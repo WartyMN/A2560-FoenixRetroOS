@@ -96,7 +96,8 @@ $(document).ready(function(){initNavTree('general_8h.html',''); initResizable();
   <div class="headertitle"><div class="title">general.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;mb/a2560_platform.h&gt;</code><br />
+<div class="textblock"><code>#include &lt;stdlib.h&gt;</code><br />
+<code>#include &lt;mb/a2560_platform.h&gt;</code><br />
 </div>
 <p><a href="general_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -105,11 +106,80 @@ Functions</h2></td></tr>
 <tr class="memitem:a8caa9f7a3d1853cb16b5a7ab11f950ba"><td class="memItemLeft" align="right" valign="top">signed int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a8caa9f7a3d1853cb16b5a7ab11f950ba">General_WrapAndTrimTextToFit</a> (char **orig_string, char **formatted_string, signed int max_chars_to_format, signed int max_width, signed int max_height, signed int one_char_width, signed int one_row_height, <a class="el" href="struct_font.html">Font</a> *the_font, signed int(*measure_function)(<a class="el" href="struct_font.html">Font</a> *, char *, signed int, signed int, signed int))</td></tr>
 <tr class="memdesc:a8caa9f7a3d1853cb16b5a7ab11f950ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Format a string by wrapping and trimming to fit the passed width and height.  <a href="general_8h.html#a8caa9f7a3d1853cb16b5a7ab11f950ba">More...</a><br /></td></tr>
 <tr class="separator:a8caa9f7a3d1853cb16b5a7ab11f950ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43395f5398a59a82ee72cf41a500131c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a43395f5398a59a82ee72cf41a500131c">General_Round</a> (double the_float)</td></tr>
+<tr class="memdesc:a43395f5398a59a82ee72cf41a500131c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Round a float to the nearest integer value THINK C's and SAS/C's math.h don't include round() from: <a href="https://stackoverflow.com/questions/4572556/concise-way-to-implement-round-in-c">https://stackoverflow.com/questions/4572556/concise-way-to-implement-round-in-c</a>.  <a href="general_8h.html#a43395f5398a59a82ee72cf41a500131c">More...</a><br /></td></tr>
+<tr class="separator:a43395f5398a59a82ee72cf41a500131c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95ed503ba98211d0e55de13556c980b3"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a95ed503ba98211d0e55de13556c980b3">General_StrToLower</a> (char *the_string)</td></tr>
+<tr class="memdesc:a95ed503ba98211d0e55de13556c980b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a string, in place, to lower case This overwrites the string with a lower case version of itself.  <a href="general_8h.html#a95ed503ba98211d0e55de13556c980b3">More...</a><br /></td></tr>
+<tr class="separator:a95ed503ba98211d0e55de13556c980b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9ef78619dd4f8a5704da0c13892a3b7"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#aa9ef78619dd4f8a5704da0c13892a3b7">General_ToLower</a> (char the_char)</td></tr>
+<tr class="memdesc:aa9ef78619dd4f8a5704da0c13892a3b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the case of the passed character from upper to lower (if necessary) Scope is limited to characters A-Z, ascii.  <a href="general_8h.html#aa9ef78619dd4f8a5704da0c13892a3b7">More...</a><br /></td></tr>
+<tr class="separator:aa9ef78619dd4f8a5704da0c13892a3b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a713680694fa24efa6d58916907948703"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a713680694fa24efa6d58916907948703">General_StrlcpyWithAlloc</a> (const char *src, signed long max_len)</td></tr>
+<tr class="memdesc:a713680694fa24efa6d58916907948703"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates memory for a new string and copies up to max_len - 1 characters from the NUL-terminated string src to the new string, NUL-terminating the result This is meant to be a one stop shop for getting a copy of a string In this implementation, f_calloc with MEM_STANDARD is used.  <a href="general_8h.html#a713680694fa24efa6d58916907948703">More...</a><br /></td></tr>
+<tr class="separator:a713680694fa24efa6d58916907948703"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5acad0656288c01f2f4c96f5e6ca0c61"><td class="memItemLeft" align="right" valign="top">signed long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a5acad0656288c01f2f4c96f5e6ca0c61">General_Strlcpy</a> (char *dst, const char *src, signed long max_len)</td></tr>
+<tr class="memdesc:a5acad0656288c01f2f4c96f5e6ca0c61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies up to max_len - 1 characters from the NUL-terminated string src to dst, NUL-terminating the result.  <a href="general_8h.html#a5acad0656288c01f2f4c96f5e6ca0c61">More...</a><br /></td></tr>
+<tr class="separator:a5acad0656288c01f2f4c96f5e6ca0c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a859a99b6609f93c025175b258696afba"><td class="memItemLeft" align="right" valign="top">signed long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a859a99b6609f93c025175b258696afba">General_Strlcat</a> (char *dst, const char *src, signed long max_len)</td></tr>
+<tr class="memdesc:a859a99b6609f93c025175b258696afba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies up to max_len - 1 characters from the NUL-terminated string src and appends to the end of dst, NUL-terminating the result.  <a href="general_8h.html#a859a99b6609f93c025175b258696afba">More...</a><br /></td></tr>
+<tr class="separator:a859a99b6609f93c025175b258696afba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5ed102f96548c97dd63a14b1742bb62"><td class="memItemLeft" align="right" valign="top">signed int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#ac5ed102f96548c97dd63a14b1742bb62">General_Strncmp</a> (const char *string_1, const char *string_2, size_t length)</td></tr>
+<tr class="memdesc:ac5ed102f96548c97dd63a14b1742bb62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes a case sensitive comparison of the specified number of characters of the two passed strings Stops processing once max_len has been reached, or when one of the two strings has run out of characters.  <a href="general_8h.html#ac5ed102f96548c97dd63a14b1742bb62">More...</a><br /></td></tr>
+<tr class="separator:ac5ed102f96548c97dd63a14b1742bb62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada9cbdf74fb211056cce03e559b177e6"><td class="memItemLeft" align="right" valign="top">signed int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#ada9cbdf74fb211056cce03e559b177e6">General_Strncasecmp</a> (const char *string_1, const char *string_2, size_t max_len)</td></tr>
+<tr class="memdesc:ada9cbdf74fb211056cce03e559b177e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes a case insensitive comparison of the specified number of characters of the two passed strings Stops processing once max_len has been reached, or when one of the two strings has run out of characters.  <a href="general_8h.html#ada9cbdf74fb211056cce03e559b177e6">More...</a><br /></td></tr>
+<tr class="separator:ada9cbdf74fb211056cce03e559b177e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae49d06d93ef7b5d1aeae704a7722822"><td class="memItemLeft" align="right" valign="top">signed long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#aae49d06d93ef7b5d1aeae704a7722822">General_Strnlen</a> (const char *the_string, size_t max_len)</td></tr>
+<tr class="memdesc:aae49d06d93ef7b5d1aeae704a7722822"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measure the length of a fixed-size string Safe(r) strlen function: will stop processing if no terminator found before max_len reached.  <a href="general_8h.html#aae49d06d93ef7b5d1aeae704a7722822">More...</a><br /></td></tr>
+<tr class="separator:aae49d06d93ef7b5d1aeae704a7722822"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75e914e61678fae23b84e22ce27361cd"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a75e914e61678fae23b84e22ce27361cd">General_CompareStringLength</a> (void *first_payload, void *second_payload)</td></tr>
+<tr class="memdesc:a75e914e61678fae23b84e22ce27361cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare the length of two strings, returning true if the first is longer than the second.  <a href="general_8h.html#a75e914e61678fae23b84e22ce27361cd">More...</a><br /></td></tr>
+<tr class="separator:a75e914e61678fae23b84e22ce27361cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a07938c6f1d87889b1195665eefd24389"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a07938c6f1d87889b1195665eefd24389">General_ExtractFileExtensionFromFilename</a> (const char *the_file_name, char *the_extension)</td></tr>
 <tr class="memdesc:a07938c6f1d87889b1195665eefd24389"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract file extension into the passed char pointer, as new lowercased string pointer, if any found.  <a href="general_8h.html#a07938c6f1d87889b1195665eefd24389">More...</a><br /></td></tr>
 <tr class="separator:a07938c6f1d87889b1195665eefd24389"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a75e914e61678fae23b84e22ce27361cd" name="a75e914e61678fae23b84e22ce27361cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75e914e61678fae23b84e22ce27361cd">&#9670;&nbsp;</a></span>General_CompareStringLength()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean General_CompareStringLength </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>first_payload</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>second_payload</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compare the length of two strings, returning true if the first is longer than the second. </p>
+<p >This function accepts void* instead of char*, to be compatible with List_MergeSortedList(). NOTE: compares to a maximum of MAX_STRING_COMP_LEN </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">first_payload</td><td>the first string to compare, passed as a void pointer. </td></tr>
+    <tr><td class="paramname">second_payload</td><td>the second string to compare, passed as a void pointer. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns true if the first string is longer than the second. Returns false if the strings are equivalent in length, or if second is longer. <br  />
+ </dd></dl>
+
+</div>
+</div>
 <a id="a07938c6f1d87889b1195665eefd24389" name="a07938c6f1d87889b1195665eefd24389"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a07938c6f1d87889b1195665eefd24389">&#9670;&nbsp;</a></span>General_ExtractFileExtensionFromFilename()</h2>
 
@@ -145,6 +215,330 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns false if no file extension found. </dd></dl>
+
+</div>
+</div>
+<a id="a43395f5398a59a82ee72cf41a500131c" name="a43395f5398a59a82ee72cf41a500131c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43395f5398a59a82ee72cf41a500131c">&#9670;&nbsp;</a></span>General_Round()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int General_Round </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>the_float</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Round a float to the nearest integer value THINK C's and SAS/C's math.h don't include round() from: <a href="https://stackoverflow.com/questions/4572556/concise-way-to-implement-round-in-c">https://stackoverflow.com/questions/4572556/concise-way-to-implement-round-in-c</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_float</td><td>a double value to round up/down </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns an int with the rounded value </dd></dl>
+
+</div>
+</div>
+<a id="a859a99b6609f93c025175b258696afba" name="a859a99b6609f93c025175b258696afba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a859a99b6609f93c025175b258696afba">&#9670;&nbsp;</a></span>General_Strlcat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">signed long General_Strlcat </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>dst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">signed long&#160;</td>
+          <td class="paramname"><em>max_len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copies up to max_len - 1 characters from the NUL-terminated string src and appends to the end of dst, NUL-terminating the result. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>The string to copy </td></tr>
+    <tr><td class="paramname">dst</td><td>The string to append to. Calling function is responsible for ensuring this string is allocated, and has at least as much storage as max_len. </td></tr>
+    <tr><td class="paramname">max_len</td><td>The maximum number of bytes to use in the destination string, including the terminator. If this is shorter than the length of src + length of dst + 1, the resulting copy string will be capped at max_len - 1. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns the length of the attempted concatenated string: initial length of dst plus the length of src. </dd></dl>
+
+</div>
+</div>
+<a id="a5acad0656288c01f2f4c96f5e6ca0c61" name="a5acad0656288c01f2f4c96f5e6ca0c61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5acad0656288c01f2f4c96f5e6ca0c61">&#9670;&nbsp;</a></span>General_Strlcpy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">signed long General_Strlcpy </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>dst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">signed long&#160;</td>
+          <td class="paramname"><em>max_len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copies up to max_len - 1 characters from the NUL-terminated string src to dst, NUL-terminating the result. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>The string to copy </td></tr>
+    <tr><td class="paramname">dst</td><td>The string to copy into. Calling function is responsible for ensuring this string is allocated, and has at least as much storage as max_len. </td></tr>
+    <tr><td class="paramname">max_len</td><td>The maximum number of bytes to use in the destination string, including the terminator. If this is shorter than the length of the source string + 1, the resulting copy string will be capped at max_len - 1. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns the length of the source string, or -1 on any error condition </dd></dl>
+
+</div>
+</div>
+<a id="a713680694fa24efa6d58916907948703" name="a713680694fa24efa6d58916907948703"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a713680694fa24efa6d58916907948703">&#9670;&nbsp;</a></span>General_StrlcpyWithAlloc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * General_StrlcpyWithAlloc </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">signed long&#160;</td>
+          <td class="paramname"><em>max_len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Allocates memory for a new string and copies up to max_len - 1 characters from the NUL-terminated string src to the new string, NUL-terminating the result This is meant to be a one stop shop for getting a copy of a string In this implementation, f_calloc with MEM_STANDARD is used. </p>
+<p >When freeing the returned string, use f_free with MEM_STANDARD. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>The string to copy </td></tr>
+    <tr><td class="paramname">max_len</td><td>The maximum number of bytes to use in the destination string, including the terminator. If this is shorter than the length of the source string + 1, the resulting copy string will be capped at max_len - 1. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a copy of the source string to max_len, or NULL on any error condition </dd></dl>
+
+</div>
+</div>
+<a id="ada9cbdf74fb211056cce03e559b177e6" name="ada9cbdf74fb211056cce03e559b177e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada9cbdf74fb211056cce03e559b177e6">&#9670;&nbsp;</a></span>General_Strncasecmp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">signed int General_Strncasecmp </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string_1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string_2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>max_len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Makes a case insensitive comparison of the specified number of characters of the two passed strings Stops processing once max_len has been reached, or when one of the two strings has run out of characters. </p>
+<p >Inspired by code from slashdot and apple open source <a href="https://stackoverflow.com/questions/5820810/case-insensitive-string-comparison-in-c">https://stackoverflow.com/questions/5820810/case-insensitive-string-comparison-in-c</a> <a href="https://opensource.apple.com/source/tcl/tcl-10/tcl/compat/strncasecmp.c.auto.html">https://opensource.apple.com/source/tcl/tcl-10/tcl/compat/strncasecmp.c.auto.html</a> </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string_1</td><td>the first string to compare. </td></tr>
+    <tr><td class="paramname">string_2</td><td>the second string to compare. </td></tr>
+    <tr><td class="paramname">max_len</td><td>the maximum number of characters to compare. Even if both strings are larger than this number, only this many characters will be compared. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns 0 if the strings are equivalent (at least up to max_len). Returns a negative or positive if the strings are different. </dd></dl>
+
+</div>
+</div>
+<a id="ac5ed102f96548c97dd63a14b1742bb62" name="ac5ed102f96548c97dd63a14b1742bb62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5ed102f96548c97dd63a14b1742bb62">&#9670;&nbsp;</a></span>General_Strncmp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">signed int General_Strncmp </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string_1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string_2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>max_len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Makes a case sensitive comparison of the specified number of characters of the two passed strings Stops processing once max_len has been reached, or when one of the two strings has run out of characters. </p>
+<p ><a href="http://home.snafu.de/kdschem/c.dir/strings.dir/strncmp.c">http://home.snafu.de/kdschem/c.dir/strings.dir/strncmp.c</a> TODO: compare this to other implementations, see which is faster. eg, <a href="https://opensource.apple.com/source/Libc/Libc-167/gen.subproj/i386.subproj/strncmp.c.auto.html">https://opensource.apple.com/source/Libc/Libc-167/gen.subproj/i386.subproj/strncmp.c.auto.html</a> </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string_1</td><td>the first string to compare. </td></tr>
+    <tr><td class="paramname">string_2</td><td>the second string to compare. </td></tr>
+    <tr><td class="paramname">max_len</td><td>the maximum number of characters to compare. Even if both strings are larger than this number, only this many characters will be compared. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns 0 if the strings are equivalent (at least up to max_len). Returns a negative or positive if the strings are different. </dd></dl>
+
+</div>
+</div>
+<a id="aae49d06d93ef7b5d1aeae704a7722822" name="aae49d06d93ef7b5d1aeae704a7722822"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae49d06d93ef7b5d1aeae704a7722822">&#9670;&nbsp;</a></span>General_Strnlen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">signed long General_Strnlen </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>the_string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>max_len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Measure the length of a fixed-size string Safe(r) strlen function: will stop processing if no terminator found before max_len reached. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns strlen(the_string), if that is less than max_len, or max_len if there is no null terminating ('\0') among the first max_len characters pointed to by the_string. </dd></dl>
+
+</div>
+</div>
+<a id="a95ed503ba98211d0e55de13556c980b3" name="a95ed503ba98211d0e55de13556c980b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95ed503ba98211d0e55de13556c980b3">&#9670;&nbsp;</a></span>General_StrToLower()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean General_StrToLower </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>the_string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convert a string, in place, to lower case This overwrites the string with a lower case version of itself. </p>
+<p >Warning: no length check is in place. Calling function must verify string is well-formed (terminated). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_string</td><td>the string to convert to lower case. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns true if the string was modified by the process. </dd></dl>
+
+</div>
+</div>
+<a id="aa9ef78619dd4f8a5704da0c13892a3b7" name="aa9ef78619dd4f8a5704da0c13892a3b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9ef78619dd4f8a5704da0c13892a3b7">&#9670;&nbsp;</a></span>General_ToLower()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char General_ToLower </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>the_char</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Change the case of the passed character from upper to lower (if necessary) Scope is limited to characters A-Z, ascii. </p>
+<p >replacement for tolower() in c library, which doesn't seem to work [in Amiga WB2K] for some reason. </p><dl class="section return"><dt>Returns</dt><dd>a character containing the lowercase version of the passed character. </dd></dl>
 
 </div>
 </div>

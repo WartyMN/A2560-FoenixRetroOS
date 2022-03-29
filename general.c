@@ -283,6 +283,11 @@ boolean General_StringToUnsignedLong(const char* the_string_value, unsigned long
 /*****************************************************************************/
 
 
+
+// **** WORD-WRAP UTILITIES *****
+
+
+
 //! Format a string by wrapping and trimming to fit the passed width and height. 
 //! If the string cannot be displayed in the specified height and width, processing will stop, but it is not an error condition
 //! @param	orig_string: pointer to a string pointer that holds the text to be formatted. Upon return, this pointer will point to the next character after the last processed character (if the string was too long to fit). If the entire string fits, this pointer will not be adjusted.
@@ -385,47 +390,28 @@ signed int General_WrapAndTrimTextToFit(char** orig_string, char** formatted_str
 }
 
 
-//! Extract file extension into the passed char pointer, as new lowercased string pointer, if any found.
-//! @param	the_file_name: the file name to extract an extension from
-//! @param	the_extension: a pre-allocated buffer that will contain the extension, if any is detected. Must be large enough to hold the extension! No bounds checking is done. 
-//! @return	Returns false if no file extension found.
-boolean General_ExtractFileExtensionFromFilename(const char* the_file_name, char* the_extension)
+
+// **** MATH UTILITIES *****
+
+
+//! Round a float to the nearest integer value
+//! THINK C's and SAS/C's math.h don't include round()
+//! from: https://stackoverflow.com/questions/4572556/concise-way-to-implement-round-in-c
+//! @param	the_float: a double value to round up/down
+//! @return	Returns an int with the rounded value
+int General_Round(double the_float)
 {
-	// LOGIC: 
-	//   if the first char is the first dot from right, we'll count the whole thing as an extension
-	//   if no dot char, then don't set extension, and return false
-	
-    char*	dot = strrchr((char*)the_file_name, '.');
-    int		i;
-
-    // (re) set the file extension to "" in case we have to return. It may have a value from whatever previous use was
-    the_extension[0] = '\0';
-
-	if(!dot)
-    {
-    	return false;
-    }
-
-	for (i = 1; dot[i]; i++)
-	{
-		the_extension[i-1] = General_ToLower(dot[i]);
-	}
-
-	the_extension[i-1] = '\0';
-
-	return true;
+    if (the_float < 0.0)
+        return (int)(the_float - 0.5);
+    else
+        return (int)(the_float + 0.5);
 }
 
 
-// replacement for tolower() in c library, which doesn't seem to work here for some reason.
-char General_ToLower(char the_char)
-{
-    char	lowered_value;
-    
-    lowered_value = (the_char >='A' && the_char<='Z') ? (the_char + 32) : (the_char);
-    
-    return lowered_value;
-}
+
+// **** NUMBER<>STRING UTILITIES *****
+
+
 
 // convert a file size in bytes to a human readable format using "10 bytes", "1.4 kb", "1 MB", etc. 
 //   NOTE: formatted_file_size string must have been allocated before passing here
@@ -472,25 +458,98 @@ void General_MakeFileSizeReadable(unsigned long size_in_bytes, char* formatted_f
 }
 
 
-// cheapo way to do round. THINK C's and SAS/C's math.h don't include round()
-// from: https://stackoverflow.com/questions/4572556/concise-way-to-implement-round-in-c
-int General_Round(double the_float)
+// Convert a positive or negative string integer to a signed long integer. returns false in event of error
+boolean General_StringToSignedLong(const char* the_string_value, signed long* the_conversion)
 {
-    if (the_float < 0.0)
-        return (int)(the_float - 0.5);
-    else
-        return (int)(the_float + 0.5);
+	signed long		signed_val = 0;
+	unsigned long	unsigned_val = 0;
+	boolean			safe_conversion;
+	const char*		start_of_number = the_string_value;
+	
+	// is this a negative number string?
+	if (*the_string_value == '-')
+	{
+		start_of_number++;
+	}
+	
+	safe_conversion = General_StringToUnsignedLong(start_of_number, &unsigned_val);
+
+	signed_val = (signed long)unsigned_val;
+	
+	if (*the_string_value == '-')
+	{
+		signed_val = -signed_val;
+	}
+	
+	*the_conversion = signed_val;
+
+	return safe_conversion;
 }
 
 
-// allocates memory and copies the passed string into it. one stop shop for getting a copy of a string
-char* General_StrlcpyWithAlloc(const char* src, unsigned long max_len)
-{
-	char* dst;
-	size_t	alloc_len = General_Strnlen(src, max_len) + 1;
-	
-	DEBUG_OUT(("%s %d: here. src=%p, max_len=%lu, alloc_len=%lu", __func__, __LINE__, src, max_len, alloc_len));
 
+// **** MISC STRING UTILITIES *****
+
+
+//! Convert a string, in place, to lower case
+//! This overwrites the string with a lower case version of itself.
+//! Warning: no length check is in place. Calling function must verify string is well-formed (terminated).
+//! @param	the_string: the string to convert to lower case.
+//! @return	Returns true if the string was modified by the process.
+boolean General_StrToLower(char* the_string)
+{
+    int		i;
+    int		len = strlen(the_string);
+    char	this_char;
+    boolean	change_made = false;
+    
+	for (i = 0; i < len; i++)
+	{
+		this_char = the_string[i];
+		the_string[i] = General_ToLower(the_string[i]);
+		
+		if (this_char != the_string[i])
+		{
+			change_made = true;
+		}
+	}
+
+	return change_made;
+}
+
+
+//! Change the case of the passed character from upper to lower (if necessary)
+//! Scope is limited to characters A-Z, ascii.
+//! replacement for tolower() in c library, which doesn't seem to work [in Amiga WB2K] for some reason.
+//! @return	a character containing the lowercase version of the passed character.
+char General_ToLower(char the_char)
+{
+    char	lowered_value;
+    
+    lowered_value = (the_char >='A' && the_char<='Z') ? (the_char + 32) : (the_char);
+    
+    return lowered_value;
+}
+
+
+//! Allocates memory for a new string and copies up to max_len - 1 characters from the NUL-terminated string src to the new string, NUL-terminating the result
+//! This is meant to be a one stop shop for getting a copy of a string
+//! In this implementation, f_calloc with MEM_STANDARD is used. When freeing the returned string, use f_free with MEM_STANDARD.
+//! @param	src: The string to copy
+//! @param	max_len: The maximum number of bytes to use in the destination string, including the terminator. If this is shorter than the length of the source string + 1, the resulting copy string will be capped at max_len - 1.
+//! @return	a copy of the source string to max_len, or NULL on any error condition
+char* General_StrlcpyWithAlloc(const char* src, signed long max_len)
+{
+	char*	dst;
+	size_t	alloc_len;
+	
+	if (max_len < 1)
+	{
+		return NULL;
+	}
+	
+	alloc_len = General_Strnlen(src, max_len) + 1;
+	
 	if ( (dst = (char*)f_calloc(alloc_len, sizeof(char), MEM_STANDARD) ) == NULL)
 	{
 		return NULL;
@@ -505,75 +564,106 @@ char* General_StrlcpyWithAlloc(const char* src, unsigned long max_len)
 }
 
 
-// strlcpy implementation from apple/bsd. the Amiga Strlcpy is only in 4.0. Modified with Amiga-isms
-unsigned long General_Strlcpy(char* dst, const char* src, unsigned long max_len)
+//! Copies up to max_len - 1 characters from the NUL-terminated string src to dst, NUL-terminating the result
+//! @param	src: The string to copy
+//! @param	dst: The string to copy into. Calling function is responsible for ensuring this string is allocated, and has at least as much storage as max_len.
+//! @param	max_len: The maximum number of bytes to use in the destination string, including the terminator. If this is shorter than the length of the source string + 1, the resulting copy string will be capped at max_len - 1.
+//! @return	Returns the length of the source string, or -1 on any error condition
+signed long General_Strlcpy(char* dst, const char* src, signed long max_len)
 {
-    const unsigned long		src_len = strlen(src);
+    const signed long	src_len = strlen(src);
+ 	
+	if (max_len < 1)
+	{
+		return -1;
+	}
 
     if (src_len + 1 < max_len)
     {
         memcpy(dst, src, src_len + 1);
     }
-    else if (max_len != 0)
+    else
     {
     	memcpy(dst, src, max_len - 1);
         dst[max_len - 1] = '\0';
     }
-
+    
     return src_len;
 }
 
-// General_Strlcat implementation from apple/bsd. Modified with Amiga-isms
-unsigned long General_Strlcat(char* dst, const char* src, unsigned long max_len)
-{
-    const unsigned long		src_len = strlen(src);
-    const unsigned long 	dstlen = General_Strnlen(dst, max_len);
 
-    if (dstlen == max_len)
-    {
-    	return max_len + src_len;
-    }
+//! Copies up to max_len - 1 characters from the NUL-terminated string src and appends to the end of dst, NUL-terminating the result
+//! @param	src: The string to copy
+//! @param	dst: The string to append to. Calling function is responsible for ensuring this string is allocated, and has at least as much storage as max_len.
+//! @param	max_len: The maximum number of bytes to use in the destination string, including the terminator. If this is shorter than the length of src + length of dst + 1, the resulting copy string will be capped at max_len - 1.
+//! @return	Returns the length of the attempted concatenated string: initial length of dst plus the length of src.
+signed long General_Strlcat(char* dst, const char* src, signed long max_len)
+{  	
+	const signed long	src_len = strlen(src);
+	const signed long 	dst_len = General_Strnlen(dst, max_len);
+ 	
+	if (max_len > 0)
+	{
+		if (dst_len == max_len)
+		{
+			return max_len + src_len;
+		}
 
-    if (src_len < max_len-dstlen)
-    {
-        memcpy(dst + dstlen, src, src_len + 1);
-    }
-    else
-    {
-        memcpy(dst + dstlen, src, max_len - dstlen - 1);
-        dst[max_len - 1] = '\0';
-    }
+		if (src_len < max_len - dst_len)
+		{
+			memcpy(dst + dst_len, src, src_len + 1);
+		}
+		else
+		{
+			memcpy(dst + dst_len, src, max_len - dst_len - 1);
+			dst[max_len - 1] = '\0';
+		}
+	}
 
-    return dstlen + src_len;
+    return dst_len + src_len;
 }
 
 
-// strncmp implementation from Amiga site. Case sensitive
-// http://home.snafu.de/kdschem/c.dir/strings.dir/strncmp.c
-int General_Strncmp(const char* string_1, const char* string_2, long length)
+//! Makes a case sensitive comparison of the specified number of characters of the two passed strings
+//! Stops processing once max_len has been reached, or when one of the two strings has run out of characters.
+//! http://home.snafu.de/kdschem/c.dir/strings.dir/strncmp.c
+//! TODO: compare this to other implementations, see which is faster. eg, https://opensource.apple.com/source/Libc/Libc-167/gen.subproj/i386.subproj/strncmp.c.auto.html
+//! @param	string_1: the first string to compare.
+//! @param	string_2: the second string to compare.
+//! @param	max_len: the maximum number of characters to compare. Even if both strings are larger than this number, only this many characters will be compared.
+//! @return	Returns 0 if the strings are equivalent (at least up to max_len). Returns a negative or positive if the strings are different.
+signed int General_Strncmp(const char* string_1, const char* string_2, size_t max_len)
 {
-	register char	c;
+	register uint8_t	u;
 	
-	do ; while( (c = *string_1++) && (c == *string_2++) && --length );
-	if (c)
+	do ; while( (u = (uint8_t)*string_1++) && (u == (uint8_t)*string_2++) && --max_len );
+
+	if (u)
 	{
 		string_2--;
 	}
-	return (c - *string_2);
+	
+	return (u - (uint8_t)*string_2);
 }
 
 
-// strncasecmp (case insensitive comparison) based on code from slashdot and apple open source
-// https://stackoverflow.com/questions/5820810/case-insensitive-string-comparison-in-c
-// https://opensource.apple.com/source/tcl/tcl-10/tcl/compat/strncasecmp.c.auto.html
-signed int General_Strncasecmp(const char* string_1, const char* string_2, long max_len)
+//! Makes a case insensitive comparison of the specified number of characters of the two passed strings
+//! Stops processing once max_len has been reached, or when one of the two strings has run out of characters.
+//! Inspired by code from slashdot and apple open source
+//! https://stackoverflow.com/questions/5820810/case-insensitive-string-comparison-in-c
+//! https://opensource.apple.com/source/tcl/tcl-10/tcl/compat/strncasecmp.c.auto.html
+//! @param	string_1: the first string to compare.
+//! @param	string_2: the second string to compare.
+//! @param	max_len: the maximum number of characters to compare. Even if both strings are larger than this number, only this many characters will be compared.
+//! @return	Returns 0 if the strings are equivalent (at least up to max_len). Returns a negative or positive if the strings are different.
+signed int General_Strncasecmp(const char* string_1, const char* string_2, size_t max_len)
 {
 	//DEBUG_OUT(("%s %d: s1='%s'; s2='%s'; max_len=%i", __func__ , __LINE__, string_1, string_2, max_len));
 
 	for (; max_len != 0; max_len--, string_1++, string_2++)
 	{
-		char	u1 = (char) *string_1;
-		char	u2 = (char) *string_2;
+		uint8_t	u1 = (uint8_t)*string_1;
+		uint8_t	u2 = (uint8_t)*string_2;
 		
 		if (General_ToLower(u1) != General_ToLower(u2))
 		{
@@ -590,12 +680,14 @@ signed int General_Strncasecmp(const char* string_1, const char* string_2, long 
 }
 
 
-// Safe(r) string length function: will stop processing if no terminator found before max_len reached
+//! Measure the length of a fixed-size string
+//! Safe(r) strlen function: will stop processing if no terminator found before max_len reached
 // Inspired by apple/bsd strnlen.
-unsigned long General_Strnlen(const char* the_string, unsigned long max_len)
+//! @return	Returns strlen(the_string), if that is less than max_len, or max_len if there is no null terminating ('\0') among the first max_len characters pointed to by the_string.
+signed long General_Strnlen(const char* the_string, size_t max_len)
 {
-	unsigned long	len;
-
+	signed long	len;
+ 	
 	for (len = 0; len < max_len; len++, the_string++)
 	{
 		if (!*the_string)
@@ -608,8 +700,12 @@ unsigned long General_Strnlen(const char* the_string, unsigned long max_len)
 }
 
 
-// function compatible with List_MergeSortedList(). Compares to strings passed as void pointers, returns true if first string is longer than second. 
-// NOTE: compares to a maximum of MAX_STRING_COMP_LEN
+//! Compare the length of two strings, returning true if the first is longer than the second.
+//! This function accepts void* instead of char*, to be compatible with List_MergeSortedList().
+//! NOTE: compares to a maximum of MAX_STRING_COMP_LEN
+//! @param	first_payload: the first string to compare, passed as a void pointer.
+//! @param	second_payload: the second string to compare, passed as a void pointer.
+//! @return	Returns true if the first string is longer than the second. Returns false if the strings are equivalent in length, or if second is longer. 
 boolean General_CompareStringLength(void* first_payload, void* second_payload)
 {
 	char*		string_1 = (char*)first_payload;
@@ -659,6 +755,11 @@ signed int General_StrFindNextWordEnd(const char* the_string, signed int max_sea
 signed int General_StrFindNextLineBreak(const char* the_string, signed int max_search_len)
 {
 	char*	next_line_break;
+ 	
+	if (max_search_len < 1)
+	{
+		return 0;
+	}
 
 	next_line_break = strchr((char*)the_string, '\n');
 	
@@ -669,6 +770,10 @@ signed int General_StrFindNextLineBreak(const char* the_string, signed int max_s
 
 	return 0;
 }
+
+
+
+// **** RECTANGLE UTILITIES *****
 
 
 // test if 2 rectangles intersect
@@ -702,35 +807,6 @@ boolean General_PointInRect(signed int x, signed int y, Rectangle r)
 	}
 
 	return true;
-}
-
-
-// Convert a positive or negative string integer to a signed long integer. returns false in event of error
-boolean General_StringToSignedLong(const char* the_string_value, signed long* the_conversion)
-{
-	signed long		signed_val = 0;
-	unsigned long	unsigned_val = 0;
-	boolean			safe_conversion;
-	const char*		start_of_number = the_string_value;
-	
-	// is this a negative number string?
-	if (*the_string_value == '-')
-	{
-		start_of_number++;
-	}
-	
-	safe_conversion = General_StringToUnsignedLong(start_of_number, &unsigned_val);
-
-	signed_val = (signed long)unsigned_val;
-	
-	if (*the_string_value == '-')
-	{
-		signed_val = -signed_val;
-	}
-	
-	*the_conversion = signed_val;
-
-	return safe_conversion;
 }
 
 
@@ -778,47 +854,10 @@ void General_CenterRectWithinRect(Rectangle* the_frame_rect, Rectangle* the_hero
 }
 
 
-// return the first char of the last part of a file path
-// if no path part detected, returns the original string
-// not guaranteed that this is a FILENAME, as if you passed a path to a dir, it would return the DIR name
-// amigaDOS compatibility function (see FilePart)
-char* General_NamePart(const char* the_file_path)
-{
-	char*	last_slash;
-	
-	last_slash = strchr(the_file_path, '/');
-	
-	if (last_slash && ++last_slash)
-	{
-		return last_slash;
-	}
-	
-	return (char*)the_file_path;
-}
 
 
-// return everything to the left of the filename in a path. 
-// amigaDOS compatibility function
-char* General_PathPart(const char* the_file_path)
-{
-	char*	the_directory_path;
-	char*	this_point;
-	
-	this_point = (char*)the_file_path;
-	the_directory_path = this_point; // default to returning start of the string
-	
-	while (*this_point)
-	{
-		if (*this_point == '/')
-		{
-			the_directory_path = this_point;
-		}
-		
-		this_point++;
-	}
-	
-	return the_directory_path;
-}
+// **** FILENAME AND FILEPATH UTILITIES *****
+
 
 
 // allocate and return the portion of the path passed, minus the filename. In other words: return a path to the parent file.
@@ -829,7 +868,7 @@ char* General_ExtractPathToParentFolderWithAlloc(const char* the_file_path)
 	//   PathPart includes the : if non-name part is for a volume. but doesn't not include trailing / if not a volume
 	//   we want in include the trailing : and /, so calling routine can always just append a file name and get a legit path
 	
-	unsigned long	path_len;
+	signed long	path_len;
 	char*			the_directory_path;
 
 	// get a string for the directory portion of the filepath
@@ -914,6 +953,87 @@ void General_CreateFilePathFromFolderAndFile(char* the_combined_path, char* the_
 
 	//DEBUG_OUT(("%s %d: file '%s' and folder '%s' produces path of '%s'", __func__ , __LINE__, the_file_name, the_folder_path, the_combined_path));
 }
+
+
+// return the first char of the last part of a file path
+// if no path part detected, returns the original string
+// not guaranteed that this is a FILENAME, as if you passed a path to a dir, it would return the DIR name
+// amigaDOS compatibility function (see FilePart)
+char* General_NamePart(const char* the_file_path)
+{
+	char*	last_slash;
+	
+	last_slash = strchr(the_file_path, '/');
+	
+	if (last_slash && ++last_slash)
+	{
+		return last_slash;
+	}
+	
+	return (char*)the_file_path;
+}
+
+
+// return everything to the left of the filename in a path. 
+// amigaDOS compatibility function
+char* General_PathPart(const char* the_file_path)
+{
+	char*	the_directory_path;
+	char*	this_point;
+	
+	this_point = (char*)the_file_path;
+	the_directory_path = this_point; // default to returning start of the string
+	
+	while (*this_point)
+	{
+		if (*this_point == '/')
+		{
+			the_directory_path = this_point;
+		}
+		
+		this_point++;
+	}
+	
+	return the_directory_path;
+}
+
+
+//! Extract file extension into the passed char pointer, as new lowercased string pointer, if any found.
+//! @param	the_file_name: the file name to extract an extension from
+//! @param	the_extension: a pre-allocated buffer that will contain the extension, if any is detected. Must be large enough to hold the extension! No bounds checking is done. 
+//! @return	Returns false if no file extension found.
+boolean General_ExtractFileExtensionFromFilename(const char* the_file_name, char* the_extension)
+{
+	// LOGIC: 
+	//   if the first char is the first dot from right, we'll count the whole thing as an extension
+	//   if no dot char, then don't set extension, and return false
+	
+    char*	dot = strrchr((char*)the_file_name, '.');
+    int		i;
+
+    // (re) set the file extension to "" in case we have to return. It may have a value from whatever previous use was
+    the_extension[0] = '\0';
+
+	if(!dot)
+    {
+    	return false;
+    }
+
+	for (i = 1; dot[i]; i++)
+	{
+		the_extension[i-1] = General_ToLower(dot[i]);
+	}
+
+	the_extension[i-1] = '\0';
+
+	return true;
+}
+
+
+
+
+// **** LOGGING AND DEBUG UTILITIES *****
+
 
 
 

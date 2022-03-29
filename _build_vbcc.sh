@@ -45,52 +45,52 @@ mv a2560_sys.lib $VBCC/targets/a2560-micah/lib/
 
 # build demo code - SYS
 vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/sys_demo.s28 lib_sys_demo.c -lm
-perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/lib_sys/build_vbcc/sys_demo.s28"
+perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/sys_demo.s28"
 
 # build test code - SYS
 vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/sys_test.s28 lib_sys_test.c -lm
-perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/lib_sys/build_vbcc/sys_test.s28"
+perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/sys_test.s28"
 
 # build demo code -- FONT
 vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/font_demo.s28 font_demo.c -lm
-perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/lib_sys/build_vbcc/font_demo.s28"
+perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/font_demo.s28"
 
 # build test code -- FONT
 vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/font_test.s28 font_test.c -lm
-perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/lib_sys/build_vbcc/font_test.s28"
+perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/font_test.s28"
 
 # build test code - GENERAL
 vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/general_test.s28 general_test.c -lm
-perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/lib_sys/build_vbcc/general_test.s28"
+perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/general_test.s28"
 
 # build demo code - BITMAP
 vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/bitmap_demo.s28 bitmap_demo.c -lm
-perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/lib_sys/build_vbcc/bitmap_demo.s28"
+perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/bitmap_demo.s28"
 
 # build test code - BITMAP
 vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/bitmap_test.s28 bitmap_test.c -lm
-perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/lib_sys/build_vbcc/bitmap_test.s28"
+perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/bitmap_test.s28"
 
 # build demo code - TEXT
 vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/text_demo.s28 text_demo.c -lm
-perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/lib_sys/build_vbcc/text_demo.s28"
+perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/text_demo.s28"
 
 # build test code - TEXT
 vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/text_test.s28 text_test.c -lm
-perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/lib_sys/build_vbcc/text_test.s28"
+perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/text_test.s28"
 
 # build demo code -- WINDOW
 vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/window_demo.s28 window_demo.c -lm
-perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/lib_sys/build_vbcc/window_demo.s28"
+perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/window_demo.s28"
 
 # build test code -- WINDOW
 vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/window_test.s28 window_test.c -lm
-perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/lib_sys/build_vbcc/window_test.s28"
+perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/window_test.s28"
 
 
 
 # renew doxygen docs
-doxygen
+#doxygen
 
 
 
