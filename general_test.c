@@ -113,14 +113,14 @@ MU_TEST(general_test_make_filesize_readable)
 {
 	char			temp_buff[30];
 	char*			result = temp_buff;
-	char*			expected_result[12] = {"1 b", "1023 b", "1.0 kb", "9.9 kb", "10 kb", "100 kb", "101 kb", "999 kb", "1.0 Mb", "9.9 Mb", "10 Mb", "100 Mb"};
-	unsigned long	input[12] = {1, 1023, 1024, 10239, 10240, 103420, 103424, 1048575, 1048576, 10485759, 10485760, 104857600};
+	char*			expected_result[12] = 	{"1 b", 	"1023 b", 	"1.0 kb", 	"10.0 kb", 	"10 kb", 	"101 kb", 	"101 kb", 	"1024 kb", 	"1.0 Mb", 	"10.0 Mb", "10 Mb", "100 Mb"};
+	unsigned long	input[12] = 			{1, 		1023, 		1024, 		10239, 		10240, 		103420, 	103424, 	1048575, 	1048576, 	10485759, 10485760, 104857600};
 	int				i;
 	
 	for (i = 0; i < 12; i++)
 	{
 		General_MakeFileSizeReadable(input[i], result);
-		DEBUG_OUT(("%s %d: result='%s', expected_result[i]='%s'", __func__, __LINE__, result, expected_result[i]));
+		DEBUG_OUT(("%s %d: i=%i, result='%s', expected_result[i]='%s'", __func__, __LINE__, i, result, expected_result[i]));
 		mu_assert_string_eq( expected_result[i], result );
 	}
 }
@@ -462,7 +462,7 @@ MU_TEST_SUITE(text_test_suite_units)
 
 	MU_RUN_TEST(general_test_extract_file_extension);
 	MU_RUN_TEST(general_test_makelower);
-	//MU_RUN_TEST(general_test_make_filesize_readable);
+	MU_RUN_TEST(general_test_make_filesize_readable);
 	MU_RUN_TEST(general_test_round);
 	//MU_RUN_TEST(general_test_strlcpy_with_alloc);
 	MU_RUN_TEST(general_test_strlcpy);
