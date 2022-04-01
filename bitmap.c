@@ -194,15 +194,10 @@ bool Bitmap_Fill(Bitmap* the_bitmap, signed int x, signed int y, unsigned char t
 {   
 	int		height;
 	int		width;
-	unsigned char	color_here;
 	
 	width = the_bitmap->width_;
 	height = the_bitmap->height_;
 
-//	color_here = Bitmap_GetPixelAtXY(the_bitmap, x, y);
-	
-// 	DEBUG_OUT(("%s %d: x=%i, y=%i, the_color=%i, value-at-spot=%i", __func__, __LINE__, x, y, the_color, color_here));
-	
     if ( 0 <= y && y < height && 0 <= x && x < width && Bitmap_GetPixelAtXY(the_bitmap, x, y) != the_color )
     {
         Bitmap_SetPixelAtXY(the_bitmap, x, y, the_color);
@@ -210,12 +205,7 @@ bool Bitmap_Fill(Bitmap* the_bitmap, signed int x, signed int y, unsigned char t
         Bitmap_Fill(the_bitmap, x+1, y, the_color);
         Bitmap_Fill(the_bitmap, x, y-1, the_color);
         Bitmap_Fill(the_bitmap, x, y+1, the_color);
-    }
-//     else
-//     {
-// 		DEBUG_OUT(("%s %d: skipping x=%i, y=%i, the_color=%i, value-at-spot=%i", __func__, __LINE__, x, y, the_color, color_here));
-//     }
-    
+    }    
     
     return true;
 }
@@ -633,8 +623,6 @@ signed int Bitmap_GetCurrentY(Bitmap* the_bitmap)
 //! @return Returns a pointer to the VRAM location that corresponds to the passed X, Y, or NULL on any error condition
 unsigned char* Bitmap_GetMemLocForXY(Bitmap* the_bitmap, signed int x, signed int y)
 {
-	unsigned char*			the_write_loc;
-
 	if (the_bitmap == NULL)
 	{
 		LOG_ERR(("%s %d: passed bitmap was NULL", __func__, __LINE__));
@@ -749,7 +737,6 @@ bool Bitmap_DrawLine(Bitmap* the_bitmap, signed int x1, signed int y1, signed in
 	signed int dy;
 	signed int sy;
 	signed int err;
-	signed int e2;
 
 	if (the_bitmap == NULL)
 	{
@@ -771,6 +758,8 @@ bool Bitmap_DrawLine(Bitmap* the_bitmap, signed int x1, signed int y1, signed in
 
 	for(;;)
 	{
+		signed int e2;
+
 		Bitmap_SetPixelAtXY(the_bitmap, x1, y1, the_color);
 
 		if (x1==x2 && y1==y2)
@@ -801,8 +790,6 @@ bool Bitmap_DrawLine(Bitmap* the_bitmap, signed int x1, signed int y1, signed in
 //! @return	returns false on any error/invalid input.
 bool Bitmap_DrawHLine(Bitmap* the_bitmap, signed int x, signed int y, signed int the_line_len, unsigned char the_color)
 {
-	signed int		dx;
-	unsigned char	the_attribute_value;
 	bool			result;
 	
 	// LOGIC: 

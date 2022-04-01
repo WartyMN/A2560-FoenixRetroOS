@@ -106,8 +106,8 @@ void RunDemo(void)
 	Window*			the_window;
 	NewWindowData	the_win_setup;
 	Bitmap*			the_bitmap;
-	unsigned int	x1;
-	unsigned int	y;
+// 	unsigned int	x1;
+// 	unsigned int	y;
 	char			temp_buff[100];
 	char*			wintitle = temp_buff;
 	unsigned int	width = 500;
@@ -162,8 +162,8 @@ void RunDemo(void)
 	Bitmap_DrawCircle(global_system->screen_[ID_CHANNEL_B]->bitmap_, 50, 200, 20, 0xff);
 	Bitmap_DrawBoxCoords(global_system->screen_[ID_CHANNEL_B]->bitmap_, 25, 25, 100, 100, 0xff);
 	//Demo_Font_DrawString(global_system->screen_[ID_CHANNEL_B]->bitmap_, 20);
-	x1 = 25;
-	y = 10;
+// 	x1 = 25;
+// 	y = 10;
 // 		Demo_Font_ShowChars(the_bitmap, x1, y);
 // 		Demo_Font_DrawString(the_bitmap, y);
 // 		Demo_Font_DrawString(the_bitmap, y + 50);
@@ -204,6 +204,6 @@ int main(int argc, char* argv[])
 	}
 	
  	RunDemo();
-	
-	exit(0);
+
+	return 0;
 }

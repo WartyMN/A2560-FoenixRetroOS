@@ -253,7 +253,6 @@ Font* Font_New(unsigned char* the_data)
 		LOG_ALLOC(("%s %d:	__ALLOC__	the_font->height_table_	%p	size	%i", __func__ , __LINE__, the_font->height_table_, height_table_count * sizeof(uint16_t)));
 
 		memcpy((char*)the_font->height_table_, (char*)the_data, height_table_count * sizeof(uint16_t));
-		the_data += height_table_count * sizeof(uint16_t);
 	}
 	else
 	{
@@ -332,11 +331,11 @@ bool Font_Destroy(Font** the_font)
 Font* Font_LoadFontData(unsigned char* the_data)
 {
 	Font*			the_font;
-	uint16_t		image_table_count;
-	uint16_t		loc_table_count;
-	uint16_t		width_table_count;
-	uint16_t		height_table_count;
-	bool			has_height_table;
+// 	uint16_t		image_table_count;
+// 	uint16_t		loc_table_count;
+// 	uint16_t		width_table_count;
+// 	uint16_t		height_table_count;
+// 	bool			has_height_table;
 	
 	if ( (the_font = Font_New(the_data)) == NULL)
 	{
@@ -427,12 +426,6 @@ char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int heig
 	char*			needs_formatting;
 	char*			needed_formatting_last_round;
 	char*			formatted_string;
-	char*			remaining_string;
-	signed int		remaining_len;
-	signed int		orig_len;
-	signed int		v_pixels = 0;
-	signed int		num_rows;
-	signed int		the_row;
 	signed int		this_line_len;
 	bool			do_another_round = false;
 	signed int		row_height;
@@ -474,6 +467,13 @@ char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int heig
 	// outer loop: iterate on one-box worth of text until all text is displayed, or calling function no longer wants to proceed
 	do
 	{	
+		char*			remaining_string;
+		signed int		remaining_len;
+		signed int		orig_len;
+		signed int		v_pixels;
+		signed int		num_rows;
+		signed int		the_row;
+
 		remaining_len = General_Strnlen(needs_formatting, num_chars + 1); // +1 for terminator. 
 		orig_len = remaining_len;
 
@@ -652,16 +652,13 @@ signed int Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_f
 	int8_t			h_offset_value;			//!< the horizontal offset from pen position before the first pixel should be drawn
 	int8_t			width_value;			//!< the total width of the character including any whitespace to left/right
 	uint16_t*		start_read_addr;
-	uint16_t*		read_addr;
 	int				row;
 	uint8_t			this_bit;
 	uint8_t			the_color;				// shortcut to bitmap->color_
 	unsigned char*	start_write_addr;
-	unsigned char*	write_addr;
 	int				pixels_moved;
 	uint8_t			first_row;				// if no height table available, this is 0. otherwise it's first row to start drawing.
 	uint8_t			max_row;				// if no height table available, this is height of font rec. otherwise it's 1 past the last vis row
-	uint16_t		v_offset_height;
 	
 	if (the_bitmap == NULL)
 	{
@@ -690,6 +687,8 @@ signed int Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_f
 	
 	if ( ((the_font->fontType >> 0) & 0x01) )
 	{
+		uint16_t		v_offset_height;
+
 		v_offset_height = the_font->height_table_[the_char];
 		
 		if (v_offset_height == 0)
@@ -765,8 +764,8 @@ signed int Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_f
 
 	for (row = 0; row < the_font->fRectHeight; row++)
 	{
-		int		i;
-		int		pixels_written = 0;
+		uint16_t*		read_addr;
+		unsigned char*	write_addr;
 		
 		read_addr = start_read_addr;
 		write_addr = start_write_addr;
@@ -780,6 +779,7 @@ signed int Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_f
 		
 		if (row >= first_row && row < max_row)
 		{
+			int		pixels_written = 0;
 
 			// for each row, account for any H offset specified for the glyph
 			write_addr += h_offset_value;
@@ -788,6 +788,8 @@ signed int Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_f
 
 			do
 			{
+				int		i;
+				
 				for (i = 15; i >= 0 && pixels_written < pixel_only_width; i--)
 				{
 					//DEBUG_OUT(("font_data=%u, bit=%u, i=%i, row=%i", *font_data, (unsigned char)((*font_data >> i) & 0x01), i, row));

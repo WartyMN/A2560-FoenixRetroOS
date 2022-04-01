@@ -193,7 +193,6 @@ void Demo_Bitmap_GetPixelAtXY(void)
 	int				height = 200;
 	int				color = 0x20;
 	unsigned char	i;
-	int				detected_color;
 	char			temp_buff[25];
 	int				text_y = (y+height)/8 + 1; // put it under the colored squares
 	
@@ -201,6 +200,8 @@ void Demo_Bitmap_GetPixelAtXY(void)
  	
  	for (i = 0; i < 10; i++)
  	{
+		int		detected_color;
+
 		Bitmap_FillBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y, width, height, color);
 	 	detected_color = Bitmap_GetPixelAtXY(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y);
 	 	sprintf(temp_buff, "Set:%x", color);
@@ -325,7 +326,7 @@ void Demo_Bitmap_DrawRoundBox(void)
 
 	// one filled one - SLOW - dangerous with small stack
 	x = 80;
-	y = 50;
+// 	y = 50;
 	width = 80;
 	height = 16;
 	radius = 5;
@@ -374,9 +375,6 @@ void Demo_Bitmap_DrawCircle(void)
 
 void Demo_Bitmap_Blit1(void)
 {
-	signed int		x1 = 320;
-	signed int		y1 = 200;
-	signed int		radius = 6;
 	signed int		box_height = 16;
 	signed int		box_width = global_system->screen_[ID_CHANNEL_B]->width_;
 	signed int		color = 0x20;
@@ -551,6 +549,6 @@ int main(int argc, char* argv[])
 	Sys_SetModeText(global_system, true);
 	
 	RunDemo();
-	
-	exit(0);
+
+	return 0;
 }

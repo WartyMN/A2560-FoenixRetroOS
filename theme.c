@@ -485,8 +485,6 @@ bool Theme_Destroy(Theme** the_theme)
 Theme* Theme_CreateDefaultTheme(void)
 {
 	Theme*		the_theme;
-	Font*		icon_font;
-	Font*		ui_font;
 	
 	if ( (the_theme = Theme_New()) == NULL)
 	{

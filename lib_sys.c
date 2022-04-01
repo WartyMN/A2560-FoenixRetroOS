@@ -521,7 +521,6 @@ Screen* Sys_GetScreen(System* the_system, signed int channel_id)
 bool Sys_SetVRAMAddr(System* the_system, uint8_t the_bitmap_layer, unsigned char* the_address)
 {
 	uint32_t			new_vicky_bitmap0_vram_value;
-	volatile uint32_t	vram0_vicky_addr;
 	
 	DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0: want to point to bitmap at %p", __func__, __LINE__, the_address));
 
@@ -610,7 +609,6 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 	screen_resolution	new_mode;
 	unsigned long		the_vicky_value;
 	unsigned char		the_video_mode_bits;
-	volatile unsigned long*		the_border_reg;
 	unsigned long		the_border_control_value;
 	int					border_x_cols;
 	int					border_y_cols;
@@ -685,6 +683,11 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 		{
 			new_mode = RES_640X480;
 		}
+	}
+	else
+	{
+		LOG_ERR(("%s %d: The VICKY register on this machine doesn't match one I know of. I won't be able to figure out what the screen size is.", __func__, __LINE__));
+		return false;
 	}
 
 	switch (new_mode)
@@ -872,20 +875,20 @@ void Sys_LoadSystemCLUT(void)
 	char*		dest = (char*)VICKY_IIIB_CLUT0;
 	char*		new_clut_data = (char*)clut_sys_default;
 	size_t		data_size = 0x400;
-	uint32_t	the_lut_choice;
-	uint32_t	the_lut_raw_value;
-	uint32_t*	the_lut_reg;
+	//uint32_t	the_lut_choice;
+	//uint32_t	the_lut_raw_value;
+	//uint32_t*	the_lut_reg;
 	
 	
 	// check which LUT bank bitmap layer0 is looking at. 
-	the_lut_reg = (uint32_t*)BITMAP_CTRL_REG_A2560_0;
-	the_lut_choice = *(the_lut_reg);
-	the_lut_raw_value = the_lut_choice;
-	the_lut_choice = (the_lut_choice & 0x0E) >> 1;
-	DEBUG_OUT(("%s %d: the_lut_reg=%p, the_lut_choice=%x, the_lut_raw_value=%x", __func__, __LINE__, the_lut_reg, the_lut_choice, the_lut_raw_value));
+	//the_lut_reg = (uint32_t*)BITMAP_CTRL_REG_A2560_0;
+	//the_lut_choice = *(the_lut_reg);
+	//the_lut_raw_value = the_lut_choice;
+	//the_lut_choice = (the_lut_choice & 0x0E) >> 1;
+	//DEBUG_OUT(("%s %d: the_lut_reg=%p, the_lut_choice=%x, the_lut_raw_value=%x", __func__, __LINE__, the_lut_reg, the_lut_choice, the_lut_raw_value));
 
 	memcpy(dest, new_clut_data, data_size);
-	DEBUG_OUT(("%s %d: copied clut data to %p", __func__, __LINE__, dest));
+	//DEBUG_OUT(("%s %d: copied clut data to %p", __func__, __LINE__, dest));
 	
 // 	// change the LUT choice
 // 	the_lut_choice++;

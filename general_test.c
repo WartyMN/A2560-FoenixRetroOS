@@ -96,10 +96,11 @@ MU_TEST(general_test_round)
 	int		expected_result[18] = {0, 0, 0, 0, 1, 1, 1, 1, 4, 10, 10, 10, 99, 100, 149999, 150001, 0, -1};
 	double	input[18] = {0.01, 0.1, 0.4, 0.49999, 0.50, 0.51, 0.99, 1.0, 4.4, 9.50, 9.99, 10.00000001, 98.5, 99.51, 149999.0000049, 150000.6, -0.01, -0.51};
 	int		i;
-	int		result;
 	
 	for (i = 0; i < 18; i++)
 	{
+		int		result;
+
 		result = General_Round(input[i]);
 		DEBUG_OUT(("%s %d: i=%i, result='%i', expected_result[i]='%i'", __func__, __LINE__, i, result, expected_result[i]));
 		mu_assert_int_eq( expected_result[i], result );
@@ -190,7 +191,6 @@ MU_TEST(general_test_strlcpy)
 {
 	char		temp_buff[30];
 	char*		copy = temp_buff;
-	signed long	result;
 	signed long	expected_len[10] = {3, 6, 6, 16, 10, 10, 10, 10, 10, -1};
 	char*		expected_result[10] =	{"1 b", "1023 b", "1.0 kb", "ACME CORPORATION", "12345678",   "123456789",  "1234567890", "1234567890", "- - - - - / ", ""};
 	char*		input[10] = 			{"1 b", "1023 b", "1.0 kb", "ACME CORPORATION", "1234567890", "1234567890", "1234567890", "1234567890", "- - - - - / ", "abc"};
@@ -199,6 +199,8 @@ MU_TEST(general_test_strlcpy)
 	
 	for (i = 0; i < 10; i++)
 	{
+		signed long		result;
+
 		result = General_Strlcpy(copy, input[i], max_len[i]);
 		DEBUG_OUT(("%s %d: i=%i, result=%lu, max_len[i]=%lu, expected_len[i]=%lu, input[i]='%s', copy='%s', expected_result[i]='%s'", __func__, __LINE__, i, result, max_len[i], expected_len[i], input[i], copy, expected_result[i]));
 
@@ -216,8 +218,6 @@ MU_TEST(general_test_strlcpy)
 
 MU_TEST(general_test_strlcat)
 {
-	char		temp_buff[30];
-	signed long	result;
 	signed long	padding[10] = 			{3, 		5, 				10, 				12, 				6, 			 7, 			7, 				7, 				12, 			3};
 	signed long	expected_len[10] = 		{6, 		11, 			14, 				16, 				9, 			 10, 			10, 			10, 			11, 			3};
 	char*		expected_result[10] = 	{"1 byte",	"1023 kbytes",	"1.0 megajoules", 	"ACME CORPORATION", "12345678",  "123456789", 	"1234567890", 	"1234567890",	"- - - - - /", "abc"};
@@ -232,6 +232,8 @@ MU_TEST(general_test_strlcat)
 	
 	for (i = 0; i < 10; i++)
 	{
+		signed int		result;
+
 		int the_end = strlen(input[i]) - padding[i];
 		
 		input[i][the_end] = 0;
@@ -253,7 +255,6 @@ MU_TEST(general_test_strlcat)
 
 MU_TEST(general_test_strncmp)
 {
-	signed int	result;
 	signed int	expected_result[12] = 	{1, 		1, 				1, 					-1, 				0, 			 1, 			1, 				0, 				0, 				0,				0,		0};
 	char*		string1[12] = 			{"1 byte",	"1023 kbytes",	"1.0 megajoules", 	"ACME CORPORATION", "CORPORATI", "123456789", 	"1234567890", 	"1234567890",	"!@#$%^&*()_+", "!@#$%^&*()XX", "abc", "abc"};
 	char*		string2[12] = 			{"1 b",		"1023 k     ", 	"1.0 Megajoules", 	"acme corporation", "CORPORATI", "123       ", 	"123",   		"1234567890", 	"!@#$%^&*()_+", "!@#$%^&*()ZZ", "abc", "abc"};
@@ -267,6 +268,8 @@ MU_TEST(general_test_strncmp)
 	
 	for (i = 0; i < 12; i++)
 	{
+		signed int		result;
+
 		result = General_Strncmp(string1[i], string2[i], max_len[i]);
 		DEBUG_OUT(("%s %d: i=%i, result=%i, max_len[i]=%i, expected_result[i]=%i, string1[i]='%s', string2[i]='%s'", __func__, __LINE__, i, result, max_len[i], expected_result[i], string1[i], string2[i]));
 
@@ -288,7 +291,6 @@ MU_TEST(general_test_strncmp)
 
 MU_TEST(general_test_strncasecmp)
 {
-	signed int	result;
 	signed int	expected_result[12] = 	{1, 		1, 				0, 					0, 					0, 			 1, 			1, 				0, 				0, 				0,				0,		0};
 	char*		string1[12] = 			{"1 byte",	"1023 kbytes",	"1.0 megajoules", 	"ACME CORPORATION", "CORPORATI", "123456789", 	"1234567890", 	"1234567890",	"!@#$%^&*()_+", "!@#$%^&*()XX", "abc", "abc"};
 	char*		string2[12] = 			{"1 b",		"1023 k     ", 	"1.0 Megajoules", 	"acme corporation", "CORPORATI", "123       ", 	"123",   		"1234567890", 	"!@#$%^&*()_+", "!@#$%^&*()ZZ", "abc", "abc"};
@@ -302,6 +304,8 @@ MU_TEST(general_test_strncasecmp)
 	
 	for (i = 0; i < 12; i++)
 	{
+		signed int		result;
+
 		result = General_Strncasecmp(string1[i], string2[i], max_len[i]);
 		DEBUG_OUT(("%s %d: i=%i, result=%i, max_len[i]=%i, expected_result[i]=%i, string1[i]='%s', string2[i]='%s'", __func__, __LINE__, i, result, max_len[i], expected_result[i], string1[i], string2[i]));
 
@@ -323,7 +327,6 @@ MU_TEST(general_test_strncasecmp)
 
 MU_TEST(general_test_strnlen)
 {
-	signed int	result;
 	signed int	expected_result[12] = 	{6, 		11, 			14, 				16, 				9, 			 9, 			10, 			10, 			12, 			10,				3,		0};
 	char*		string1[12] = 			{"1 byte",	"1023 kbytes",	"1.0 megajoules", 	"ACME CORPORATION", "CORPORATI", "123456789", 	"1234567890", 	"1234567890",	"!@#$%^&*()_+", "!@#$%^&*()XX", "abc", "abc"};
 	size_t		max_len[12] = 			{100, 		20,				20, 				17, 				9, 			 9, 			10, 			100, 			12, 			10,				-1,		0};
@@ -331,6 +334,8 @@ MU_TEST(general_test_strnlen)
 	
 	for (i = 0; i < 12; i++)
 	{
+		signed int		result;
+		
 		result = General_Strnlen(string1[i], max_len[i]);
 		DEBUG_OUT(("%s %d: i=%i, result=%i, max_len[i]=%i, expected_result[i]=%i, string1[i]='%s'", __func__, __LINE__, i, result, max_len[i], expected_result[i], string1[i]));
 		mu_assert_int_eq(result, expected_result[i]);
@@ -340,7 +345,6 @@ MU_TEST(general_test_strnlen)
 
 MU_TEST(general_test_compare_string_len)
 {
-	bool		result;
 	bool		expected_result[12] = 	{true, 		false, 			false, 				false, 				false, 		 false, 		true, 			false, 			true, 			false,			true,	false};
 	char*		string1[12] = 			{"1 byte",	"1023 kbytes",	"1.0 megajoules", 	"ACME CORPORATION", "       ",	"123456789", 	"1234567890", 	"1234567890",	"!@#$%^&*()_+", "!@#$%^&*()X",	"a",
 		"123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 "};
@@ -350,6 +354,8 @@ MU_TEST(general_test_compare_string_len)
 	
 	for (i = 0; i < 12; i++)
 	{
+		bool		result;
+		
 		result = General_CompareStringLength(string1[i], string2[i]);
 		DEBUG_OUT(("%s %d: i=%i, result=%i, expected_result[i]=%i, string1[i]='%s', string2[i]='%s'", __func__, __LINE__, i, result, expected_result[i], string1[i], string2[i]));
 		mu_assert_int_eq(result, expected_result[i]);
@@ -369,7 +375,7 @@ MU_TEST(general_test_extract_file_extension)
 	char*	filename2 = ".txt";
 	char*	filename2result = "txt";
 	char*	filename3 = "myfile";
-	char*	filename3result = "";
+	//char*	filename3result = "";
 	char*	filename4 = "myfile.reallybigextension";
 	char*	filename4result = "reallybigextension";
 	char*	filename5 = "myfile.UPPERCASEext";
@@ -405,44 +411,28 @@ MU_TEST(text_test_hline_speed)
 	long end1;
 	long start2;
 	long end2;
-	signed int		x;
-	signed int		y;
-	signed int		line_len;
-	unsigned char	the_char;
-	signed int		i;
-	signed int		num_passes = 90;
-	signed int		j;
-	signed int		num_cycles = 10;
-
 	
 	// test speed of first variant
 	start1 = mu_timer_real();
 	
-	for (j = 0; j < num_cycles; j++)
-	{
-		for (i=0; i < num_passes; i++)
-		{
-			//mu_assert( Text_DrawHLineSlow(global_system->screen_[ID_CHANNEL_A], x, y + i, line_len, the_char, FG_COLOR_GREEN, BG_COLOR_BLACK, CHAR_ONLY) == true, "Text_DrawHLine failed" );
-		}
-	}
-		
+
+
+	// speed test 1 goes here
+	
+	
 	end1 = mu_timer_real();
 	
-	// test speed of second variant
-	x++;
+	// test speed of 2nd variant
 	start2 = mu_timer_real();
 	
-	for (j = 0; j < num_cycles; j++)
-	{
-		for (i=0; i < num_passes; i++)
-		{
-			//mu_assert( Text_DrawHLine(global_system->screen_[ID_CHANNEL_A], x, y + i, line_len, the_char, FG_COLOR_RED, BG_COLOR_BLACK, CHAR_ONLY) == true, "Text_DrawHLine failed" );
-		}
-	}
+
+
+	// speed test 2 goes here
+	
 	
 	end2 = mu_timer_real();
 	
-	printf("\nSpeed results: first routine completed in %li ticks; second in %li ticks\n", end1 - start1, end2 - start2);	
+	printf("\nSpeed results: first routine completed in %li ticks; second in %li ticks\n", end1 - start1, end2 - start2);
 }
 
 

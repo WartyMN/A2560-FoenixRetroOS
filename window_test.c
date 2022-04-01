@@ -101,25 +101,23 @@ MU_TEST(text_test_hline_speed)
 	long end1;
 	long start2;
 	long end2;
-	signed int		x;
-	signed int		y;
-	signed int		line_len;
-	unsigned char	the_char;
-	signed int		i;
-	signed int		num_passes = 90;
-	signed int		j;
-	signed int		num_cycles = 10;
-
-	x = 1;
-	y = 1;
-	line_len = 120;
 	
 	// test speed of first variant
 	start1 = mu_timer_real();
 	
 
 
-	// speed test go here
+	// speed test 1 goes here
+	
+	
+	end1 = mu_timer_real();
+	
+	// test speed of 2nd variant
+	start2 = mu_timer_real();
+	
+
+
+	// speed test 2 goes here
 	
 	
 	end2 = mu_timer_real();

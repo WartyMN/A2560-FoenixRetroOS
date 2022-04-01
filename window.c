@@ -263,8 +263,6 @@ Window* Window_New(NewWindowData* the_win_setup)
 	//   The offscreen bitmap can be NULL and be ok, but the main Bitmap MUST be valid. 
 	//   The size parameters can be adjusted to match system mins and maxs.
 	
-	DEBUG_OUT(("%s %d: x=%i, y=%i, width=%i", __func__, __LINE__, the_win_setup->x_, the_win_setup->y_, the_win_setup->width_));
-	
 	if ( the_win_setup == NULL)
 	{
 		LOG_ERR(("%s %d: passed NewWindowData was NULL", __func__ , __LINE__));
@@ -276,6 +274,8 @@ Window* Window_New(NewWindowData* the_win_setup)
 		LOG_ERR(("%s %d: passed bitmap was NULL", __func__ , __LINE__));
 		goto error;
 	}
+	
+	DEBUG_OUT(("%s %d: x=%i, y=%i, width=%i", __func__, __LINE__, the_win_setup->x_, the_win_setup->y_, the_win_setup->width_));
 	
 	if ( (the_window = (Window*)f_calloc(1, sizeof(Window), MEM_STANDARD) ) == NULL)
 	{

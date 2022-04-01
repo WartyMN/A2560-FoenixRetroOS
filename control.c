@@ -135,6 +135,7 @@ void Control_Print(Control* the_control)
 	DEBUG_OUT(("  visible_: %i", 			the_control->visible_));
 	DEBUG_OUT(("  active_: %i", 			the_control->active_));
 	DEBUG_OUT(("  enabled_: %i", 			the_control->enabled_));
+	DEBUG_OUT(("  pressed_: %i", 			the_control->pressed_));
 	DEBUG_OUT(("  value_: %i",	 			the_control->value_));
 	DEBUG_OUT(("  min_: %i",	 			the_control->min_));
 	DEBUG_OUT(("  max_: %i", 				the_control->max_));
@@ -196,10 +197,11 @@ Control* Control_New(ControlTemplate* the_template, Window* the_window, uint16_t
 	the_control->image_active_down_ = the_template->image_active_down_;
 	the_control->caption_ = the_template->caption_;
 	
-	// at start, all new controls are inactive, value 0, disabled, and invisible
+	// at start, all new controls are inactive, value 0, disabled, not-pressed, and invisible
 	the_control->visible_ = false;
 	the_control->active_ = false;
 	the_control->enabled_ = false;
+	the_control->pressed_ = false;
 	the_control->value_ = 0;
 	
 	// localize to the parent window
@@ -290,22 +292,25 @@ void Control_Render(Control* the_control)
 	//   Depending on the state of the control, one of 3 bitmaps will be blitted to the parent window
 	//   If control is set to invisible, none will be rendered
 	
-	if (!the_control->visible_)
+	if (the_control->visible_ == false)
 	{
 		return;
 	}
 	
-	if (!the_control->active_)
+	if (the_control->active_ == false)
 	{
 		the_bitmap = the_control->image_inactive_;
 	}
-	else if (the_control->active_)
-	{
-		the_bitmap = the_control->image_active_down_;
-	}
 	else
 	{
-		the_bitmap = the_control->image_active_up_;
+		if (the_control->pressed_)
+		{
+			the_bitmap = the_control->image_active_down_;
+		}
+		else
+		{
+			the_bitmap = the_control->image_active_up_;
+		}
 	}
 
 	DEBUG_OUT(("%s %d: about to blit control %p to parent window bitmap", __func__, __LINE__, the_control));

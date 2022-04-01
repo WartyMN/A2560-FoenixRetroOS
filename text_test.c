@@ -500,7 +500,6 @@ MU_TEST(text_test_char_and_attr_writing)
 MU_TEST(text_test_char_and_attr_reading)
 {
 	unsigned char	the_color;
-	unsigned char	the_value;
 	unsigned char	the_char;
 	unsigned char	the_attribute_value;
 	signed int		x;

@@ -186,8 +186,6 @@ void RunDemo(void)
 	Window*			the_window;
 	NewWindowData	the_win_setup;
 	Bitmap*			the_bitmap;
-	unsigned int	x1;
-	unsigned int	y;
 	char			temp_buff[] = "My New Window";
 	char*			wintitle = temp_buff;
 	unsigned int	width = 500;
@@ -274,5 +272,5 @@ int main(int argc, char* argv[])
 
 // 	Sys_SetModeText(global_system, false);
 	
-	exit(0);
+	return 0;
 }

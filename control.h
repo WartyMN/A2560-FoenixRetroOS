@@ -130,6 +130,7 @@ struct Control
 	bool					visible_;
 	bool					active_;						//! is the control activated or not (in appearance). Does not affect ability to receive events.
 	bool					enabled_;						//! is the control enabled or not. If not enabled, it will not receive events.
+	bool					pressed_;						//! is the control currently in a clicked/pushed/depressed state or not. Drives rendering choice. Does not affect ability to receive events.
 	int16_t					value_;							//! current value of the control
 	int16_t					min_;							//! minimum allowed value
 	int16_t					max_;							//! maximum allowed value

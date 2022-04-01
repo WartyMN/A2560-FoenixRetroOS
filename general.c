@@ -106,7 +106,6 @@ void General_WrapParaWriteLine(char** src, char** dst, signed int write_len)
 signed int General_WrapPara(char* this_line_start, char* formatted_text, signed int remaining_len, signed int max_width, signed int remaining_v_pixels, signed int one_char_width, signed int one_row_height, Font* the_font, signed int (* measure_function)(Font*, char*, signed int, signed int, signed int))
 {
 	signed int		v_pixels = 0;
-	bool			line_complete;
 	signed int		next_line_len;
 // 	char*			start_of_para = this_line_start;
 // 	char*			start_of_formatted = formatted_text;
@@ -123,6 +122,7 @@ signed int General_WrapPara(char* this_line_start, char* formatted_text, signed 
 	{
 		signed int		this_line_len = 0;
 		char*			next_line_start = this_line_start;
+		bool			line_complete;
 
 		line_complete = false;
 
@@ -501,11 +501,12 @@ bool General_StrToLower(char* the_string)
 {
     int		i;
     int		len = strlen(the_string);
-    char	this_char;
     bool	change_made = false;
     
 	for (i = 0; i < len; i++)
 	{
+	    char	this_char;
+		
 		this_char = the_string[i];
 		the_string[i] = General_ToLower(the_string[i]);
 		
@@ -938,10 +939,8 @@ char* General_ExtractFilenameFromPathWithAlloc(const char* the_file_path)
 // populates the passed string by safely combining the passed file path and name, accounting for cases where path is a disk root
 void General_CreateFilePathFromFolderAndFile(char* the_combined_path, char* the_folder_path, char* the_file_name)
 {
-	signed int	path_len;
 	
 	General_Strlcpy(the_combined_path, the_folder_path, FILE_MAX_PATHNAME_SIZE);
-	path_len = General_Strnlen(the_combined_path, FILE_MAX_PATHNAME_SIZE);
 
 	// if the filename passed was empty, just return the original folder path. 
 	//   otherwise you end up with "mypath" and file "" = "mypath/", which is bad. 

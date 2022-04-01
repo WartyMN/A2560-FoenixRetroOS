@@ -763,6 +763,18 @@ bool Text_InvertBox(Screen* the_screen, signed int x1, signed int y1, signed int
 //! @return	returns false on any error/invalid input.
 bool Text_UpdateFontData(Screen* the_screen, char* new_font_data)
 {
+	if (the_screen == NULL)
+	{
+		LOG_ERR(("%s %d: passed screen was NULL", __func__, __LINE__));
+		return false;
+	}
+
+	if (new_font_data == NULL)
+	{
+		LOG_ERR(("%s %d: passed font data was NULL", __func__, __LINE__));
+		return false;
+	}
+
 	memcpy(the_screen->text_font_ram_, new_font_data, 8*256*1);
 
 	return true;
@@ -1024,8 +1036,6 @@ unsigned char Text_GetBackColorAtXY(Screen* the_screen, signed int x, signed int
 //! @return	returns false on any error/invalid input.
 bool Text_DrawHLine(Screen* the_screen, signed int x, signed int y, signed int the_line_len, unsigned char the_char, unsigned char fore_color, unsigned char back_color, text_draw_choice the_draw_choice)
 {
-	signed int		dx;
-	unsigned char	the_attribute_value;
 	bool			result;
 	
 	// LOGIC: 
@@ -1051,6 +1061,9 @@ bool Text_DrawHLine(Screen* the_screen, signed int x, signed int y, signed int t
 	{
 		// calculate attribute value from passed fore and back colors
 		// LOGIC: text mode only supports 16 colors. lower 4 bits are back, upper 4 bits are foreground
+
+		unsigned char	the_attribute_value;
+
 		the_attribute_value = ((fore_color << 4) | back_color);
 	
 		if (the_draw_choice == ATTR_ONLY)
@@ -1435,20 +1448,13 @@ bool Text_DrawStringAtXY(Screen* the_screen, signed int x, signed int y, char* t
 char* Text_DrawStringInBox(Screen* the_screen, signed int x1, signed int y1, signed int x2, signed int y2, char* the_string, unsigned char fore_color, unsigned char back_color, bool (* continue_function)(void))
 {
 	char*			the_char_loc;
-	char*			the_attr_loc;
 	char*			needs_formatting;
 	char*			needed_formatting_last_round;
 	char*			formatted_string;
-	char*			remaining_string;
 	unsigned char	the_attribute_value;
 	signed int		max_col;
-	signed int		remaining_len;
-	signed int		orig_len;
-	signed int		v_pixels = 0;
 	signed int		max_pix_width;
 	signed int		max_pix_height;
-	signed int		num_rows;
-	signed int		the_row;
 	signed int		this_line_len;
 	bool			do_another_round = false;
 	
@@ -1493,6 +1499,14 @@ char* Text_DrawStringInBox(Screen* the_screen, signed int x1, signed int y1, sig
 	// outer loop: iterate on one-box worth of text until all text is displayed, or calling function no longer wants to proceed
 	do
 	{	
+		char*			the_attr_loc;
+		char*			remaining_string;
+		signed int		remaining_len;
+		signed int		orig_len;
+		signed int		v_pixels;
+		signed int		num_rows;
+		signed int		the_row;
+
 		remaining_len = General_Strnlen(needs_formatting, the_screen->text_mem_cols_ * the_screen->text_mem_rows_ + 1); // can't be bigger than the screen (80x60=4800). +1 for terminator. 
 		orig_len = remaining_len;
 

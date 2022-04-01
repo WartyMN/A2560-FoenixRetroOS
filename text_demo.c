@@ -865,6 +865,6 @@ int main(int argc, char* argv[])
 	//sys_chan_flush(sys_chan_open(0, (unsigned char*)"", 1));
 	
 	RunDemo();
-	
-	exit(0);
+
+	return 0;
 }
