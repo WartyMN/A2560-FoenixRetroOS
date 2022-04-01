@@ -384,16 +384,20 @@ bool Window_Destroy(Window** the_window)
 
 void Window_Render(Window* the_window)
 {
+	Theme*	the_theme;
+	
+	the_theme = Sys_GetCurrentTheme(global_system);
+
 	// put up some drawings in the window to fake represent real window graphics 
 
 	// draw basic boxes to represent window shape
 	//Bitmap_FillBoxRect(the_window->bitmap_, &the_window->overall_rect_, SYS_COLOR_WHITE);
-	Bitmap_DrawBoxRect(the_window->bitmap_, &the_window->overall_rect_, SYS_COLOR_BLACK);
+	Bitmap_DrawBoxRect(the_window->bitmap_, &the_window->overall_rect_, Theme_GetOutlineColor(the_theme));
 	
-	Bitmap_FillBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, SYS_COLOR_BLUE1);
+	Bitmap_FillBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, Theme_GetTitlebarColor(the_theme));
 	//Bitmap_DrawBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, 0xff);
 
- 	Bitmap_FillBoxRect(the_window->bitmap_, &the_window->content_rect_, SYS_COLOR_GRAY1);
+ 	Bitmap_FillBoxRect(the_window->bitmap_, &the_window->content_rect_, Theme_GetContentAreaColor(the_theme));
 	//Bitmap_DrawBoxRect(the_window->bitmap_, &the_window->content_rect_, SYS_COLOR_GREEN1);
 
 	// Draw window title

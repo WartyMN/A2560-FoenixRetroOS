@@ -155,6 +155,12 @@ ControlTemplate* Theme_GetMaximizeControlTemplate(Theme* the_theme);
 
 Bitmap* Theme_GetDesktopPattern(Theme* the_theme);
 
+ColorIdx Theme_GetTitlebarColor(Theme* the_theme);
+ColorIdx Theme_GetIconbarColor(Theme* the_theme);
+ColorIdx Theme_GetOutlineColor(Theme* the_theme);
+ColorIdx Theme_GetContentAreaColor(Theme* the_theme);
+ColorIdx Theme_GetDesktopColor(Theme* the_theme);
+
 
 
 // **** xxx functions *****

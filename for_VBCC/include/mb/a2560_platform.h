@@ -26,6 +26,7 @@
 /*                                Includes                                   */
 /*****************************************************************************/
 
+#include <stdint.h>
 
 
 /*****************************************************************************/
@@ -260,7 +261,7 @@
 #define SYS_COLOR_BLUE2		SYS_COLOR_BLUE1 + 2
 #define SYS_COLOR_BLUE3		SYS_COLOR_BLUE2 + 2
 
-#define SYS_COLOR_PURPLEBLUE	14*8+7	// purplish blue = 119 = 0x77
+#define SYS_COLOR_PURPLEBLUE	15*8+7	// purplish blue = 127 = 0x7F
 #define SYS_COLOR_PURPLEBLUEHL	10*8+5	// light accent color for purplish blue = 85 = 0x55
 
 #define SYS_DEF_COLOR_WINFRAME			SYS_COLOR_BLACK
@@ -276,7 +277,7 @@
 
 
 
-
+typedef uint8_t	ColorIdx;
 
 /*****************************************************************************/
 /*                               Enumerations                                */
