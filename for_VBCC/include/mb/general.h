@@ -50,10 +50,10 @@
 #define FILE_MAX_PATHNAME_SIZE	260	// https://www.keil.com/pack/doc/mw/FileSystem/html/fat_fs.html
 
 // turn debug mode on/off
-#define LOG_LEVEL_1x		// errors
-#define LOG_LEVEL_2x		// warnings
-#define LOG_LEVEL_3x		// infos
-#define LOG_LEVEL_4x		// debug level info for programmer
+#define LOG_LEVEL_1		// errors
+#define LOG_LEVEL_2		// warnings
+#define LOG_LEVEL_3		// infos
+#define LOG_LEVEL_4		// debug level info for programmer
 #define LOG_LEVEL_5x		// memory allocation info for programmer
 
 #ifdef LOG_LEVEL_1 

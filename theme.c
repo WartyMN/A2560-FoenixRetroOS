@@ -598,6 +598,16 @@ ControlTemplate* Theme_GetMaximizeControlTemplate(Theme* the_theme)
 }
 
 
+Bitmap* Theme_GetDesktopPattern(Theme* the_theme)
+{
+	if (the_theme == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+	}
+
+	return the_theme->desktop_pattern_;
+}
 
 
 // **** xxx functions *****

@@ -194,6 +194,7 @@ bool Sys_InitSystem(void)
 	Bitmap*			the_bitmap;
 	Font*			the_system_font;
 	Font*			the_icon_font;
+	Bitmap*			the_pattern;
 	
 	
 	DEBUG_OUT(("%s %d: Initializing Memory Manager...", __func__, __LINE__));
@@ -291,6 +292,10 @@ bool Sys_InitSystem(void)
 
 	// Set the screen background color
 	Bitmap_FillBox(the_bitmap, 0, 0, the_bitmap->width_-1, the_bitmap->height_-1, global_system->theme_->desktop_color_);
+
+	// tile the default theme's background pattern over the background color
+	the_pattern = Theme_GetDesktopPattern(global_system->theme_);
+	Bitmap_Tile(the_pattern, 0, 0, the_bitmap, 16, 16);
 	
 	DEBUG_OUT(("%s %d: System initialization complete.", __func__, __LINE__));
 

@@ -153,6 +153,8 @@ ControlTemplate* Theme_GetMinimizeControlTemplate(Theme* the_theme);
 ControlTemplate* Theme_GetNormSizeControlTemplate(Theme* the_theme);
 ControlTemplate* Theme_GetMaximizeControlTemplate(Theme* the_theme);
 
+Bitmap* Theme_GetDesktopPattern(Theme* the_theme);
+
 
 
 // **** xxx functions *****

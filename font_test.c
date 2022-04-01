@@ -175,4 +175,5 @@ int main(int argc, char* argv[])
 	Sys_SetModeText(global_system, false);
 	printf("now in normal text mode");
 
+	return 0;
 }

@@ -181,4 +181,5 @@ int main(int argc, char* argv[])
 		return MU_EXIT_CODE;
 	#endif
 
+	return 0;
 }
