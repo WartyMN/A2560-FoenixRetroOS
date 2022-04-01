@@ -19,6 +19,7 @@
 #include "control.h"
 
 // C includes
+#include <stdbool.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -353,7 +354,7 @@ error:
 
 // destructor
 // frees all allocated memory associated with the passed object, and the object itself
-boolean Window_Destroy(Window** the_window)
+bool Window_Destroy(Window** the_window)
 {
 	if (*the_window == NULL)
 	{

@@ -282,11 +282,11 @@
 /*                               Enumerations                                */
 /*****************************************************************************/
 
-typedef enum
-{
-	false = 0,
-	true = 1
-} boolean;
+// typedef enum
+// {
+// 	false = 0,
+// 	true = 1
+// } bool;
 
 // device-independent resolution flags
 typedef enum

@@ -23,6 +23,7 @@
 #include "window.h"
 
 // C includes
+#include <stdbool.h>
 
 
 // A2560 includes

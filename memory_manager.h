@@ -43,6 +43,7 @@
 #include <mb/a2560_platform.h>
 
 // C includes
+#include <stdbool.h>
 #include <stdio.h>
 
 /*****************************************************************************/
@@ -93,7 +94,7 @@ typedef struct bfhead MemoryPool;
 
 //! Initialize the VRAM and standard RAM memory pools'
 //! return Returns NULL if it fails to allocate enough memory to start the BGET system up
-boolean Memory_Initialize(void);
+bool Memory_Initialize(void);
 
 
 

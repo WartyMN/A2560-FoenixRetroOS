@@ -38,6 +38,9 @@
 
 // project includes
 
+// C includes
+#include <stdbool.h>
+
 
 // A2560 includes
 #include <mcp/syscalls.h>
@@ -119,7 +122,7 @@ Theme* Theme_New(void);
 
 // destructor
 // frees all allocated memory associated with the passed object, and the object itself
-boolean Theme_Destroy(Theme** the_theme);
+bool Theme_Destroy(Theme** the_theme);
 
 
 

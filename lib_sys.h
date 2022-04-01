@@ -42,6 +42,10 @@
 #include "control_template.h"
 
 
+// C includes
+#include <stdbool.h>
+
+
 // A2560 includes
 #include <mcp/syscalls.h>
 #include <mb/a2560_platform.h>
@@ -98,7 +102,7 @@ System* Sys_New(void);
 
 // destructor
 // frees all allocated memory associated with the passed object, and the object itself
-boolean Sys_Destroy(System** the_system);
+bool Sys_Destroy(System** the_system);
 
 
 
@@ -106,7 +110,7 @@ boolean Sys_Destroy(System** the_system);
 
 //! Initialize the system (primary entry point for all system initialization activity)
 //! Starts up the memory manager, creates the global system object, runs autoconfigure to check the system hardware, loads system and application fonts, allocates a bitmap for the screen.
-boolean Sys_InitSystem(void);
+bool Sys_InitSystem(void);
 
 
 
@@ -118,16 +122,16 @@ boolean Sys_InitSystem(void);
 //! Configures screen width, height, total text rows and cols, and visible text rows and cols by checking hardware
 //! For machines with 2 screens, call this once per screen
 //! @return	Returns false if the machine is known to be incompatible with this software. 
-boolean Sys_AutoConfigure(System* the_system);
+bool Sys_AutoConfigure(System* the_system);
 
 //! Detect the current screen mode/resolution, and set # of columns, rows, H pixels, V pixels, accordingly
 //! @return	returns false on any error/invalid input.
-boolean Sys_DetectScreenSize(Screen* the_screen);
+bool Sys_DetectScreenSize(Screen* the_screen);
 
 //! Change video mode to the one passed.
 //! @param	new_mode: One of the enumerated screen_resolution values. Must correspond to a valid VICKY video mode for the host machine. See VICKY_IIIA_RES_800X600_FLAGS, etc. defined in a2560_platform.h
 //! @return	returns false on any error/invalid input.
-boolean Sys_SetVideoMode(Screen* the_screen, screen_resolution new_mode);
+bool Sys_SetVideoMode(Screen* the_screen, screen_resolution new_mode);
 
 
 
@@ -161,7 +165,7 @@ void Sys_SetScreenBitmap(System* the_system, signed int channel_id, Bitmap* the_
 
 // **** xxx functions *****
 
-boolean Sys_SetVRAMAddr(System* the_system, uint8_t the_bitmap_layer, unsigned char* the_address);
+bool Sys_SetVRAMAddr(System* the_system, uint8_t the_bitmap_layer, unsigned char* the_address);
 
 
 
@@ -173,11 +177,11 @@ boolean Sys_SetVRAMAddr(System* the_system, uint8_t the_bitmap_layer, unsigned c
 
 
 //! Switch machine into graphics mode
-boolean Sys_SetModeGraphics(System* the_system);
+bool Sys_SetModeGraphics(System* the_system);
 
 //! Switch machine into text mode
 //! @param as_overlay: If true, sets text overlay mode (text over graphics). If false, sets full text mode (no graphics);
-boolean Sys_SetModeText(System* the_system, boolean as_overlay);
+bool Sys_SetModeText(System* the_system, bool as_overlay);
 
 
 

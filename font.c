@@ -17,6 +17,7 @@
 #include "font.h"
 
 // C includes
+#include <stdbool.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -150,7 +151,7 @@ Font* Font_New(unsigned char* the_data)
 	uint16_t		loc_table_count;
 	uint16_t		width_table_count;
 	uint16_t		height_table_count;
-	boolean			has_height_table;
+	bool			has_height_table;
 	
 	// LOGIC:
 	//   the font data will contain 26 bytes of font record, followed by data
@@ -235,8 +236,8 @@ Font* Font_New(unsigned char* the_data)
 	//   the low byte will be the v offset from top of glyph rect (eg, 3, if the first pixel is in the 4th row down)
 	//   the high byte will contain the total rows of visible pixels (eg, 3 for say a comma, but 9 for a capital letter)
 
-	has_height_table = (boolean)((the_font->fontType >> 0) & 0x01);
-// 	DEBUG_OUT(("%s %d: has_height_table=%u, has_detailed_width_table=%u", __func__, __LINE__, has_height_table, (boolean)((the_font->fontType >> 1) & 0x01)));	
+	has_height_table = (bool)((the_font->fontType >> 0) & 0x01);
+// 	DEBUG_OUT(("%s %d: has_height_table=%u, has_detailed_width_table=%u", __func__, __LINE__, has_height_table, (bool)((the_font->fontType >> 1) & 0x01)));	
 		
 	if (has_height_table)
 	{
@@ -280,7 +281,7 @@ error:
 
 // destructor
 // frees all allocated memory associated with the passed object, and the object itself
-boolean Font_Destroy(Font** the_font)
+bool Font_Destroy(Font** the_font)
 {
 	if (*the_font == NULL)
 	{
@@ -335,7 +336,7 @@ Font* Font_LoadFontData(unsigned char* the_data)
 	uint16_t		loc_table_count;
 	uint16_t		width_table_count;
 	uint16_t		height_table_count;
-	boolean			has_height_table;
+	bool			has_height_table;
 	
 	if ( (the_font = Font_New(the_data)) == NULL)
 	{
@@ -369,7 +370,7 @@ Font* Font_LoadFontData(unsigned char* the_data)
 // No word wrap is performed. 
 // If max_chars is less than the string length, only that many characters will be drawn (as space allows)
 // If max_chars is -1, then the full string length will be drawn, as space allows.
-boolean Font_DrawString(Bitmap* the_bitmap, char* the_string, signed int max_chars)
+bool Font_DrawString(Bitmap* the_bitmap, char* the_string, signed int max_chars)
 {
 	signed int		fit_count;
 	signed int		i;
@@ -420,7 +421,7 @@ boolean Font_DrawString(Bitmap* the_bitmap, char* the_string, signed int max_cha
 //! @param	wrap_buffer: pointer to a pointer to a temporary text buffer that can be used to hold the wrapped ('formatted') characters. The buffer must be large enough to hold num_chars of incoming text, plus additional line break characters where necessary. 
 //! @param	continue_function: optional hook to a function that will be called if the provided text cannot fit into the specified box. If provided, the function will be called each time text exceeds available space. If the function returns true, another chunk of text will be displayed, replacing the first. If the function returns false, processing will stop. If no function is provided, processing will stop at the point text exceeds the available space.
 //! @return	returns a pointer to the first character in the string after which it stopped processing (if string is too long to be displayed in its entirety). Returns the original string if the entire string was processed successfully. Returns NULL in the event of any error.
-char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int height, char* the_string, signed int num_chars, char** wrap_buffer, boolean (* continue_function)(void))
+char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int height, char* the_string, signed int num_chars, char** wrap_buffer, bool (* continue_function)(void))
 {
 	Font*			the_font;
 	char*			needs_formatting;
@@ -433,7 +434,7 @@ char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int heig
 	signed int		num_rows;
 	signed int		the_row;
 	signed int		this_line_len;
-	boolean			do_another_round = false;
+	bool			do_another_round = false;
 	signed int		row_height;
 	signed int		fixed_char_width;	
 	signed int		x;

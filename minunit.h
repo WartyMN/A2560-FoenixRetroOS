@@ -46,6 +46,10 @@
 #define _POSIX_C_SOURCE 200112L
 #endif
 
+
+
+// C includes
+#include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
 #include <math.h>

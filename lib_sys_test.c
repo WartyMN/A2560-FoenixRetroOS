@@ -23,6 +23,7 @@
 #include "lib_sys.h"
 
 // C includes
+#include <stdbool.h>
 
 
 // A2560 includes

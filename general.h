@@ -30,6 +30,9 @@
 /*                                Includes                                   */
 /*****************************************************************************/
 
+
+// C includes
+#include <stdbool.h>
 #include <stdlib.h>
 
 // A2560 includes
@@ -47,10 +50,10 @@
 #define FILE_MAX_PATHNAME_SIZE	260	// https://www.keil.com/pack/doc/mw/FileSystem/html/fat_fs.html
 
 // turn debug mode on/off
-#define LOG_LEVEL_1		// errors
-#define LOG_LEVEL_2		// warnings
-#define LOG_LEVEL_3		// infos
-#define LOG_LEVEL_4		// debug level info for programmer
+#define LOG_LEVEL_1x		// errors
+#define LOG_LEVEL_2x		// warnings
+#define LOG_LEVEL_3x		// infos
+#define LOG_LEVEL_4x		// debug level info for programmer
 #define LOG_LEVEL_5x		// memory allocation info for programmer
 
 #ifdef LOG_LEVEL_1 
@@ -162,7 +165,7 @@ int General_Round(double the_float);
 void General_MakeFileSizeReadable(unsigned long size_in_bytes, char* formatted_file_size);
 
 // Convert a positive or negative string integer to a signed long integer. returns false in event of error
-boolean General_StringToSignedLong(const char* the_string_value, signed long* the_conversion);
+bool General_StringToSignedLong(const char* the_string_value, signed long* the_conversion);
 
 
 
@@ -174,7 +177,7 @@ boolean General_StringToSignedLong(const char* the_string_value, signed long* th
 //! Warning: no length check is in place. Calling function must verify string is well-formed (terminated).
 //! @param	the_string: the string to convert to lower case.
 //! @return	Returns true if the string was modified by the process.
-boolean General_StrToLower(char* the_string);
+bool General_StrToLower(char* the_string);
 
 //! Change the case of the passed character from upper to lower (if necessary)
 //! Scope is limited to characters A-Z, ascii.
@@ -237,7 +240,7 @@ signed long General_Strnlen(const char *the_string, size_t max_len);
 //! @param	first_payload: the first string to compare, passed as a void pointer.
 //! @param	second_payload: the second string to compare, passed as a void pointer.
 //! @return	Returns true if the first string is longer than the second. Returns false if the strings are equivalent in length, or if second is longer. 
-boolean General_CompareStringLength(void* first_payload, void* second_payload);
+bool General_CompareStringLength(void* first_payload, void* second_payload);
 
 
 
@@ -245,14 +248,14 @@ boolean General_CompareStringLength(void* first_payload, void* second_payload);
 
 
 // test if 2 rectangles intersect
-boolean General_RectIntersect(struct Rectangle r1, struct Rectangle r2);
+bool General_RectIntersect(struct Rectangle r1, struct Rectangle r2);
 
 // test if a point is within a rectangle
-boolean General_PointInRect(signed int x, signed int y, Rectangle r);
+bool General_PointInRect(signed int x, signed int y, Rectangle r);
 
 // Position one rect within the bounds of another. Horizontally: centers the hero rect within the left/right of the frame rect; Vertically: centers or or puts at 25% line
 // put the frame coords into the frame_rect, and the object to be centered into the hero_rect. ON return, the frame rect will hold the coords to be used.
-void General_CenterRectWithinRect(Rectangle* the_frame_rect, Rectangle* the_hero_rect, boolean at_25_percent_v);
+void General_CenterRectWithinRect(Rectangle* the_frame_rect, Rectangle* the_hero_rect, bool at_25_percent_v);
 
 
 
@@ -283,7 +286,7 @@ char* General_PathPart(const char* the_file_path);
 //! @param	the_file_name: the file name to extract an extension from
 //! @param	the_extension: a pre-allocated buffer that will contain the extension, if any is detected. Must be large enough to hold the extension! No bounds checking is done. 
 //! @return	Returns false if no file extension found.
-boolean General_ExtractFileExtensionFromFilename(const char* the_file_name, char* the_extension);
+bool General_ExtractFileExtensionFromFilename(const char* the_file_name, char* the_extension);
 
 
 
@@ -300,7 +303,7 @@ void General_LogWarning(const char* format, ...);
 void General_LogInfo(const char* format, ...);
 void General_DebugOut(const char* format, ...);
 void General_LogAlloc(const char* format, ...);
-boolean General_LogInitialize(void);
+bool General_LogInitialize(void);
 void General_LogCleanUp(void);
 
 // debug function to print out a chunk of memory character by character

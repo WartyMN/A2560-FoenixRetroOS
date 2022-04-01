@@ -17,8 +17,9 @@
 #include "memory_manager.h"
 
 // C includes
+#include <stdbool.h>
 #include <stdio.h>
-#include <assert.h>
+//#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -32,6 +33,9 @@
 /*                               Definitions                                 */
 /*****************************************************************************/
 
+#define assert(expr) \
+    if (!(expr)) \
+        DEBUG_OUT(("%s %d: assertion failed", __func__, __LINE__));
 
 /*****************************************************************************/
 /*                                 Structs                                   */
@@ -127,7 +131,7 @@ int		bpoolv(void *pool);
 
 //! Initialize the VRAM and standard RAM memory pools'
 //! return Returns NULL if it fails to allocate enough memory to start the BGET system up
-boolean Memory_Initialize(void)
+bool Memory_Initialize(void)
 {
 	// LOGIC: 
 	//   The VRAM buffer is safe enough to just use, but the standard RAM is tricky

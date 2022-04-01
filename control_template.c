@@ -17,6 +17,7 @@
 #include "control_template.h"
 
 // C includes
+#include <stdbool.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -119,7 +120,7 @@ error:
 
 // destructor
 // frees all allocated memory associated with the passed object, and the object itself
-boolean ControlTemplate_Destroy(ControlTemplate** the_template)
+bool ControlTemplate_Destroy(ControlTemplate** the_template)
 {
 	if (*the_template == NULL)
 	{

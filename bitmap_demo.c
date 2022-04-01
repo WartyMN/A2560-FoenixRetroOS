@@ -18,6 +18,7 @@
 
 
 // C includes
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -433,7 +434,7 @@ void Demo_Bitmap_Blit1(void)
 }
 
 
-// boolean Bitmap_Blit(Screen* the_screen, Bitmap* src_bm, int src_x, int src_y, Bitmap* dst_bm, int dst_x, int dst_y, int width, int height);
+// bool Bitmap_Blit(Screen* the_screen, Bitmap* src_bm, int src_x, int src_y, Bitmap* dst_bm, int dst_x, int dst_y, int width, int height);
 
 
 

@@ -18,6 +18,7 @@
 // project includes
 
 // C includes
+#include <stdbool.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -102,7 +103,7 @@ void General_DrawPoly(struct RastPort* the_rastport, short num_coords, short* th
 
 /*
 // draw a rectangle in the rastport passed. If do_undraw is TRUE, try to undraw it (unimplemented TODO)
-void General_DrawBox(struct RastPort* the_rastport, signed short x1, signed short y1, signed short x2, signed short y2, boolean do_undraw, unsigned char the_color_pen)
+void General_DrawBox(struct RastPort* the_rastport, signed short x1, signed short y1, signed short x2, signed short y2, bool do_undraw, unsigned char the_color_pen)
 {
 	short				coordinates[10];
 
@@ -148,7 +149,7 @@ void General_DrawBox(struct RastPort* the_rastport, signed short x1, signed shor
 /*
 // checks a file exists without locking the file. tries to get a lock on the dir containing the file, then checks contents until it matches
 // SLOW, and probably pointless, but struggling with issue of locks not unlocking when checking for existence of an icon file.
-boolean General_CheckFileExists(unsigned char* the_file_path)
+bool General_CheckFileExists(unsigned char* the_file_path)
 {
 	BPTR 					the_dir_lock;
 	struct FileInfoBlock*	fileInfo;

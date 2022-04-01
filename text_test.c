@@ -23,6 +23,7 @@
 #include "text.h"
 
 // C includes
+#include <stdbool.h>
 
 
 // A2560 includes
@@ -56,10 +57,10 @@ extern System*			global_system;
 /*****************************************************************************/
 
 // test using sys_kbd_scancode() instead of a channel driver - TEMP - BAD
-boolean keyboard_test_2(void);
+bool keyboard_test_2(void);
 
 // test using channel driver - TEMP - BAD
-boolean keyboard_test(void);
+bool keyboard_test(void);
 
 
 /*****************************************************************************/
@@ -68,7 +69,7 @@ boolean keyboard_test(void);
 
 
 // test using sys_kbd_scancode() instead of a channel driver - TEMP - BAD
-boolean keyboard_test_2(void)
+bool keyboard_test_2(void)
 {
 	// LOGIC: 
 	//   page 34 of FoenixMCP Manual
@@ -100,7 +101,7 @@ boolean keyboard_test_2(void)
 
 
 // test using channel driver - TEMP - BAD
-boolean keyboard_test(void)
+bool keyboard_test(void)
 {
 	signed short			bytes_read = 0;
 	signed short			bytes_requested = 5;
@@ -108,7 +109,7 @@ boolean keyboard_test(void)
 	unsigned char*			the_keyboard_buff = keyboard_buff;
 	signed short			the_channel_id;
 	signed short			the_device_id = 0;
-	boolean					stop = false;
+	bool					stop = false;
 	signed int				y = 30;
 	
 // 	Text_DrawStringAtXY(ID_CHANNEL_B, 0, y++, (char*)"Trying to open keyboard device...", FG_COLOR_DK_BLUE, BG_COLOR_YELLOW);

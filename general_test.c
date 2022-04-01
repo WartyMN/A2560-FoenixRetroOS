@@ -23,6 +23,7 @@
 #include "general.h"
 
 // C includes
+#include <stdbool.h>
 
 
 // A2560 includes
@@ -339,8 +340,8 @@ MU_TEST(general_test_strnlen)
 
 MU_TEST(general_test_compare_string_len)
 {
-	boolean		result;
-	boolean		expected_result[12] = 	{true, 		false, 			false, 				false, 				false, 		 false, 		true, 			false, 			true, 			false,			true,	false};
+	bool		result;
+	bool		expected_result[12] = 	{true, 		false, 			false, 				false, 				false, 		 false, 		true, 			false, 			true, 			false,			true,	false};
 	char*		string1[12] = 			{"1 byte",	"1023 kbytes",	"1.0 megajoules", 	"ACME CORPORATION", "       ",	"123456789", 	"1234567890", 	"1234567890",	"!@#$%^&*()_+", "!@#$%^&*()X",	"a",
 		"123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 "};
 	char*		string2[12] = 			{"1 b",		"1023 k     ", 	"1.0 Megajoules", 	"acme corporation", "       ",	"123       ", 	"123",   		"1234567890", 	"!@#$%^&*()_",	"!@#$%^&*()ZZ", "", 	

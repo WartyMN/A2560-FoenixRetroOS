@@ -18,6 +18,7 @@
 #include "control.h"
 
 // C includes
+#include <stdbool.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -218,7 +219,7 @@ error:
 
 // destructor
 // frees all allocated memory associated with the passed object, and the object itself
-boolean Control_Destroy(Control** the_control)
+bool Control_Destroy(Control** the_control)
 {
 	if (*the_control == NULL)
 	{
@@ -244,7 +245,7 @@ boolean Control_Destroy(Control** the_control)
 
 // **** Set xxx functions *****
 
-boolean Control_SetNextControl(Control* the_control, Control* the_next_control)
+bool Control_SetNextControl(Control* the_control, Control* the_next_control)
 {
 	if (the_control == NULL)
 	{

@@ -18,6 +18,7 @@
 
 
 // C includes
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -62,7 +63,7 @@ void RunDemo(void);
 
 // simple function for testing passing a function hook for "do something to see another page of text" for the drawstringinbox stuff. 
 //! @return	returns true if the user wants to continue, or false if the user wants to stop the current action.
-boolean Test_MyGetUserResponseFunc(void);
+bool Test_MyGetUserResponseFunc(void);
 
 // various demos
 void Demo_Text_FillCharMem1(void);
@@ -101,7 +102,7 @@ void Demo_Text_UpdateFontData(void);
 
 // simple function for testing passing a function hook for "do something to see another page of text" for the drawstringinbox stuff. 
 //! @return	returns true if the user wants to continue, or false if the user wants to stop the current action.
-boolean Test_MyGetUserResponseFunc(void)
+bool Test_MyGetUserResponseFunc(void)
 {
 	unsigned char	c;
 	

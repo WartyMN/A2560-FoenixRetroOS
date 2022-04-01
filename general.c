@@ -19,6 +19,7 @@
 #include "general.h"
 
 // C includes
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -64,7 +65,7 @@ static FILE*			global_log_file;
 //! \cond PRIVATE
 
 // Convert a (positive-only) string integer to an unsigned long integer. returns false in event of error
-boolean General_StringToUnsignedLong(const char* the_string_value, unsigned long* the_conversion);
+bool General_StringToUnsignedLong(const char* the_string_value, unsigned long* the_conversion);
 
 // PRIVATE - no checking of parameters
 // copy the specified length of text from this_line_start into the write buffer, and overwrite the null terminator with a line break character
@@ -105,7 +106,7 @@ void General_WrapParaWriteLine(char** src, char** dst, signed int write_len)
 signed int General_WrapPara(char* this_line_start, char* formatted_text, signed int remaining_len, signed int max_width, signed int remaining_v_pixels, signed int one_char_width, signed int one_row_height, Font* the_font, signed int (* measure_function)(Font*, char*, signed int, signed int, signed int))
 {
 	signed int		v_pixels = 0;
-	boolean			line_complete;
+	bool			line_complete;
 	signed int		next_line_len;
 // 	char*			start_of_para = this_line_start;
 // 	char*			start_of_formatted = formatted_text;
@@ -242,11 +243,11 @@ signed int General_WrapPara(char* this_line_start, char* formatted_text, signed 
 
 
 // Convert a (positive-only) string integer to an unsigned long integer. returns false in event of error
-boolean General_StringToUnsignedLong(const char* the_string_value, unsigned long* the_conversion)
+bool General_StringToUnsignedLong(const char* the_string_value, unsigned long* the_conversion)
 {
 	char*			temp;
 	unsigned long	val = 0;
-	boolean			safe_conversion = true;
+	bool			safe_conversion = true;
 	
 	errno = 0;
 	// LOGIC: errno will be changed by strtol if an overrun or other error occurs
@@ -307,7 +308,7 @@ signed int General_WrapAndTrimTextToFit(char** orig_string, char** formatted_str
 	signed int		new_v_pixels_used;
 	char*			remaining_text;
 	signed int		remaining_len = max_chars_to_format;
-	boolean			format_complete = false;
+	bool			format_complete = false;
 	signed int		remaining_v_pixels;
 	static char		para_buff[1024];
 	char*			the_para = para_buff;
@@ -320,7 +321,7 @@ signed int General_WrapAndTrimTextToFit(char** orig_string, char** formatted_str
 	// Outer Loop: each pass is one line
 	do
 	{
-		boolean			line_complete = false;
+		bool			line_complete = false;
 		signed int		dist_to_next_hard_break;
 		signed int		len_to_process;
 		
@@ -459,11 +460,11 @@ void General_MakeFileSizeReadable(unsigned long size_in_bytes, char* formatted_f
 
 
 // Convert a positive or negative string integer to a signed long integer. returns false in event of error
-boolean General_StringToSignedLong(const char* the_string_value, signed long* the_conversion)
+bool General_StringToSignedLong(const char* the_string_value, signed long* the_conversion)
 {
 	signed long		signed_val = 0;
 	unsigned long	unsigned_val = 0;
-	boolean			safe_conversion;
+	bool			safe_conversion;
 	const char*		start_of_number = the_string_value;
 	
 	// is this a negative number string?
@@ -496,12 +497,12 @@ boolean General_StringToSignedLong(const char* the_string_value, signed long* th
 //! Warning: no length check is in place. Calling function must verify string is well-formed (terminated).
 //! @param	the_string: the string to convert to lower case.
 //! @return	Returns true if the string was modified by the process.
-boolean General_StrToLower(char* the_string)
+bool General_StrToLower(char* the_string)
 {
     int		i;
     int		len = strlen(the_string);
     char	this_char;
-    boolean	change_made = false;
+    bool	change_made = false;
     
 	for (i = 0; i < len; i++)
 	{
@@ -706,7 +707,7 @@ signed long General_Strnlen(const char* the_string, size_t max_len)
 //! @param	first_payload: the first string to compare, passed as a void pointer.
 //! @param	second_payload: the second string to compare, passed as a void pointer.
 //! @return	Returns true if the first string is longer than the second. Returns false if the strings are equivalent in length, or if second is longer. 
-boolean General_CompareStringLength(void* first_payload, void* second_payload)
+bool General_CompareStringLength(void* first_payload, void* second_payload)
 {
 	char*		string_1 = (char*)first_payload;
 	char*		string_2 = (char*)second_payload;
@@ -777,7 +778,7 @@ signed int General_StrFindNextLineBreak(const char* the_string, signed int max_s
 
 
 // test if 2 rectangles intersect
-boolean General_RectIntersect(Rectangle r1, Rectangle r2)
+bool General_RectIntersect(Rectangle r1, Rectangle r2)
 {
 	if	(
 		(r1.MinX > r2.MaxX) ||
@@ -794,7 +795,7 @@ boolean General_RectIntersect(Rectangle r1, Rectangle r2)
 
 
 // test if a point is within a rectangle
-boolean General_PointInRect(signed int x, signed int y, Rectangle r)
+bool General_PointInRect(signed int x, signed int y, Rectangle r)
 {
 	if	(
 		(x > r.MaxX) ||
@@ -812,7 +813,7 @@ boolean General_PointInRect(signed int x, signed int y, Rectangle r)
 
 // Position one rect within the bounds of another. Horizontally: centers the hero rect within the left/right of the frame rect; Vertically: centers or or puts at 25% line
 // put the frame coords into the frame_rect, and the object to be centered into the hero_rect. ON return, the frame rect will hold the coords to be used.
-void General_CenterRectWithinRect(Rectangle* the_frame_rect, Rectangle* the_hero_rect, boolean at_25_percent_v)
+void General_CenterRectWithinRect(Rectangle* the_frame_rect, Rectangle* the_hero_rect, bool at_25_percent_v)
 {
 	signed short	hero_height = the_hero_rect->MaxY - the_hero_rect->MinY;
 	signed short	hero_width = the_hero_rect->MaxX - the_hero_rect->MinX;
@@ -1002,7 +1003,7 @@ char* General_PathPart(const char* the_file_path)
 //! @param	the_file_name: the file name to extract an extension from
 //! @param	the_extension: a pre-allocated buffer that will contain the extension, if any is detected. Must be large enough to hold the extension! No bounds checking is done. 
 //! @return	Returns false if no file extension found.
-boolean General_ExtractFileExtensionFromFilename(const char* the_file_name, char* the_extension)
+bool General_ExtractFileExtensionFromFilename(const char* the_file_name, char* the_extension)
 {
 	// LOGIC: 
 	//   if the first char is the first dot from right, we'll count the whole thing as an extension
@@ -1129,7 +1130,7 @@ void General_LogAlloc(const char* format, ...)
 
 // initialize log file
 // globals for the log file
-boolean General_LogInitialize(void)
+bool General_LogInitialize(void)
 {
 	const char*		the_file_path = "wb2k_log.txt";
 

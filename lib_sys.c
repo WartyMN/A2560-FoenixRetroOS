@@ -25,6 +25,7 @@
 #include "window.h"
 
 // C includes
+#include <stdbool.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -143,7 +144,7 @@ error:
 
 // destructor
 // frees all allocated memory associated with the passed object, and the object itself
-boolean Sys_Destroy(System** the_system)
+bool Sys_Destroy(System** the_system)
 {
 	int		i;
 	
@@ -188,7 +189,7 @@ boolean Sys_Destroy(System** the_system)
 
 //! Initialize the system (primary entry point for all system initialization activity)
 //! Starts up the memory manager, creates the global system object, runs autoconfigure to check the system hardware, loads system and application fonts, allocates a bitmap for the screen.
-boolean Sys_InitSystem(void)
+bool Sys_InitSystem(void)
 {
 	Bitmap*			the_bitmap;
 	Font*			the_system_font;
@@ -305,7 +306,7 @@ error:
 //! Configures screen width, height, total text rows and cols, and visible text rows and cols by checking hardware
 //! For machines with 2 screens, call this once per screen
 //! @return	Returns false if the machine is known to be incompatible with this software. 
-boolean Sys_AutoConfigure(System* the_system)
+bool Sys_AutoConfigure(System* the_system)
 {
 	struct s_sys_info	the_sys_info;
 	unsigned short		the_model_number;
@@ -517,7 +518,7 @@ Screen* Sys_GetScreen(System* the_system, signed int channel_id)
 // **** xxx functions *****
 
 
-boolean Sys_SetVRAMAddr(System* the_system, uint8_t the_bitmap_layer, unsigned char* the_address)
+bool Sys_SetVRAMAddr(System* the_system, uint8_t the_bitmap_layer, unsigned char* the_address)
 {
 	uint32_t			new_vicky_bitmap0_vram_value;
 	volatile uint32_t	vram0_vicky_addr;
@@ -542,7 +543,7 @@ boolean Sys_SetVRAMAddr(System* the_system, uint8_t the_bitmap_layer, unsigned c
 
 
 //! Switch machine into graphics mode
-boolean Sys_SetModeGraphics(System* the_system)
+bool Sys_SetModeGraphics(System* the_system)
 {	
 	if (the_system == NULL)
 	{
@@ -559,12 +560,14 @@ boolean Sys_SetModeGraphics(System* the_system)
 
 	// enable bitmap layer0
 	R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_CTRL_L) = 0x01;
+	
+	return true;
 }
 
 
 //! Switch machine into text mode
 //! @param as_overlay: If true, sets text overlay mode (text over graphics). If false, sets full text mode (no graphics);
-boolean Sys_SetModeText(System* the_system, boolean as_overlay)
+bool Sys_SetModeText(System* the_system, bool as_overlay)
 {	
 	if (the_system == NULL)
 	{
@@ -596,12 +599,13 @@ boolean Sys_SetModeText(System* the_system, boolean as_overlay)
 		// disable bitmap layer0
 		R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_CTRL_L) = 0x00;
 	}
-
+	
+	return true;
 }
 
 
 //! Detect the current screen mode/resolution, and set # of columns, rows, H pixels, V pixels, accordingly
-boolean Sys_DetectScreenSize(Screen* the_screen)
+bool Sys_DetectScreenSize(Screen* the_screen)
 {
 	screen_resolution	new_mode;
 	unsigned long		the_vicky_value;
@@ -732,7 +736,7 @@ boolean Sys_DetectScreenSize(Screen* the_screen)
 //! Change video mode to the one passed.
 //! @param	new_mode: One of the enumerated screen_resolution values. Must correspond to a valid VICKY video mode for the host machine. See VICKY_IIIA_RES_800X600_FLAGS, etc. defined in a2560_platform.h
 //! @return	returns false on any error/invalid input.
-boolean Sys_SetVideoMode(Screen* the_screen, screen_resolution new_mode)
+bool Sys_SetVideoMode(Screen* the_screen, screen_resolution new_mode)
 {
 	unsigned char	new_mode_flag = 0xFF;
 	

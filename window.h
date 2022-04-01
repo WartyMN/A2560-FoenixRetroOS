@@ -43,6 +43,8 @@
 // project includes
 #include "control.h"
 
+// C includes
+#include <stdbool.h>
 
 // A2560 includes
 #include <mcp/syscalls.h>
@@ -126,11 +128,11 @@ struct Window
 	Rectangle				grow_right_rect_;				// the rect defining the area in which a click/drag will resize window
 	Rectangle				grow_top_rect_;					// the rect defining the area in which a click/drag will resize window
 	Rectangle				grow_bottom_rect_;				// the rect defining the area in which a click/drag will resize window
-	boolean					is_backdrop_;					// true if this is the backdrop (desktop) window
-	boolean					visible_;						// is the window visible?
-	boolean					active_;						// keep 1 window as the active one. only active windows get regular updates
-	boolean					changes_to_save_;				// starts at false; if window is resized or repositioned, is set to true. used to know if we have to save out to icon file when window is closed.
-	boolean					can_resize_;					// if true, window can be stretched or shrunk. If false, the width_ and height_ will be locked.
+	bool					is_backdrop_;					// true if this is the backdrop (desktop) window
+	bool					visible_;						// is the window visible?
+	bool					active_;						// keep 1 window as the active one. only active windows get regular updates
+	bool					changes_to_save_;				// starts at false; if window is resized or repositioned, is set to true. used to know if we have to save out to icon file when window is closed.
+	bool					can_resize_;					// if true, window can be stretched or shrunk. If false, the width_ and height_ will be locked.
 	signed int				x_;								// horizontal coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
 	signed int				y_;								// vertical coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
 	signed int				width_;							// width of window when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
@@ -145,8 +147,8 @@ struct Window
 	signed int				content_top_;					// of the raw y pos of the window (non-gzz), the y pos where window should start rendering content. =gzz_top_ until window is scrolled down
 	signed int				required_inner_width_;			// greater of current inner_width or H space required inside the window to display all content. If greater than H space, a scroller is needed.
 	signed int				required_inner_height_;			// greater of current inner_height or V space required inside the window to display all content. If greater than V space, a scroller is needed.
-	boolean					h_scroller_visible_;
-	boolean					v_scroller_visible_;
+	bool					h_scroller_visible_;
+	bool					v_scroller_visible_;
 	Bitmap*					pattern_;						// optional pattern used for filling the window content rect background on refresh. 
 	Window*					parent_window_;					// can be NULL. used for requesters that are spawned from a specific window.
 	Window*					child_window_;					// can be NULL. used when a window spawns a requester. (This is the requester). NULLs out again when requester is closed. 
@@ -171,8 +173,8 @@ struct NewWindowData
 	window_type				type_;
 	Bitmap* 				bitmap_;						// on-screen bitmap covering the visible portion of window
 	Bitmap* 				buffer_bitmap_;					// off-screen bitmap covering the visible portion of window
-	boolean					is_backdrop_;					// true if this is the backdrop (desktop) window
-	boolean					can_resize_;					// if true, window can be stretched or shrunk. If false, the width_ and height_ will be locked.
+	bool					is_backdrop_;					// true if this is the backdrop (desktop) window
+	bool					can_resize_;					// if true, window can be stretched or shrunk. If false, the width_ and height_ will be locked.
 	signed int				x_;								// horizontal coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
 	signed int				y_;								// vertical coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
 	signed int				width_;							// width of window when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
@@ -203,7 +205,7 @@ Window* Window_New(NewWindowData* the_win_setup);
 
 // destructor
 // frees all allocated memory associated with the passed object, and the object itself
-boolean Window_Destroy(Window** the_window);
+bool Window_Destroy(Window** the_window);
 
 
 
@@ -227,7 +229,7 @@ Control* Window_GetRootControl(Window* the_window);
 Control* Window_GetControl(Window* the_window, uint16_t the_control_id);
 uint16_t Window_GetControlID(Window* the_window, Control* the_control);
 
-boolean Window_SetControlState(Window* the_window, uint16_t the_control_id);
+bool Window_SetControlState(Window* the_window, uint16_t the_control_id);
 
 
 
