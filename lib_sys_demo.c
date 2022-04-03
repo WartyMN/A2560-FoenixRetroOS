@@ -154,7 +154,7 @@ void Demo_Font_DrawString(Bitmap* the_bitmap, unsigned int y)
 	// draw whereever the pen happens to be, in white
 	Bitmap_SetCurrentColor(the_bitmap, 0xff);
 	
-	if (Font_DrawString(the_bitmap, string1, -1) == false)
+	if (Font_DrawString(the_bitmap, string1, FONT_NO_STRLEN_CAP) == false)
 	{
 	}
 
@@ -167,7 +167,7 @@ void Demo_Font_DrawString(Bitmap* the_bitmap, unsigned int y)
 	{
 		Bitmap_SetCurrentXY(the_bitmap, x, y);
 
-		if (Font_DrawString(the_bitmap, string2, -1) == false)
+		if (Font_DrawString(the_bitmap, string2, FONT_NO_STRLEN_CAP) == false)
 		{
 		}
 		

@@ -50,8 +50,8 @@
 /*                            Macro Definitions                              */
 /*****************************************************************************/
 
-#define FONT_RECORD_SIZE	26	//!< size, in bytes, of the font record (minus tables) as stored in Mac FONT resources
-
+#define FONT_RECORD_SIZE		26	//!< size, in bytes, of the font record (minus tables) as stored in Mac FONT resources
+#define FONT_NO_STRLEN_CAP		-1	//!< for the Font_DrawString function's max_chars parameter, the value that corresponds to 'draw the entire string if it fits, do not cap it at n characters' 
 
 /*****************************************************************************/
 /*                               Enumerations                                */

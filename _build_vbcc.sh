@@ -4,7 +4,7 @@ export VBCC=/opt/vbcc
 export PATH=$VBCC/bin:$PATH
 export DEVA2560=~/dev/bbedit-workspace-a2560
 
-cd $DEVA2560/lib_sys
+cd $DEVA2560/frOS
 
 # copy latest version of headers to VBCC
 cp lib_sys.h $VBCC/targets/a2560-micah/include/mb/

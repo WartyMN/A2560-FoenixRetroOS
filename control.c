@@ -263,8 +263,21 @@ bool Control_SetNextControl(Control* the_control, Control* the_next_control)
 
 
 
-// **** Get xxx functions *****
+// **** Get functions *****
 
+
+//! Get the ID of the control
+//! @return	Returns the ID, or -1 in any error condition
+uint16_t Control_GetID(Control* the_control)
+{
+	if (the_control == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return -1;
+	}
+	
+	return the_control->id_;
+}
 
 
 

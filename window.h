@@ -85,14 +85,16 @@ typedef enum window_type
 	WIN_STANDARD	= 0,
 	WIN_BACKDROP 	= 1,
 	WIN_DIALOG		= 2,
+	WIN_UNKNOWN_TYPE,
 } window_type;
 
 typedef enum window_state
 {
-	HIDDEN			= 0,
-	MINIMIZED 		= 1,
-	NORMAL			= 2,
-	MAXIMIZED		= 3,
+	WIN_HIDDEN			= 0,
+	WIN_MINIMIZED 		= 1,
+	WIN_NORMAL			= 2,
+	WIN_MAXIMIZED		= 3,
+	WIN_UNKNOWN_STATE,
 } window_state;
 
 typedef enum window_base_control_id
@@ -111,7 +113,7 @@ struct Window
 {
 	uint8_t					id_;							// reserved. Not currently used.
 	int8_t					display_order_;					// 0 = active window, ascending order from there. maintained by system. 
-	unsigned long			user_data_;						// 32 bits for use of programs. The system will not process this field. 
+	uint32_t				user_data_;						// 32 bits for use of programs. The system will not process this field. 
 	char*					title_;
 	window_type				type_;
 	window_state			state_;							// read-only: whether the window is currently hidden, minimized, normal/window sized, or maximized
@@ -217,19 +219,38 @@ bool Window_Destroy(Window** the_window);
 
 
 
-// **** Set xxx functions *****
+// **** Set functions *****
+
+
+bool Window_SetControlState(Window* the_window, uint16_t the_control_id);
+
+// replace the current window title with the passed string
+// Note: the passed string will be copied into storage by the window. The passing function can dispose of the passed string when done.
+void Window_SetTitle(Window* the_window, char* the_title);
 
 
 
 
-
-// **** Get xxx functions *****
+// **** Get functions *****
 
 Control* Window_GetRootControl(Window* the_window);
 Control* Window_GetControl(Window* the_window, uint16_t the_control_id);
 uint16_t Window_GetControlID(Window* the_window, Control* the_control);
 
-bool Window_SetControlState(Window* the_window, uint16_t the_control_id);
+// return the current window title
+// Note: the window title is maintained by the window. Do not free the string pointer returned by this function!
+char* Window_GetTitle(Window* the_window);
+
+uint32_t Window_GetUserData(Window* the_window);
+
+window_type Window_GetType(Window* the_window);
+window_state Window_GetState(Window* the_window);
+Bitmap* Window_GetBitmap(Window* the_window);
+
+signed int Window_GetX(Window* the_window);
+signed int Window_GetY(Window* the_window);
+signed int Window_GetWidth(Window* the_window);
+signed int Window_GetHeight(Window* the_window);
 
 
 

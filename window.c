@@ -404,7 +404,7 @@ void Window_Render(Window* the_window)
 	Bitmap_SetCurrentColor(the_window->bitmap_, SYS_COLOR_WHITE);
 	Bitmap_SetCurrentXY(the_window->bitmap_, the_window->titlebar_rect_.MinX + 25, the_window->titlebar_rect_.MinY + 4);
 
-	if (Font_DrawString(the_window->bitmap_, the_window->title_, -1) == false)
+	if (Font_DrawString(the_window->bitmap_, the_window->title_, FONT_NO_STRLEN_CAP) == false)
 	{
 	}
 
@@ -445,13 +445,23 @@ void Window_Render(Window* the_window)
 
 
 
-// **** Set xxx functions *****
+
+
+// **** Set functions *****
+
+
+bool Window_SetControlState(Window* the_window, uint16_t the_control_id);
+
+// replace the current window title with the passed string
+// Note: the passed string will be copied into storage by the window. The passing function can dispose of the passed string when done.
+void Window_SetTitle(Window* the_window, char* the_title);
 
 
 
 
 
-// **** Get xxx functions *****
+
+// **** Get functions *****
 
 Control* Window_GetRootControl(Window* the_window)
 {
@@ -463,6 +473,167 @@ Control* Window_GetRootControl(Window* the_window)
 	
 	return the_window->root_control_;
 }
+
+
+Control* Window_GetControl(Window* the_window, uint16_t the_control_id)
+{
+	Control*	the_control = NULL;
+	
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+	}
+	
+	the_control = Window_GetRootControl(the_window);
+	
+	while (the_control)
+	{
+		if (Control_GetID(the_control) == the_control_id)
+		{
+			return the_control;
+		}
+		
+		the_control = the_control->next_;
+	}
+	
+	return the_control;
+}
+
+
+uint16_t Window_GetControlID(Window* the_window, Control* the_control)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return -1;
+	}
+	
+	return Control_GetID(the_control);
+}
+
+
+// return the current window title
+// Note: the window title is maintained by the window. Do not free the string pointer returned by this function!
+char* Window_GetTitle(Window* the_window)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+	}
+	
+	return the_window->title_;
+}
+
+
+uint32_t Window_GetUserData(Window* the_window)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return 0;
+	}
+	
+	return the_window->user_data_;
+}
+
+
+window_type Window_GetType(Window* the_window)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return WIN_UNKNOWN_TYPE;
+	}
+	
+	return the_window->type_;
+}
+
+
+window_state Window_GetState(Window* the_window)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return WIN_UNKNOWN_STATE;
+	}
+	
+	return the_window->state_;
+}
+
+
+Bitmap* Window_GetBitmap(Window* the_window)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+	}
+	
+	return the_window->bitmap_;
+}
+
+
+signed int Window_GetX(Window* the_window)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return -1;
+	}
+	
+	return the_window->x_;
+}
+
+
+signed int Window_GetY(Window* the_window)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return -1;
+	}
+	
+	return the_window->y_;
+}
+
+
+signed int Window_GetWidth(Window* the_window)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return -1;
+	}
+	
+	return the_window->width_;
+}
+
+
+signed int Window_GetHeight(Window* the_window)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return -1;
+	}
+	
+	return the_window->height_;
+}
+
+
+
+
+
+// **** Set functions *****
+
+
+
+
+
+// **** Get functions *****
+
 
 
 
