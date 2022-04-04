@@ -6,7 +6,7 @@ FOENIX = $(DEVA2560)/calypsi-try3/Calypsi-m68k-hello-world/module/Calypsi-m68k-F
 TARGET = $(DEVA2560)/_target_foenix
 
 # Common source files
-LIB_SRCS = lib_sys.c memory_manager.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c
+LIB_SRCS = lib_sys.c memory_manager.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c
 TEST_SRCS = bitmap_test.c font_test.c lib_sys_test.c text_test.c window_test.c general_test.c 
 DEMO_SRCS = bitmap_demo.c font_demo.c lib_sys_demo.c text_demo.c window_demo.c
 

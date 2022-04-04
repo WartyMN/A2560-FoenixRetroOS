@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>	// just for initiating rand()
 
 
 // A2560 includes
@@ -119,8 +120,8 @@ void Demo_Font_ShowChars(Bitmap* the_bitmap, unsigned int x1, unsigned int y)
 	i = the_font->firstChar;
 	pix_written = x1;
 	
-	Bitmap_SetCurrentXY(the_bitmap, x1, y);
-	Bitmap_SetCurrentColor(the_bitmap, 0xaa);
+	Bitmap_SetXY(the_bitmap, x1, y);
+	Bitmap_SetColor(the_bitmap, 0xaa);
 	
 	for (; i < the_font->lastChar; i++)
 	{
@@ -130,7 +131,7 @@ void Demo_Font_ShowChars(Bitmap* the_bitmap, unsigned int x1, unsigned int y)
 		{
 			pix_written = x1;
 			y = y + the_font->fRectHeight + the_font->leading;
-			Bitmap_SetCurrentXY(the_bitmap, x1, y);
+			Bitmap_SetXY(the_bitmap, x1, y);
 		}
 	}
 	
@@ -152,7 +153,7 @@ void Demo_Font_DrawString(Bitmap* the_bitmap, unsigned int y)
 	row_height = the_font->leading + the_font->fRectHeight;
 	
 	// draw whereever the pen happens to be, in white
-	Bitmap_SetCurrentColor(the_bitmap, 0xff);
+	Bitmap_SetColor(the_bitmap, 0xff);
 	
 	if (Font_DrawString(the_bitmap, string1, FONT_NO_STRLEN_CAP) == false)
 	{
@@ -160,12 +161,12 @@ void Demo_Font_DrawString(Bitmap* the_bitmap, unsigned int y)
 
 	// draw at upper right, in too narrow a space, in light blue
 	x = 450;
-	Bitmap_SetCurrentColor(the_bitmap, 0x88);
+	Bitmap_SetColor(the_bitmap, 0x88);
 	
 	// draw copy of string down right edge of screen to test fit
 	for (; y < the_bitmap->height_; y += row_height)
 	{
-		Bitmap_SetCurrentXY(the_bitmap, x, y);
+		Bitmap_SetXY(the_bitmap, x, y);
 
 		if (Font_DrawString(the_bitmap, string2, FONT_NO_STRLEN_CAP) == false)
 		{
@@ -183,59 +184,49 @@ void Demo_Font_DrawString(Bitmap* the_bitmap, unsigned int y)
 
 void RunDemo(void)
 {
-	Window*			the_window;
-	NewWindowData	the_win_setup;
-	Bitmap*			the_bitmap;
-	char			temp_buff[] = "My New Window";
-	char*			wintitle = temp_buff;
-	unsigned int	width = 500;
-	unsigned int	height = 300;
-
-// 	ShowDescription("Welcome to the A2560 System Library Demo!");	
-// 	WaitForUser();
+	Window*				the_window;
+	NewWinTemplate*		the_win_template;
+	int					max_width = 640;
+	int					max_height = 460;
+	static char*		the_win_title = "A New Window";
+	int					win_num;
+	int					random_num;
+	
+	srand(sys_time_jiffies());
+	//srand(time(NULL));   // Initialization, should only be called once.
 	
 	DEBUG_OUT(("%s %d: Setting graphics mode...", __func__, __LINE__));
 
 	Sys_SetModeGraphics(global_system);
 	
-	// try to allocate a bitmap in VRAM for the window
-	if ( (the_bitmap = Bitmap_New(width, height, Sys_GetAppFont(global_system))) == NULL)
+	if ( (the_win_template = Window_GetNewWinTemplate(the_win_title)) == NULL)
 	{
-		LOG_ERR(("%s %d: Failed to create bitmap", __func__, __LINE__));
+		LOG_ERR(("%s %d: Could not get a new window template", __func__ , __LINE__));
 		return;
-	}
-
-	the_win_setup.x_ = 20;
-	the_win_setup.y_ = 40;
-	the_win_setup.width_ = width;
-	the_win_setup.height_ = height;
-	the_win_setup.min_width_ = 100;
-	the_win_setup.min_height_ = 100;
-	the_win_setup.max_width_ = 1024;
-	the_win_setup.max_height_ = 768;
-
-	the_win_setup.user_data_ = 0L;
-	the_win_setup.title_ = wintitle;
-	the_win_setup.type_ = WIN_STANDARD;
-	the_win_setup.bitmap_ = the_bitmap;
-	the_win_setup.buffer_bitmap_ = NULL;
-	the_win_setup.is_backdrop_ = false;
-	the_win_setup.can_resize_ = true;
-
-	DEBUG_OUT(("%s %d: x=%i, y=%i, width=%i, title='%s'", __func__, __LINE__, the_win_setup.x_, the_win_setup.y_, the_win_setup.width_, the_win_setup.title_));
+	}	
+	// note: all the default values are fine for us in this case.
 	
-	if ( (the_window = Window_New(&the_win_setup)) == NULL)
+	for (win_num = 0; win_num < 4; win_num++)
 	{
-		DEBUG_OUT(("%s %d: Couldn't instantiate a window", __func__, __LINE__));
-		return;
+		the_win_template->x_ = (rand() * (max_width / 2)) / RAND_MAX;
+		the_win_template->y_ = (rand() * (max_height / 2)) / RAND_MAX;
+		the_win_template->width_ = (rand() * (max_width)) / RAND_MAX;
+		the_win_template->height_ = (rand() * (max_height)) / RAND_MAX;
+
+		if ( (the_window = Window_New(the_win_template)) == NULL)
+		{
+			DEBUG_OUT(("%s %d: Couldn't instantiate a window", __func__, __LINE__));
+			return;
+		}
+
+		// declare the window to be visible
+		Window_SetVisible(the_window, true);
 	}
-
-	// pretend render the window
-	Window_Render(the_window);
 	
-	// blit to screen
-	Bitmap_Blit(the_window->bitmap_, 0, 0, global_system->screen_[ID_CHANNEL_B]->bitmap_, the_window->x_, the_window->y_, width, height);
-
+	
+	// temporary until event handler is written: tell system to render the screen and all windows
+	Sys_Render(global_system);
+	
 
 // 	Window_Destroy(&the_window);
 

@@ -37,6 +37,7 @@
 /*****************************************************************************/
 
 // project includes
+#include "list.h"
 #include "memory_manager.h"
 #include "theme.h"
 #include "control_template.h"
@@ -73,11 +74,14 @@
 
 struct System
 {
-	Font*	system_font_;
-	Font*	app_font_;
-	Screen*	screen_[2];
-	Theme*	theme_;
-	uint8_t	num_screens_;
+	Font*		system_font_;
+	Font*		app_font_;
+	Screen*		screen_[2];
+	Theme*		theme_;
+	uint8_t		num_screens_;
+	List**		list_windows_;
+	Window*		active_window_;
+	uint8_t		window_count_;
 };
 
 
@@ -136,8 +140,32 @@ bool Sys_SetVideoMode(Screen* the_screen, screen_resolution new_mode);
 
 
 
+// **** Window management functions *****
 
-// **** xxx functions *****
+// Add this window to the list of windows
+void Sys_AddToWindowList(System* the_system, Window* the_new_window);
+
+// create the backdrop window for the system
+bool Sys_CreateBackdropWindow(System* the_system);
+
+// return the active window
+Window* Sys_GetActiveWindow(System* the_system);
+
+// return the backdrop window
+Window* Sys_GetBackdropWindow(System* the_system);
+
+// return a reference to the next window in the system's list, excluding backdrop windows
+Window* Sys_GetNextWindow(System* the_system);
+
+// return a reference to the previous window in the system's list, excluding backdrop windows
+Window* Sys_GetPreviousWindow(System* the_system);
+
+// Find the Window under the mouse -- accounts for z depth (topmost window will be found)
+Window* Sys_FindWindowUnderMouse(System* the_system);
+
+
+
+// **** Other GET functions *****
 
 Font* Sys_GetSystemFont(System* the_system);
 
@@ -145,10 +173,12 @@ Font* Sys_GetAppFont(System* the_system);
 
 Screen* Sys_GetScreen(System* the_system, signed int channel_id);
 
-Theme* Sys_GetCurrentTheme(System* the_system);
+Theme* Sys_GetTheme(System* the_system);
+
+Bitmap* Sys_GetScreenBitmap(System* the_system, signed int channel_id);
 
 
-// **** Set xxx functions *****
+// **** Other SET functions *****
 
 void Sys_SetSystemFont(System* the_system, Font* the_font);
 
@@ -159,7 +189,6 @@ void Sys_SetScreen(System* the_system, signed int channel_id, Screen* the_screen
 void Sys_SetScreenBitmap(System* the_system, signed int channel_id, Bitmap* the_bitmap);
 
 
-// **** Get xxx functions *****
 
 
 
@@ -232,6 +261,17 @@ Font* Sys_LoadSystemFont(void);
 // create a font object and populate with helvetica 9 pt regular
 // this is a temporary function until we get file handling and can load from disk
 Font* Sys_LoadAppFont(void);
+
+
+
+// **** Render functions *****
+
+
+//! Render all visible windows
+//! NOTE: this will move to a private Sys function later, once event handling is available
+void Sys_Render(System* the_system);
+
+
 
 
 #endif /* LIB_SYS_H_ */

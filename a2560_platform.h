@@ -305,12 +305,13 @@ typedef enum
 // forward declarations
 typedef struct Font Font;
 typedef struct Window Window;
-typedef struct NewWindowData NewWindowData;
+typedef struct NewWinTemplate NewWinTemplate;
 typedef struct Theme Theme;
 typedef struct Control Control;
 typedef struct ControlTemplate ControlTemplate;
 typedef struct System System;
 typedef struct Bitmap Bitmap;
+typedef struct List List;
 
 
 

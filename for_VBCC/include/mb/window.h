@@ -58,10 +58,12 @@
 /*                            Macro Definitions                              */
 /*****************************************************************************/
 
+#define WIN_DEFAULT_WIDTH			512
+#define WIN_DEFAULT_HEIGHT			342
 #define WIN_DEFAULT_MIN_WIDTH		90
 #define WIN_DEFAULT_MIN_HEIGHT		60
-#define WIN_DEFAULT_MAX_WIDTH		1024
-#define WIN_DEFAULT_MAX_HEIGHT		768
+#define WIN_DEFAULT_MAX_WIDTH		800
+#define WIN_DEFAULT_MAX_HEIGHT		600
 
 #define WIN_DEFAULT_DRAG_ZONE_SIZE		8		//! The width of left/right drag zones, starting from edge of window, or the height of top/bottom drag zones
 
@@ -125,6 +127,10 @@ struct Window
 // 	struct Region*			titlebar_region_;
 	Rectangle				overall_rect_;					// the rect describing the total area of the window
 	Rectangle				content_rect_;					// the rect describing the content area of the window
+	signed int				pen_x_;							// H position relative to the content_rect_, of the "pen", for drawing functions
+	signed int				pen_y_;							// V position relative to the content_rect_, of the "pen", for drawing functions
+	uint8_t					pen_color_;						// Color index of the "pen", for drawing functions
+	Font*					pen_font_;						// Font to be used by the "pen", for drawing functions
 	Rectangle				titlebar_rect_;					// the rect describing the titlebar area
 	Rectangle				grow_left_rect_;				// the rect defining the area in which a click/drag will resize window
 	Rectangle				grow_right_rect_;				// the rect defining the area in which a click/drag will resize window
@@ -135,6 +141,7 @@ struct Window
 	bool					active_;						// keep 1 window as the active one. only active windows get regular updates
 	bool					changes_to_save_;				// starts at false; if window is resized or repositioned, is set to true. used to know if we have to save out to icon file when window is closed.
 	bool					can_resize_;					// if true, window can be stretched or shrunk. If false, the width_ and height_ will be locked.
+	bool					invalidated_;					// if true, the window needs to be completed re-rendered on the next render pass
 	signed int				x_;								// horizontal coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
 	signed int				y_;								// vertical coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
 	signed int				width_;							// width of window when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
@@ -143,8 +150,8 @@ struct Window
 	signed int				min_height_;					// minimum height of window when in window-sized (normal) mode. 
 	signed int				max_width_;						// maximum width of window when in window-sized (normal) mode. If > 0, the window will not maximize. Default 0.
 	signed int				max_height_;					// maximum height of window when in window-sized (normal) mode. If > 0, the window will not maximize. Default 0. 
-	signed int				inner_width_;					// space available inside the window, accounting for border thicknesses
-	signed int				inner_height_;					// space available inside the window, accounting for border thicknesses and title bar
+	signed int				inner_width_;					// space available inside the content area, accounting for border thicknesses
+	signed int				inner_height_;					// space available inside the content area, accounting for border thicknesses and title bar
 	signed int				content_left_;					// of the raw x pos of the window (non-gzz), the x pos where window should start rendering content. =gzz_left_ until window is scrolled leftwards
 	signed int				content_top_;					// of the raw y pos of the window (non-gzz), the y pos where window should start rendering content. =gzz_top_ until window is scrolled down
 	signed int				required_inner_width_;			// greater of current inner_width or H space required inside the window to display all content. If greater than H space, a scroller is needed.
@@ -168,7 +175,7 @@ struct Window
 };
 
 
-struct NewWindowData
+struct NewWinTemplate
 {
 	unsigned long			user_data_;						// 32 bits for use of programs. The system will not process this field. 
 	char*					title_;
@@ -203,18 +210,18 @@ struct NewWindowData
 
 // constructor
 //! Allocate a Window object
-Window* Window_New(NewWindowData* the_win_setup);
+Window* Window_New(NewWinTemplate* the_win_template);
 
 // destructor
 // frees all allocated memory associated with the passed object, and the object itself
 bool Window_Destroy(Window** the_window);
 
+//! Allocate and populate a new window template object
+//! Ensures that all fields have appropriate default values
+//! Calling method must free this after creating a window with it. 
+NewWinTemplate* Window_GetNewWinTemplate(char* the_win_title);
 
 
-
-
-
-// **** xxx functions *****
 
 
 
@@ -228,7 +235,9 @@ bool Window_SetControlState(Window* the_window, uint16_t the_control_id);
 // Note: the passed string will be copied into storage by the window. The passing function can dispose of the passed string when done.
 void Window_SetTitle(Window* the_window, char* the_title);
 
-
+//! Set the passed window's visibility flag.
+//! This does not immediately cause the window to render. The window will be rendered on the next system rendering pass.
+void Window_SetVisible(Window* the_window, bool is_visible);
 
 
 // **** Get functions *****
@@ -252,17 +261,157 @@ signed int Window_GetY(Window* the_window);
 signed int Window_GetWidth(Window* the_window);
 signed int Window_GetHeight(Window* the_window);
 
+// Get backdrop yes/no flag. returns true if backdrop, false if not
+bool Window_IsBackdrop(Window* the_window);
+
+// Get visible yes/no flag. returns true if window should be rendered, false if not
+bool Window_IsVisible(Window* the_window);
 
 
-// **** xxx functions *****
+
+
+// **** RENDER functions *****
 
 void Window_Render(Window* the_window);
 
+// clears the content area rect, setting it to the theme's backcolor
+void Window_ClearContent(Window* the_window);
 
 
-// **** xxx functions *****
 
 
+// **** DRAW functions *****
+
+//! Set the font
+//! This is the font that will be used for any subsequent font drawing in this Window
+//! This also sets the font of the window's bitmap
+//! This only affects programmer-controlled drawing actions; it will not change the title bar font, the icon font, etc. Those are controlled by the theme.
+//! @param	the_window: reference to a valid Window object.
+//! @param	the_font: reference to a complete, loaded Font object.
+//! @return Returns false on any error condition
+bool Window_SetFont(Window* the_window, Font* the_font);
+
+//! Set the "pen" color
+//! This is the color that the next pen-based graphics function will use
+//! This also sets the pen color of the window's bitmap
+//! This only affects functions that use the pen: any graphics function that specifies a color will use that instead
+//! @param	the_window: reference to a valid Window object.
+//! @param	the_color: a 1-byte index to the current LUT
+//! @return Returns false on any error condition
+bool Window_SetColor(Window* the_window, uint8_t the_color);
+
+//! Set the "pen" position within the content area
+//! This also sets the pen position of the window's bitmap
+//! This is the location that the next pen-based graphics function will use for a starting location
+//! @param	the_window: reference to a valid Window object.
+//! @param	x: the horizontal position within the content area of the window. Will be clipped to the edges.
+//! @param	y: the vertical position within the content area of the window. Will be clipped to the edges.
+//! @return Returns false on any error condition
+bool Window_SetPenXY(Window* the_window, signed int x, signed int y);
+
+//! Fill a rectangle drawn from the current pen location, for the passed width/height
+//! @param	the_window: reference to a valid Window object.
+//! @param	width: width, in pixels, of the rectangle to be drawn
+//! @param	height: height, in pixels, of the rectangle to be drawn
+//! @param	the_color: a 1-byte index to the current LUT
+//! @return	returns false on any error/invalid input.
+bool Window_FillBox(Window* the_window, signed int width, signed int height, unsigned char the_color);
+
+//! Fill pixel values for the passed Rectangle object, using the specified LUT value
+//! @param	the_window: reference to a valid Window object.
+//! @param	the_coords: the starting and ending coordinates within the content area of the window
+//! @param	the_color: a 1-byte index to the current LUT
+//! @return	returns false on any error/invalid input.
+bool Window_FillBoxRect(Window* the_window, Rectangle* the_coords, unsigned char the_color);
+
+//! Set the color of the pixel at the current pen location
+//! @param	the_window: reference to a valid Window object.
+//! @param	the_color: a 1-byte index to the current LUT
+//! @return	returns false on any error/invalid input.
+bool Window_SetPixel(Window* the_window, unsigned char the_color);
+
+//! Draws a line between 2 passed coordinates.
+//! Use for any line that is not perfectly vertical or perfectly horizontal
+//! @param	the_window: reference to a valid Window object.
+//! @param	x1: the starting horizontal position within the content area of the window
+//! @param	y1: the starting vertical position within the content area of the window
+//! @param	x2: the ending horizontal position within the content area of the window
+//! @param	y2: the ending vertical position within the content area of the window
+//! Based on http://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#C. Used in C128 Lich King. 
+bool Window_DrawLine(Window* the_window, signed int x1, signed int y1, signed int x2, signed int y2, unsigned char the_color);
+
+//! Draws a horizontal line from the current pen location, for n pixels, using the specified pixel value
+//! @param	the_window: reference to a valid Window object.
+//! @param	the_color: a 1-byte index to the current LUT
+//! @return	returns false on any error/invalid input.
+bool Window_DrawHLine(Window* the_window, signed int the_line_len, unsigned char the_color);
+
+//! Draws a vertical line from specified coords, for n pixels
+//! @param	the_window: reference to a valid Window object.
+//! @param	the_color: a 1-byte index to the current LUT
+//! @return	returns false on any error/invalid input.
+bool Window_DrawVLine(Window* the_window, signed int the_line_len, unsigned char the_color);
+
+//! Draws a rectangle based on the passed Rectangle object, using the specified LUT value
+//! @param	the_window: reference to a valid Window object.
+//! @param	the_coords: the starting and ending coordinates within the content area of the window
+//! @param	the_color: a 1-byte index to the current LUT
+//! @return	returns false on any error/invalid input.
+bool Window_DrawBoxRect(Window* the_window, Rectangle* the_coords, unsigned char the_color);
+
+//! Draws a rectangle based on 2 sets of coords, using the specified LUT value
+//! @param	the_window: reference to a valid Window object.
+//! @param	x1: the starting horizontal position within the content area of the window
+//! @param	y1: the starting vertical position within the content area of the window
+//! @param	x2: the ending horizontal position within the content area of the window
+//! @param	y2: the ending vertical position within the content area of the window
+//! @param	the_color: a 1-byte index to the current LUT
+//! @return	returns false on any error/invalid input.
+bool Window_DrawBoxCoords(Window* the_window, signed int x1, signed int y1, signed int x2, signed int y2, unsigned char the_color);
+
+//! Draws a rectangle based on start coords and width/height, and optionally fills the rectangle.
+//! @param	the_window: reference to a valid Window object.
+//! @param	width: width, in pixels, of the rectangle to be drawn
+//! @param	height: height, in pixels, of the rectangle to be drawn
+//! @param	the_color: a 1-byte index to the current LUT
+//! @param	do_fill: If true, the box will be filled with the provided color. If false, the box will only draw the outline.
+//! @return	returns false on any error/invalid input.
+bool Window_DrawBox(Window* the_window, signed int width, signed int height, unsigned char the_color, bool do_fill);
+
+//! Draws a rounded rectangle from the current pen location, with the specified size and radius, and optionally fills the rectangle.
+//! @param	the_window: reference to a valid Window object.
+//! @param	width: width, in pixels, of the rectangle to be drawn
+//! @param	height: height, in pixels, of the rectangle to be drawn
+//! @param	radius: radius, in pixels, of the arc to be applied to the rectangle's corners. Minimum 3, maximum 20.
+//! @param	the_color: a 1-byte index to the current color LUT
+//! @param	do_fill: If true, the box will be filled with the provided color. If false, the box will only draw the outline.
+//! @return	returns false on any error/invalid input.
+bool Window_DrawRoundBox(Window* the_window, signed int width, signed int height, signed int radius, unsigned char the_color, bool do_fill);
+
+//! Draw a circle centered on the current pen location
+//! Based on http://rosettacode.org/wiki/Bitmap/Midpoint_circle_algorithm#C
+//! @param	the_window: reference to a valid Window object.
+bool Window_DrawCircle(Window* the_window, signed int radius, unsigned char the_color);
+
+// Draw a string at the current "pen" location, using the current pen color of the Window
+// Truncate, but still draw the string if it is too long to display on the line it started.
+// No word wrap is performed. 
+// If max_chars is less than the string length, only that many characters will be drawn (as space allows)
+// If max_chars is -1, then the full string length will be drawn, as space allows.
+bool Window_DrawString(Window* the_window, char* the_string, signed int max_chars);
+
+//! Draw a string in a rectangular block on the window, with wrap.
+//! The current font, pen location, and pen color of the window will be used
+//! If a word can't be wrapped, it will break the word and move on to the next line. So if you pass a rect with 1 char of width, it will draw a vertical line of chars down the screen.
+//! @param	the_bitmap: a valid Bitmap object, with a valid font_ property
+//! @param	width: the horizontal size of the text wrap box, in pixels. The total of 'width' and the current X coord of the bitmap must not be greater than width of the window's content area.
+//! @param	height: the vertical size of the text wrap box, in pixels. The total of 'height' and the current Y coord of the bitmap must not be greater than height of the window's content area.
+//! @param	the_string: the null-terminated string to be displayed.
+//! @param	num_chars: either the length of the passed string, or as much of the string as should be displayed.
+//! @param	wrap_buffer: pointer to a pointer to a temporary text buffer that can be used to hold the wrapped ('formatted') characters. The buffer must be large enough to hold num_chars of incoming text, plus additional line break characters where necessary. 
+//! @param	continue_function: optional hook to a function that will be called if the provided text cannot fit into the specified box. If provided, the function will be called each time text exceeds available space. If the function returns true, another chunk of text will be displayed, replacing the first. If the function returns false, processing will stop. If no function is provided, processing will stop at the point text exceeds the available space.
+//! @return	returns a pointer to the first character in the string after which it stopped processing (if string is too long to be displayed in its entirety). Returns the original string if the entire string was processed successfully. Returns NULL in the event of any error.
+char* Window_DrawStringInBox(Window* the_window, signed int width, signed int height, char* the_string, signed int num_chars, char** wrap_buffer, bool (* continue_function)(void));
 
 
 

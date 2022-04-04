@@ -31,6 +31,7 @@
 #include <mb/text.h>
 #include <mb/font.h>
 #include <mb/window.h>
+#include <mb/memory_manager.h>
 
 
 /*****************************************************************************/
@@ -102,7 +103,7 @@ ControlTemplate* ControlTemplate_New(void)
 {
 	ControlTemplate*	the_template;
 	
-	if ( (the_template = (ControlTemplate*)calloc(1, sizeof(ControlTemplate)) ) == NULL)
+	if ( (the_template = (ControlTemplate*)f_calloc(1, sizeof(ControlTemplate), MEM_STANDARD) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new ControlTemplate", __func__ , __LINE__));
 		goto error;
@@ -129,7 +130,7 @@ bool ControlTemplate_Destroy(ControlTemplate** the_template)
 	}
 
 	LOG_ALLOC(("%s %d:	__FREE__	*the_template	%p	size	%i", __func__ , __LINE__, *the_template, sizeof(ControlTemplate)));
-	free(*the_template);
+	f_free(*the_template, MEM_STANDARD);
 	*the_template = NULL;
 	
 	return true;

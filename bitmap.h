@@ -185,7 +185,7 @@ bool Bitmap_FillBox(Bitmap* the_bitmap, signed int x, signed int y, signed int w
 //! @param	the_bitmap: reference to a valid Bitmap object.
 //! @param	the_font: reference to a complete, loaded Font object.
 //! @return Returns false on any error condition
-bool Bitmap_SetCurrentFont(Bitmap* the_bitmap, Font* the_font);
+bool Bitmap_SetFont(Bitmap* the_bitmap, Font* the_font);
 
 //! Set the "pen" color
 //! This is the color that the next pen-based graphics function will use
@@ -193,7 +193,7 @@ bool Bitmap_SetCurrentFont(Bitmap* the_bitmap, Font* the_font);
 //! @param	the_bitmap: reference to a valid Bitmap object.
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return Returns false on any error condition
-bool Bitmap_SetCurrentColor(Bitmap* the_bitmap, uint8_t the_color);
+bool Bitmap_SetColor(Bitmap* the_bitmap, uint8_t the_color);
 
 //! Set the "pen" position
 //! This is the location that the next pen-based graphics function will use for a starting location
@@ -203,28 +203,32 @@ bool Bitmap_SetCurrentColor(Bitmap* the_bitmap, uint8_t the_color);
 //! @param	x: the horizontal position, between 0 and bitmap width - 1
 //! @param	y: the vertical position, between 0 and bitmap height - 1
 //! @return Returns false on any error condition
-bool Bitmap_SetCurrentXY(Bitmap* the_bitmap, signed int x, signed int y);
+bool Bitmap_SetXY(Bitmap* the_bitmap, signed int x, signed int y);
 
 //! Get the current color of the pen
 //! @param	the_bitmap: reference to a valid Bitmap object.
 //! @return Returns a 1-byte index to the current LUT, or 0 on any error
-uint8_t Bitmap_GetCurrentColor(Bitmap* the_bitmap);
+uint8_t Bitmap_GetColor(Bitmap* the_bitmap);
 
 //! Get the current X position of the pen
 //! @param	the_bitmap: reference to a valid Bitmap object.
 //! @return Returns -1 on any error
-signed int Bitmap_GetCurrentX(Bitmap* the_bitmap);
+signed int Bitmap_GetX(Bitmap* the_bitmap);
 
 //! Get the current Y position of the pen
 //! @param	the_bitmap: reference to a valid Bitmap object.
 //! @return Returns -1 on any error
-signed int Bitmap_GetCurrentY(Bitmap* the_bitmap);
+signed int Bitmap_GetY(Bitmap* the_bitmap);
 
 //! Calculate the VRAM location of the current coordinate within the bitmap
 //! @param	the_bitmap: reference to a valid Bitmap object.
 //! @return Returns a pointer to the VRAM location that corresponds to the current "pen" X, Y, or NULL on any error condition
-unsigned char* Bitmap_GetCurrentMemLoc(Bitmap* the_bitmap);
+unsigned char* Bitmap_GetMemLoc(Bitmap* the_bitmap);
 
+//! Get the current font of the pen
+//! @param	the_bitmap: reference to a valid Bitmap object.
+//! @return Returns NULL on any error
+Font* Bitmap_GetFont(Bitmap* the_bitmap);
 
 
 

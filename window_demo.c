@@ -104,77 +104,76 @@ void ShowDescription(char* the_message)
 void RunDemo(void)
 {
 	Window*			the_window;
-	NewWindowData	the_win_setup;
-	Bitmap*			the_bitmap;
-// 	unsigned int	x1;
-// 	unsigned int	y;
-	char			temp_buff[100];
-	char*			wintitle = temp_buff;
+	NewWinTemplate*		the_win_template;
 	unsigned int	width = 500;
 	unsigned int	height = 300;
-
-// 	ShowDescription("Welcome to the A2560 Window Demo!");	
-// 	WaitForUser();
+	static char*	the_win_title = "My New Window";
 	
 	DEBUG_OUT(("%s %d: Setting graphics mode...", __func__, __LINE__));
 
 	Sys_SetModeGraphics(global_system);
 	
-	// try to allocate a bitmap in VRAM for the window
-	if ( (the_bitmap = Bitmap_New(width, height, Sys_GetAppFont(global_system))) == NULL)
+	if ( (the_win_template = Window_GetNewWinTemplate(the_win_title)) == NULL)
 	{
-		LOG_ERR(("%s %d: Failed to create bitmap", __func__, __LINE__));
+		LOG_ERR(("%s %d: Could not get a new window template", __func__ , __LINE__));
 		return;
-	}
-
-	sprintf(wintitle, "My Window");
+	}	
+	// note: all the default values are fine for us in this case.
 	
-	the_win_setup.x_ = 101;
-	the_win_setup.y_ = 101;
-	the_win_setup.width_ = width;
-	the_win_setup.height_ = height;
-	the_win_setup.min_width_ = 100;
-	the_win_setup.min_height_ = 100;
-	the_win_setup.max_width_ = 1024;
-	the_win_setup.max_height_ = 768;
-
-	the_win_setup.user_data_ = 0L;
-	the_win_setup.title_ = wintitle;
-	the_win_setup.type_ = WIN_STANDARD;
-	the_win_setup.bitmap_ = the_bitmap;
-	the_win_setup.buffer_bitmap_ = NULL;
-	the_win_setup.is_backdrop_ = false;
-	the_win_setup.can_resize_ = true;
-
-	DEBUG_OUT(("%s %d: x=%i, y=%i, width=%i, title='%s'", __func__, __LINE__, the_win_setup.x_, the_win_setup.y_, the_win_setup.width_, the_win_setup.title_));
+	DEBUG_OUT(("%s %d: x=%i, y=%i, width=%i, title='%s'", __func__, __LINE__, the_win_template->x_, the_win_template->y_, the_win_template->width_, the_win_template->title_));
 	
-	if ( (the_window = Window_New(&the_win_setup)) == NULL)
+	if ( (the_window = Window_New(the_win_template)) == NULL)
 	{
 		DEBUG_OUT(("%s %d: Couldn't instantiate a window", __func__, __LINE__));
 		return;
 	}
 
-	Window_Print(the_window);
+	// say hi
+	Window_SetPenXY(the_window, 5, 5);
 
-	Bitmap_DrawCircle(global_system->screen_[ID_CHANNEL_B]->bitmap_, 25, 25, 12, 0x88);
-	Bitmap_DrawCircle(global_system->screen_[ID_CHANNEL_B]->bitmap_, 25, 25, 15, 0xcc);
-	Bitmap_DrawCircle(global_system->screen_[ID_CHANNEL_B]->bitmap_, 25, 25, 20, 0xff);
-	Bitmap_DrawCircle(global_system->screen_[ID_CHANNEL_B]->bitmap_, 50, 200, 20, 0xff);
-	Bitmap_DrawBoxCoords(global_system->screen_[ID_CHANNEL_B]->bitmap_, 25, 25, 100, 100, 0xff);
-	//Demo_Font_DrawString(global_system->screen_[ID_CHANNEL_B]->bitmap_, 20);
-// 	x1 = 25;
-// 	y = 10;
-// 		Demo_Font_ShowChars(the_bitmap, x1, y);
-// 		Demo_Font_DrawString(the_bitmap, y);
-// 		Demo_Font_DrawString(the_bitmap, y + 50);
-	//Demo_Font_DrawStringInBox1(the_bitmap);
+	if (Window_DrawString(the_window, (char*)"Hello, World", FONT_NO_STRLEN_CAP) == false)
+	{
+		// oh, no! you should handle this.
+	}
 	
-	// pretend render the window
-	Window_Render(the_window);
 
+	// draw some stuff in the window we created
+	{
+		// draw some color blocks
+		int i;
+		int x = 1;
+		int y = the_window->content_rect_.MinY + 50;
+		int height = 16;
 	
-	// blit to screen
-	Bitmap_Blit(the_window->bitmap_, 0, 0, global_system->screen_[ID_CHANNEL_B]->bitmap_, the_window->x_, the_window->y_, width, height);
+		// chromatic
+		for (i=1; i<(256-41); i++)
+		{
+			Bitmap_FillBox(the_window->bitmap_, x, y, 2, height, i);
+			x += 2;
+		
+			if (i % 36 == 0)
+			{
+				x = 1;
+				y += height;
+			}
+		}
+
+		// reds > greens > blues > grays
+		x = 1;
+		y += height;
+
+		for (; i<256; i++)
+		{
+			Bitmap_FillBox(the_window->bitmap_, x, y, 2, height, i);
+			x += 2;
+		}
+	}
+
+	// declare the window to be visible
+	Window_SetVisible(the_window, true);
+	
+	// temporary until event handler is written: tell system to render the screen and all windows
+	Sys_Render(global_system);
 
 
 // 	Window_Destroy(&the_window);

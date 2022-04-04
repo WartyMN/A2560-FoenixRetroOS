@@ -20,6 +20,7 @@
 #include "bitmap.h"
 #include "font.h"
 #include "general.h"
+#include "list.h"
 #include "text.h"
 #include "theme.h"
 #include "window.h"
@@ -215,6 +216,14 @@ bool Sys_InitSystem(void)
 		goto error;
 	}
 	
+	// initiate the list of windows
+	if ( (global_system->list_windows_ = (List**)calloc(1, sizeof(List*)) ) == NULL)
+	{
+		LOG_ERR(("%s %d: could not allocate memory to create new list of windows", __func__ , __LINE__));
+		goto error;
+	}
+	LOG_ALLOC(("%s %d:	__ALLOC__	the_system->list_windows_	%p	size	%i", __func__ , __LINE__, the_system->list_windows_, sizeof(List*)));
+	
 // 	// set the global variable that other classes/libraries need access to.
 // 	global_system = the_system;
 
@@ -253,7 +262,7 @@ bool Sys_InitSystem(void)
 	
 	DEBUG_OUT(("%s %d: allocating screen bitmap...", __func__, __LINE__));
 	
-	// try to allocate a bitmap in VRAM
+	// try to allocate a bitmap in VRAM for the screen
 	if ( (the_bitmap = Bitmap_New(global_system->screen_[ID_CHANNEL_B]->width_, global_system->screen_[ID_CHANNEL_B]->height_, Sys_GetSystemFont(global_system))) == NULL)
 	{
 		LOG_ERR(("%s %d: Failed to create bitmap", __func__, __LINE__));
@@ -274,7 +283,7 @@ bool Sys_InitSystem(void)
 // 	
 // 	DEBUG_OUT(("%s %d: Bitmap allocated! p=%p, addr=%p", __func__, __LINE__, the_bitmap, the_bitmap->addr_));
 // 
-// 	if (Bitmap_SetCurrentFont(the_bitmap, Sys_GetSystemFont(global_system)) == false)
+// 	if (Bitmap_SetFont(the_bitmap, Sys_GetSystemFont(global_system)) == false)
 // 	{
 // 		DEBUG_OUT(("%s %d: Couldn't get the system font and assign it to bitmap", __func__, __LINE__));
 // 		goto error;
@@ -290,12 +299,25 @@ bool Sys_InitSystem(void)
 	
 	Sys_SetScreenBitmap(global_system, ID_CHANNEL_B, the_bitmap);
 
+	// create the backdrop window and add it to the list of the windows the system tracks
+	
+	// LOGIC:
+	//   Every app will use (or at least have access to) the backdrop window
+	//   The backdrop window shares the same bitmap as the Screen
+	//   The backdrop window will catch events that drop through the windows in the foreground
+	
+	if ( Sys_CreateBackdropWindow(global_system) == false)
+	{
+		LOG_ERR(("%s %d: Failed to create a backdrop window. Fatal error.", __func__, __LINE__));
+		goto error;
+	}
+	
 	// Set the screen background color
 	//Bitmap_FillBox(the_bitmap, 0, 0, the_bitmap->width_-1, the_bitmap->height_-1, global_system->theme_->desktop_color_);
 
-	// tile the default theme's background pattern
-	the_pattern = Theme_GetDesktopPattern(global_system->theme_);
-	Bitmap_Tile(the_pattern, 0, 0, the_bitmap, 16, 16);
+// 	// tile the default theme's background pattern
+// 	the_pattern = Theme_GetDesktopPattern(global_system->theme_);
+// 	Bitmap_Tile(the_pattern, 0, 0, the_bitmap, 16, 16);
 	
 	DEBUG_OUT(("%s %d: System initialization complete.", __func__, __LINE__));
 
@@ -390,7 +412,413 @@ bool Sys_AutoConfigure(System* the_system)
 
 
 
-// **** Set xxx functions *****
+
+// **** Window management functions *****
+
+
+// Add this window to the list of windows
+void Sys_AddToWindowList(System* the_system, Window* the_new_window)
+{
+	List*	the_new_item;
+	
+ 	if (the_system == NULL)
+ 	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		Sys_Destroy(&the_system); // crash early, crash often
+ 	}
+	
+	the_new_item = List_NewItem((void*)the_new_window);
+	List_AddItem(the_system->list_windows_, the_new_item);
+	++the_system->window_count_;
+}
+
+
+// create the backdrop window for the system
+bool Sys_CreateBackdropWindow(System* the_system)
+{
+	Screen*				the_screen;
+	Window*				the_window;
+	NewWinTemplate*		the_win_template;
+	static char*		the_win_title = "_backdrop";
+
+ 	if (the_system == NULL)
+ 	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return false;
+ 	}
+
+	if ( (the_win_template = Window_GetNewWinTemplate(the_win_title)) == NULL)
+	{
+		LOG_ERR(("%s %d: Could not get a new window template", __func__ , __LINE__));
+		return false;
+	}
+		
+	the_screen = the_system->screen_[ID_CHANNEL_B];
+	
+	the_win_template->x_ = 0;
+	the_win_template->y_ = 0;
+	the_win_template->width_ = the_screen->width_;
+	the_win_template->height_ = the_screen->height_;
+	the_win_template->min_width_ = the_screen->width_;
+	the_win_template->min_height_ = the_screen->height_;
+	the_win_template->max_width_ = the_screen->width_;
+	the_win_template->max_height_ = the_screen->height_;
+
+	the_win_template->type_ = WIN_BACKDROP;
+	the_win_template->is_backdrop_ = true;
+	the_win_template->can_resize_ = false;
+	
+	if ( (the_window = Window_New(the_win_template)) == NULL)
+	{
+		DEBUG_OUT(("%s %d: Couldn't instantiate the backdrop window", __func__, __LINE__));
+		goto error;
+	}
+
+	// make the window visible (Window_New always sets windows to invisible so they don't render before you need them to)
+	Window_SetVisible(the_window, true);
+	
+	return true;
+	
+error:
+	return false;
+}
+
+
+// return the active window
+Window* Sys_GetActiveWindow(System* the_system)
+{
+ 	if (the_system == NULL)
+ 	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+ 	}
+	
+	return the_system->active_window_;
+}
+
+
+// return the backdrop window
+Window* Sys_GetBackdropWindow(System* the_system)
+{
+ 	List*	the_item;
+ 	
+ 	if (the_system == NULL)
+ 	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+ 	}
+	
+	the_item = *(the_system->list_windows_);
+
+	while (the_item != NULL)
+	{
+		Window*		this_window = (Window*)(the_item->payload_);
+		
+		if (Window_IsBackdrop(this_window))
+		{
+			return this_window;
+		}
+		;
+
+		the_item = the_item->next_item_;
+	}
+	
+	return NULL;
+}
+
+
+// return a reference to the next window in the system's list, excluding backdrop windows
+Window* Sys_GetNextWindow(System* the_system)
+{
+	Window*		current_window;
+	Window*		next_window;
+	List*		current_window_item;
+	List*		next_window_item;
+	bool		ok = false;
+	bool		looped = false;
+
+ 	if (the_system == NULL)
+ 	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+ 	}
+	
+	if (the_system->window_count_ < 1)
+	{
+		return NULL;
+	}
+	
+	current_window = Sys_GetActiveWindow(the_system);
+
+	// if no active window (possible on a window close), then use the first window as starting point
+	// otherwise, use active window as starting point
+	if (current_window == NULL)
+	{
+		current_window_item = List_GetFirst(the_system->list_windows_);
+		looped = true;
+	}
+	else
+	{
+		current_window_item = List_FindThisObject(the_system->list_windows_, (void*)current_window);
+	}	
+
+	if (current_window_item == NULL)
+	{
+		LOG_ERR(("%s %d: couldn't find current window in the list of windows", __func__ , __LINE__));
+		Sys_Destroy(&the_system); // crash early, crash often
+	}
+	
+	next_window_item = current_window_item->next_item_;
+	
+	while (!ok)
+	{	
+		if (next_window_item == NULL)
+		{
+			// loop back to start of List
+			if (looped == false)
+			{
+				next_window_item = List_GetFirst(the_system->list_windows_);
+				looped = true;
+				DEBUG_OUT(("%s %d: going back to first item in window list", __func__ , __LINE__));
+			}
+			else
+			{
+				DEBUG_OUT(("%s %d: have already looped once; giving up", __func__ , __LINE__));
+				current_window = (Window*)current_window_item->payload_; // there is always ONE window until we do Sys_Destroy()
+				return current_window;
+			}
+		}
+		else
+		{
+			// check for backdrop and skip.
+			next_window = (Window*)next_window_item->payload_;
+			DEBUG_OUT(("%s %d: backdrop check: this window is '%s'", __func__ , __LINE__, next_window->title_));
+
+			if (next_window->is_backdrop_)
+			{
+				next_window_item = next_window_item->next_item_;
+				DEBUG_OUT(("%s %d: was backdrop", __func__ , __LINE__));
+			}
+			else
+			{
+				ok = true;
+				DEBUG_OUT(("%s %d: ok reached", __func__ , __LINE__));
+			}
+		}
+	}
+	
+	return next_window;
+}
+
+
+// return a reference to the previous window in the system's list, excluding backdrop windows
+Window* Sys_GetPreviousWindow(System* the_system)
+{
+	Window*		current_window;
+	Window*		next_window;
+	List*		current_window_item;
+	List*		next_window_item;
+	bool		ok = false;
+
+ 	if (the_system == NULL)
+ 	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+ 	}
+	
+	if (the_system->window_count_ < 1)
+	{
+		return NULL;
+	}
+	
+	current_window = Sys_GetActiveWindow(the_system);
+
+	if (current_window == NULL)
+	{
+		return NULL;
+	}
+
+	if (the_system->window_count_ < 2)
+	{
+		return current_window;
+	}
+	
+	current_window_item = List_FindThisObject(the_system->list_windows_, (void*)current_window);
+
+	if (current_window_item == NULL)
+	{
+		LOG_ERR(("%s %d: couldn't find current window in the list of windows", __func__ , __LINE__));
+		Sys_Destroy(&the_system); // crash early, crash often
+	}
+	
+	next_window_item = current_window_item->prev_item_;
+	
+	while (!ok)
+	{	
+		if (next_window_item == NULL)
+		{
+			// loop back to start of List
+			next_window_item = List_GetLast(the_system->list_windows_);
+		}
+		else
+		{
+			// check for backdrop and skip.
+			next_window = (Window*)next_window_item->payload_;
+
+			if (next_window->is_backdrop_)
+			{
+				next_window_item = next_window_item->prev_item_;
+			}
+			else
+			{
+				ok = true;
+			}
+		}
+	}
+	
+	return next_window;
+}
+
+// NOTE: 2022/04/03: this needs to be re-invented for the Foenix. Leaving Amiga code here commented out as a reminder we need a similar function. 
+// // Find the Window under the mouse -- accounts for z depth (topmost window will be found)
+// Window* Sys_FindWindowUnderMouse(System* the_system)
+// {
+// 	struct Layer_Info*	the_layer_info = &the_system->screen_->LayerInfo;
+// 	struct Layer*		the_layer;
+// 	struct Window*		the_window_under_mouse;
+// 	Window*				the_window_under_mouse;
+// 	
+// 	// LOGIC:
+// 	//   measuring just against window coords alone doesn't mean some other window wasn't in front
+// 	//   the layer library has a function WhichLayer which will tell you which window is in front at the coords passed. 
+// 	//   note from Thomas R on EAB: "intuition may change this order any time as long as you don't lock the LayerInfo-structure"
+// 	
+//  	if (the_system == NULL)
+//  	{
+// 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+// 		return NULL;
+//  	}
+// 	
+// 	LockLayerInfo(the_layer_info);
+// 	
+// 	the_layer = WhichLayer(the_layer_info, the_system->screen_->MouseX, the_system->screen_->MouseY);
+// 	
+// 	if (the_layer == NULL)
+// 	{
+// 		// don't know if this would ever return null, but...
+// 		LOG_ERR(("%s %d: Layer library returned a NULL for layer under mouse!!?", __func__ , __LINE__));
+// 		UnlockLayerInfo(the_layer_info);
+// 		Sys_Destroy(); // crash early, crash often
+// 	}
+// 	
+// 	the_window_under_mouse = the_layer->Window;	
+// 
+// 	if (the_window_under_mouse == NULL)
+// 	{
+// 		// this DOES happen. Seems to occur only under the screen's title bar. The backdrop window starts at 0,0, but maybe title bar has special layer. 
+// 		// for this system, this doesn't need to be fatal. 
+// 		DEBUG_OUT(("%s %d: Layer library thinks a layer not associated with a window was clicked.", __func__ , __LINE__));
+// 		UnlockLayerInfo(the_layer_info);
+// 		return NULL;
+// 	}
+// 	
+// 	the_window_under_mouse = Sys_FindWindowByWindow(the_system, the_window_under_mouse);
+// 		
+// 	if (the_window_under_mouse == NULL)
+// 	{
+// 		LOG_ERR(("%s %d: the window Layer library says mouse was on a window (title=%s), but that window doesn't appear to be a WB2K window", __func__ , __LINE__, the_window_under_mouse->Title)); // NOTE: maxonC has a problem with this Title, I think it is confused with reaction.h's Title () macro.
+// 		//LOG_ERR(("%s %d: the window Layer library says mouse was on a window), but that window doesn't appear to be a WB2K window", __func__ , __LINE__));
+// 		UnlockLayerInfo(the_layer_info);
+// 		Sys_Destroy(); // crash early, crash often
+// 	}
+// 
+// 	UnlockLayerInfo(the_layer_info);
+// 
+// 	return the_window_under_mouse;
+// }
+// 
+
+
+
+
+
+
+// **** Other GET functions *****
+
+
+Theme* Sys_GetTheme(System* the_system)
+{
+	if (the_system == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+	}
+	
+	return the_system->theme_;
+}
+
+Font* Sys_GetSystemFont(System* the_system)
+{
+	if (the_system == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+	}
+	
+	return the_system->system_font_;
+}
+
+
+Font* Sys_GetAppFont(System* the_system)
+{
+	if (the_system == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+	}
+	
+	return the_system->app_font_;
+}
+
+
+Screen* Sys_GetScreen(System* the_system, signed int channel_id)
+{
+	if (the_system == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+	}
+	
+	if (channel_id != ID_CHANNEL_A && channel_id != ID_CHANNEL_B)
+	{
+		LOG_ERR(("%s %d: passed channel_id (%i) was invalid", __func__ , __LINE__, channel_id));
+		return NULL;
+	}
+	
+	return the_system->screen_[channel_id];
+}
+
+
+Bitmap* Sys_GetScreenBitmap(System* the_system, signed int channel_id)
+{
+	if (the_system == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+	}
+	
+	if (channel_id != ID_CHANNEL_A && channel_id != ID_CHANNEL_B)
+	{
+		LOG_ERR(("%s %d: passed channel_id (%i) was invalid", __func__ , __LINE__, channel_id));
+		return NULL;
+	}
+	
+	return the_system->screen_[channel_id]->bitmap_;
+}
+
+
+
+// **** Other SET functions *****
 
 void Sys_SetSystemFont(System* the_system, Font* the_font)
 {
@@ -457,63 +885,6 @@ void Sys_SetScreenBitmap(System* the_system, signed int channel_id, Bitmap* the_
 	the_system->screen_[channel_id]->bitmap_ = the_bitmap;
 	
 	Sys_SetVRAMAddr(the_system, 0, the_bitmap->addr_);
-}
-
-
-
-
-// **** Get xxx functions *****
-
-Theme* Sys_GetCurrentTheme(System* the_system)
-{
-	if (the_system == NULL)
-	{
-		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
-	}
-	
-	return the_system->theme_;
-}
-
-Font* Sys_GetSystemFont(System* the_system)
-{
-	if (the_system == NULL)
-	{
-		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
-	}
-	
-	return the_system->system_font_;
-}
-
-
-Font* Sys_GetAppFont(System* the_system)
-{
-	if (the_system == NULL)
-	{
-		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
-	}
-	
-	return the_system->app_font_;
-}
-
-
-Screen* Sys_GetScreen(System* the_system, signed int channel_id)
-{
-	if (the_system == NULL)
-	{
-		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
-	}
-	
-	if (channel_id != ID_CHANNEL_A && channel_id != ID_CHANNEL_B)
-	{
-		LOG_ERR(("%s %d: passed channel_id (%i) was invalid", __func__ , __LINE__, channel_id));
-		return NULL;
-	}
-	
-	return the_system->screen_[channel_id];
 }
 
 
@@ -1573,4 +1944,68 @@ Font* Sys_LoadAppFont(void)
 	}
 }
 
+
+// **** Render functions *****
+
+
+//! Render all visible windows
+//! NOTE: this will move to a private Sys function later, once event handling is available
+void Sys_Render(System* the_system)
+{
+	Window*		this_window;
+	int			num_nodes = 0;
+	List*		the_item;
+
+ 	if (the_system == NULL)
+ 	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return;
+ 	}
+	
+	// LOGIC:
+	//   as we do not have regions and layers set up yet, we have to render every single window in its entirely, including the backdrop
+	//   therefore, it is critical that the rendering take place in the order of back to front
+	//   until there is a mouse, and event handling, there is no way to make one window in front of another, so the distinction is meaningless
+	//   for now, we render backdrop > next window created > next window created > etc.
+	
+	// render the backdrop window (this writes directly to the Screen's bitmap, as that is shared with the backdrop window)
+	// in effect, this wipes out any windows that had been drawn previously
+	if ( (this_window = Sys_GetBackdropWindow(the_system)) != NULL)
+	{
+		Window_Render(this_window);
+	}
+	
+	// have each window (re)render its controls/content/etc to its bitmap, and blit each one to the main screen/backdrop window bitmap
+	
+	if (the_system->list_windows_ == NULL)
+	{
+		DEBUG_OUT(("%s %d: the window list was NULL", __func__ , __LINE__));
+		return;
+	}
+	
+	List_Print(the_system->list_windows_, (void*)&Window_Print);
+	
+	the_item = *(the_system->list_windows_);
+
+	while (the_item != NULL)
+	{
+		Window*		this_window = (Window*)(the_item->payload_);
+		
+		if (Window_IsVisible(this_window) == true && Window_IsBackdrop(this_window) == false)
+		{
+			++num_nodes;
+			Window_Render(this_window);
+
+			// blit to screen
+			Bitmap_Blit(this_window->bitmap_, 0, 0, the_system->screen_[ID_CHANNEL_B]->bitmap_, this_window->x_, this_window->y_, this_window->width_, this_window->height_);
+		}
+
+		the_item = the_item->next_item_;
+	}
+
+	// now free up the list items themselves
+	List_Destroy(the_system->list_windows_);
+
+	DEBUG_OUT(("%s %d: %i windows rendered out of %i total window", __func__ , __LINE__, num_nodes, the_system->window_count_));
+}
 

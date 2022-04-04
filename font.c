@@ -29,6 +29,7 @@
 #include <mb/general.h>
 #include <mb/bitmap.h>
 #include <mb/text.h>
+#include <mb/memory_manager.h>
 
 
 /*****************************************************************************/
@@ -163,7 +164,7 @@ Font* Font_New(unsigned char* the_data)
 	//   process is allocate space for font rec, copy over its 20 bytes
 	//   use the data now in the font rec to allocate space for the other 3 tables and copy them over. 
 	
-	if ( (the_font = (Font*)calloc(1, sizeof(Font)) ) == NULL)
+	if ( (the_font = (Font*)f_calloc(1, sizeof(Font), MEM_STANDARD) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new font record", __func__ , __LINE__));
 		goto error;
@@ -189,7 +190,7 @@ Font* Font_New(unsigned char* the_data)
 
 	image_table_count = the_font->rowWords * the_font->fRectHeight;
 	
-	if ( (the_font->image_table_ = (uint16_t*)calloc(image_table_count, sizeof(uint16_t)) ) == NULL)
+	if ( (the_font->image_table_ = (uint16_t*)f_calloc(image_table_count, sizeof(uint16_t), MEM_STANDARD) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new font image data", __func__ , __LINE__));
 		goto error;
@@ -204,7 +205,7 @@ Font* Font_New(unsigned char* the_data)
 
 	loc_table_count = the_font->lastChar - the_font->firstChar + 3;
 
-	if ( (the_font->loc_table_ = (uint16_t*)calloc(loc_table_count, sizeof(uint16_t)) ) == NULL)
+	if ( (the_font->loc_table_ = (uint16_t*)f_calloc(loc_table_count, sizeof(uint16_t), MEM_STANDARD) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new font location data", __func__ , __LINE__));
 		goto error;
@@ -221,7 +222,7 @@ Font* Font_New(unsigned char* the_data)
 
 	width_table_count = the_font->lastChar - the_font->firstChar + 3;
 	
-	if ( (the_font->width_table_ = (uint16_t*)calloc(width_table_count, sizeof(uint16_t)) ) == NULL)
+	if ( (the_font->width_table_ = (uint16_t*)f_calloc(width_table_count, sizeof(uint16_t), MEM_STANDARD) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new font width data", __func__ , __LINE__));
 		goto error;
@@ -245,7 +246,7 @@ Font* Font_New(unsigned char* the_data)
 		
 		height_table_count = the_font->lastChar - the_font->firstChar + 3;
 		
-		if ( (the_font->height_table_ = (uint16_t*)calloc(height_table_count, sizeof(uint16_t)) ) == NULL)
+		if ( (the_font->height_table_ = (uint16_t*)f_calloc(height_table_count, sizeof(uint16_t), MEM_STANDARD) ) == NULL)
 		{
 			LOG_ERR(("%s %d: could not allocate memory to create new font height data", __func__ , __LINE__));
 			goto error;
@@ -291,29 +292,29 @@ bool Font_Destroy(Font** the_font)
 	if ((*the_font)->image_table_)
 	{
 		LOG_ALLOC(("%s %d:	__FREE__	(*the_font)->image_table_	%p	size	?", __func__ , __LINE__, (*the_font)->image_table_));
-		free((*the_font)->image_table_);
+		f_free((*the_font)->image_table_, MEM_STANDARD);
 	}
 	
 	if ((*the_font)->loc_table_)
 	{
 		LOG_ALLOC(("%s %d:	__FREE__	(*the_font)->loc_table_	%p	size	?", __func__ , __LINE__, (*the_font)->loc_table_));
-		free((*the_font)->loc_table_);
+		f_free((*the_font)->loc_table_, MEM_STANDARD);
 	}
 	
 	if ((*the_font)->width_table_)
 	{
 		LOG_ALLOC(("%s %d:	__FREE__	(*the_font)->width_table_	%p	size	?", __func__ , __LINE__, (*the_font)->width_table_));
-		free((*the_font)->width_table_);
+		f_free((*the_font)->width_table_, MEM_STANDARD);
 	}
 	
 	if ((*the_font)->height_table_)
 	{
 		LOG_ALLOC(("%s %d:	__FREE__	(*the_font)->height_table_	%p	size	?", __func__ , __LINE__, (*the_font)->height_table_));
-		free((*the_font)->height_table_);
+		f_free((*the_font)->height_table_, MEM_STANDARD);
 	}
 
 	LOG_ALLOC(("%s %d:	__FREE__	*the_font	%p	size	%i", __func__ , __LINE__, *the_font, sizeof(Font)));
-	free(*the_font);
+	f_free(*the_font, MEM_STANDARD);
 	*the_font = NULL;
 	
 	return true;
@@ -439,8 +440,8 @@ char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int heig
 		return NULL;
 	}
 
-	x = Bitmap_GetCurrentX(the_bitmap);
-	y = Bitmap_GetCurrentY(the_bitmap);
+	x = Bitmap_GetX(the_bitmap);
+	y = Bitmap_GetY(the_bitmap);
 	
 	//DEBUG_OUT(("%s %d: x=%i, y=%i, num_chars=%i", __func__, __LINE__, x, y, num_chars));
 	
@@ -540,7 +541,7 @@ char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int heig
 			//DEBUG_OUT(("%s %d: remaining_len=%i, remaining='%s'", __func__ , __LINE__, remaining_len, remaining_string));
 			
 			y += row_height;
-			Bitmap_SetCurrentXY(the_bitmap, x, y);
+			Bitmap_SetXY(the_bitmap, x, y);
 // 			the_char_loc += the_screen->text_mem_cols_;
 // 			the_attr_loc += the_screen->text_mem_cols_;		
 			the_row++;
@@ -755,11 +756,11 @@ signed int Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_f
 	image_offset_index_rem = loc_offset % 16;
 	//DEBUG_OUT(("%s %d: loc_offset=%i, image_offset_index=%i, image_offset_index_rem=%i", __func__, __LINE__, loc_offset, image_offset_index, image_offset_index_rem));
 
-	the_color = Bitmap_GetCurrentColor(the_bitmap);
+	the_color = Bitmap_GetColor(the_bitmap);
 	
 	start_read_addr = the_font->image_table_ + image_offset_index;
 	
-	start_write_addr = Bitmap_GetCurrentMemLoc(the_bitmap);
+	start_write_addr = Bitmap_GetMemLoc(the_bitmap);
 	//DEBUG_OUT(("%s %d: start_write_addr=%p", __func__, __LINE__, start_write_addr));
 
 	for (row = 0; row < the_font->fRectHeight; row++)

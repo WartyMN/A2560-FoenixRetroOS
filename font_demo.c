@@ -912,8 +912,8 @@ void Demo_Font_ShowChars(Bitmap* the_bitmap, unsigned int x1, unsigned int y)
 	i = the_font->firstChar;
 	pix_written = x1;
 	
-	Bitmap_SetCurrentXY(the_bitmap, x1, y);
-	Bitmap_SetCurrentColor(the_bitmap, SYS_COLOR_RED2);
+	Bitmap_SetXY(the_bitmap, x1, y);
+	Bitmap_SetColor(the_bitmap, SYS_COLOR_RED2);
 	
 	for (; i < the_font->lastChar; i++)
 	{
@@ -923,7 +923,7 @@ void Demo_Font_ShowChars(Bitmap* the_bitmap, unsigned int x1, unsigned int y)
 		{
 			pix_written = x1;
 			y = y + the_font->fRectHeight + the_font->leading;
-			Bitmap_SetCurrentXY(the_bitmap, x1, y);
+			Bitmap_SetXY(the_bitmap, x1, y);
 		}
 	}
 	
@@ -945,7 +945,7 @@ void Demo_Font_DrawString(Bitmap* the_bitmap, unsigned int y)
 	row_height = the_font->leading + the_font->fRectHeight;
 	
 	// draw whereever the pen happens to be, in white
-	Bitmap_SetCurrentColor(the_bitmap, SYS_COLOR_WHITE);
+	Bitmap_SetColor(the_bitmap, SYS_COLOR_WHITE);
 	
 	if (Font_DrawString(the_bitmap, string1, FONT_NO_STRLEN_CAP) == false)
 	{
@@ -953,12 +953,12 @@ void Demo_Font_DrawString(Bitmap* the_bitmap, unsigned int y)
 
 	// draw at upper right, in too narrow a space, in light blue
 	x = 450;
-	Bitmap_SetCurrentColor(the_bitmap, SYS_COLOR_BLUE1);
+	Bitmap_SetColor(the_bitmap, SYS_COLOR_BLUE1);
 	
 	// draw copy of string down right edge of screen to test fit
 	for (; y < the_bitmap->height_; y += row_height)
 	{
-		Bitmap_SetCurrentXY(the_bitmap, x, y);
+		Bitmap_SetXY(the_bitmap, x, y);
 
 		if (Font_DrawString(the_bitmap, string2, FONT_NO_STRLEN_CAP) == false)
 		{
@@ -994,8 +994,8 @@ void Demo_Font_DrawStringInBox1(Bitmap* the_bitmap)
 	width = 150;
 	height = 200;
 
-	Bitmap_SetCurrentColor(the_bitmap, SYS_COLOR_BLACK);
-	Bitmap_SetCurrentXY(the_bitmap, x, y);
+	Bitmap_SetColor(the_bitmap, SYS_COLOR_BLACK);
+	Bitmap_SetXY(the_bitmap, x, y);
 	
 	Bitmap_DrawBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x - margin, y - margin, width + margin, height + margin, SYS_COLOR_WHITE, PARAM_DO_FILL);
 	Bitmap_DrawBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x - margin, y - margin, width + margin, height + margin, SYS_COLOR_BLACK, PARAM_DO_NOT_FILL);

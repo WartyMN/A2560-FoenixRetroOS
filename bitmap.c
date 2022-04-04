@@ -286,7 +286,7 @@ Bitmap* Bitmap_New(signed int width, signed int height, Font* the_font)
 
 	if (the_font)
 	{
-		if (Bitmap_SetCurrentFont(the_bitmap, the_font) == false)
+		if (Bitmap_SetFont(the_bitmap, the_font) == false)
 		{
 			LOG_ERR(("%s %d: Couldn't assign the font to the bitmap", __func__, __LINE__));
 			goto error;
@@ -765,7 +765,7 @@ bool Bitmap_FillBox(Bitmap* the_bitmap, signed int x, signed int y, signed int w
 //! @param	the_bitmap: reference to a valid Bitmap object.
 //! @param	the_font: reference to a complete, loaded Font object.
 //! @return Returns false on any error condition
-bool Bitmap_SetCurrentFont(Bitmap* the_bitmap, Font* the_font)
+bool Bitmap_SetFont(Bitmap* the_bitmap, Font* the_font)
 {
 	if (the_bitmap == NULL)
 	{
@@ -791,7 +791,7 @@ bool Bitmap_SetCurrentFont(Bitmap* the_bitmap, Font* the_font)
 //! @param	the_bitmap: reference to a valid Bitmap object.
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return Returns false on any error condition
-bool Bitmap_SetCurrentColor(Bitmap* the_bitmap, uint8_t the_color)
+bool Bitmap_SetColor(Bitmap* the_bitmap, uint8_t the_color)
 {
 	if (the_bitmap == NULL)
 	{
@@ -813,7 +813,7 @@ bool Bitmap_SetCurrentColor(Bitmap* the_bitmap, uint8_t the_color)
 //! @param	x: the horizontal position, between 0 and bitmap width - 1
 //! @param	y: the vertical position, between 0 and bitmap height - 1
 //! @return Returns false on any error condition
-bool Bitmap_SetCurrentXY(Bitmap* the_bitmap, signed int x, signed int y)
+bool Bitmap_SetXY(Bitmap* the_bitmap, signed int x, signed int y)
 {
 	if (the_bitmap == NULL)
 	{
@@ -837,7 +837,7 @@ bool Bitmap_SetCurrentXY(Bitmap* the_bitmap, signed int x, signed int y)
 //! Get the current color of the pen
 //! @param	the_bitmap: reference to a valid Bitmap object.
 //! @return Returns a 1-byte index to the current LUT, or 0 on any error
-uint8_t Bitmap_GetCurrentColor(Bitmap* the_bitmap)
+uint8_t Bitmap_GetColor(Bitmap* the_bitmap)
 {
 	if (the_bitmap == NULL)
 	{
@@ -852,7 +852,7 @@ uint8_t Bitmap_GetCurrentColor(Bitmap* the_bitmap)
 //! Get the current X position of the pen
 //! @param	the_bitmap: reference to a valid Bitmap object.
 //! @return Returns -1 on any error
-signed int Bitmap_GetCurrentX(Bitmap* the_bitmap)
+signed int Bitmap_GetX(Bitmap* the_bitmap)
 {
 	if (the_bitmap == NULL)
 	{
@@ -866,7 +866,7 @@ signed int Bitmap_GetCurrentX(Bitmap* the_bitmap)
 //! Get the current Y position of the pen
 //! @param	the_bitmap: reference to a valid Bitmap object.
 //! @return Returns -1 on any error
-signed int Bitmap_GetCurrentY(Bitmap* the_bitmap)
+signed int Bitmap_GetY(Bitmap* the_bitmap)
 {
 	if (the_bitmap == NULL)
 	{
@@ -876,6 +876,22 @@ signed int Bitmap_GetCurrentY(Bitmap* the_bitmap)
 
 	return the_bitmap->y_;
 }
+
+
+//! Get the current font of the pen
+//! @param	the_bitmap: reference to a valid Bitmap object.
+//! @return Returns NULL on any error
+Font* Bitmap_GetFont(Bitmap* the_bitmap)
+{
+	if (the_bitmap == NULL)
+	{
+		LOG_ERR(("%s %d: passed bitmap was NULL", __func__, __LINE__));
+		return NULL;
+	}
+
+	return the_bitmap->font_;
+}
+
 
 
 //! Calculate the VRAM location of the specified coordinate within the bitmap
@@ -913,7 +929,7 @@ unsigned char* Bitmap_GetMemLocForXY(Bitmap* the_bitmap, signed int x, signed in
 //! Calculate the VRAM location of the current coordinate within the bitmap
 //! @param	the_bitmap: reference to a valid Bitmap object.
 //! @return Returns a pointer to the VRAM location that corresponds to the current "pen" X, Y, or NULL on any error condition
-unsigned char* Bitmap_GetCurrentMemLoc(Bitmap* the_bitmap)
+unsigned char* Bitmap_GetMemLoc(Bitmap* the_bitmap)
 {
 	return Bitmap_GetMemLocForXY(the_bitmap, the_bitmap->x_, the_bitmap->y_);
 }

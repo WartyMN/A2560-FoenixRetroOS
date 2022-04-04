@@ -175,7 +175,7 @@ Control* Control_New(ControlTemplate* the_template, Window* the_window, uint16_t
 	//   to personalize the control for a given window, the parent window is needed
 	//   the final location of the control is calculated based on the offset info in the template + the size of the parent window
 	
-	if ( (the_control = (Control*)calloc(1, sizeof(Control)) ) == NULL)
+	if ( (the_control = (Control*)f_calloc(1, sizeof(Control), MEM_STANDARD) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new font record", __func__ , __LINE__));
 		goto error;
@@ -230,7 +230,7 @@ bool Control_Destroy(Control** the_control)
 	}
 
 	LOG_ALLOC(("%s %d:	__FREE__	*the_control	%p	size	%i", __func__ , __LINE__, *the_control, sizeof(Control)));
-	free(*the_control);
+	f_free(*the_control, MEM_STANDARD);
 	*the_control = NULL;
 	
 	return true;
@@ -326,8 +326,8 @@ void Control_Render(Control* the_control)
 		}
 	}
 
-	DEBUG_OUT(("%s %d: about to blit control %p to parent window bitmap", __func__, __LINE__, the_control));
-	DEBUG_OUT(("%s %d: pbitmap w/h=%i, %i; this MinX/MinY=%i, %i", __func__, __LINE__, the_control->parent_->bitmap_->width_, the_control->parent_->bitmap_->height_, the_control->rect_.MinX, the_control->rect_.MinY));
+	//DEBUG_OUT(("%s %d: about to blit control %p to parent window bitmap", __func__, __LINE__, the_control));
+	//DEBUG_OUT(("%s %d: pbitmap w/h=%i, %i; this MinX/MinY=%i, %i", __func__, __LINE__, the_control->parent_->bitmap_->width_, the_control->parent_->bitmap_->height_, the_control->rect_.MinX, the_control->rect_.MinY));
 	
 	Bitmap_Blit(the_bitmap, 0, 0, 
 						the_control->parent_->bitmap_, 
