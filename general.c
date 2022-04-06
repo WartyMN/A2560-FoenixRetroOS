@@ -1032,6 +1032,42 @@ bool General_ExtractFileExtensionFromFilename(const char* the_file_name, char* t
 
 
 
+
+// **** TIME UTILITIES *****
+
+
+//! Wait for the specified number of ticks before returning
+//! In multi-tasking ever becomes a thing, this is not a multi-tasking-friendly operation. 
+void Delay(int32_t ticks)
+{
+	long	start_ticks = sys_time_jiffies();
+	long	now_ticks = start_ticks;
+	
+	while ((now_ticks - start_ticks) < ticks)
+	{
+		now_ticks = sys_time_jiffies();
+	}
+}
+
+
+//! Wait for the specified number of seconds before returning
+//! In multi-tasking ever becomes a thing, this is not a multi-tasking-friendly operation. 
+void DelaySeconds(uint16_t seconds)
+{
+	long	start_ticks = sys_time_jiffies();
+	long	now_ticks = start_ticks;
+	
+	while ((now_ticks - start_ticks) / SYS_TICKS_PER_SEC < seconds)
+	{
+		now_ticks = sys_time_jiffies();
+	}
+}
+
+
+
+
+
+
 // **** LOGGING AND DEBUG UTILITIES *****
 
 

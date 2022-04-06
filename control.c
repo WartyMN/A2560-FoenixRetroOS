@@ -139,9 +139,10 @@ void Control_Print(Control* the_control)
 	DEBUG_OUT(("  value_: %i",	 			the_control->value_));
 	DEBUG_OUT(("  min_: %i",	 			the_control->min_));
 	DEBUG_OUT(("  max_: %i", 				the_control->max_));
-	DEBUG_OUT(("  image_inactive_: %p",		the_control->image_inactive_));
-	DEBUG_OUT(("  image_active_up_: %p", 	the_control->image_active_up_));
-	DEBUG_OUT(("  image_active_down_: %p",	the_control->image_active_down_));
+	DEBUG_OUT(("  inactive image up: %p", 	the_control->image_[CONTROL_INACTIVE][CONTROL_UP]));
+	DEBUG_OUT(("  inactive image dn: %p", 	the_control->image_[CONTROL_INACTIVE][CONTROL_DOWN]));
+	DEBUG_OUT(("  active image up: %p", 	the_control->image_[CONTROL_ACTIVE][CONTROL_UP]));
+	DEBUG_OUT(("  active image dn: %p", 	the_control->image_[CONTROL_ACTIVE][CONTROL_DOWN]));
 	DEBUG_OUT(("  caption_: %p", 			the_control->caption_));	
 }
 
@@ -192,9 +193,10 @@ Control* Control_New(ControlTemplate* the_template, Window* the_window, uint16_t
 	the_control->height_ = the_template->height_;
 	the_control->min_ = the_template->min_;
 	the_control->max_ = the_template->max_;
-	the_control->image_inactive_ = the_template->image_inactive_;
-	the_control->image_active_up_ = the_template->image_active_up_;
-	the_control->image_active_down_ = the_template->image_active_down_;
+	the_control->image_[CONTROL_INACTIVE][CONTROL_UP] = the_template->image_[CONTROL_INACTIVE][CONTROL_UP];
+	the_control->image_[CONTROL_INACTIVE][CONTROL_DOWN] = the_template->image_[CONTROL_INACTIVE][CONTROL_DOWN];
+	the_control->image_[CONTROL_ACTIVE][CONTROL_UP] = the_template->image_[CONTROL_ACTIVE][CONTROL_UP];
+	the_control->image_[CONTROL_ACTIVE][CONTROL_DOWN] = the_template->image_[CONTROL_ACTIVE][CONTROL_DOWN];
 	the_control->caption_ = the_template->caption_;
 	
 	// at start, all new controls are inactive, value 0, disabled, not-pressed, and invisible
@@ -245,7 +247,7 @@ bool Control_Destroy(Control** the_control)
 
 
 
-// **** Set xxx functions *****
+// **** Set functions *****
 
 bool Control_SetNextControl(Control* the_control, Control* the_next_control)
 {
@@ -260,6 +262,31 @@ bool Control_SetNextControl(Control* the_control, Control* the_next_control)
 	return true;
 }
 
+
+//! Set the control's active/inactive state
+void Control_SetActive(Control* the_control, bool is_active)
+{
+	if (the_control == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return;
+	}
+	
+	the_control->active_ = is_active;
+}
+
+
+//! Set the control's pressed/unpressed state
+void Control_SetPressed(Control* the_control, bool is_pressed)
+{
+	if (the_control == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return;
+	}
+	
+	the_control->pressed_ = is_pressed;
+}
 
 
 
@@ -277,6 +304,20 @@ uint16_t Control_GetID(Control* the_control)
 	}
 	
 	return the_control->id_;
+}
+
+
+//! Get the next control in the chain
+//! @Return	returns NULL on any error, or if this is the last control in the chain
+Control* Control_GetNextControl(Control* the_control)
+{
+	if (the_control == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+	}
+	
+	return the_control->next_;
 }
 
 
@@ -310,24 +351,12 @@ void Control_Render(Control* the_control)
 		return;
 	}
 	
-	if (the_control->active_ == false)
-	{
-		the_bitmap = the_control->image_inactive_;
-	}
-	else
-	{
-		if (the_control->pressed_)
-		{
-			the_bitmap = the_control->image_active_down_;
-		}
-		else
-		{
-			the_bitmap = the_control->image_active_up_;
-		}
-	}
+	the_bitmap = the_control->image_[the_control->active_][the_control->pressed_];
+	//the_bitmap = the_control->image_[1][1];
 
 	//DEBUG_OUT(("%s %d: about to blit control %p to parent window bitmap", __func__, __LINE__, the_control));
 	//DEBUG_OUT(("%s %d: pbitmap w/h=%i, %i; this MinX/MinY=%i, %i", __func__, __LINE__, the_control->parent_->bitmap_->width_, the_control->parent_->bitmap_->height_, the_control->rect_.MinX, the_control->rect_.MinY));
+	//DEBUG_OUT(("%s %d: control type=%i, active=%i, pressed=%i", __func__, __LINE__, the_control->type_, the_control->active_, the_control->pressed_));
 	
 	Bitmap_Blit(the_bitmap, 0, 0, 
 						the_control->parent_->bitmap_, 

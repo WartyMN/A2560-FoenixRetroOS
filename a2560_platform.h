@@ -118,6 +118,9 @@
 #define VICKYB_BORDER_CTRL_A2560K	VICKY_A2560K_B + 0x04	// vicky III channel B border control register
 #define VICKYB_CURSOR_CTRL_A2560K	VICKY_A2560K_B + 0x10	// vicky III channel B cursor control register
 #define VICKYB_CURSOR_POS_A2560K	VICKY_A2560K_B + 0x14	// vicky III channel B cursor position register
+#define VICKYB_MOUSE_GRAPHIC_A2560K	0xfec80400				// vicky III channel B mouse pointer graphic stored here (16x16)
+#define VICKYB_MOUSE_CTRL_A2560K	0xfec80c00				// vicky III channel B mouse pointer control register. set to 1 to enable mouse. +2 to do whatever "pointer choice" does.
+#define VICKYB_MOUSE_PTR_POS_A2560K	0xfec80c04				// vicky III channel B mouse pointer position (Y pos in upper 16 bits, x in lower)
 #define TEXTA_RAM_A2560K			(char*)0xfec60000		// channel A text
 #define TEXTA_ATTR_A2560K			(char*)0xfec68000		// channel A attr
 #define TEXTB_RAM_A2560K			(char*)0xfeca0000		// channel B text
@@ -261,8 +264,9 @@
 #define SYS_COLOR_BLUE2		SYS_COLOR_BLUE1 + 2
 #define SYS_COLOR_BLUE3		SYS_COLOR_BLUE2 + 2
 
-#define SYS_COLOR_PURPLEBLUE	15*8+7	// purplish blue = 127 = 0x7F
-#define SYS_COLOR_PURPLEBLUEHL	10*8+5	// light accent color for purplish blue = 85 = 0x55
+#define SYS_COLOR_PURPLEBLUE		15*8+7	// purplish blue = 127 = 0x7F
+#define SYS_COLOR_PURPLEBLUEINACT	SYS_COLOR_GRAY3	// light gray inactive accent color for purplish blue = 85 = 0x55
+#define SYS_COLOR_PURPLEBLUEHL		6*7+1	// light active accent color for purplish blue = 37 = 0x2B
 
 #define SYS_DEF_COLOR_WINFRAME			SYS_COLOR_BLACK
 #define SYS_DEF_COLOR_WINTITLE_BACK		SYS_COLOR_PURPLEBLUE

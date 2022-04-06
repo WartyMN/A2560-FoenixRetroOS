@@ -174,6 +174,45 @@ void RunDemo(void)
 	
 	// temporary until event handler is written: tell system to render the screen and all windows
 	Sys_Render(global_system);
+	
+
+	// inactivate some buttons to test things out
+	DelaySeconds(2);
+	
+	// deactivate some of the controls
+	Control*	root_control;
+	Control*	this_control;
+	
+	root_control = Window_GetRootControl(the_window);
+	this_control = root_control;
+	
+	while (this_control)
+	{
+		Control_SetActive(this_control, CONTROL_INACTIVE);
+		Control_SetPressed(this_control, CONTROL_UP);
+		
+		this_control = Control_GetNextControl(this_control);
+		Sys_Render(global_system);
+		
+		Delay(30);
+	}
+	
+
+	// reactive some buttons and pretend to push them
+	DelaySeconds(2);
+	
+	this_control = root_control;
+	
+	while (this_control)
+	{
+		Control_SetActive(this_control, CONTROL_ACTIVE);
+		Control_SetPressed(this_control, CONTROL_DOWN);
+		
+		this_control = Control_GetNextControl(this_control);
+		Sys_Render(global_system);
+		
+		Delay(30);
+	}
 
 
 // 	Window_Destroy(&the_window);

@@ -381,6 +381,12 @@ Window* Window_New(NewWinTemplate* the_win_template)
 		Control_SetNextControl(minimize_control, normsize_control);
 		Control_SetNextControl(normsize_control, maximize_control);
 		Control_SetNextControl(maximize_control, NULL);
+
+		// set controls to active, except for the normal size one, because windows open at normal size
+		Control_SetActive(close_control, CONTROL_ACTIVE);
+		Control_SetActive(minimize_control, CONTROL_ACTIVE);
+		Control_SetActive(normsize_control, CONTROL_INACTIVE);
+		Control_SetActive(maximize_control, CONTROL_ACTIVE);
 		
 		// do first pass clear of the content area
 		Window_ClearContent(the_window);

@@ -312,12 +312,9 @@ bool Sys_InitSystem(void)
 		goto error;
 	}
 	
-	// Set the screen background color
-	//Bitmap_FillBox(the_bitmap, 0, 0, the_bitmap->width_-1, the_bitmap->height_-1, global_system->theme_->desktop_color_);
-
-// 	// tile the default theme's background pattern
-// 	the_pattern = Theme_GetDesktopPattern(global_system->theme_);
-// 	Bitmap_Tile(the_pattern, 0, 0, the_bitmap, 16, 16);
+	// Enable mouse pointer -- no idea if this works, f68 emulator doesn't support mouse yet. 
+	R32(VICKYB_MOUSE_CTRL_A2560K) = 1;
+	
 	
 	DEBUG_OUT(("%s %d: System initialization complete.", __func__, __LINE__));
 
@@ -2002,9 +1999,6 @@ void Sys_Render(System* the_system)
 
 		the_item = the_item->next_item_;
 	}
-
-	// now free up the list items themselves
-	List_Destroy(the_system->list_windows_);
 
 	DEBUG_OUT(("%s %d: %i windows rendered out of %i total window", __func__ , __LINE__, num_nodes, the_system->window_count_));
 }

@@ -79,9 +79,7 @@ struct ControlTemplate
 	signed int				height_;						//! height of the control
 	int16_t					min_;							//! minimum allowed value
 	int16_t					max_;							//! maximum allowed value
-	Bitmap*					image_inactive_;				//! image of the control in inactive state. size must match the length and width defined in the rect_. If not supplied, the control will be effectively invisible.
-	Bitmap*					image_active_up_;				//! image of the control when active, and not clicked/pressed. size must match the length and width defined in the rect_. If not supplied, the control will be effectively invisible.
-	Bitmap*					image_active_down_;				//! image of the control when active, and clicked/depressed. size must match the length and width defined in the rect_. If not supplied, the control will be effectively invisible.
+	Bitmap*					image_[2][2];					//! 4 image state bitmaps: [active yes/no][pushed down yes/no]
 	char*					caption_;						//! optional string to draw centered horizontally and vertically on the control. Typical use case is for a button.
 // 	char*					hover_text_;					//! optional string to show in help/hover-text situations
 };

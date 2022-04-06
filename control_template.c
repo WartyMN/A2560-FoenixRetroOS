@@ -82,10 +82,11 @@ void ControlTemplate_Print(ControlTemplate* the_template)
 	DEBUG_OUT(("  height_: %i", the_template->height_));
 	DEBUG_OUT(("  min_: %i", the_template->min_));
 	DEBUG_OUT(("  max_: %i", the_template->max_));
-	DEBUG_OUT(("  image_inactive_: %p", the_template->image_inactive_));
-	DEBUG_OUT(("  image_active_up_: %p", the_template->image_active_up_));
-	DEBUG_OUT(("  image_active_down_: %p", the_template->image_active_down_));
-	DEBUG_OUT(("  caption_: %p", the_template->caption_));	
+	DEBUG_OUT(("  inactive image up: %p", the_template->image_[CONTROL_INACTIVE][CONTROL_UP]));
+	DEBUG_OUT(("  inactive image dn: %p", the_template->image_[CONTROL_INACTIVE][CONTROL_DOWN]));
+	DEBUG_OUT(("  active image up: %p", the_template->image_[CONTROL_ACTIVE][CONTROL_UP]));
+	DEBUG_OUT(("  active image dn: %p", the_template->image_[CONTROL_ACTIVE][CONTROL_DOWN]));
+	DEBUG_OUT(("  caption_: %p", the_template->caption_));
 }
 
 

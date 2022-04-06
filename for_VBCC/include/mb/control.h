@@ -66,6 +66,18 @@
 /*                               Enumerations                                */
 /*****************************************************************************/
 
+typedef enum control_active_state
+{
+	CONTROL_INACTIVE = 0,
+	CONTROL_ACTIVE = 1,
+} control_active_state;
+
+typedef enum control_pushed_state
+{
+	CONTROL_UP = 0,
+	CONTROL_DOWN = 1,
+} control_pushed_state;
+
 typedef enum control_type
 {
 	BUTTON			= 0,
@@ -134,9 +146,7 @@ struct Control
 	int16_t					value_;							//! current value of the control
 	int16_t					min_;							//! minimum allowed value
 	int16_t					max_;							//! maximum allowed value
-	Bitmap*					image_inactive_;				//! image of the control in inactive state. size must match the length and width defined in the rect_. If not supplied, the control will be effectively invisible.
-	Bitmap*					image_active_up_;				//! image of the control when active, and not clicked/pressed. size must match the length and width defined in the rect_. If not supplied, the control will be effectively invisible.
-	Bitmap*					image_active_down_;				//! image of the control when active, and clicked/depressed. size must match the length and width defined in the rect_. If not supplied, the control will be effectively invisible.
+	Bitmap*					image_[2][2];					//! 4 image state bitmaps: [active yes/no][pushed down yes/no]
 	char*					caption_;						//! optional string to draw centered horizontally and vertically on the control. Typical use cases include buttons and labels.
 // 	char*					hover_text_;					//! optional string to show in help/hover-text situations
 };
@@ -193,10 +203,18 @@ bool Control_Destroy(Control** the_control);
 // 	Bitmap*					image_active_down_;				//! image of the control when active, and clicked/depressed. size must match the length and width defined in the rect_. If not supplied, the control will be effectively invisible.
 // 	char*					caption_;						//! optional string to draw centered horizontally and vertically on the control. Typical use cases include buttons and labels.
 
+
+//! Get the ID of the control
+//! @return	Returns the ID, or -1 in any error condition
 uint16_t Control_GetID(Control* the_control);
+
 control_type Control_GetType(Control* the_control);
 int8_t Control_GetGroup(Control* the_control);
+
+//! Get the next control in the chain
+//! @Return	returns NULL on any error, or if this is the last control in the chain
 Control* Control_GetNextControl(Control* the_control);
+
 Window* Control_GetParent(Control* the_control);
 Rectangle Control_GetRect(Control* the_control);
 bool Control_GetVisible(Control* the_control);
@@ -216,8 +234,13 @@ bool Control_SetGroup(Control* the_control, int8_t the_group_id);
 bool Control_SetNextControl(Control* the_control, Control* the_next_control);
 bool Control_SetParent(Control* the_control, Window* the_window);
 bool Control_SetRect(Control* the_control, Rectangle the_rect);
-bool Control_SetVisible(Control* the_control, bool is_visible);
-bool Control_SetActive(Control* the_control, bool is_active);
+
+//! Set the control's active/inactive state
+void Control_SetActive(Control* the_control, bool is_active);
+
+//! Set the control's pressed/unpressed state
+void Control_SetPressed(Control* the_control, bool is_pressed);
+
 bool Control_SetEnabled(Control* the_control, bool is_enabled);
 bool Control_SetValue(Control* the_control, int16_t the_value);
 bool Control_SetMinValue(Control* the_control, int16_t the_value);

@@ -36,6 +36,7 @@
 #include <stdlib.h>
 
 // A2560 includes
+#include <mcp/syscalls.h>
 #include <mb/a2560_platform.h>
 
 
@@ -287,6 +288,21 @@ char* General_PathPart(const char* the_file_path);
 //! @param	the_extension: a pre-allocated buffer that will contain the extension, if any is detected. Must be large enough to hold the extension! No bounds checking is done. 
 //! @return	Returns false if no file extension found.
 bool General_ExtractFileExtensionFromFilename(const char* the_file_name, char* the_extension);
+
+
+
+
+// **** TIME UTILITIES *****
+
+
+//! Wait for the specified number of ticks before returning
+//! In multi-tasking ever becomes a thing, this is not a multi-tasking-friendly operation. 
+void Delay(int32_t ticks);
+
+//! Wait for the specified number of seconds before returning
+//! In multi-tasking ever becomes a thing, this is not a multi-tasking-friendly operation. 
+void DelaySeconds(uint16_t seconds);
+
 
 
 
