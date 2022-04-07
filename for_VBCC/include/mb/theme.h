@@ -138,7 +138,9 @@ Theme* Theme_CreateDefaultTheme(void);
 
 // **** xxx functions *****
 
-
+//! Make the passed theme into the active Theme
+//! Note: this will change the VICKY's CLUT, inform the system to change its current theme (and in future: load new icons, etc) 
+bool Theme_Activate(Theme* the_theme);
 
 
 // **** Set xxx functions *****

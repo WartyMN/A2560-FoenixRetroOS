@@ -188,7 +188,10 @@ void Sys_SetScreen(System* the_system, signed int channel_id, Screen* the_screen
 
 void Sys_SetScreenBitmap(System* the_system, signed int channel_id, Bitmap* the_bitmap);
 
-
+//! Set the passed theme as the System's current theme
+//! Note: this will dispose of the current theme after setting the new one
+//! @return	Returns false on any error condition
+bool Sys_SetTheme(System* the_system, Theme* the_theme);
 
 
 

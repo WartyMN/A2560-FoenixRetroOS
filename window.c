@@ -362,9 +362,13 @@ Window* Window_New(NewWinTemplate* the_win_template)
 	if ( the_win_template->is_backdrop_ == false)
 	{
 		DEBUG_OUT(("%s %d: getting theme and theme controls...", __func__, __LINE__));
-		
-		the_theme = Sys_GetTheme(global_system);
 
+		if ( (the_theme = Sys_GetTheme(global_system)) == NULL)
+		{
+			LOG_ERR(("%s %d: failed to get the current system theme!", __func__ , __LINE__));
+			goto error;
+		}
+		
 		close_control = Control_New(Theme_GetCloseControlTemplate(the_theme), the_window, CLOSE_WIDGET_ID, 0);
 		minimize_control = Control_New(Theme_GetMinimizeControlTemplate(the_theme), the_window, MINIMIZE_WIDGET_ID, 0);
 		normsize_control = Control_New(Theme_GetNormSizeControlTemplate(the_theme), the_window, NORM_SIZE_WIDGET_ID, 0);

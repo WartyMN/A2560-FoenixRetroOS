@@ -65,8 +65,6 @@ System*			global_system;
 
 void Sys_Print(System* the_system);
 
-// **** TEMP functions until file loading available 
-void Sys_LoadSystemCLUT(void);
 
 /*****************************************************************************/
 /*                       Private Function Definitions                        */
@@ -192,10 +190,11 @@ bool Sys_Destroy(System** the_system)
 //! Starts up the memory manager, creates the global system object, runs autoconfigure to check the system hardware, loads system and application fonts, allocates a bitmap for the screen.
 bool Sys_InitSystem(void)
 {
-	Bitmap*			the_bitmap;
-	Font*			the_system_font;
-	Font*			the_icon_font;
-	Bitmap*			the_pattern;
+	Bitmap*		the_bitmap;
+	Font*		the_system_font;
+	Font*		the_icon_font;
+	Bitmap*		the_pattern;
+	Theme*		the_theme;
 	
 	
 	DEBUG_OUT(("%s %d: Initializing Memory Manager...", __func__, __LINE__));
@@ -255,11 +254,7 @@ bool Sys_InitSystem(void)
 	Sys_SetSystemFont(global_system, the_system_font);
 	Sys_SetAppFont(global_system, the_icon_font);
 	
-	DEBUG_OUT(("%s %d: loading color table...", __func__, __LINE__));
-	
-	// load in a custom CLUT
-	Sys_LoadSystemCLUT();
-	
+
 	DEBUG_OUT(("%s %d: allocating screen bitmap...", __func__, __LINE__));
 	
 	// try to allocate a bitmap in VRAM for the screen
@@ -268,36 +263,19 @@ bool Sys_InitSystem(void)
 		LOG_ERR(("%s %d: Failed to create bitmap", __func__, __LINE__));
 		goto error;
 	}
-
-// 	DEBUG_OUT(("%s %d: Allocating a screen-sized bitmap in VRAM...", __func__, __LINE__));
-// 
-// 	if ((the_bitmap = f_calloc(sizeof(uint8_t), global_system->screen_[ID_CHANNEL_B]->width_ * global_system->screen_[ID_CHANNEL_B]->height_, MEM_VRAM)) == NULL)
-// 	{
-// 		DEBUG_OUT(("%s %d: Couldn't instantiate a bitmap", __func__, __LINE__));
-// 		goto error;
-// 	}
-// 
-// 	the_bitmap->addr_ = (unsigned char*)the_bitmap;
-// 	the_bitmap->width_ = global_system->screen_[ID_CHANNEL_B]->width_;
-// 	the_bitmap->height_ = global_system->screen_[ID_CHANNEL_B]->height_;
-// 	
-// 	DEBUG_OUT(("%s %d: Bitmap allocated! p=%p, addr=%p", __func__, __LINE__, the_bitmap, the_bitmap->addr_));
-// 
-// 	if (Bitmap_SetFont(the_bitmap, Sys_GetSystemFont(global_system)) == false)
-// 	{
-// 		DEBUG_OUT(("%s %d: Couldn't get the system font and assign it to bitmap", __func__, __LINE__));
-// 		goto error;
-// 	}
-// 		
-// 	Bitmap_Print(the_bitmap);
 	
-	if ( (global_system->theme_ = Theme_CreateDefaultTheme() ) == NULL)
+	Sys_SetScreenBitmap(global_system, ID_CHANNEL_B, the_bitmap);
+
+
+	DEBUG_OUT(("%s %d: loading default theme...", __func__, __LINE__));
+	
+	if ( (the_theme = Theme_CreateDefaultTheme() ) == NULL)
 	{
 		LOG_ERR(("%s %d: Failed to create default system theme", __func__, __LINE__));
 		goto error;
 	}
 	
-	Sys_SetScreenBitmap(global_system, ID_CHANNEL_B, the_bitmap);
+	Theme_Activate(the_theme);
 
 	// create the backdrop window and add it to the list of the windows the system tracks
 	
@@ -885,6 +863,32 @@ void Sys_SetScreenBitmap(System* the_system, signed int channel_id, Bitmap* the_
 }
 
 
+//! Set the passed theme as the System's current theme
+//! Note: this will dispose of the current theme after setting the new one
+//! @return	Returns false on any error condition
+bool Sys_SetTheme(System* the_system, Theme* the_theme)
+{
+	if (the_system == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return false;
+	}
+	
+	if (the_theme == NULL)
+	{
+		LOG_WARN(("%s %d: passed theme object was null", __func__ , __LINE__));
+		return false;
+	}
+	
+	if (the_system->theme_ != NULL)
+	{
+		Theme_Destroy(&the_system->theme_);
+	}
+	
+	the_system->theme_ = the_theme;
+}
+
+
 
 
 
@@ -1198,93 +1202,6 @@ bool Sys_SetVideoMode(Screen* the_screen, screen_resolution new_mode)
 
 
 
-
-
-// **** TEMP CLUT loading ****
-
-// load a custom CLUT into the LUT 0 slot
-// this is a temporary function until we get file handling and can load from disk
-void Sys_LoadSystemCLUT(void)
-{
-	// slightly modified apple 256 color CLUT. on Foenix machines, first color is always transparent. 
-	// in apple CLUT, first was white. Moved white to slot 256-12, replacing a very dark blue. that gives a run from white->gray->black at the end of the CLUT. 
-	// this CLUT has been reversed to BGRA.
-	uint32_t clut_sys_default[] = 
-	{
-		0x00000000,0xCCFFFF00,0x99FFFF00,0x66FFFF00,0x33FFFF00,0x00FFFF00,0xFFCCFF00,0xCCCCFF00,
-		0x99CCFF00,0x66CCFF00,0x33CCFF00,0x00CCFF00,0xFF99FF00,0xCC99FF00,0x9999FF00,0x6699FF00,
-		0x3399FF00,0x0099FF00,0xFF66FF00,0xCC66FF00,0x9966FF00,0x6666FF00,0x3366FF00,0x0066FF00,
-		0xFF33FF00,0xCC33FF00,0x9933FF00,0x6633FF00,0x3333FF00,0x0033FF00,0xFF00FF00,0xCC00FF00,
-		0x9900FF00,0x6600FF00,0x3300FF00,0x0000FF00,0xFFFFCC00,0xCCFFCC00,0x99FFCC00,0x66FFCC00,
-		0x33FFCC00,0x00FFCC00,0xFFCCCC00,0xCCCCCC00,0x99CCCC00,0x66CCCC00,0x33CCCC00,0x00CCCC00,
-		0xFF99CC00,0xCC99CC00,0x9999CC00,0x6699CC00,0x3399CC00,0x0099CC00,0xFF66CC00,0xCC66CC00,
-		0x9966CC00,0x6666CC00,0x3366CC00,0x0066CC00,0xFF33CC00,0xCC33CC00,0x9933CC00,0x6633CC00,
-		0x3333CC00,0x0033CC00,0xFF00CC00,0xCC00CC00,0x9900CC00,0x6600CC00,0x3300CC00,0x0000CC00,
-		0xFFFF9900,0xCCFF9900,0x99FF9900,0x66FF9900,0x33FF9900,0x00FF9900,0xFFCC9900,0xCCCC9900,
-		0x99CC9900,0x66CC9900,0x33CC9900,0x00CC9900,0xFF999900,0xCC999900,0x99999900,0x66999900,
-		0x33999900,0x00999900,0xFF669900,0xCC669900,0x99669900,0x66669900,0x33669900,0x00669900,
-		0xFF339900,0xCC339900,0x99339900,0x66339900,0x33339900,0x00339900,0xFF009900,0xCC009900,
-		0x99009900,0x66009900,0x33009900,0x00009900,0xFFFF6600,0xCCFF6600,0x99FF6600,0x66FF6600,
-		0x33FF6600,0x00FF6600,0xFFCC6600,0xCCCC6600,0x99CC6600,0x66CC6600,0x33CC6600,0x00CC6600,
-		0xFF996600,0xCC996600,0x99996600,0x66996600,0x33996600,0x00996600,0xFF666600,0xCC666600,
-		0x99666600,0x66666600,0x33666600,0x00666600,0xFF336600,0xCC336600,0x99336600,0x66336600,
-		0x33336600,0x00336600,0xFF006600,0xCC006600,0x99006600,0x66006600,0x33006600,0x00006600,
-		0xFFFF3300,0xCCFF3300,0x99FF3300,0x66FF3300,0x33FF3300,0x00FF3300,0xFFCC3300,0xCCCC3300,
-		0x99CC3300,0x66CC3300,0x33CC3300,0x00CC3300,0xFF993300,0xCC993300,0x99993300,0x66993300,
-		0x33993300,0x00993300,0xFF663300,0xCC663300,0x99663300,0x66663300,0x33663300,0x00663300,
-		0xFF333300,0xCC333300,0x99333300,0x66333300,0x33333300,0x00333300,0xFF003300,0xCC003300,
-		0x99003300,0x66003300,0x33003300,0x00003300,0xFFFF0000,0xCCFF0000,0x99FF0000,0x66FF0000,
-		0x33FF0000,0x00FF0000,0xFFCC0000,0xCCCC0000,0x99CC0000,0x66CC0000,0x33CC0000,0x00CC0000,
-		0xFF990000,0xCC990000,0x99990000,0x66990000,0x33990000,0x00990000,0xFF660000,0xCC660000,
-		0x99660000,0x66660000,0x33660000,0x00660000,0xFF330000,0xCC330000,0x99330000,0x66330000,
-		0x33330000,0x00330000,0xFF000000,0xCC000000,0x99000000,0x66000000,0x33000000,0x0000EE00,
-		0x0000DD00,0x0000BB00,0x0000AA00,0x00008800,0x00007700,0x00005500,0x00004400,0x00002200,
-		0x00001100,0x00EE0000,0x00DD0000,0x00BB0000,0x00AA0000,0x00880000,0x00770000,0x00550000,
-		0x00440000,0x00220000,0x00110000,0xEE000000,0xDD000000,0xBB000000,0xAA000000,0x88000000,
-		0x77000000,0x55000000,0x44000000,0x22000000,0xFFFFFF00,0xEEEEEE00,0xDDDDDD00,0xBBBBBB00,
-		0xAAAAAA00,0x88888800,0x77777700,0x55555500,0x44444400,0x22222200,0x11111100,0x00000000,
-	};
-
-	char*		dest = (char*)VICKY_IIIB_CLUT0;
-	char*		new_clut_data = (char*)clut_sys_default;
-	size_t		data_size = 0x400;
-	//uint32_t	the_lut_choice;
-	//uint32_t	the_lut_raw_value;
-	//uint32_t*	the_lut_reg;
-	
-	
-	// check which LUT bank bitmap layer0 is looking at. 
-	//the_lut_reg = (uint32_t*)BITMAP_CTRL_REG_A2560_0;
-	//the_lut_choice = *(the_lut_reg);
-	//the_lut_raw_value = the_lut_choice;
-	//the_lut_choice = (the_lut_choice & 0x0E) >> 1;
-	//DEBUG_OUT(("%s %d: the_lut_reg=%p, the_lut_choice=%x, the_lut_raw_value=%x", __func__, __LINE__, the_lut_reg, the_lut_choice, the_lut_raw_value));
-
-	memcpy(dest, new_clut_data, data_size);
-	//DEBUG_OUT(("%s %d: copied clut data to %p", __func__, __LINE__, dest));
-	
-// 	// change the LUT choice
-// 	the_lut_choice++;
-// 	*the_lut_reg = ((the_lut_choice << 1) | *(the_lut_reg));
-// 
-// 	the_lut_reg = (uint32_t*)BITMAP_CTRL_REG_A2560_0;
-// 	the_lut_choice = *(the_lut_reg);
-// 	the_lut_raw_value = the_lut_choice;
-// 	the_lut_choice = (the_lut_choice & 0x0E) >> 1;
-// 	DEBUG_OUT(("%s %d: the_lut_reg=%p, the_lut_choice=%x, the_lut_raw_value=%x", __func__, __LINE__, the_lut_reg, the_lut_choice, the_lut_raw_value));
-// 
-// 	// test read from CLUT 0
-// 	dest = (char*)VICKY_IIIB_CLUT0;
-// 	uint32_t	clut_value;
-// 	uint32_t*	clut_ptr;
-// 	
-// 	clut_ptr = (uint32_t*)VICKY_IIIB_CLUT0;
-// 	clut_ptr++; // move past the 0000000 first one. next should be 0xCCFFFF00
-// 	clut_value = *clut_ptr;
-// 	DEBUG_OUT(("%s %d: clut_ptr=%p, clut_value=%x", __func__, __LINE__, clut_ptr, clut_value));
-	
-	
-}
 
 
 // **** TEMP font loading *****
