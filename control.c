@@ -379,6 +379,59 @@ Control* Control_GetNextControl(Control* the_control)
 }
 
 
+//! Get the control type
+//! @return	Returns CONTROL_TYPE_ERROR (-1) on any error, or the control_type value
+control_type Control_GetType(Control* the_control)
+{
+	if (the_control == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return CONTROL_TYPE_ERROR;
+	}
+	
+	return the_control->type_;
+}
+
+
+//! Compare the control's right-edge coordinate to the passed value
+//! If the control is more to the right than the passed value, the passed value is updated with the control's right edge
+//! @return	Returns true if the control is further to the right than the passed value.
+bool Control_IsRighter(Control* the_control, int16_t* x)
+{
+	if (the_control == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return false;
+	}
+	
+	if (the_control->rect_.MaxX > *x)
+	{
+		*x = the_control->rect_.MaxX;
+		return true;
+	}
+	
+	return false;
+}
+
+//! Compare the control's left-edge coordinate to the passed value
+//! If the control is more to the left than the passed value, the passed value is updated with the control's left edge
+//! @return	Returns true if the control is further to the left than the passed value.
+bool Control_IsLefter(Control* the_control, int16_t* x)
+{
+	if (the_control == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return false;
+	}
+	
+	if (the_control->rect_.MinX < *x)
+	{
+		*x = the_control->rect_.MinX;
+		return true;
+	}
+	
+	return false;
+}
 
 
 // **** Render functions *****

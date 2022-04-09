@@ -80,6 +80,7 @@ typedef enum control_pushed_state
 
 typedef enum control_type
 {
+	CONTROL_TYPE_ERROR = -1,
 	BUTTON			= 0,
 	CHECKBOX 		,	
 	RADIOBUTTON		,	
@@ -209,7 +210,10 @@ bool Control_Destroy(Control** the_control);
 //! @return	Returns the ID, or -1 in any error condition
 uint16_t Control_GetID(Control* the_control);
 
+//! Get the control type
+//! @return	Returns CONTROL_TYPE_ERROR (-1) on any error, or the control_type value
 control_type Control_GetType(Control* the_control);
+
 int8_t Control_GetGroup(Control* the_control);
 
 //! Get the next control in the chain
@@ -251,6 +255,16 @@ bool Control_SetImageDown(Control* the_control, Bitmap* the_image);
 bool Control_SetImageInactive(Control* the_control, Bitmap* the_image);
 bool Control_SetCaption(Control* the_control, char* the_text);
 
+
+//! Compare the control's right-edge coordinate to the passed value
+//! If the control is more to the right than the passed value, the passed value is updated with the control's right edge
+//! @return	Returns true if the control is further to the right than the passed value.
+bool Control_IsRighter(Control* the_control, int16_t* x);
+
+//! Compare the control's left-edge coordinate to the passed value
+//! If the control is more to the left than the passed value, the passed value is updated with the control's left edge
+//! @return	Returns true if the control is further to the left than the passed value.
+bool Control_IsLefter(Control* the_control, int16_t* x);
 
 
 // **** Get xxx functions *****

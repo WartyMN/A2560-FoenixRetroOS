@@ -184,7 +184,7 @@ void Demo_Font_DrawString(Bitmap* the_bitmap, unsigned int y)
 
 void RunDemo(void)
 {
-	Window*				the_window;
+	Window*				the_window[5];
 	NewWinTemplate*		the_win_template;
 	int					max_width = 640;
 	int					max_height = 460;
@@ -213,22 +213,38 @@ void RunDemo(void)
 		the_win_template->width_ = (rand() * (max_width)) / RAND_MAX;
 		the_win_template->height_ = (rand() * (max_height)) / RAND_MAX;
 
-		if ( (the_window = Window_New(the_win_template)) == NULL)
+		if ( (the_window[win_num] = Window_New(the_win_template)) == NULL)
 		{
 			DEBUG_OUT(("%s %d: Couldn't instantiate a window", __func__, __LINE__));
 			return;
 		}
 
 		// declare the window to be visible
-		Window_SetVisible(the_window, true);
+		Window_SetVisible(the_window[win_num], true);
 	}
+	
+	// one more guaranteed smallest window for testing
+	the_win_template->x_ = 10;
+	the_win_template->y_ = 10;
+	the_win_template->width_ = 1;
+	the_win_template->height_ = 1;
+
+	if ( (the_window[4] = Window_New(the_win_template)) == NULL)
+	{
+		DEBUG_OUT(("%s %d: Couldn't instantiate a window", __func__, __LINE__));
+		return;
+	}
+
+	// declare the window to be visible
+	Window_SetVisible(the_window[4], true);
+	
 	
 	
 	// temporary until event handler is written: tell system to render the screen and all windows
 	Sys_Render(global_system);
 
 	// delay a bit before switching
-	General_DelaySeconds(2);
+	General_DelaySeconds(3);
 	
 	// switch to green theme!
 	Theme*	the_theme;
@@ -241,7 +257,11 @@ void RunDemo(void)
 	
 	Theme_Activate(the_theme);
 
-	Window_ClearContent(the_window);
+	for (win_num = 0; win_num < 5; win_num++)
+	{
+		Window_ClearContent(the_window[win_num]);
+	}
+
 	Sys_Render(global_system);
 
 

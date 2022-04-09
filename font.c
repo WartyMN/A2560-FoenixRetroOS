@@ -595,7 +595,7 @@ char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int heig
 //! The current font of the bitmap will be used as the basis for calculating fit.
 //! @param	the_font: reference to a complete, loaded Font object.
 //! @param	the_string: the null-terminated string to be measured.
-//! @param	num_chars: the length of the passed string. If the entire string fits, this len will be returned.
+//! @param	num_chars: either the length of the passed string, or as much of the string as should be displayed. Passing FONT_NO_STRLEN_CAP will mean it will attempt to measure the entire string.
 //! @param	available_width: the width, in pixels, of the space the string is to be measured against.
 //! @param	fixed_char_width: the width, in pixels, of one character. This value will be ignored. It exists to keep text-mode text-wrapping compatible with bitmap-font text-wrapping.
 //! @return	returns -1 in any error condition, or the number of characters that fit. If the entire string fits, the passed len will be returned.
@@ -612,10 +612,18 @@ signed int Font_MeasureStringWidth(Font* the_font, char* the_string, signed int 
 
 	//DEBUG_OUT(("%s %d: num_chars=%i, available_width=%i, str='%s'", __func__, __LINE__, num_chars, available_width, the_string));
 
-	if (num_chars < 1)
+	if (num_chars == 1)
 	{
 		return -1;
 	}
+	
+	// num_chars will be FONT_NO_STRLEN_CAP (-1) if the calling method wants us to display the entire string. 
+	if (num_chars == FONT_NO_STRLEN_CAP)
+	{
+		num_chars = General_Strnlen(the_string, WORD_WRAP_MAX_LEN);
+	}
+	
+
 		
 	// LOGIC:
 	//   The Font object contains a table with the total width (including white space) of every character in the font

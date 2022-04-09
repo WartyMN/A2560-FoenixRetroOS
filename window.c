@@ -58,6 +58,8 @@ extern System*			global_system;
 /*                       Private Function Prototypes                         */
 /*****************************************************************************/
 
+// **** Private CONFIGURATION functions *****
+
 //! set or update the drag rects on the four edges of the screen
 //! Call this after every window resize event
 void Window_ConfigureDragRects(Window* the_window);
@@ -68,21 +70,37 @@ void Window_ConfigureStructureRects(Window* the_window);
 //! verify and adjust window width, height, etc, 
 void Window_CheckDimensions(Window* the_window, NewWinTemplate* the_win_template);
 
-// draws or redraws the window controls
-void Window_DrawControls(Window* the_window);
-// draws or redraws the structure area of the windows (excluding the content area and controls)
-void Window_DrawStructure(Window* the_window);
-// draws or redraws the entire window, including clearing the content area
-void Window_DrawAll(Window* the_window);
-
 //! Updates the current window controls with control template info from the current system theme 
 void Window_UpdateControlTheme(Window* the_window);
+
+//! Determine available pixel width for the title, based on theme's title x offset and left-most control
+//! Run after every re-size, or after a theme change
+//! Note: this returns the result space and sets the window's avail_title_width_ property. It does not force any re-rendering.
+//! @return	Returns -1 in event of error, or the calculated width
+static int16_t Window_CalculateTitleSpace(Window* the_window);
+	
+// **** Private RENDER functions *****
+
+// draws or redraws the structure area of the windows (excluding the content area and controls)
+static void Window_DrawStructure(Window* the_window);
+
+// draws or redraws the entire window, including clearing the content area
+static void Window_DrawAll(Window* the_window);
+
+// draws or redraws the window controls
+static void Window_DrawControls(Window* the_window);
+
+//! Draws the title text into the titlebar using the active theme's system font
+//! @param	the_window: a valid pointer to a Window
+static void Window_DrawTitle(Window* the_window);
 
 
 /*****************************************************************************/
 /*                       Private Function Definitions                        */
 /*****************************************************************************/
 
+
+// **** Private CONFIGURATION functions *****
 
 //! set or update the drag rects on the four edges of the screen
 //! Call this after every window resize event
@@ -310,6 +328,199 @@ void Window_UpdateControlTheme(Window* the_window)
 	return;
 }
 
+//! Determine available pixel width for the title, based on theme's title x offset and left-most control
+//! Run after every re-size, or after a theme change
+//! Note: this returns the result space and sets the window's avail_title_width_ property. It does not force any re-rendering.
+//! @return	Returns -1 in event of error, or the calculated width
+static int16_t Window_CalculateTitleSpace(Window* the_window)
+{
+	Theme*		the_theme;
+	Control*	the_control = NULL;
+	int16_t		lowest_left = -1;
+	int16_t		lowest_right = -1;
+	int16_t		this_left;
+	int16_t		avail_width;
+	
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return -1;
+	}
+	
+	if ( (the_theme = Sys_GetTheme(global_system)) == NULL)
+	{
+		LOG_ERR(("%s %d: failed to get the current system theme!", __func__ , __LINE__));
+		return -1;
+	}
+	
+	// LOGIC:
+	//   Controls could be arranged in all kinds of ways
+	//   The theme though is required to set the left-most drawing point for the title text
+	//   Whichever control is the closest to the RIGHT of that position will represent the end of usable text
+	
+	lowest_left = the_window->titlebar_rect_.MaxX;
+	
+	the_control = Window_GetRootControl(the_window);
+	
+	while (the_control)
+	{
+		switch (Control_GetType(the_control))
+		{
+			case CLOSE_WIDGET:
+			case SIZE_MINIMIZE:
+			case SIZE_NORMAL:
+			case SIZE_MAXIMIZE:
+				//DEBUG_OUT(("before: lowest_left=%i, control MinX=%i; lowest_right=%i, control MaxX=%i", lowest_left, the_control->rect_.MinX, lowest_right, the_control->rect_.MaxX));
+				this_left = lowest_left;
+				
+				if (Control_IsLefter(the_control, &lowest_left))
+				{
+					// left got adjusted. but was that control always left of the starting point?
+					if (lowest_left < the_theme->title_x_offset_)
+					{
+						lowest_left = this_left;
+					}
+				}
+				//DEBUG_OUT(("after: lowest_left=%i, control MinX=%i; lowest_right=%i, control MaxX=%i", lowest_left, the_control->rect_.MinX, lowest_right, the_control->rect_.MaxX));
+			
+				break;
+
+			default:
+				break;
+		}
+		
+		the_control = the_control->next_;
+	}
+	
+	// were all controls to the one side or the other? 
+	the_window->avail_title_width_ = lowest_left - the_theme->title_x_offset_;
+//	DEBUG_OUT(("after: the_window->avail_title_width_=%i", the_window->avail_title_width_));
+	
+	return the_window->avail_title_width_;
+}
+
+
+
+// **** Private RENDER functions *****
+
+
+// draws or redraws the structure area of the windows (excluding the content area and controls)
+static void Window_DrawStructure(Window* the_window)
+{
+	Theme*	the_theme;
+
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		Sys_Destroy(&global_system); // crash early, crash often
+	}
+
+	// LOGIC:
+	//   order of rect rendering must be Fill titlebar > Draw overall border rect > draw titlebar rect
+	//   this allows titlebar to overwrite the overall border when it has one, but not have its fill overwrite the overall border if no titlebar border
+	
+	the_theme = Sys_GetTheme(global_system);
+
+	Bitmap_FillBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, Theme_GetTitlebarColor(the_theme));
+	
+	if (the_theme->titlebar_outline_)
+	{
+		Bitmap_DrawBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, Theme_GetOutlineColor(the_theme));
+	}
+	
+	Bitmap_DrawBoxRect(the_window->bitmap_, &the_window->overall_rect_, Theme_GetOutlineColor(the_theme));
+
+	Window_DrawTitle(the_window);
+}
+
+
+// draws or redraws the entire window, including clearing the content area
+static void Window_DrawAll(Window* the_window)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		Sys_Destroy(&global_system); // crash early, crash often
+	}
+
+	Window_DrawStructure(the_window);
+	Window_ClearContent(the_window);
+	Window_DrawControls(the_window);
+}
+
+
+// draws or redraws the window controls
+static void Window_DrawControls(Window* the_window)
+{
+	Control*	this_control;
+
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		Sys_Destroy(&global_system); // crash early, crash often
+	}
+
+	this_control = Window_GetRootControl(the_window);
+
+	while (this_control)
+	{
+		this_control->enabled_ = true;
+		this_control->visible_ = true;
+	
+		Control_Render(this_control);
+	
+		this_control = this_control->next_;
+	}
+}
+
+
+//! Draws the title text into the titlebar using the active theme's system font
+//! @param	the_window: a valid pointer to a Window
+static void Window_DrawTitle(Window* the_window)
+{
+	Theme*		the_theme;
+	Font*		new_font;
+	Font*		old_font;
+	int16_t		available_width;
+	int16_t		chars_that_fit;
+
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		Sys_Destroy(&global_system); // crash early, crash often
+	}
+
+	// Draw window title with system (app) font, being careful to reset to whatever font was before.
+	// title is to be drawn centered vertically within the titlebar Rect
+	// title is to be clipped if too long to fit horizontally
+
+	the_theme = Sys_GetTheme(global_system);
+	new_font = Sys_GetSystemFont(global_system);
+	old_font = Bitmap_GetFont(the_window->bitmap_);
+
+	if (Bitmap_SetFont(the_window->bitmap_, new_font) == false)
+	{
+		DEBUG_OUT(("%s %d: Couldn't get the system font and assign it to bitmap", __func__, __LINE__));
+		Sys_Destroy(&global_system);	// crash early, crash often
+	}
+	
+	available_width = the_window->avail_title_width_;
+	chars_that_fit = Font_MeasureStringWidth(new_font, the_window->title_, FONT_NO_STRLEN_CAP, available_width, 0);
+	//DEBUG_OUT(("%s %d: available_width=%i, chars_that_fit=%i", __func__, __LINE__, available_width, chars_that_fit));
+	
+	Bitmap_SetColor(the_window->bitmap_, the_theme->title_color_);
+	Bitmap_SetXY(the_window->bitmap_, the_window->titlebar_rect_.MinX + the_theme->title_x_offset_, the_window->titlebar_rect_.MinY + (the_theme->titlebar_height_ + new_font->nDescent) / 2);
+
+	if (Font_DrawString(the_window->bitmap_, the_window->title_, chars_that_fit) == false)
+	{
+	}
+
+	if (Bitmap_SetFont(the_window->bitmap_, old_font) == false)
+	{
+		DEBUG_OUT(("%s %d: Couldn't set the bitmap's font back to what it had been", __func__, __LINE__));
+		Sys_Destroy(&global_system);	// crash early, crash often
+	}
+}
 
 
 // **** Debug functions *****
@@ -326,9 +537,9 @@ void Window_Print(Window* the_window)
 	DEBUG_OUT(("  bitmap_: %p",			the_window->bitmap_));
 	DEBUG_OUT(("  buffer_bitmap_: %p",	the_window->buffer_bitmap_));
 	DEBUG_OUT(("  overall_rect_: %i, %i, %i, %i", the_window->overall_rect_.MinX, the_window->overall_rect_.MinY, the_window->overall_rect_.MaxX, the_window->overall_rect_.MaxY));
-	DEBUG_OUT(("  content_rect_: %i, %i, %i, %i", the_window->content_rect_.MinX, the_window->content_rect_.MinY, the_window->content_rect_.MaxX, the_window->content_rect_.MaxY));
 	DEBUG_OUT(("  titlebar_rect_: %i, %i, %i, %i", the_window->titlebar_rect_.MinX, the_window->titlebar_rect_.MinY, the_window->titlebar_rect_.MaxX, the_window->titlebar_rect_.MaxY));
 	DEBUG_OUT(("  iconbar_rect_: %i, %i, %i, %i", the_window->iconbar_rect_.MinX, the_window->iconbar_rect_.MinY, the_window->iconbar_rect_.MaxX, the_window->iconbar_rect_.MaxY));
+	DEBUG_OUT(("  content_rect_: %i, %i, %i, %i", the_window->content_rect_.MinX, the_window->content_rect_.MinY, the_window->content_rect_.MaxX, the_window->content_rect_.MaxY));
 	DEBUG_OUT(("  grow_left_rect_: %i, %i, %i, %i", the_window->grow_left_rect_.MinX, the_window->grow_left_rect_.MinY, the_window->grow_left_rect_.MaxX, the_window->grow_left_rect_.MaxY));
 	DEBUG_OUT(("  grow_right_rect_: %i, %i, %i, %i", the_window->grow_right_rect_.MinX, the_window->grow_right_rect_.MinY, the_window->grow_right_rect_.MaxX, the_window->grow_right_rect_.MaxY));
 	DEBUG_OUT(("  grow_top_rect_: %i, %i, %i, %i", the_window->grow_top_rect_.MinX, the_window->grow_top_rect_.MinY, the_window->grow_top_rect_.MaxX, the_window->grow_top_rect_.MaxY));
@@ -349,6 +560,7 @@ void Window_Print(Window* the_window)
 	DEBUG_OUT(("  max_height_: %i",		the_window->max_height_));	
 	DEBUG_OUT(("  inner_width_: %i",	the_window->inner_width_));	
 	DEBUG_OUT(("  inner_height_: %i",	the_window->inner_height_));	
+	DEBUG_OUT(("  avail_title_width_: %i",	the_window->avail_title_width_));	
 	DEBUG_OUT(("  content_left_: %i",	the_window->content_left_));	
 	DEBUG_OUT(("  content_top_: %i",	the_window->content_top_));	
 	DEBUG_OUT(("  required_inner_width_: %i",		the_window->required_inner_width_));	
@@ -511,6 +723,9 @@ Window* Window_New(NewWinTemplate* the_win_template)
 		Control_SetActive(minimize_control, CONTROL_ACTIVE);
 		Control_SetActive(normsize_control, CONTROL_INACTIVE);
 		Control_SetActive(maximize_control, CONTROL_ACTIVE);
+	
+		// calculate available title width
+		Window_CalculateTitleSpace(the_window);
 		
 		// do first pass clear of the content area
 		Window_ClearContent(the_window);
@@ -700,96 +915,9 @@ void Window_UpdateTheme(Window* the_window)
 
 	// have all controls update themselves
 	Window_UpdateControlTheme(the_window);
-}
-
-
-// draws or redraws the entire window, including clearing the content area
-void Window_DrawAll(Window* the_window)
-{
-	if (the_window == NULL)
-	{
-		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
-	}
-
-	Window_DrawStructure(the_window);
-	Window_ClearContent(the_window);
-	Window_DrawControls(the_window);
-}
-
-
-// draws or redraws the structure area of the windows (excluding the content area and controls)
-void Window_DrawStructure(Window* the_window)
-{
-	Theme*	the_theme;
-	Font*	new_font;
-	Font*	old_font;
-
-	if (the_window == NULL)
-	{
-		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
-	}
-
-	the_theme = Sys_GetTheme(global_system);
-	new_font = Sys_GetSystemFont(global_system);
-	old_font = Bitmap_GetFont(the_window->bitmap_);
-
-	Bitmap_FillBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, Theme_GetTitlebarColor(the_theme));
 	
-	if (the_theme->titlebar_outline_)
-	{
-		Bitmap_DrawBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, Theme_GetOutlineColor(the_theme));
-	}
-	
-	Bitmap_DrawBoxRect(the_window->bitmap_, &the_window->overall_rect_, Theme_GetOutlineColor(the_theme));
-
-	// TODO: refactor this into it's own function, and have real way of calculating the font baseline position
-	// Draw window title with system (app) font, being careful to reset to whatever font was before.
-
-	if (Bitmap_SetFont(the_window->bitmap_, new_font) == false)
-	{
-		DEBUG_OUT(("%s %d: Couldn't get the system font and assign it to bitmap", __func__, __LINE__));
-		Sys_Destroy(&global_system);	// crash early, crash often
-	}
-	
-	Bitmap_SetColor(the_window->bitmap_, the_theme->title_color_);
-	Bitmap_SetXY(the_window->bitmap_, the_window->titlebar_rect_.MinX + the_theme->title_x_offset_, the_window->titlebar_rect_.MinY + (the_theme->titlebar_height_ + new_font->nDescent) / 2);
-
-	if (Font_DrawString(the_window->bitmap_, the_window->title_, FONT_NO_STRLEN_CAP) == false)
-	{
-	}
-
-	if (Bitmap_SetFont(the_window->bitmap_, old_font) == false)
-	{
-		DEBUG_OUT(("%s %d: Couldn't set the bitmap's font back to what it had been", __func__, __LINE__));
-		Sys_Destroy(&global_system);	// crash early, crash often
-	}
-}
-
-
-// draws or redraws the window controls
-void Window_DrawControls(Window* the_window)
-{
-	Control*	this_control;
-
-	if (the_window == NULL)
-	{
-		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
-	}
-
-	this_control = Window_GetRootControl(the_window);
-
-	while (this_control)
-	{
-		this_control->enabled_ = true;
-		this_control->visible_ = true;
-	
-		Control_Render(this_control);
-	
-		this_control = this_control->next_;
-	}
+	// recalculate available title width
+	Window_CalculateTitleSpace(the_window);
 }
 
 

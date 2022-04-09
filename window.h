@@ -125,14 +125,14 @@ struct Window
 // 	struct Region*			content_region_;				// portion of window that will contain content. excludes the borders and title bar
 // 	struct Region*			iconbar_region_;				// region for the iconbar, if any
 // 	struct Region*			titlebar_region_;
-	Rectangle				overall_rect_;					// the rect describing the total area of the window
-	Rectangle				content_rect_;					// the rect describing the content area of the window
 	signed int				pen_x_;							// H position relative to the content_rect_, of the "pen", for drawing functions
 	signed int				pen_y_;							// V position relative to the content_rect_, of the "pen", for drawing functions
 	uint8_t					pen_color_;						// Color index of the "pen", for drawing functions
 	Font*					pen_font_;						// Font to be used by the "pen", for drawing functions
+	Rectangle				overall_rect_;					// the rect describing the total area of the window
 	Rectangle				titlebar_rect_;					// the rect describing the titlebar area
 	Rectangle				iconbar_rect_;					// the rect describing the optional iconbar area
+	Rectangle				content_rect_;					// the rect describing the content area of the window
 	Rectangle				grow_left_rect_;				// the rect defining the area in which a click/drag will resize window
 	Rectangle				grow_right_rect_;				// the rect defining the area in which a click/drag will resize window
 	Rectangle				grow_top_rect_;					// the rect defining the area in which a click/drag will resize window
@@ -154,6 +154,7 @@ struct Window
 	signed int				max_height_;					// maximum height of window when in window-sized (normal) mode. If > 0, the window will not maximize. Default 0. 
 	signed int				inner_width_;					// space available inside the content area, accounting for border thicknesses
 	signed int				inner_height_;					// space available inside the content area, accounting for border thicknesses and title bar
+	signed int				avail_title_width_;				// available pixel width for the title to be rendered, based on delta between title x offset and left-most titlebar control
 	signed int				content_left_;					// of the raw x pos of the window (non-gzz), the x pos where window should start rendering content. =gzz_left_ until window is scrolled leftwards
 	signed int				content_top_;					// of the raw y pos of the window (non-gzz), the y pos where window should start rendering content. =gzz_top_ until window is scrolled down
 	signed int				required_inner_width_;			// greater of current inner_width or H space required inside the window to display all content. If greater than H space, a scroller is needed.

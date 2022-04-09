@@ -167,7 +167,7 @@ char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int heig
 //! The current font of the bitmap will be used as the basis for calculating fit.
 //! @param	the_font: reference to a complete, loaded Font object.
 //! @param	the_string: the null-terminated string to be measured.
-//! @param	num_chars: the length of the passed string. If the entire string fits, this len will be returned.
+//! @param	num_chars: either the length of the passed string, or as much of the string as should be displayed. Passing FONT_NO_STRLEN_CAP will mean it will attempt to measure the entire string.
 //! @param	available_width: the width, in pixels, of the space the string is to be measured against.
 //! @param	fixed_char_width: the width, in pixels, of one character. This value will be ignored. It exists to keep text-mode text-wrapping compatible with bitmap-font text-wrapping.
 //! @return	returns -1 in any error condition, or the number of characters that fit. If the entire string fits, the passed len will be returned.
