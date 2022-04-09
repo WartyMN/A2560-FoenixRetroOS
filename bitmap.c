@@ -510,6 +510,125 @@ bool Bitmap_Tile(Bitmap* src_bm, int src_x, int src_y, Bitmap* dst_bm, int width
 	v_rem = dst_bm->height_ % height;
 
 	//DEBUG_OUT(("%s %d: h_tiles=%i, h_rem=%i, v_tiles=%i, v_rem=%i", __func__, __LINE__, h_tiles, h_rem, v_tiles, v_rem));
+
+	// now we are reading from the destination bitmap, from the area we prepared. 
+	// we will keep reading the same blob over and over again, so read loc is now permanent.
+	the_read_loc = dst_bm->addr_;
+	
+	uint32_t write_size = dst_bm->width_ * height;
+	the_write_loc = dst_bm->addr_ + (dst_bm->width_ * height * 1); // right after the first band of tile
+	
+	// each loop is horizontal band of tiles running full length of target bitmap, writing top to bottom, from 2nd vertical band
+	for (j = 1; j < v_tiles; j++)	 // 1 because we just wrote one band worth's above.
+	{
+		memcpy(the_write_loc, the_read_loc, write_size);
+	
+		the_write_loc += write_size;
+	}
+	
+	// the last tile, if any, will have less height
+	if (v_rem)
+	{
+		height = v_rem;
+		write_size = dst_bm->width_ * height;
+		
+		memcpy(the_write_loc, the_read_loc, write_size);
+	}
+	
+	//DEBUG_OUT(("%s %d: final parameters: src_x=%i, src_y=%i, width=%i, height=%i.", __func__, __LINE__, src_x, src_y, width, height));
+	
+	return true;
+}
+
+
+//! Tile the source bitmap into the destination bitmap, filling it
+//! The source and destination bitmaps can be the same: you can use this to copy a chunk of pixels from one part of a screen to another. If the destination location cannot fit the entirety of the copied rectangle, the copy will be truncated, but will not return an error. 
+//! @param src_bm: the source bitmap. It must have a valid address within the VRAM memory space.
+//! @param dst_bm: the destination bitmap. It must have a valid address within the VRAM memory space. It can be the same bitmap as the source.
+//! @param src_x, src_y: the upper left coordinate within the source bitmap, for the tile you want to copy. Must be non-negative.
+//! @param width, height: the size of the tile to be derived from the source bitmap, in pixels.
+bool Bitmap_TileV2(Bitmap* src_bm, int src_x, int src_y, Bitmap* dst_bm, int width, int height)
+{
+	unsigned char*		the_starting_read_loc;
+	unsigned char*		the_read_loc;
+	unsigned char*		the_write_loc;
+	int					i;
+	int					h_tiles;
+	int					h_rem;
+	int					v_tiles;
+	int					v_rem;
+	int					j;
+	
+	
+	// TODO: move the 2 checks below to a private common function if other blit functions are added
+	
+	if (src_bm == NULL || dst_bm == NULL)
+	{
+		LOG_ERR(("%s %d: passed source or destination bitmap was NULL", __func__, __LINE__));
+		return false;
+	}
+	
+	if (src_bm->addr_ == NULL || dst_bm->addr_ == NULL)
+	{
+		LOG_ERR(("%s %d: passed source or destination bitmap had a NULL address", __func__, __LINE__));
+		return false;
+	}
+	
+	// LOGIC:
+	//   The entire width and height of the tile must be within the source bitmap. 
+	
+	if (src_x < 0 || src_x + width > src_bm->width_ || src_y < 0 || src_y + height > src_bm->height_)
+	{
+		LOG_INFO(("%s %d: Tile operations require the entire height and width of the tile to be defined within the bounds of the source bitmap. No tiling performed. src_x=%i, src_y=%i, width=%i, height=%i.", __func__, __LINE__, src_x, src_y, width, height));
+		return false;
+	}
+
+	//DEBUG_OUT(("%s %d: starting parameters: src_x=%i, src_y=%i, width=%i, height=%i.", __func__, __LINE__, src_x, src_y, width, height));
+	//DEBUG_OUT(("%s %d: dst_bm=%p, dst_bm=%p", __func__, __LINE__, src_bm, dst_bm));
+	
+	// LOGIC:
+	//   Unlike a blit operation, a tile operation always starts in the upper left corner of the target bitmap, and fills it entirely
+	//   As an optimization, each row of one tile worth will be copied to the right to fill one horizontal row of the dest. bitmap
+	//   From that point, will loop through the required number of remaining bands, copying the full width of the dest bitmap.
+	
+	// adjust copy width/height if the prescribed tile height or width wouldn't fit on target bitmap
+	width = (width >= dst_bm->width_) ? dst_bm->width_ : width;
+	height = (height >= dst_bm->height_) ? dst_bm->height_ : height;
+
+	// checks complete. ready to tile. 
+	the_starting_read_loc = src_bm->addr_ + (src_bm->width_ * src_y) + src_x;
+	
+	h_tiles = dst_bm->width_ / width;
+	h_rem = dst_bm->width_ % width;
+	
+	// first loop is to create 1 pixel row worth extending across the entire target bitmap
+	// and loop that for each row in the source tile
+	for (i = 0; i < height; i++)
+	{
+		the_read_loc = the_starting_read_loc + src_bm->width_ * i;
+		the_write_loc = dst_bm->addr_ + dst_bm->width_ * i; // x=0, row = i
+
+		for (j = 0; j < h_tiles; j++)
+		{
+			memcpy(the_write_loc, the_read_loc, width);
+	
+			the_write_loc += width;
+		}
+		
+		// the last horizontal span, if any, will have less width
+		if (h_rem)
+		{
+			memcpy(the_write_loc, the_read_loc, h_rem);
+		}
+	}		
+	
+	
+	// have now filled the entire width of the dest. bitmap, to a height of 'height'. tile downwards...
+	
+	v_tiles = dst_bm->height_ / height;
+	v_rem = dst_bm->height_ % height;
+
+	//DEBUG_OUT(("%s %d: h_tiles=%i, h_rem=%i, v_tiles=%i, v_rem=%i", __func__, __LINE__, h_tiles, h_rem, v_tiles, v_rem));
 	
 	// each loop is one tile, writing top to bottom, from 2nd vertical band
 	for (j = 1; j < v_tiles; j++)	 // 1 because we just wrote one band worth's above.

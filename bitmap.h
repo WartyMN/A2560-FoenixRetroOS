@@ -153,6 +153,13 @@ bool Bitmap_Tile(Bitmap* src_bm, int src_x, int src_y, Bitmap* dst_bm, int width
 //! @param width, height: the size of the tile to be derived from the source bitmap, in pixels.
 bool Bitmap_TileV1(Bitmap* src_bm, int src_x, int src_y, Bitmap* dst_bm, int width, int height);
 
+//! Tile the source bitmap into the destination bitmap, filling it
+//! The source and destination bitmaps can be the same: you can use this to copy a chunk of pixels from one part of a screen to another. If the destination location cannot fit the entirety of the copied rectangle, the copy will be truncated, but will not return an error. 
+//! @param src_bm: the source bitmap. It must have a valid address within the VRAM memory space.
+//! @param dst_bm: the destination bitmap. It must have a valid address within the VRAM memory space. It can be the same bitmap as the source.
+//! @param src_x, src_y: the upper left coordinate within the source bitmap, for the tile you want to copy. Must be non-negative.
+//! @param width, height: the size of the tile to be derived from the source bitmap, in pixels.
+bool Bitmap_TileV2(Bitmap* src_bm, int src_x, int src_y, Bitmap* dst_bm, int width, int height);
 
 
 
