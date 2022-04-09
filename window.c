@@ -114,28 +114,94 @@ void Window_ConfigureDragRects(Window* the_window)
 //! set up the rects for titlebar, content, etc. 
 void Window_ConfigureStructureRects(Window* the_window)
 {
+	Theme*		the_theme;
+	
 	// LOGIC: 
 	//   In final model, the location and height of the content and titlebar rects will be configurable
 	//   In this early prototype, they are going to be hard coded here
 	
-	// inset the titlebar rect by 0 pixels, compared to overall rect: to allow for a title bar outline to draw over the overall window outline
-	the_window->titlebar_rect_.MinX = 0;
-	the_window->titlebar_rect_.MinY = 0;
-	the_window->titlebar_rect_.MaxX = the_window->width_ - 1;
-	the_window->titlebar_rect_.MaxY = 19;
-
-	// inset the content rect by 1 pixel, compared to overall rect: content area is not allowed to overwrite the overall window outline
-	the_window->content_rect_.MinX = 1;
-	the_window->content_rect_.MinY = the_window->titlebar_rect_.MaxY + 1;
-	the_window->content_rect_.MaxX = the_window->width_ - 1;
-	the_window->content_rect_.MaxY = the_window->height_ - 1;
-	the_window->inner_width_ = the_window->content_rect_.MaxX - the_window->content_rect_.MinX;
-	the_window->inner_height_ = the_window->content_rect_.MaxY - the_window->content_rect_.MinY;
+	if ( (the_theme = Sys_GetTheme(global_system)) == NULL)
+	{
+		LOG_ERR(("%s %d: failed to get the current system theme!", __func__ , __LINE__));
+		return;
+	}
 
 	the_window->overall_rect_.MinX = 0;
 	the_window->overall_rect_.MinY = 0;
 	the_window->overall_rect_.MaxX = the_window->width_ - 1;
 	the_window->overall_rect_.MaxY = the_window->height_ - 1;
+
+	// LOGIC for VERTICAL placement of title bar, icon bar, and content area:
+	//   if theme's flow_from_bottom_ property is true, the vertical flow of elements from top will be content area->iconbar->titlebar
+	//     if false, the vertical flow of elements from top will be titlebar->iconbar->content area
+	
+	// LOGIC for titlebar placement:
+	//   do NOT inset the titlebar vertically or horizontally by one. Titlebar must be allowed to overwrite the overall window border
+	
+	if (the_theme->flow_from_bottom_ == false)
+	{
+		the_window->titlebar_rect_.MinY = the_window->overall_rect_.MinY;
+	}
+	else
+	{
+		the_window->titlebar_rect_.MinY = the_window->overall_rect_.MaxY - the_theme->titlebar_height_;
+	}
+	
+	the_window->titlebar_rect_.MaxY = the_window->titlebar_rect_.MinY + the_theme->titlebar_height_;
+	the_window->titlebar_rect_.MinX = 0;
+	the_window->titlebar_rect_.MaxX = the_window->width_ - 1;
+	
+
+	// LOGIC for iconbar placement:
+	//   if iconbar is set to not show, then do not allocate any vertical space for it.
+	//     Let it overlap the titlebar area exactly so that content area can position itself always relative to iconbar.
+	//   DO inset the iconbar vertically by one from the title. Iconbar must not be allowed to overwrite the titlebar border
+	//   Do NOT inset the iconbar horizontally by one from the window edge. Iconbar must be allowed to overwrite the overall window border
+	if (the_window->show_iconbar_)
+	{
+		if (the_theme->flow_from_bottom_ == false)
+		{
+			the_window->iconbar_rect_.MinY = the_window->titlebar_rect_.MaxY + 1;
+		}
+		else
+		{
+			the_window->iconbar_rect_.MinY = the_window->titlebar_rect_.MinY - 1 - the_theme->iconbar_height_;
+		}
+
+		the_window->iconbar_rect_.MaxY = the_window->iconbar_rect_.MinY + the_theme->iconbar_height_;
+		the_window->iconbar_rect_.MinX = 0;
+		the_window->iconbar_rect_.MaxX = the_window->width_ - 1;
+	}
+	else
+	{
+		the_window->iconbar_rect_.MinX = the_window->titlebar_rect_.MaxX;
+		the_window->iconbar_rect_.MaxX = the_window->titlebar_rect_.MaxX;
+		the_window->iconbar_rect_.MinY = the_window->titlebar_rect_.MinY;
+		the_window->iconbar_rect_.MaxY = the_window->titlebar_rect_.MaxY;
+	}
+	
+
+	// LOGIC for content area placement:
+	//   DO inset the iconbar vertically and horizontally by one from the window edge and titlebar/iconbar: content area must not be allowed to overwrite any borders
+	if (the_theme->flow_from_bottom_ == false)
+	{
+		the_window->content_rect_.MinY = the_window->iconbar_rect_.MaxY + 1;
+		the_window->content_rect_.MaxY = the_window->overall_rect_.MaxY - 1;
+	}
+	else
+	{
+		the_window->content_rect_.MinY = the_window->overall_rect_.MinY + 1;
+		the_window->content_rect_.MaxY = the_window->iconbar_rect_.MinY - 1;
+	}
+
+	the_window->content_rect_.MinX = 1;
+	the_window->content_rect_.MaxX = the_window->width_ - 1;
+
+	the_window->inner_width_ = the_window->content_rect_.MaxX - the_window->content_rect_.MinX;
+	the_window->inner_height_ = the_window->content_rect_.MaxY - the_window->content_rect_.MinY;
+
+	//DEBUG_OUT(("%s %d: Window after configure struct rects...", __func__, __LINE__));
+	//Window_Print(the_window);
 }
 
 
@@ -143,7 +209,7 @@ void Window_ConfigureStructureRects(Window* the_window)
 void Window_CheckDimensions(Window* the_window, NewWinTemplate* the_win_template)
 {
 	
-	DEBUG_OUT(("%s %d: checking window dimensions...", __func__, __LINE__));
+	//DEBUG_OUT(("%s %d: checking window dimensions...", __func__, __LINE__));
 
 	if (the_win_template->min_width_ < WIN_DEFAULT_MIN_WIDTH)
 	{
@@ -208,7 +274,7 @@ void Window_UpdateControlTheme(Window* the_window)
 	//   old controls will not be destroyed and recreated
 	//   the parts of the control that could have been affected by the theme are simply adjusted
 	
-	DEBUG_OUT(("%s %d: udpating controls based on current system theme...", __func__, __LINE__));
+	DEBUG_OUT(("%s %d: updating controls based on current system theme...", __func__, __LINE__));
 
 	if ( (the_theme = Sys_GetTheme(global_system)) == NULL)
 	{
@@ -262,10 +328,12 @@ void Window_Print(Window* the_window)
 	DEBUG_OUT(("  overall_rect_: %i, %i, %i, %i", the_window->overall_rect_.MinX, the_window->overall_rect_.MinY, the_window->overall_rect_.MaxX, the_window->overall_rect_.MaxY));
 	DEBUG_OUT(("  content_rect_: %i, %i, %i, %i", the_window->content_rect_.MinX, the_window->content_rect_.MinY, the_window->content_rect_.MaxX, the_window->content_rect_.MaxY));
 	DEBUG_OUT(("  titlebar_rect_: %i, %i, %i, %i", the_window->titlebar_rect_.MinX, the_window->titlebar_rect_.MinY, the_window->titlebar_rect_.MaxX, the_window->titlebar_rect_.MaxY));
+	DEBUG_OUT(("  iconbar_rect_: %i, %i, %i, %i", the_window->iconbar_rect_.MinX, the_window->iconbar_rect_.MinY, the_window->iconbar_rect_.MaxX, the_window->iconbar_rect_.MaxY));
 	DEBUG_OUT(("  grow_left_rect_: %i, %i, %i, %i", the_window->grow_left_rect_.MinX, the_window->grow_left_rect_.MinY, the_window->grow_left_rect_.MaxX, the_window->grow_left_rect_.MaxY));
 	DEBUG_OUT(("  grow_right_rect_: %i, %i, %i, %i", the_window->grow_right_rect_.MinX, the_window->grow_right_rect_.MinY, the_window->grow_right_rect_.MaxX, the_window->grow_right_rect_.MaxY));
 	DEBUG_OUT(("  grow_top_rect_: %i, %i, %i, %i", the_window->grow_top_rect_.MinX, the_window->grow_top_rect_.MinY, the_window->grow_top_rect_.MaxX, the_window->grow_top_rect_.MaxY));
 	DEBUG_OUT(("  grow_bottom_rect_: %i, %i, %i, %i", the_window->grow_bottom_rect_.MinX, the_window->grow_bottom_rect_.MinY, the_window->grow_bottom_rect_.MaxX, the_window->grow_bottom_rect_.MaxY));
+	DEBUG_OUT(("  show_iconbar_: %i",	the_window->show_iconbar_));
 	DEBUG_OUT(("  is_backdrop_: %i",	the_window->is_backdrop_));
 	DEBUG_OUT(("  visible_: %i",		the_window->visible_));
 	DEBUG_OUT(("  active_: %i",			the_window->active_));
@@ -331,6 +399,12 @@ Window* Window_New(NewWinTemplate* the_win_template)
 		goto error;
 	}
 	
+	if ( (the_theme = Sys_GetTheme(global_system)) == NULL)
+	{
+		LOG_ERR(("%s %d: failed to get the current system theme!", __func__ , __LINE__));
+		goto error;
+	}
+	
 	DEBUG_OUT(("%s %d: x=%i, y=%i, width=%i", __func__, __LINE__, the_win_template->x_, the_win_template->y_, the_win_template->width_));
 	
 	if ( (the_window = (Window*)f_calloc(1, sizeof(Window), MEM_STANDARD) ) == NULL)
@@ -386,6 +460,7 @@ Window* Window_New(NewWinTemplate* the_win_template)
 
 	the_window->user_data_ = the_win_template->user_data_;
 	the_window->buffer_bitmap_ = the_win_template->buffer_bitmap_;
+	the_window->show_iconbar_ = the_win_template->show_iconbar_;
 	the_window->is_backdrop_ = the_win_template->is_backdrop_;
 	the_window->can_resize_ = the_win_template->can_resize_;
 
@@ -414,16 +489,10 @@ Window* Window_New(NewWinTemplate* the_win_template)
 	{
 		DEBUG_OUT(("%s %d: getting theme and theme controls...", __func__, __LINE__));
 
-		if ( (the_theme = Sys_GetTheme(global_system)) == NULL)
-		{
-			LOG_ERR(("%s %d: failed to get the current system theme!", __func__ , __LINE__));
-			goto error;
-		}
-		
-		close_control = Control_New(Theme_GetCloseControlTemplate(the_theme), the_window, CLOSE_WIDGET_ID, 0);
-		minimize_control = Control_New(Theme_GetMinimizeControlTemplate(the_theme), the_window, MINIMIZE_WIDGET_ID, 0);
-		normsize_control = Control_New(Theme_GetNormSizeControlTemplate(the_theme), the_window, NORM_SIZE_WIDGET_ID, 0);
-		maximize_control = Control_New(Theme_GetMaximizeControlTemplate(the_theme), the_window, MAXIMIZE_WIDGET_ID, 0);
+		close_control = Control_New(Theme_GetCloseControlTemplate(the_theme), the_window, &the_window->titlebar_rect_, CLOSE_WIDGET_ID, 0);
+		minimize_control = Control_New(Theme_GetMinimizeControlTemplate(the_theme), the_window, &the_window->titlebar_rect_, MINIMIZE_WIDGET_ID, 0);
+		normsize_control = Control_New(Theme_GetNormSizeControlTemplate(the_theme), the_window, &the_window->titlebar_rect_, NORM_SIZE_WIDGET_ID, 0);
+		maximize_control = Control_New(Theme_GetMaximizeControlTemplate(the_theme), the_window, &the_window->titlebar_rect_, MAXIMIZE_WIDGET_ID, 0);
 	
 		DEBUG_OUT(("%s %d: close_control=%p", __func__, __LINE__, close_control));
 		DEBUG_OUT(("%s %d: minimize_control=%p", __func__, __LINE__, minimize_control));
@@ -450,7 +519,7 @@ Window* Window_New(NewWinTemplate* the_win_template)
 	// Add this window to the list of windows
 	Sys_AddToWindowList(global_system, the_window);
 	
-	//Window_Print(the_window);
+	Window_Print(the_window);
 		
 	return the_window;
 	
@@ -653,6 +722,7 @@ void Window_DrawAll(Window* the_window)
 void Window_DrawStructure(Window* the_window)
 {
 	Theme*	the_theme;
+	Font*	new_font;
 	Font*	old_font;
 
 	if (the_window == NULL)
@@ -662,8 +732,8 @@ void Window_DrawStructure(Window* the_window)
 	}
 
 	the_theme = Sys_GetTheme(global_system);
-
-	Bitmap_DrawBoxRect(the_window->bitmap_, &the_window->overall_rect_, Theme_GetOutlineColor(the_theme));
+	new_font = Sys_GetSystemFont(global_system);
+	old_font = Bitmap_GetFont(the_window->bitmap_);
 
 	Bitmap_FillBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, Theme_GetTitlebarColor(the_theme));
 	
@@ -672,18 +742,19 @@ void Window_DrawStructure(Window* the_window)
 		Bitmap_DrawBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, Theme_GetOutlineColor(the_theme));
 	}
 	
+	Bitmap_DrawBoxRect(the_window->bitmap_, &the_window->overall_rect_, Theme_GetOutlineColor(the_theme));
+
 	// TODO: refactor this into it's own function, and have real way of calculating the font baseline position
 	// Draw window title with system (app) font, being careful to reset to whatever font was before.
-	old_font = Bitmap_GetFont(the_window->bitmap_);
 
-	if (Bitmap_SetFont(the_window->bitmap_, Sys_GetSystemFont(global_system)) == false)
+	if (Bitmap_SetFont(the_window->bitmap_, new_font) == false)
 	{
 		DEBUG_OUT(("%s %d: Couldn't get the system font and assign it to bitmap", __func__, __LINE__));
 		Sys_Destroy(&global_system);	// crash early, crash often
 	}
 	
 	Bitmap_SetColor(the_window->bitmap_, the_theme->title_color_);
-	Bitmap_SetXY(the_window->bitmap_, the_window->titlebar_rect_.MinX + the_theme->title_x_offset_, the_window->titlebar_rect_.MinY + 2);
+	Bitmap_SetXY(the_window->bitmap_, the_window->titlebar_rect_.MinX + the_theme->title_x_offset_, the_window->titlebar_rect_.MinY + (the_theme->titlebar_height_ + new_font->nDescent) / 2);
 
 	if (Font_DrawString(the_window->bitmap_, the_window->title_, FONT_NO_STRLEN_CAP) == false)
 	{

@@ -228,7 +228,7 @@ void RunDemo(void)
 	Sys_Render(global_system);
 
 	// delay a bit before switching
-	DelaySeconds(2);
+	General_DelaySeconds(2);
 	
 	// switch to green theme!
 	Theme*	the_theme;

@@ -132,10 +132,12 @@ struct Window
 	uint8_t					pen_color_;						// Color index of the "pen", for drawing functions
 	Font*					pen_font_;						// Font to be used by the "pen", for drawing functions
 	Rectangle				titlebar_rect_;					// the rect describing the titlebar area
+	Rectangle				iconbar_rect_;					// the rect describing the optional iconbar area
 	Rectangle				grow_left_rect_;				// the rect defining the area in which a click/drag will resize window
 	Rectangle				grow_right_rect_;				// the rect defining the area in which a click/drag will resize window
 	Rectangle				grow_top_rect_;					// the rect defining the area in which a click/drag will resize window
 	Rectangle				grow_bottom_rect_;				// the rect defining the area in which a click/drag will resize window
+	bool					show_iconbar_;					// true if the iconbar area should be rendered
 	bool					is_backdrop_;					// true if this is the backdrop (desktop) window
 	bool					visible_;						// is the window visible?
 	bool					active_;						// keep 1 window as the active one. only active windows get regular updates
@@ -182,6 +184,7 @@ struct NewWinTemplate
 	window_type				type_;
 	Bitmap* 				bitmap_;						// on-screen bitmap covering the visible portion of window
 	Bitmap* 				buffer_bitmap_;					// off-screen bitmap covering the visible portion of window
+	bool					show_iconbar_;					// true if the iconbar area should be rendered
 	bool					is_backdrop_;					// true if this is the backdrop (desktop) window
 	bool					can_resize_;					// if true, window can be stretched or shrunk. If false, the width_ and height_ will be locked.
 	signed int				x_;								// horizontal coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.

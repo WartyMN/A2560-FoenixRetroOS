@@ -1517,18 +1517,16 @@ void Theme_Print(Theme* the_theme)
 	DEBUG_OUT(("  clut_: %p",				the_theme->clut_));
 	DEBUG_OUT(("  outline_size_: %u", 		the_theme->outline_size_));
 	DEBUG_OUT(("  outline_color_: %u", 		the_theme->outline_color_));
+	DEBUG_OUT(("  flow_from_bottom_: %u", 	the_theme->flow_from_bottom_));
 	DEBUG_OUT(("  titlebar_height_: %u", 	the_theme->titlebar_height_));
-	DEBUG_OUT(("  titlebar_y_: %i", 		the_theme->titlebar_y_));
 	DEBUG_OUT(("  titlebar_color_: %u",		the_theme->titlebar_color_));
 	DEBUG_OUT(("  titlebar_outline_: %u",	the_theme->titlebar_outline_));
 	DEBUG_OUT(("  title_color_: %u",		the_theme->title_color_));
 	DEBUG_OUT(("  title_h_align_: %i", 		the_theme->title_h_align_));
 	DEBUG_OUT(("  title_x_offset_: %i", 	the_theme->title_x_offset_));
 	DEBUG_OUT(("  iconbar_height_: %u",		the_theme->iconbar_height_));
-	DEBUG_OUT(("  iconbar_y_: %i", 			the_theme->iconbar_y_));
 	DEBUG_OUT(("  iconbar_color_: %u", 		the_theme->iconbar_color_));
 	DEBUG_OUT(("  iconbar_outline_: %u",	the_theme->iconbar_outline_));
-	DEBUG_OUT(("  contentarea_y_: %i", 		the_theme->contentarea_y_));
 	DEBUG_OUT(("  contentarea_color_: %u", 	the_theme->contentarea_color_));
 	DEBUG_OUT(("  contentarea_font_color_: %u",		the_theme->contentarea_font_color_));
 	DEBUG_OUT(("  desktop_color_: %u",	 	the_theme->desktop_color_));
@@ -1653,8 +1651,9 @@ Theme* Theme_CreateDefaultTheme(void)
 	the_theme->outline_size_ = WIN_DEFAULT_OUTLINE_SIZE;
 	the_theme->outline_color_ = WIN_DEFAULT_OUTLINE_COLOR;
 	
+	the_theme->flow_from_bottom_ = WIN_DEFAULT_FLOW_FROM_BOTTOM;
+	
 	the_theme->titlebar_height_ = WIN_DEFAULT_TITLEBAR_HEIGHT;
-	the_theme->titlebar_y_ = WIN_DEFAULT_TITLEBAR_Y;
 	the_theme->titlebar_color_ = WIN_DEFAULT_TITLEBAR_COLOR;
 	the_theme->titlebar_outline_ = WIN_DEFAULT_TITLEBAR_HAS_OUTLINE;
 
@@ -1663,11 +1662,9 @@ Theme* Theme_CreateDefaultTheme(void)
 	the_theme->title_x_offset_ = 25; // so it is to the right of the close btn
 	
 	the_theme->iconbar_height_ = WIN_DEFAULT_ICONBAR_HEIGHT;
-	the_theme->iconbar_y_ = WIN_DEFAULT_ICONBAR_Y;
 	the_theme->iconbar_color_ = WIN_DEFAULT_ICONBAR_COLOR;
 	the_theme->iconbar_outline_ = WIN_DEFAULT_ICONBAR_HAS_OUTLINE;
 	
-	the_theme->contentarea_y_ = WIN_DEFAULT_CONTENTAREA_Y;
 	the_theme->contentarea_color_ = WIN_DEFAULT_CONTENTAREA_COLOR;
 	the_theme->contentarea_font_color_ = WIN_DEFAULT_CONTENTAREA_FONT_COLOR;
 	
@@ -1686,7 +1683,7 @@ Theme* Theme_CreateDefaultTheme(void)
 	the_theme->control_t_maximize_ = Theme_CreateDefaultControlTemplateMaximize();
 	
 	// debug
-	Theme_Print(the_theme);
+	//Theme_Print(the_theme);
 	
 	// temp: set background color to theme color (test)
 	R32(VICKYB_BORDER_COLOR_A2560K) = 0;
@@ -1922,9 +1919,10 @@ Theme* Theme_CreateGreenTheme(void)
 
 	the_theme->outline_size_ = WIN_DEFAULT_OUTLINE_SIZE;
 	the_theme->outline_color_ = 0x0F; // bright green
+
+	the_theme->flow_from_bottom_ = true;
 	
-	the_theme->titlebar_height_ = WIN_DEFAULT_TITLEBAR_HEIGHT + 2;
-	the_theme->titlebar_y_ = WIN_DEFAULT_TITLEBAR_Y;
+	the_theme->titlebar_height_ = WIN_DEFAULT_TITLEBAR_HEIGHT + 4;
 	the_theme->titlebar_color_ = 0x1F; // black
 	the_theme->titlebar_outline_ = true;
 
@@ -1933,11 +1931,9 @@ Theme* Theme_CreateGreenTheme(void)
 	the_theme->title_x_offset_ = 5; // close btn in this theme is off to the right, so can start title close to left window edge
 	
 	the_theme->iconbar_height_ = WIN_DEFAULT_ICONBAR_HEIGHT;
-	the_theme->iconbar_y_ = WIN_DEFAULT_ICONBAR_Y + 2;
 	the_theme->iconbar_color_ = 0x1E; // near black
 	the_theme->iconbar_outline_ = false;
 
-	the_theme->contentarea_y_ = WIN_DEFAULT_CONTENTAREA_Y + 2;
 	the_theme->contentarea_color_ = 0x1F; // black
 	the_theme->contentarea_font_color_ = 0x14; // medium green
 	
@@ -2057,7 +2053,7 @@ ControlTemplate* Theme_CreateGreenControlTemplateClose(void)
 	the_template->h_align_ = H_ALIGN_RIGHT;
 	the_template->v_align_ = V_ALIGN_TOP;
 	the_template->x_offset_ = 16+16+16+16;
-	the_template->y_offset_ = 3;
+	the_template->y_offset_ = 4;
 	the_template->width_ = width;
 	the_template->height_ = height;
 	the_template->min_ = 0;
@@ -2112,7 +2108,7 @@ ControlTemplate* Theme_CreateGreenControlTemplateMinimize(void)
 	the_template->h_align_ = H_ALIGN_RIGHT;
 	the_template->v_align_ = V_ALIGN_TOP;
 	the_template->x_offset_ = 16+16+16;
-	the_template->y_offset_ = 3;
+	the_template->y_offset_ = 4;
 	the_template->width_ = width;
 	the_template->height_ = height;
 	the_template->min_ = 0;
@@ -2167,7 +2163,7 @@ ControlTemplate* Theme_CreateGreenControlTemplateNormSize(void)
 	the_template->h_align_ = H_ALIGN_RIGHT;
 	the_template->v_align_ = V_ALIGN_TOP;
 	the_template->x_offset_ = 16+16;
-	the_template->y_offset_ = 3;
+	the_template->y_offset_ = 4;
 	the_template->width_ = width;
 	the_template->height_ = height;
 	the_template->min_ = 0;
@@ -2222,7 +2218,7 @@ ControlTemplate* Theme_CreateGreenControlTemplateMaximize(void)
 	the_template->h_align_ = H_ALIGN_RIGHT;
 	the_template->v_align_ = V_ALIGN_TOP;
 	the_template->x_offset_ = 16;
-	the_template->y_offset_ = 3;
+	the_template->y_offset_ = 4;
 	the_template->width_ = width;
 	the_template->height_ = height;
 	the_template->min_ = 0;

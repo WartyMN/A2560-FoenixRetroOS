@@ -131,7 +131,8 @@ struct Control
 	control_type			type_;							//! button vs checkbox vs radio button, etc. 
 	int8_t					group_;							//! group number, if this control is part of a group of controls. -1 (no group) is default. Typical use case: radio buttons.
 	Control*				next_;							//! next control in the list
-	Window*					parent_;						//! parent window
+	Window*					parent_win_;					//! parent window
+	Rectangle*				parent_rect_;					//! parent rectangle (the window segment it belongs to: titlebar, contentarea, iconbar
 	Rectangle				rect_;							//! coordinates relative to the parent window (ie, these are not global coordinates)
 	h_align_type			h_align_;						//! whether the control should be positioned relative to the left side, right side, or centered
 	v_align_type			v_align_;						//! whether the control should be positioned relative to the top edge, bottom edge, or centered
@@ -168,7 +169,7 @@ struct Control
 
 // constructor
 //! Allocate a Control object
-Control* Control_New(ControlTemplate* the_template, Window* the_window, uint16_t the_id, int8_t the_group);
+Control* Control_New(ControlTemplate* the_template, Window* the_window, Rectangle* the_parent_rect, uint16_t the_id, int8_t the_group);
 
 // destructor
 // frees all allocated memory associated with the passed object, and the object itself

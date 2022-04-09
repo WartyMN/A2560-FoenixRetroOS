@@ -77,39 +77,46 @@ void Control_AlignToWindow(Control* the_control)
 	//   Controls have an h align and v align choice, and x and y offsets.
 	//   Based on those choices, and the parent window's dimensions, 
 	//     the control needs its' rect_ property adjusted to match where it should render
-	//   rect_ values are relative to the window 0,0 (upper left)
+	//   rect_ values are relative to the control's parent window, but calculated relative to the parent rect
+	//     for close/max/min/norm, this will be the window's titlebar rect
+	//       (not to the window itself -- this allows them to render at bottom of window if that's where titlebar is)
+	//     for iconbar controls, that will be the iconbar_rect_
+	//     for any other control, that will be the contentarea_rect_
 	
 	if (the_control->h_align_ == H_ALIGN_LEFT)
 	{
-		the_control->rect_.MinX = the_control->x_offset_;
+		the_control->rect_.MinX = the_control->parent_rect_->MinX + the_control->x_offset_;
 	}
 	else if (the_control->h_align_ == H_ALIGN_RIGHT)
 	{
-		the_control->rect_.MinX = the_control->parent_->overall_rect_.MaxX - the_control->x_offset_;
+		the_control->rect_.MinX = the_control->parent_rect_->MaxX - the_control->x_offset_;
 	}
 	else
 	{
 		// center
-		the_control->rect_.MinX = the_control->parent_->overall_rect_.MinX + ((the_control->parent_->width_ - the_control->width_) / 2);		
+		the_control->rect_.MinX = the_control->parent_rect_->MinX + ((the_control->parent_rect_->MaxX - the_control->parent_rect_->MinX - the_control->width_) / 2);		
 	}
 	
 	the_control->rect_.MaxX = the_control->rect_.MinX + the_control->width_;
 	
 	if (the_control->v_align_ == V_ALIGN_TOP)
 	{
-		the_control->rect_.MinY = the_control->y_offset_;
+		the_control->rect_.MinY = the_control->parent_rect_->MinY + the_control->y_offset_;
 	}
 	else if (the_control->v_align_ == V_ALIGN_BOTTOM)
 	{
-		the_control->rect_.MinY = the_control->parent_->overall_rect_.MaxY - the_control->y_offset_;
+		the_control->rect_.MinY = the_control->parent_rect_->MaxY - the_control->y_offset_;
 	}
 	else
 	{
 		// center
-		the_control->rect_.MinY = the_control->parent_->overall_rect_.MinY + ((the_control->parent_->height_ - the_control->height_) / 2);		
+		the_control->rect_.MinY = the_control->parent_rect_->MinY + ((the_control->parent_rect_->MaxY - the_control->parent_rect_->MinY - the_control->height_) / 2);		
 	}
 	
-	the_control->rect_.MaxY = the_control->rect_.MinY + the_control->height_;	
+	the_control->rect_.MaxY = the_control->rect_.MinY + the_control->height_;
+	
+	//DEBUG_OUT(("%s %d: Control after AlignToWindow...", __func__, __LINE__));
+	//Control_Print(the_control);
 }
 
 
@@ -124,7 +131,8 @@ void Control_Print(Control* the_control)
 	DEBUG_OUT(("  type_: %i",	 			the_control->type_));
 	DEBUG_OUT(("  group_: %i",	 			the_control->group_));
 	DEBUG_OUT(("  next_: %p",				the_control->next_));
-	DEBUG_OUT(("  parent_: %p",				the_control->parent_));
+	DEBUG_OUT(("  parent_win_: %p",			the_control->parent_win_));
+	DEBUG_OUT(("  parent_rect_: %i, %i, %i, %i",	the_control->parent_rect_->MinX, the_control->parent_rect_->MinY, the_control->parent_rect_->MaxX, the_control->parent_rect_->MaxY));
 	DEBUG_OUT(("  rect_: %i, %i, %i, %i",	the_control->rect_.MinX, the_control->rect_.MinY, the_control->rect_.MaxX, the_control->rect_.MaxY));
 	DEBUG_OUT(("  h_align_: %i", 			the_control->h_align_));
 	DEBUG_OUT(("  v_align_: %i",			the_control->v_align_));
@@ -155,7 +163,7 @@ void Control_Print(Control* the_control)
 // **** CONSTRUCTOR AND DESTRUCTOR *****
 
 // constructor
-Control* Control_New(ControlTemplate* the_template, Window* the_window, uint16_t the_id, int8_t the_group)
+Control* Control_New(ControlTemplate* the_template, Window* the_window, Rectangle* the_parent_rect, uint16_t the_id, int8_t the_group)
 {
 	Control*		the_control;
 
@@ -168,6 +176,12 @@ Control* Control_New(ControlTemplate* the_template, Window* the_window, uint16_t
 	if ( the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed parent window was NULL", __func__ , __LINE__));
+		goto error;
+	}
+
+	if ( the_parent_rect == NULL)
+	{
+		LOG_ERR(("%s %d: passed parent rect was NULL", __func__ , __LINE__));
 		goto error;
 	}
 		
@@ -208,7 +222,8 @@ Control* Control_New(ControlTemplate* the_template, Window* the_window, uint16_t
 	
 	// localize to the parent window
 	the_control->id_ = the_id;
-	the_control->parent_ = the_window;
+	the_control->parent_win_ = the_window;
+	the_control->parent_rect_ = the_parent_rect;
 	Control_AlignToWindow(the_control);
 	
 	//Control_Print(the_control);
@@ -378,7 +393,7 @@ void Control_Render(Control* the_control)
 		return;
 	}
 	
-	if (the_control->parent_ == NULL)
+	if (the_control->parent_win_ == NULL)
 	{
 		LOG_ERR(("%s %d: control's parent window object was null", __func__ , __LINE__));
 		return;
@@ -402,12 +417,12 @@ void Control_Render(Control* the_control)
 	//DEBUG_OUT(("%s %d: control type=%i, active=%i, pressed=%i", __func__, __LINE__, the_control->type_, the_control->active_, the_control->pressed_));
 	
 	Bitmap_Blit(the_bitmap, 0, 0, 
-						the_control->parent_->bitmap_, 
-						the_control->rect_.MinX, 
-						the_control->rect_.MinY, 
-						the_control->width_, 
-						the_control->height_
-						);
+				the_control->parent_win_->bitmap_, 
+				the_control->rect_.MinX, 
+				the_control->rect_.MinY, 
+				the_control->width_, 
+				the_control->height_
+				);
 }
 
 

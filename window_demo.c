@@ -183,7 +183,7 @@ void RunDemo(void)
 	Sys_Render(global_system);
 	
 	// get ready to switch theme
-	DelaySeconds(2);
+	General_DelaySeconds(2);
 
 	// switch to green theme!
 	Theme*	the_theme;
@@ -251,7 +251,7 @@ void RunDemo(void)
 
 
 	// inactivate some buttons to test things out
-	DelaySeconds(1);
+	General_DelaySeconds(1);
 	
 	// deactivate some of the controls
 	Control*	root_control;
@@ -268,12 +268,12 @@ void RunDemo(void)
 		this_control = Control_GetNextControl(this_control);
 		Sys_Render(global_system);
 		
-		Delay(30);
+		General_DelayTicks(30);
 	}
 	
 
 	// reactive some buttons and pretend to push them
-	DelaySeconds(2);
+	General_DelaySeconds(2);
 	
 	this_control = root_control;
 	
@@ -285,7 +285,7 @@ void RunDemo(void)
 		this_control = Control_GetNextControl(this_control);
 		Sys_Render(global_system);
 		
-		Delay(30);
+		General_DelayTicks(30);
 	}
 
 
