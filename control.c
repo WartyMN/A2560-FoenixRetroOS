@@ -211,7 +211,7 @@ Control* Control_New(ControlTemplate* the_template, Window* the_window, uint16_t
 	the_control->parent_ = the_window;
 	Control_AlignToWindow(the_control);
 	
-	Control_Print(the_control);
+	//Control_Print(the_control);
 	
 	return the_control;
 	
@@ -244,6 +244,49 @@ bool Control_Destroy(Control** the_control)
 
 // **** xxx functions *****
 
+//! Updates the passed control with new theme info from the passed control template
+//! Call this when the theme has been changed
+//! It allows existing controls to be updated in place, without having to free them and create new theme controls
+bool Control_UpdateFromTemplate(Control* the_control, ControlTemplate* the_template)
+{
+	if ( the_control == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was NULL", __func__ , __LINE__));
+		return false;
+	}
+
+	if ( the_template == NULL)
+	{
+		LOG_ERR(("%s %d: passed template was NULL", __func__ , __LINE__));
+		return false;
+	}
+
+	// LOGIC:
+	//   the control template will contain most of the information needed to establish the Control
+	//   we already have a working control, and we don't need to change the type, visibility, active/inactive, etc. 
+	//   we want to change only the properties that might have changed due to a change in theme.
+	
+	// copy template info in before localizing to the window
+	the_control->h_align_ = the_template->h_align_;
+	the_control->v_align_ = the_template->v_align_;
+	the_control->x_offset_ = the_template->x_offset_;
+	the_control->y_offset_ = the_template->y_offset_;
+	the_control->width_ = the_template->width_;
+	the_control->height_ = the_template->height_;
+
+	// do NOT free old images, they didn't really belong to the control, they belonged to the previous theme
+	the_control->image_[CONTROL_INACTIVE][CONTROL_UP] = the_template->image_[CONTROL_INACTIVE][CONTROL_UP];
+	the_control->image_[CONTROL_INACTIVE][CONTROL_DOWN] = the_template->image_[CONTROL_INACTIVE][CONTROL_DOWN];
+	the_control->image_[CONTROL_ACTIVE][CONTROL_UP] = the_template->image_[CONTROL_ACTIVE][CONTROL_UP];
+	the_control->image_[CONTROL_ACTIVE][CONTROL_DOWN] = the_template->image_[CONTROL_ACTIVE][CONTROL_DOWN];
+		
+	// localize to the parent window
+	Control_AlignToWindow(the_control);
+	
+	//Control_Print(the_control);
+	
+	return true;
+}
 
 
 
