@@ -75,6 +75,9 @@ void Window_DrawStructure(Window* the_window);
 // draws or redraws the entire window, including clearing the content area
 void Window_DrawAll(Window* the_window);
 
+//! Updates the current window controls with control template info from the current system theme 
+void Window_UpdateControlTheme(Window* the_window);
+
 
 /*****************************************************************************/
 /*                       Private Function Definitions                        */
@@ -115,12 +118,13 @@ void Window_ConfigureStructureRects(Window* the_window)
 	//   In final model, the location and height of the content and titlebar rects will be configurable
 	//   In this early prototype, they are going to be hard coded here
 	
-	// inset the titlebar and content rects by 1 pixel, compared to overall rect.
-	the_window->titlebar_rect_.MinX = 1;
-	the_window->titlebar_rect_.MinY = 1;
+	// inset the titlebar rect by 0 pixels, compared to overall rect: to allow for a title bar outline to draw over the overall window outline
+	the_window->titlebar_rect_.MinX = 0;
+	the_window->titlebar_rect_.MinY = 0;
 	the_window->titlebar_rect_.MaxX = the_window->width_ - 1;
 	the_window->titlebar_rect_.MaxY = 19;
 
+	// inset the content rect by 1 pixel, compared to overall rect: content area is not allowed to overwrite the overall window outline
 	the_window->content_rect_.MinX = 1;
 	the_window->content_rect_.MinY = the_window->titlebar_rect_.MaxY + 1;
 	the_window->content_rect_.MaxX = the_window->width_ - 1;
@@ -191,7 +195,54 @@ void Window_CheckDimensions(Window* the_window, NewWinTemplate* the_win_template
 }
 
 
+//! Updates the current window controls with control template info from the current system theme 
+void Window_UpdateControlTheme(Window* the_window)
+{
+	Theme*		the_theme;
+	Control*	close_control;
+	Control*	minimize_control;
+	Control*	normsize_control;
+	Control*	maximize_control;
+	
+	// LOGIC:
+	//   old controls will not be destroyed and recreated
+	//   the parts of the control that could have been affected by the theme are simply adjusted
+	
+	DEBUG_OUT(("%s %d: udpating controls based on current system theme...", __func__, __LINE__));
 
+	if ( (the_theme = Sys_GetTheme(global_system)) == NULL)
+	{
+		LOG_ERR(("%s %d: failed to get the current system theme!", __func__ , __LINE__));
+		return;
+	}
+	
+	if ( (close_control = Window_GetControl(the_window, CLOSE_WIDGET_ID)) != NULL)
+	{
+		Control_UpdateFromTemplate(close_control, Theme_GetCloseControlTemplate(the_theme));
+	}
+	
+	if ( (minimize_control = Window_GetControl(the_window, MINIMIZE_WIDGET_ID)) != NULL)
+	{
+		Control_UpdateFromTemplate(minimize_control, Theme_GetMinimizeControlTemplate(the_theme));
+	}
+	
+	if ( (normsize_control = Window_GetControl(the_window, NORM_SIZE_WIDGET_ID)) != NULL)
+	{
+		Control_UpdateFromTemplate(normsize_control, Theme_GetNormSizeControlTemplate(the_theme));
+	}
+	
+	if ( (maximize_control = Window_GetControl(the_window, MAXIMIZE_WIDGET_ID)) != NULL)
+	{
+		Control_UpdateFromTemplate(maximize_control, Theme_GetMaximizeControlTemplate(the_theme));
+	}
+	
+	// TODO: maybe add a Theme_GetXXControl() function that takes one of the widget IDs. 
+	// that could let above just be iteration. 
+
+	// TODO: once other control types are defined (textfield, textbutton, etc,) add calls to update from template here....
+	
+	return;
+}
 
 
 
@@ -472,6 +523,68 @@ NewWinTemplate* Window_GetNewWinTemplate(char* the_win_title)
 
 
 
+
+// **** CONTROL MANAGEMENT functions *****
+
+bool Window_SetControlState(Window* the_window, uint16_t the_control_id);
+
+
+
+
+Control* Window_GetRootControl(Window* the_window)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+	}
+	
+	return the_window->root_control_;
+}
+
+
+Control* Window_GetControl(Window* the_window, uint16_t the_control_id)
+{
+	Control*	the_control = NULL;
+	
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+	}
+	
+	the_control = Window_GetRootControl(the_window);
+	
+	while (the_control)
+	{
+		if (Control_GetID(the_control) == the_control_id)
+		{
+			return the_control;
+		}
+		
+		the_control = the_control->next_;
+	}
+	
+	return the_control;
+}
+
+
+uint16_t Window_GetControlID(Window* the_window, Control* the_control)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return -1;
+	}
+	
+	return Control_GetID(the_control);
+}
+
+
+
+
+
+
 // **** Render functions *****
 
 void Window_Render(Window* the_window)
@@ -493,7 +606,7 @@ void Window_Render(Window* the_window)
 	{
 		// backdrop window: fill it with its pattern. no controls, borders, etc. 
 		// tile the default theme's background pattern
-		Bitmap_Tile(the_pattern, 0, 0, the_window->bitmap_, 16, 16);
+		Bitmap_Tile(the_pattern, 0, 0, the_window->bitmap_, the_theme->pattern_width_, the_theme->pattern_height_);
 	}
 	else
 	{
@@ -507,6 +620,17 @@ void Window_Render(Window* the_window)
 		// either way, we are currently re-rendering all controls until damage regions/etc are available.
 		Window_DrawControls(the_window);
 	}
+}
+
+
+//! Updates the current window controls, etc., to match the current system theme 
+void Window_UpdateTheme(Window* the_window)
+{
+	// adjust the rects for titlebar, content, etc., as each theme can change the position, height, etc. 
+	Window_ConfigureStructureRects(the_window);
+
+	// have all controls update themselves
+	Window_UpdateControlTheme(the_window);
 }
 
 
@@ -542,7 +666,12 @@ void Window_DrawStructure(Window* the_window)
 	Bitmap_DrawBoxRect(the_window->bitmap_, &the_window->overall_rect_, Theme_GetOutlineColor(the_theme));
 
 	Bitmap_FillBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, Theme_GetTitlebarColor(the_theme));
-
+	
+	if (the_theme->titlebar_outline_)
+	{
+		Bitmap_DrawBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, Theme_GetOutlineColor(the_theme));
+	}
+	
 	// TODO: refactor this into it's own function, and have real way of calculating the font baseline position
 	// Draw window title with system (app) font, being careful to reset to whatever font was before.
 	old_font = Bitmap_GetFont(the_window->bitmap_);
@@ -553,8 +682,8 @@ void Window_DrawStructure(Window* the_window)
 		Sys_Destroy(&global_system);	// crash early, crash often
 	}
 	
-	Bitmap_SetColor(the_window->bitmap_, SYS_COLOR_WHITE);
-	Bitmap_SetXY(the_window->bitmap_, the_window->titlebar_rect_.MinX + 25, the_window->titlebar_rect_.MinY + 2);
+	Bitmap_SetColor(the_window->bitmap_, the_theme->title_color_);
+	Bitmap_SetXY(the_window->bitmap_, the_window->titlebar_rect_.MinX + the_theme->title_x_offset_, the_window->titlebar_rect_.MinY + 2);
 
 	if (Font_DrawString(the_window->bitmap_, the_window->title_, FONT_NO_STRLEN_CAP) == false)
 	{
@@ -615,7 +744,6 @@ void Window_ClearContent(Window* the_window)
 // **** Set functions *****
 
 
-bool Window_SetControlState(Window* the_window, uint16_t the_control_id);
 
 // replace the current window title with the passed string
 // Note: the passed string will be copied into storage by the window. The passing function can dispose of the passed string when done.
@@ -641,54 +769,6 @@ void Window_SetVisible(Window* the_window, bool is_visible)
 
 // **** Get functions *****
 
-Control* Window_GetRootControl(Window* the_window)
-{
-	if (the_window == NULL)
-	{
-		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
-	}
-	
-	return the_window->root_control_;
-}
-
-
-Control* Window_GetControl(Window* the_window, uint16_t the_control_id)
-{
-	Control*	the_control = NULL;
-	
-	if (the_window == NULL)
-	{
-		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
-	}
-	
-	the_control = Window_GetRootControl(the_window);
-	
-	while (the_control)
-	{
-		if (Control_GetID(the_control) == the_control_id)
-		{
-			return the_control;
-		}
-		
-		the_control = the_control->next_;
-	}
-	
-	return the_control;
-}
-
-
-uint16_t Window_GetControlID(Window* the_window, Control* the_control)
-{
-	if (the_window == NULL)
-	{
-		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return -1;
-	}
-	
-	return Control_GetID(the_control);
-}
 
 
 // return the current window title

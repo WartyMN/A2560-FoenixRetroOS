@@ -223,13 +223,17 @@ NewWinTemplate* Window_GetNewWinTemplate(char* the_win_title);
 
 
 
+// **** CONTROL MANAGEMENT functions *****
 
+bool Window_SetControlState(Window* the_window, uint16_t the_control_id);
+
+Control* Window_GetRootControl(Window* the_window);
+Control* Window_GetControl(Window* the_window, uint16_t the_control_id);
+uint16_t Window_GetControlID(Window* the_window, Control* the_control);
 
 
 // **** Set functions *****
 
-
-bool Window_SetControlState(Window* the_window, uint16_t the_control_id);
 
 // replace the current window title with the passed string
 // Note: the passed string will be copied into storage by the window. The passing function can dispose of the passed string when done.
@@ -242,9 +246,6 @@ void Window_SetVisible(Window* the_window, bool is_visible);
 
 // **** Get functions *****
 
-Control* Window_GetRootControl(Window* the_window);
-Control* Window_GetControl(Window* the_window, uint16_t the_control_id);
-uint16_t Window_GetControlID(Window* the_window, Control* the_control);
 
 // return the current window title
 // Note: the window title is maintained by the window. Do not free the string pointer returned by this function!
@@ -276,6 +277,9 @@ void Window_Render(Window* the_window);
 
 // clears the content area rect, setting it to the theme's backcolor
 void Window_ClearContent(Window* the_window);
+
+//! Updates the current window controls, etc., to match the current system theme 
+void Window_UpdateTheme(Window* the_window);
 
 
 

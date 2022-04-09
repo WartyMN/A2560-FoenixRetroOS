@@ -260,7 +260,10 @@ bool Control_SetCaption(Control* the_control, char* the_text);
 
 // **** xxx functions *****
 
-
+//! Updates the passed control with new theme info from the passed control template
+//! Call this when the theme has been changed
+//! It allows existing controls to be updated in place, without having to free them and create new theme controls
+bool Control_UpdateFromTemplate(Control* the_control, ControlTemplate* the_template);
 
 
 // **** Render functions *****

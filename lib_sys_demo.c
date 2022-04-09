@@ -226,7 +226,24 @@ void RunDemo(void)
 	
 	// temporary until event handler is written: tell system to render the screen and all windows
 	Sys_Render(global_system);
+
+	// delay a bit before switching
+	DelaySeconds(2);
 	
+	// switch to green theme!
+	Theme*	the_theme;
+	
+	if ( (the_theme = Theme_CreateGreenTheme() ) == NULL)
+	{
+		LOG_ERR(("%s %d: Failed to create custom green theme", __func__, __LINE__));
+		return;
+	}
+	
+	Theme_Activate(the_theme);
+
+	Window_ClearContent(the_window);
+	Sys_Render(global_system);
+
 
 // 	Window_Destroy(&the_window);
 

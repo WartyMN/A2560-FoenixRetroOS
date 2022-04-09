@@ -116,6 +116,8 @@
 #define VICKYA_CURSOR_POS_A2560K	VICKY_A2560K_A + 0x14	// vicky III channel A cursor position register (x pos is lower word, y pos is upper word)
 #define VICKY_A2560K_B				0xfec80000				// vicky III channel B control register
 #define VICKYB_BORDER_CTRL_A2560K	VICKY_A2560K_B + 0x04	// vicky III channel B border control register
+#define VICKYB_BORDER_COLOR_A2560K	0xfec80008				// vicky III channel B border color register
+#define VICKYB_BACK_COLOR_A2560K	0xfec8000C				// vicky III channel B background color register
 #define VICKYB_CURSOR_CTRL_A2560K	VICKY_A2560K_B + 0x10	// vicky III channel B cursor control register
 #define VICKYB_CURSOR_POS_A2560K	VICKY_A2560K_B + 0x14	// vicky III channel B cursor position register
 #define VICKYB_MOUSE_GRAPHIC_A2560K	0xfec80400				// vicky III channel B mouse pointer graphic stored here (16x16)

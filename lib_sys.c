@@ -59,6 +59,9 @@ System*			global_system;
 /*                       Private Function Prototypes                         */
 /*****************************************************************************/
 
+//! Instruct every window to update itself and its controls to match the system's current theme
+//! This is called as part of Sys_SetTheme().
+void Sys_UpdateWindowTheme(System* the_system);
 
 
 // **** Debug functions *****
@@ -90,6 +93,33 @@ void Sys_Print(System* the_system)
 // 	DEBUG_OUT(("  descent: %i", the_system->descent));
 // 	DEBUG_OUT(("  leading: %i", the_system->leading));
 // 	DEBUG_OUT(("  rowWords: %i", the_system->rowWords));	
+}
+
+
+//! Instruct every window to update itself and its controls to match the system's current theme
+//! This is called as part of Sys_SetTheme().
+void Sys_UpdateWindowTheme(System* the_system)
+{
+ 	List*	the_item;
+ 	
+ 	if (the_system == NULL)
+ 	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return;
+ 	}
+	
+	the_item = *(the_system->list_windows_);
+
+	while (the_item != NULL)
+	{
+		Window*		this_window = (Window*)(the_item->payload_);
+		
+		Window_UpdateTheme(this_window);
+		
+		the_item = the_item->next_item_;
+	}
+	
+	return;
 }
 
 
@@ -493,7 +523,6 @@ Window* Sys_GetBackdropWindow(System* the_system)
 		{
 			return this_window;
 		}
-		;
 
 		the_item = the_item->next_item_;
 	}
@@ -886,6 +915,15 @@ bool Sys_SetTheme(System* the_system, Theme* the_theme)
 	}
 	
 	the_system->theme_ = the_theme;
+	
+	Sys_SetSystemFont(global_system, the_theme->control_font_);
+	Sys_SetAppFont(global_system, the_theme->icon_font_);
+
+	// have all windows update their controls / etc with info from new theme
+	Sys_UpdateWindowTheme(global_system);
+	
+	// force re-render
+	Sys_Render(global_system);
 }
 
 
@@ -1897,7 +1935,7 @@ void Sys_Render(System* the_system)
 		return;
 	}
 	
-	List_Print(the_system->list_windows_, (void*)&Window_Print);
+	//List_Print(the_system->list_windows_, (void*)&Window_Print);
 	
 	the_item = *(the_system->list_windows_);
 
