@@ -52,6 +52,7 @@
 
 #define FONT_RECORD_SIZE		26	//!< size, in bytes, of the font record (minus tables) as stored in Mac FONT resources
 #define FONT_NO_STRLEN_CAP		-1	//!< for the Font_DrawString function's max_chars parameter, the value that corresponds to 'draw the entire string if it fits, do not cap it at n characters' 
+#define WORD_WRAP_MAX_LEN		12800	//!< For the Font_DrawStringInBox function, the strnlen char limit. 128*100 (1024x768 with 8x8 char grid). 
 
 /*****************************************************************************/
 /*                               Enumerations                                */
@@ -156,7 +157,7 @@ bool Font_DrawString(Bitmap* the_bitmap, char* the_string, signed int max_chars)
 //! @param	width: the horizontal size of the text wrap box, in pixels. The total of 'width' and the current X coord of the bitmap must not be greater than width of the bitmap.
 //! @param	height: the vertical size of the text wrap box, in pixels. The total of 'height' and the current Y coord of the bitmap must not be greater than height of the bitmap.
 //! @param	the_string: the null-terminated string to be displayed.
-//! @param	num_chars: either the length of the passed string, or as much of the string as should be displayed.
+//! @param	num_chars: either the length of the passed string, or as much of the string as should be displayed. Passing FONT_NO_STRLEN_CAP will mean it will attempt to display the entire string if it fits.
 //! @param	wrap_buffer: pointer to a pointer to a temporary text buffer that can be used to hold the wrapped ('formatted') characters. The buffer must be large enough to hold num_chars of incoming text, plus additional line break characters where necessary. 
 //! @param	continue_function: optional hook to a function that will be called if the provided text cannot fit into the specified box. If provided, the function will be called each time text exceeds available space. If the function returns true, another chunk of text will be displayed, replacing the first. If the function returns false, processing will stop. If no function is provided, processing will stop at the point text exceeds the available space.
 //! @return	returns a pointer to the first character in the string after which it stopped processing (if string is too long to be displayed in its entirety). Returns the original string if the entire string was processed successfully. Returns NULL in the event of any error.

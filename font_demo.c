@@ -1001,7 +1001,7 @@ void Demo_Font_DrawStringInBox1(Bitmap* the_bitmap)
 	Bitmap_DrawBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x - margin, y - margin, width + margin, height + margin, SYS_COLOR_BLACK, PARAM_DO_NOT_FILL);
 	Font_DrawStringInBox(the_bitmap, width, height, the_message, num_chars, &the_wrap_buffer, NULL);
 
-	free(the_message);
+	f_free(the_message, MEM_STANDARD);
 
 	WaitForUser();
 }
@@ -1013,7 +1013,7 @@ void RunDemo(void)
 {
 	Font*	the_font;
 	Font*	the_other_font;
-	Bitmap*	the_bitmap = global_system->screen_[ID_CHANNEL_B]->bitmap_;
+	Bitmap*	the_bitmap = Sys_GetScreenBitmap(global_system, ID_CHANNEL_B);
 
 // 	ShowDescription("Welcome to the A2560 Font Library Demo!");	
 // 	WaitForUser();

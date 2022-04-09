@@ -390,6 +390,8 @@ bool Font_DrawString(Bitmap* the_bitmap, char* the_string, signed int max_chars)
 	
 	available_width = the_bitmap->width_ - the_bitmap->x_;
 	
+	//DEBUG_OUT(("%s %d: the_bitmap->width_=%i, the_bitmap->x_=%i, max_chars=%i, num_chars=%i", __func__, __LINE__, the_bitmap->width_, the_bitmap->x_, max_chars, num_chars));
+	
 	fit_count = Font_MeasureStringWidth(the_bitmap->font_, the_string, num_chars, available_width, 0);
 	
 	if (fit_count == -1)
@@ -417,7 +419,7 @@ bool Font_DrawString(Bitmap* the_bitmap, char* the_string, signed int max_chars)
 //! @param	width: the horizontal size of the text wrap box, in pixels. The total of 'width' and the current X coord of the bitmap must not be greater than width of the bitmap.
 //! @param	height: the vertical size of the text wrap box, in pixels. The total of 'height' and the current Y coord of the bitmap must not be greater than height of the bitmap.
 //! @param	the_string: the null-terminated string to be displayed.
-//! @param	num_chars: either the length of the passed string, or as much of the string as should be displayed.
+//! @param	num_chars: either the length of the passed string, or as much of the string as should be displayed. Passing FONT_NO_STRLEN_CAP will mean it will attempt to display the entire string if it fits.
 //! @param	wrap_buffer: pointer to a pointer to a temporary text buffer that can be used to hold the wrapped ('formatted') characters. The buffer must be large enough to hold num_chars of incoming text, plus additional line break characters where necessary. 
 //! @param	continue_function: optional hook to a function that will be called if the provided text cannot fit into the specified box. If provided, the function will be called each time text exceeds available space. If the function returns true, another chunk of text will be displayed, replacing the first. If the function returns false, processing will stop. If no function is provided, processing will stop at the point text exceeds the available space.
 //! @return	returns a pointer to the first character in the string after which it stopped processing (if string is too long to be displayed in its entirety). Returns the original string if the entire string was processed successfully. Returns NULL in the event of any error.
@@ -455,6 +457,12 @@ char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int heig
 	{
 		LOG_ERR(("%s %d: illegal box size (%i, %i, %i, %i)", __func__, __LINE__, x, y, width, height));
 		return NULL;
+	}
+	
+	// num_chars will be FONT_NO_STRLEN_CAP (-1) if the calling method wants us to display the entire string. 
+	if (num_chars == FONT_NO_STRLEN_CAP)
+	{
+		num_chars = General_Strnlen(the_string, WORD_WRAP_MAX_LEN);
 	}
 	
 	formatted_string = *wrap_buffer;
@@ -602,13 +610,13 @@ signed int Font_MeasureStringWidth(Font* the_font, char* the_string, signed int 
 		return -1;
 	}
 
+	//DEBUG_OUT(("%s %d: num_chars=%i, available_width=%i, str='%s'", __func__, __LINE__, num_chars, available_width, the_string));
+
 	if (num_chars < 1)
 	{
 		return -1;
 	}
-	
-	//DEBUG_OUT(("%s %d: num_chars=%i, available_width=%i, str='%s'", __func__, __LINE__, num_chars, available_width, the_string));
-	
+		
 	// LOGIC:
 	//   The Font object contains a table with the total width (including white space) of every character in the font
 	//   The Font object also contains a height pixel count and a leading pixel count. Combination of those is required V space per line.
@@ -623,7 +631,7 @@ signed int Font_MeasureStringWidth(Font* the_font, char* the_string, signed int 
 		the_char = the_string[i];
 		this_width = Font_GetCharWidth(the_font, the_char);
 		required_width += this_width;
-		//DEBUG_OUT(("%s %d: the_char=%u, this_width=%u, required_width=%i, available_width=%i, i=%i", __func__, __LINE__, the_char, this_width, required_width, available_width, i));
+		//DEBUG_OUT(("%s %d: the_char=%u, this_width=%u, required_width=%i, available_width=%i, i=%i, num_chars=%i", __func__, __LINE__, the_char, this_width, required_width, available_width, i, num_chars));
 	}
 	
 	if (required_width <= available_width)
