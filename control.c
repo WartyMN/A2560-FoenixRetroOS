@@ -50,6 +50,7 @@
 /*                             Global Variables                              */
 /*****************************************************************************/
 
+extern System*			global_system;
 
 
 /*****************************************************************************/
@@ -59,6 +60,12 @@
 //! Align the control to its parent window
 //! No checking done on inputs
 void Control_AlignToWindow(Control* the_control);
+
+//! Draws the control's caption text into the control's available space using the parent window's bitmaps' current font
+//! If the caption cannot fit in its entirety, it will be truncated
+//! This is a private function; it is the calling function's responsibility to ensure the window's bitmap is set to the desired font before calling.
+//! @param	the_control: a valid pointer to a Control with a non-NULL caption
+static void Control_DrawCaption(Control* the_control);
 
 
 // **** Debug functions *****
@@ -120,6 +127,91 @@ void Control_AlignToWindow(Control* the_control)
 }
 
 
+//! Draws the control's caption text into the control's available space using the parent window's bitmaps' current font
+//! If the caption cannot fit in its entirety, it will be truncated
+//! This is a private function; it is the calling function's responsibility to ensure the window's bitmap is set to the desired font before calling.
+//! @param	the_control: a valid pointer to a Control with a non-NULL caption
+static void Control_DrawCaption(Control* the_control)
+{
+	Theme*		the_theme;
+	Font*		the_font;
+	Font*		old_font;
+	int16_t		available_width;
+	int16_t		x_offset;
+	int16_t		x;
+	int16_t		y;
+	int16_t		chars_that_fit;
+	signed int	pixels_used;
+	uint8_t		font_color;
+
+	if (the_control == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		Sys_Destroy(&global_system); // crash early, crash often
+	}
+
+	// Draw control caption with parent window's current font. 
+// 	// Assumption is that all controls with text are going to be rendered one after another, so getting/setting font each time is wasteful.
+// 	//   If this assumption proves to be false, re-enable the font selection here. 
+	// caption is to be drawn centered vertically within the control Rect
+	// caption is to be clipped if too long to fit horizontally
+
+	the_theme = Sys_GetTheme(global_system);
+	the_font = Sys_GetSystemFont(global_system);
+
+	if (Bitmap_SetFont(the_control->parent_win_->bitmap_, the_font) == false)
+	{
+		DEBUG_OUT(("%s %d: Couldn't get the system font and assign it to bitmap", __func__, __LINE__));
+		Sys_Destroy(&global_system);	// crash early, crash often
+	}
+	
+	available_width = the_control->avail_text_width_;	
+	chars_that_fit = Font_MeasureStringWidth(the_font, the_control->caption_, FONT_NO_STRLEN_CAP, available_width, 0, &pixels_used);
+	//DEBUG_OUT(("%s %d: available_width=%i, chars_that_fit=%i", __func__, __LINE__, available_width, chars_that_fit));
+
+	x_offset = the_control->rect_.MinX + (the_control->width_ - the_control->avail_text_width_) / 2; // potentially, this could be problematic if a theme designer set up a theme with right width 10, left width 2. 
+	x = x_offset + (available_width - pixels_used) / 2;
+	y = the_control->rect_.MinY + (the_control->rect_.MaxY - the_control->rect_.MinY + the_font->nDescent) / 2 - 1;
+	//DEBUG_OUT(("%s %d: available_width=%i, x_offset=%i, x=%i, y=%i", __func__, __LINE__, available_width, x_offset, x, y));
+
+	if (the_control->active_)
+	{
+		if (the_control->pressed_)
+		{
+			font_color = the_theme->standard_back_color_; // fore/back colors expected to be inversed when pressed.
+		}
+		else
+		{
+			font_color = the_theme->standard_fore_color_;
+		}
+	}
+	else
+	{
+		if (the_control->pressed_)
+		{
+			font_color = the_theme->highlight_fore_color_;
+		}
+		else
+		{
+			font_color = the_theme->inactive_fore_color_;
+		}
+	}
+	
+	Bitmap_SetColor(the_control->parent_win_->bitmap_, font_color);
+	Bitmap_SetXY(the_control->parent_win_->bitmap_, x, y);
+
+	if (Font_DrawString(the_control->parent_win_->bitmap_, the_control->caption_, chars_that_fit) == false)
+	{
+	}
+
+// 	if (Bitmap_SetFont(the_control->parent_win_->bitmap_, old_font) == false)
+// 	{
+// 		DEBUG_OUT(("%s %d: Couldn't set the bitmap's font back to what it had been", __func__, __LINE__));
+// 		Sys_Destroy(&global_system);	// crash early, crash often
+// 	}
+}
+
+
 
 
 // **** Debug functions *****
@@ -152,6 +244,7 @@ void Control_Print(Control* the_control)
 	DEBUG_OUT(("  active image up: %p", 	the_control->image_[CONTROL_ACTIVE][CONTROL_UP]));
 	DEBUG_OUT(("  active image dn: %p", 	the_control->image_[CONTROL_ACTIVE][CONTROL_DOWN]));
 	DEBUG_OUT(("  caption_: %p", 			the_control->caption_));	
+	DEBUG_OUT(("  avail_text_width_: %i", 	the_control->avail_text_width_));
 }
 
 
@@ -212,6 +305,7 @@ Control* Control_New(ControlTemplate* the_template, Window* the_window, Rectangl
 	the_control->image_[CONTROL_ACTIVE][CONTROL_UP] = the_template->image_[CONTROL_ACTIVE][CONTROL_UP];
 	the_control->image_[CONTROL_ACTIVE][CONTROL_DOWN] = the_template->image_[CONTROL_ACTIVE][CONTROL_DOWN];
 	the_control->caption_ = the_template->caption_;
+	the_control->avail_text_width_ = the_template->avail_text_width_;
 	
 	// at start, all new controls are inactive, value 0, disabled, not-pressed, and invisible
 	the_control->visible_ = false;
@@ -288,6 +382,7 @@ bool Control_UpdateFromTemplate(Control* the_control, ControlTemplate* the_templ
 	the_control->y_offset_ = the_template->y_offset_;
 	the_control->width_ = the_template->width_;
 	the_control->height_ = the_template->height_;
+	the_control->avail_text_width_ = the_template->avail_text_width_;
 
 	// do NOT free old images, they didn't really belong to the control, they belonged to the previous theme
 	the_control->image_[CONTROL_INACTIVE][CONTROL_UP] = the_template->image_[CONTROL_INACTIVE][CONTROL_UP];
@@ -468,6 +563,7 @@ void Control_Render(Control* the_control)
 	//DEBUG_OUT(("%s %d: about to blit control %p to parent window bitmap", __func__, __LINE__, the_control));
 	//DEBUG_OUT(("%s %d: pbitmap w/h=%i, %i; this MinX/MinY=%i, %i", __func__, __LINE__, the_control->parent_->bitmap_->width_, the_control->parent_->bitmap_->height_, the_control->rect_.MinX, the_control->rect_.MinY));
 	//DEBUG_OUT(("%s %d: control type=%i, active=%i, pressed=%i", __func__, __LINE__, the_control->type_, the_control->active_, the_control->pressed_));
+	Control_Print(the_control);
 	
 	Bitmap_Blit(the_bitmap, 0, 0, 
 				the_control->parent_win_->bitmap_, 
@@ -476,6 +572,13 @@ void Control_Render(Control* the_control)
 				the_control->width_, 
 				the_control->height_
 				);
+				
+	// some controls have captions. if present, draw them directly to the parent bitmap
+	// (leave the control's bitmaps clean, so text can be changed, font changed, etc.)
+	if (the_control->caption_ != NULL)
+	{
+		Control_DrawCaption(the_control);
+	}
 }
 
 

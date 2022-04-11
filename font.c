@@ -377,6 +377,7 @@ bool Font_DrawString(Bitmap* the_bitmap, char* the_string, signed int max_chars)
 	signed int		num_chars;
 	signed int		available_width;
 	signed int		draw_result = 0;
+	signed int		pixels_used;
 	
 	// LOGIC:
 	//   Determine how many characters of the string will fit in one line on the bitmap and draw that many
@@ -392,7 +393,7 @@ bool Font_DrawString(Bitmap* the_bitmap, char* the_string, signed int max_chars)
 	
 	//DEBUG_OUT(("%s %d: the_bitmap->width_=%i, the_bitmap->x_=%i, max_chars=%i, num_chars=%i", __func__, __LINE__, the_bitmap->width_, the_bitmap->x_, max_chars, num_chars));
 	
-	fit_count = Font_MeasureStringWidth(the_bitmap->font_, the_string, num_chars, available_width, 0);
+	fit_count = Font_MeasureStringWidth(the_bitmap->font_, the_string, num_chars, available_width, 0, &pixels_used);
 	
 	if (fit_count == -1)
 	{
@@ -598,11 +599,13 @@ char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int heig
 //! @param	num_chars: either the length of the passed string, or as much of the string as should be displayed. Passing FONT_NO_STRLEN_CAP will mean it will attempt to measure the entire string.
 //! @param	available_width: the width, in pixels, of the space the string is to be measured against.
 //! @param	fixed_char_width: the width, in pixels, of one character. This value will be ignored. It exists to keep text-mode text-wrapping compatible with bitmap-font text-wrapping.
+//! @param	measured_width: the number of pixels needed to display the characters that fit into the available_width. If the entire string fit, this is the width in pixels of that string. If only X characters fit, it is the pixel width of those X characters.
 //! @return	returns -1 in any error condition, or the number of characters that fit. If the entire string fits, the passed len will be returned.
-signed int Font_MeasureStringWidth(Font* the_font, char* the_string, signed int num_chars, signed int available_width, signed int fixed_char_width)
+signed int Font_MeasureStringWidth(Font* the_font, char* the_string, signed int num_chars, signed int available_width, signed int fixed_char_width, signed int* measured_width)
 {
 	signed int		required_width = 0;
 	signed int		i;
+	uint8_t			this_width;
 		
 	if (the_font == NULL)
 	{
@@ -634,7 +637,6 @@ signed int Font_MeasureStringWidth(Font* the_font, char* the_string, signed int 
 	for (i=0; i < num_chars && required_width <= available_width; i++)
 	{
 		unsigned char	the_char;
-		uint8_t			this_width;
 		
 		the_char = the_string[i];
 		this_width = Font_GetCharWidth(the_font, the_char);
@@ -644,10 +646,12 @@ signed int Font_MeasureStringWidth(Font* the_font, char* the_string, signed int 
 	
 	if (required_width <= available_width)
 	{
+		*measured_width = required_width;
 		return num_chars;
 	}
 	else
 	{
+		*measured_width = required_width - this_width; // take back that last measurement, as it went over the limit
 		return i - 1;
 	}
 }

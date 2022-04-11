@@ -75,7 +75,7 @@ void General_WrapParaWriteLine(char** src, char** dst, signed int write_len);
 // PRIVATE - no checking of parameters
 // passed a string with no line breaks in it, and a buffer to write into, copies the string contents into the target buffer, performing line breaks as it goes
 // stops when all characters have been processed, or when all available vertical space has been used up.
-signed int General_WrapPara(char* this_line_start, char* formatted_text, signed int remaining_len, signed int max_width, signed int remaining_v_pixels, signed int one_char_width, signed int one_row_height, Font* the_font, signed int (* measure_function)(Font*, char*, signed int, signed int, signed int));
+signed int General_WrapPara(char* this_line_start, char* formatted_text, signed int remaining_len, signed int max_width, signed int remaining_v_pixels, signed int one_char_width, signed int one_row_height, Font* the_font, signed int (* measure_function)(Font*, char*, signed int, signed int, signed int, signed int*));
 
 //! \endcond
 
@@ -103,7 +103,7 @@ void General_WrapParaWriteLine(char** src, char** dst, signed int write_len)
 // PRIVATE - no checking of parameters
 // passed a string with no line breaks in it, and a buffer to write into, copies the string contents into the target buffer, performing line breaks as it goes
 // stops when all characters have been processed, or when all available vertical space has been used up.
-signed int General_WrapPara(char* this_line_start, char* formatted_text, signed int remaining_len, signed int max_width, signed int remaining_v_pixels, signed int one_char_width, signed int one_row_height, Font* the_font, signed int (* measure_function)(Font*, char*, signed int, signed int, signed int))
+signed int General_WrapPara(char* this_line_start, char* formatted_text, signed int remaining_len, signed int max_width, signed int remaining_v_pixels, signed int one_char_width, signed int one_row_height, Font* the_font, signed int (* measure_function)(Font*, char*, signed int, signed int, signed int, signed int*))
 {
 	signed int		v_pixels = 0;
 	signed int		next_line_len;
@@ -135,7 +135,8 @@ signed int General_WrapPara(char* this_line_start, char* formatted_text, signed 
 			
 			if (next_soft_break_pos < 0)
 			{
-				signed int		chars_that_fit;
+				signed int	chars_that_fit;
+				signed int	pixels_used;
 
 				// there are no more word breaks in this string. 2 possible conditions:
 				//   A. We previously started a new line, and have at least 1 word. there's ONE more word then end of string
@@ -150,7 +151,7 @@ signed int General_WrapPara(char* this_line_start, char* formatted_text, signed 
 				
 				signed int	proposed_new_line_len = this_line_len + next_line_len;
 				
-				chars_that_fit = (*measure_function)(the_font, this_line_start, proposed_new_line_len, max_width, one_char_width);
+				chars_that_fit = (*measure_function)(the_font, this_line_start, proposed_new_line_len, max_width, one_char_width, &pixels_used);
 				
 				if (chars_that_fit >= proposed_new_line_len)
 				{
@@ -191,8 +192,9 @@ signed int General_WrapPara(char* this_line_start, char* formatted_text, signed 
 
 				signed int	proposed_new_line_len = this_line_len + next_soft_break_pos;
 				signed int	chars_that_fit;
+				signed int	pixels_used;
 			
-				chars_that_fit = (*measure_function)(the_font, this_line_start, proposed_new_line_len, max_width, one_char_width);
+				chars_that_fit = (*measure_function)(the_font, this_line_start, proposed_new_line_len, max_width, one_char_width, &pixels_used);
 				
 				if (chars_that_fit >= proposed_new_line_len)
 				{
@@ -301,7 +303,7 @@ bool General_StringToUnsignedLong(const char* the_string_value, unsigned long* t
 //! @param	the_font: the font object to be used in measuring width. This is optional and ignore if called for text mode operations.
 //! @param	measure_function: pointer to the function responsible for measuring the graphical width of a string 
 //! @return Returns number of vertical pixels required. Returns -1 in any error condition.
-signed int General_WrapAndTrimTextToFit(char** orig_string, char** formatted_string, signed int max_chars_to_format, signed int max_width, signed int max_height, signed int one_char_width, signed int one_row_height, Font* the_font, signed int (* measure_function)(Font*, char*, signed int, signed int, signed int))
+signed int General_WrapAndTrimTextToFit(char** orig_string, char** formatted_string, signed int max_chars_to_format, signed int max_width, signed int max_height, signed int one_char_width, signed int one_row_height, Font* the_font, signed int (* measure_function)(Font*, char*, signed int, signed int, signed int, signed int*))
 {
 	char*			formatted_text;
 	signed int		v_pixels = 0;

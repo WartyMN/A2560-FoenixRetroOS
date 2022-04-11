@@ -282,42 +282,64 @@ void Window_CheckDimensions(Window* the_window, NewWinTemplate* the_win_template
 //! Updates the current window controls with control template info from the current system theme 
 void Window_UpdateControlTheme(Window* the_window)
 {
-	Theme*		the_theme;
-	Control*	close_control;
-	Control*	minimize_control;
-	Control*	normsize_control;
-	Control*	maximize_control;
+	Theme*				the_theme;
+	Control*			the_control = NULL;
+	ControlTemplate*	the_template;
 	
 	// LOGIC:
 	//   old controls will not be destroyed and recreated
 	//   the parts of the control that could have been affected by the theme are simply adjusted
 	
-	DEBUG_OUT(("%s %d: updating controls based on current system theme...", __func__, __LINE__));
-
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return;
+	}
+	
 	if ( (the_theme = Sys_GetTheme(global_system)) == NULL)
 	{
 		LOG_ERR(("%s %d: failed to get the current system theme!", __func__ , __LINE__));
 		return;
 	}
+
+	DEBUG_OUT(("%s %d: updating controls based on current system theme...", __func__, __LINE__));
+
+	the_control = Window_GetRootControl(the_window);
 	
-	if ( (close_control = Window_GetControl(the_window, CLOSE_WIDGET_ID)) != NULL)
+	while (the_control)
 	{
-		Control_UpdateFromTemplate(close_control, Theme_GetCloseControlTemplate(the_theme));
-	}
+		if (the_control->id_ == CLOSE_WIDGET_ID)
+		{
+			the_template = Theme_GetCloseControlTemplate(the_theme);
+		}
+		else if (the_control->id_ == MINIMIZE_WIDGET_ID)
+		{
+			the_template = Theme_GetMinimizeControlTemplate(the_theme);
+		}
+		else if (the_control->id_ == NORM_SIZE_WIDGET_ID)
+		{
+			the_template = Theme_GetNormSizeControlTemplate(the_theme);
+		}
+		else if (the_control->id_ == MAXIMIZE_WIDGET_ID)
+		{
+			the_template = Theme_GetMaximizeControlTemplate(the_theme);
+		}
+		else if (the_control->type_ == TEXT_BUTTON)
+		{
+			signed int	new_height = the_theme->flex_width_backdrops_[TEXT_BUTTON].height_;
+			
+			the_control->height_ = new_height; // each theme controls the height of expandable controls, and it may differ from what control had previously.
+			
+			if ( (the_template = Theme_CreateControlTemplateFlexWidth(the_theme, TEXT_BUTTON, the_control->width_, the_control->height_, the_control->x_offset_, the_control->y_offset_, the_control->h_align_, the_control->v_align_, the_control->caption_)) == NULL)
+			{
+				LOG_ERR(("%s %d: Failed to create the control template", __func__, __LINE__));
+				return;
+			}
+		}
+		
+		Control_UpdateFromTemplate(the_control, the_template);
 	
-	if ( (minimize_control = Window_GetControl(the_window, MINIMIZE_WIDGET_ID)) != NULL)
-	{
-		Control_UpdateFromTemplate(minimize_control, Theme_GetMinimizeControlTemplate(the_theme));
-	}
-	
-	if ( (normsize_control = Window_GetControl(the_window, NORM_SIZE_WIDGET_ID)) != NULL)
-	{
-		Control_UpdateFromTemplate(normsize_control, Theme_GetNormSizeControlTemplate(the_theme));
-	}
-	
-	if ( (maximize_control = Window_GetControl(the_window, MAXIMIZE_WIDGET_ID)) != NULL)
-	{
-		Control_UpdateFromTemplate(maximize_control, Theme_GetMaximizeControlTemplate(the_theme));
+		the_control = the_control->next_;
 	}
 	
 	// TODO: maybe add a Theme_GetXXControl() function that takes one of the widget IDs. 
@@ -468,7 +490,7 @@ static void Window_DrawControls(Window* the_window)
 		this_control->visible_ = true;
 	
 		Control_Render(this_control);
-	
+		
 		this_control = this_control->next_;
 	}
 }
@@ -483,6 +505,7 @@ static void Window_DrawTitle(Window* the_window)
 	Font*		old_font;
 	int16_t		available_width;
 	int16_t		chars_that_fit;
+	signed int	pixels_used;
 
 	if (the_window == NULL)
 	{
@@ -505,11 +528,11 @@ static void Window_DrawTitle(Window* the_window)
 	}
 	
 	available_width = the_window->avail_title_width_;
-	chars_that_fit = Font_MeasureStringWidth(new_font, the_window->title_, FONT_NO_STRLEN_CAP, available_width, 0);
+	chars_that_fit = Font_MeasureStringWidth(new_font, the_window->title_, FONT_NO_STRLEN_CAP, available_width, 0, &pixels_used);
 	//DEBUG_OUT(("%s %d: available_width=%i, chars_that_fit=%i", __func__, __LINE__, available_width, chars_that_fit));
 	
 	Bitmap_SetColor(the_window->bitmap_, the_theme->title_color_);
-	Bitmap_SetXY(the_window->bitmap_, the_window->titlebar_rect_.MinX + the_theme->title_x_offset_, the_window->titlebar_rect_.MinY + (the_theme->titlebar_height_ + new_font->nDescent) / 2);
+	Bitmap_SetXY(the_window->bitmap_, the_window->titlebar_rect_.MinX + the_theme->title_x_offset_, the_window->titlebar_rect_.MinY + (the_theme->titlebar_height_ + new_font->nDescent) / 2 - 1);
 
 	if (Font_DrawString(the_window->bitmap_, the_window->title_, chars_that_fit) == false)
 	{
@@ -824,6 +847,34 @@ Control* Window_GetRootControl(Window* the_window)
 	}
 	
 	return the_window->root_control_;
+}
+
+
+//! Find and return the last control in the window's chain of controls
+//! This corresponds to the first control with a NULL value for next_
+Control* Window_GetLastControl(Window* the_window)
+{
+	Control*	the_control = NULL;
+	
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+	}
+	
+	the_control = Window_GetRootControl(the_window);
+	
+	while (the_control)
+	{
+		if (the_control->next_ == NULL)
+		{
+			return the_control;
+		}
+		
+		the_control = the_control->next_;
+	}
+	
+	return NULL;
 }
 
 

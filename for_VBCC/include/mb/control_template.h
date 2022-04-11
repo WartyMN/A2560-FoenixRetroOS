@@ -81,6 +81,7 @@ struct ControlTemplate
 	int16_t					max_;							//! maximum allowed value
 	Bitmap*					image_[2][2];					//! 4 image state bitmaps: [active yes/no][pushed down yes/no]
 	char*					caption_;						//! optional string to draw centered horizontally and vertically on the control. Typical use case is for a button.
+	uint16_t				avail_text_width_;				//! number of pixels available for writing text. For flexible width buttons, etc., this excludes the left/right segments. 
 // 	char*					hover_text_;					//! optional string to show in help/hover-text situations
 };
 

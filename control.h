@@ -81,10 +81,13 @@ typedef enum control_pushed_state
 typedef enum control_type
 {
 	CONTROL_TYPE_ERROR = -1,
-	BUTTON			= 0,
+	TEXT_BUTTON			= 0,	//! flexible-width button with text caption
+	TEXT_FIELD			= 1,	//! flexible-width single-line text input field
+	RADIO_BUTTON	,	
 	CHECKBOX 		,	
-	RADIOBUTTON		,	
 	TITLEBAR		,	
+	TEXT_BOX		,		//! multi-line text input field
+	IMAGE_BUTTON	,
 	CLOSE_WIDGET	,	
 	SIZE_MINIMIZE	,	
 	SIZE_NORMAL		,	
@@ -92,8 +95,6 @@ typedef enum control_type
 	H_SCROLLER		,	
 	V_SCROLLER		,		
 	LABEL			,		//! static text label
-	TEXT_FIELD		,		//! single line text input field
-	TEXT_BOX		,		//! multi-line text input field
 	FUTURE_GROW_L	,		//! not sure these will be treated as generic controls, but reserving the id
 	FUTURE_GROW_R	,		//! not sure these will be treated as generic controls, but reserving the id
 	FUTURE_GROW_UP	,		//! not sure these will be treated as generic controls, but reserving the id
@@ -150,6 +151,7 @@ struct Control
 	int16_t					max_;							//! maximum allowed value
 	Bitmap*					image_[2][2];					//! 4 image state bitmaps: [active yes/no][pushed down yes/no]
 	char*					caption_;						//! optional string to draw centered horizontally and vertically on the control. Typical use cases include buttons and labels.
+	uint16_t				avail_text_width_;				//! number of pixels available for writing text. For flexible width buttons, etc., this excludes the left/right segments. 
 // 	char*					hover_text_;					//! optional string to show in help/hover-text situations
 };
 

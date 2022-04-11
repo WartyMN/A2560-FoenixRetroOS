@@ -68,8 +68,12 @@
 #define WIN_DEFAULT_ICONBAR_HEIGHT				16
 #define WIN_DEFAULT_ICONBAR_COLOR				SYS_DEF_COLOR_ICONBAR_BACK
 #define WIN_DEFAULT_ICONBAR_HAS_OUTLINE			false
-#define WIN_DEFAULT_CONTENTAREA_COLOR			SYS_DEF_COLOR_CONTENT_BACK
-#define WIN_DEFAULT_CONTENTAREA_FONT_COLOR		SYS_COLOR_GRAY10
+#define WIN_DEFAULT_STANDARD_BACK_COLOR			SYS_DEF_COLOR_CONTENT_BACK
+#define WIN_DEFAULT_STANDARD_FORE_COLOR			SYS_COLOR_GRAY10
+#define WIN_DEFAULT_INACTIVE_BACK_COLOR			SYS_COLOR_WHITE
+#define WIN_DEFAULT_INACTIVE_FORE_COLOR			SYS_COLOR_GRAY4
+#define WIN_DEFAULT_HIGHLIGHT_BACK_COLOR		SYS_COLOR_TETRA_3
+#define WIN_DEFAULT_HIGHLIGHT_FORE_COLOR		SYS_COLOR_WHITE
 #define WIN_DEFAULT_DESKTOP_COLOR				SYS_DEF_COLOR_DESKTOP
 #define WIN_DEFAULT_DESKTOP_WIDTH				16
 #define WIN_DEFAULT_DESKTOP_HEIGHT				16
@@ -85,6 +89,18 @@
 /*****************************************************************************/
 /*                                 Structs                                   */
 /*****************************************************************************/
+
+
+struct ControlBackdrop
+{
+	Bitmap*					image_left_[2][2];			//! left side of 4 image state bitmaps: [active yes/no][pushed down yes/no]
+	Bitmap*					image_mid_[2][2];			//! 4 image state bitmaps: [active yes/no][pushed down yes/no]
+	Bitmap*					image_right_[2][2];			//! 4 image state bitmaps: [active yes/no][pushed down yes/no]
+	uint16_t				left_width_;				//! width of the left image
+	uint16_t				mid_width_;					//! width of the mid image
+	uint16_t				right_width_;				//! width of the right image
+	uint16_t				height_;					//! height of the images (all must have same height)
+};
 
 struct Theme
 {
@@ -103,8 +119,12 @@ struct Theme
 	uint8_t					iconbar_height_;				//! Height of iconbar (when displayed).
 	uint8_t					iconbar_color_;					//! Index to the color LUT
 	bool					iconbar_outline_;				//! Draw an outline using the outline_color_, around the iconbar?
-	uint8_t					contentarea_color_;				//! Index to the color LUT
-	uint8_t					contentarea_font_color_;		//! Index to the color LUT	
+	uint8_t					standard_back_color_;			//! Index to the color LUT
+	uint8_t					standard_fore_color_;			//! Index to the color LUT	
+	uint8_t					inactive_back_color_;			//! Index to the color LUT
+	uint8_t					inactive_fore_color_;			//! Index to the color LUT	
+	uint8_t					highlight_back_color_;			//! Index to the color LUT
+	uint8_t					highlight_fore_color_;			//! Index to the color LUT	
 	uint8_t					desktop_color_;					//! Required LUT index for the desktop color; Used when no pattern bitmap
 	Bitmap*					desktop_pattern_;				//! Optional bitmap to be tiled into a desktop pattern
 	uint8_t					pattern_width_;					//! Width of the desktop pattern
@@ -115,9 +135,9 @@ struct Theme
 	ControlTemplate*		control_t_minimize_;
 	ControlTemplate*		control_t_norm_size_;
 	ControlTemplate*		control_t_maximize_;
+	ControlBackdrop			flex_width_backdrops_[2];		//! structs to hold pointers to the background left/mid/right graphics for varying-width controls like buttons
+
 };
-
-
 
 /*****************************************************************************/
 /*                             Global Variables                              */
@@ -169,6 +189,9 @@ ControlTemplate* Theme_GetCloseControlTemplate(Theme* the_theme);
 ControlTemplate* Theme_GetMinimizeControlTemplate(Theme* the_theme);
 ControlTemplate* Theme_GetNormSizeControlTemplate(Theme* the_theme);
 ControlTemplate* Theme_GetMaximizeControlTemplate(Theme* the_theme);
+
+//! Create a control template for a flexible-width control
+ControlTemplate* Theme_CreateControlTemplateFlexWidth(Theme* the_theme, control_type the_type, int16_t width, int16_t height, int16_t x_offset, int16_t y_offset, h_align_type h_align, v_align_type v_align, char* caption);
 
 Bitmap* Theme_GetDesktopPattern(Theme* the_theme);
 

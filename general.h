@@ -135,7 +135,7 @@ typedef enum LoggingLevel
 //! @param	the_font: the font object to be used in measuring width. This is optional and ignore if called for text mode operations.
 //! @param	measure_function: pointer to the function responsible for measuring the graphical width of a string 
 //! @return Returns number of vertical pixels required. Returns -1 in any error condition.
-signed int General_WrapAndTrimTextToFit(char** orig_string, char** formatted_string, signed int max_chars_to_format, signed int max_width, signed int max_height, signed int one_char_width, signed int one_row_height, Font* the_font, signed int (* measure_function)(Font*, char*, signed int, signed int, signed int));
+signed int General_WrapAndTrimTextToFit(char** orig_string, char** formatted_string, signed int max_chars_to_format, signed int max_width, signed int max_height, signed int one_char_width, signed int one_row_height, Font* the_font, signed int (* measure_function)(Font*, char*, signed int, signed int, signed int, signed int*));
 
 // Find the next space, dash, or other word break character and return its position within the string. If none found before end of string or max len, returns -1.
 signed int General_StrFindNextWordEnd(const char* the_string, signed int max_search_len);

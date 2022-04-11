@@ -269,6 +269,9 @@
 #define SYS_COLOR_PURPLEBLUE		15*8+7	// purplish blue = 127 = 0x7F
 #define SYS_COLOR_PURPLEBLUEINACT	SYS_COLOR_GRAY3	// light gray inactive accent color for purplish blue = 85 = 0x55
 #define SYS_COLOR_PURPLEBLUEHL		6*7+1	// light active accent color for purplish blue = 37 = 0x2B
+#define SYS_COLOR_TETRA_1			14 * 4 + 0 // wine color (CC6699) that is tetradic for SYS_COLOR_PURPLEBLUE = 56 = 0x38
+#define SYS_COLOR_TETRA_2			11 * 4 + 1 // yellowish (CCCC66) color that is tetradic for SYS_COLOR_PURPLEBLUE = 44 = 0x2C
+#define SYS_COLOR_TETRA_3			29 * 4 + 0 // teal/greenish color (66CC99) that is tetradic for SYS_COLOR_PURPLEBLUE = 116 = 0x74
 
 #define SYS_DEF_COLOR_WINFRAME			SYS_COLOR_BLACK
 #define SYS_DEF_COLOR_WINTITLE_BACK		SYS_COLOR_PURPLEBLUE
@@ -315,6 +318,7 @@ typedef struct NewWinTemplate NewWinTemplate;
 typedef struct Theme Theme;
 typedef struct Control Control;
 typedef struct ControlTemplate ControlTemplate;
+typedef struct ControlBackdrop ControlBackdrop;
 typedef struct System System;
 typedef struct Bitmap Bitmap;
 typedef struct List List;

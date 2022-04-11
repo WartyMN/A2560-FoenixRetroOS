@@ -1618,8 +1618,9 @@ char* Text_DrawStringInBox(Screen* the_screen, signed int x1, signed int y1, sig
 //! @param	the_len: the length of the passed string. If the entire string fits, this len will be returned.
 //! @param	available_width: the width, in pixels, of the space the string is to be measured against.
 //! @param	fixed_char_width: the width, in pixels, of one character.
+//! @param	measured_width: the number of pixels needed to display the characters that fit into the available_width. If the entire string fit, this is the width in pixels of that string. If only X characters fit, it is the pixel width of those X characters.
 //! @return	returns -1 in any error condition, or the number of characters that fit. If the entire string fits, the passed len will be returned.
-signed int Text_MeasureStringWidth(Font* the_font, char* the_string, signed int the_len, signed int available_width, signed int fixed_char_width)
+signed int Text_MeasureStringWidth(Font* the_font, char* the_string, signed int the_len, signed int available_width, signed int fixed_char_width, signed int* measured_width)
 {
 	signed int		fit_count;
 	signed int		required_width;
@@ -1640,10 +1641,12 @@ signed int Text_MeasureStringWidth(Font* the_font, char* the_string, signed int 
 	if (available_width >= required_width)
 	{
 		fit_count = the_len;
+		*measured_width = required_width;
 	}
 	else
 	{
 		fit_count = available_width / fixed_char_width;
+		*measured_width = available_width;
 	}
 	
 	return fit_count;	

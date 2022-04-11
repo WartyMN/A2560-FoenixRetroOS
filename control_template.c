@@ -87,6 +87,7 @@ void ControlTemplate_Print(ControlTemplate* the_template)
 	DEBUG_OUT(("  active image up: %p", the_template->image_[CONTROL_ACTIVE][CONTROL_UP]));
 	DEBUG_OUT(("  active image dn: %p", the_template->image_[CONTROL_ACTIVE][CONTROL_DOWN]));
 	DEBUG_OUT(("  caption_: %p", the_template->caption_));
+	DEBUG_OUT(("  avail_text_width_: %i", 	the_template->avail_text_width_));
 }
 
 
