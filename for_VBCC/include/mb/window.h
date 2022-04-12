@@ -231,6 +231,20 @@ NewWinTemplate* Window_GetNewWinTemplate(char* the_win_title);
 
 bool Window_SetControlState(Window* the_window, uint16_t the_control_id);
 
+//! Add the passed control to the window's list of controls
+//! @return	Returns false in any error condition
+bool Window_AddControl(Window* the_window, Control* the_control);
+
+//! Instantiate a new control from the passed template, and add it to the window's list of controls
+//! @return	Returns a pointer to the new control, or NULL in any error condition
+Control* Window_AddNewControlFromTemplate(Window* the_window, ControlTemplate* the_template, uint16_t the_id, uint16_t group_id);
+
+//! Instantiate a new control of the type specified, and add it to the window's list of controls
+//! @return	Returns a pointer to the new control, or NULL in any error condition
+Control* Window_AddNewControl(Window* the_window, control_type the_type, int width, int height, int x_offset, int y_offset, h_align_type the_h_align, v_align_type the_v_align, char* the_caption, uint16_t the_id, uint16_t group_id);
+
+
+
 Control* Window_GetRootControl(Window* the_window);
 //! Find and return the last control in the window's chain of controls
 //! This corresponds to the first control with a NULL value for next_

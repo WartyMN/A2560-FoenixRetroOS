@@ -420,7 +420,7 @@ bool Font_DrawString(Bitmap* the_bitmap, char* the_string, signed int max_chars)
 //! @param	width: the horizontal size of the text wrap box, in pixels. The total of 'width' and the current X coord of the bitmap must not be greater than width of the bitmap.
 //! @param	height: the vertical size of the text wrap box, in pixels. The total of 'height' and the current Y coord of the bitmap must not be greater than height of the bitmap.
 //! @param	the_string: the null-terminated string to be displayed.
-//! @param	num_chars: either the length of the passed string, or as much of the string as should be displayed. Passing FONT_NO_STRLEN_CAP will mean it will attempt to display the entire string if it fits.
+//! @param	num_chars: either the length of the passed string, or as much of the string as should be displayed. Passing GEN_NO_STRLEN_CAP will mean it will attempt to display the entire string if it fits.
 //! @param	wrap_buffer: pointer to a pointer to a temporary text buffer that can be used to hold the wrapped ('formatted') characters. The buffer must be large enough to hold num_chars of incoming text, plus additional line break characters where necessary. 
 //! @param	continue_function: optional hook to a function that will be called if the provided text cannot fit into the specified box. If provided, the function will be called each time text exceeds available space. If the function returns true, another chunk of text will be displayed, replacing the first. If the function returns false, processing will stop. If no function is provided, processing will stop at the point text exceeds the available space.
 //! @return	returns a pointer to the first character in the string after which it stopped processing (if string is too long to be displayed in its entirety). Returns the original string if the entire string was processed successfully. Returns NULL in the event of any error.
@@ -460,8 +460,8 @@ char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int heig
 		return NULL;
 	}
 	
-	// num_chars will be FONT_NO_STRLEN_CAP (-1) if the calling method wants us to display the entire string. 
-	if (num_chars == FONT_NO_STRLEN_CAP)
+	// num_chars will be GEN_NO_STRLEN_CAP (-1) if the calling method wants us to display the entire string. 
+	if (num_chars == GEN_NO_STRLEN_CAP)
 	{
 		num_chars = General_Strnlen(the_string, WORD_WRAP_MAX_LEN);
 	}
@@ -596,7 +596,7 @@ char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int heig
 //! The current font of the bitmap will be used as the basis for calculating fit.
 //! @param	the_font: reference to a complete, loaded Font object.
 //! @param	the_string: the null-terminated string to be measured.
-//! @param	num_chars: either the length of the passed string, or as much of the string as should be displayed. Passing FONT_NO_STRLEN_CAP will mean it will attempt to measure the entire string.
+//! @param	num_chars: either the length of the passed string, or as much of the string as should be displayed. Passing GEN_NO_STRLEN_CAP will mean it will attempt to measure the entire string.
 //! @param	available_width: the width, in pixels, of the space the string is to be measured against.
 //! @param	fixed_char_width: the width, in pixels, of one character. This value will be ignored. It exists to keep text-mode text-wrapping compatible with bitmap-font text-wrapping.
 //! @param	measured_width: the number of pixels needed to display the characters that fit into the available_width. If the entire string fit, this is the width in pixels of that string. If only X characters fit, it is the pixel width of those X characters.
@@ -615,13 +615,13 @@ signed int Font_MeasureStringWidth(Font* the_font, char* the_string, signed int 
 
 	//DEBUG_OUT(("%s %d: num_chars=%i, available_width=%i, str='%s'", __func__, __LINE__, num_chars, available_width, the_string));
 
-	if (num_chars == 1)
+	if (num_chars == 0)
 	{
 		return -1;
 	}
 	
-	// num_chars will be FONT_NO_STRLEN_CAP (-1) if the calling method wants us to display the entire string. 
-	if (num_chars == FONT_NO_STRLEN_CAP)
+	// num_chars will be GEN_NO_STRLEN_CAP (-1) if the calling method wants us to display the entire string. 
+	if (num_chars == GEN_NO_STRLEN_CAP)
 	{
 		num_chars = General_Strnlen(the_string, WORD_WRAP_MAX_LEN);
 	}
@@ -647,11 +647,13 @@ signed int Font_MeasureStringWidth(Font* the_font, char* the_string, signed int 
 	if (required_width <= available_width)
 	{
 		*measured_width = required_width;
+		//DEBUG_OUT(("%s %d: required_width=%i, measured_width=%i, available_width=%i, i=%i, num_chars=%i", __func__, __LINE__, required_width, *measured_width, available_width, i, num_chars));
 		return num_chars;
 	}
 	else
 	{
 		*measured_width = required_width - this_width; // take back that last measurement, as it went over the limit
+		//DEBUG_OUT(("%s %d: required_width=%i, measured_width=%i, available_width=%i, i=%i, num_chars=%i", __func__, __LINE__, required_width, *measured_width, available_width, i, num_chars));
 		return i - 1;
 	}
 }

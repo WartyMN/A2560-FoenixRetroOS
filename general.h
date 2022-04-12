@@ -45,7 +45,11 @@
 /*****************************************************************************/
 
 // general
-#define MAX_STRING_COMP_LEN		256	// 255 + terminator is max string size for compares
+#define MAX_STRING_COMP_LEN		256		//!< 255 + terminator is max string size for compares
+
+// word-wrap and string measurement related
+#define GEN_NO_STRLEN_CAP		-1		//!< for the xxx_DrawString function's max_chars parameter, the value that corresponds to 'draw the entire string if it fits, do not cap it at n characters' 
+#define WORD_WRAP_MAX_LEN		12800	//!< For the xxx_DrawStringInBox function, the strnlen char limit. 128*100 (1024x768 with 8x8 char grid). 
 
 // file-related
 #define FILE_MAX_PATHNAME_SIZE	260	// https://www.keil.com/pack/doc/mw/FileSystem/html/fat_fs.html

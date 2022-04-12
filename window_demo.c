@@ -67,7 +67,6 @@ void RunDemo(void);
 void SwitchThemes(Window* the_window);
 void ToggleButtonStates(Window* the_window);
 void AddControls(Window* the_window);
-Control* AddControl(Window* the_window, Theme* the_theme, int x_offset, int y_offset, int width, int height, char* the_caption, uint16_t the_id, uint16_t group_id);
 	
 
 /*****************************************************************************/
@@ -111,7 +110,7 @@ void SwitchThemes(Window* the_window)
 
 // 	Window_SetPenXY(the_window, 2, 25);
 // 
-// 	if (Window_DrawString(the_window, (char*)"This is the default theme. Let's try a custom one...", FONT_NO_STRLEN_CAP) == false)
+// 	if (Window_DrawString(the_window, (char*)"This is the default theme. Let's try a custom one...", GEN_NO_STRLEN_CAP) == false)
 // 	{
 // 		// oh, no! you should handle this.
 // 	}
@@ -131,10 +130,10 @@ void SwitchThemes(Window* the_window)
 	char	the_buff[2048];
 	char*	wrapBuff = the_buff;
 	
-// 	if (Window_DrawStringInBox(the_window, the_window->inner_width_-10, the_window->inner_height_-10,(char*)"A theme designer can change the background, color palette, fonts, graphics for controls, position of controls and content, and more!\nThe simplest form of theme is nothing more than a different color palette. This theme has a different palette, different control graphics (size is also different); the position of the controls in the title is different, and of course the font is different. \n You could place the title bar at the bottom of the window if you want.", FONT_NO_STRLEN_CAP, &wrapBuff, NULL) != NULL)
-// 	{
-// 		// oh, no! you should handle this.
-// 	}
+	if (Window_DrawStringInBox(the_window, the_window->inner_width_-10, the_window->inner_height_-10,(char*)"A theme designer can change the background, color palette, fonts, graphics for controls, position of controls and content, and more!\nThe simplest form of theme is nothing more than a different color palette. This theme has a different palette, different control graphics (size is also different); the position of the controls in the title is different, and of course the font is different. \n You could place the title bar at the bottom of the window if you want.", GEN_NO_STRLEN_CAP, &wrapBuff, NULL) != NULL)
+	{
+		// oh, no! you should handle this.
+	}
 
 	// draw some stuff in the window we created
 	{
@@ -170,7 +169,7 @@ void SwitchThemes(Window* the_window)
 
 	Window_SetPenXY(the_window, 5, 200);
 
-// 	if (Window_DrawString(the_window, (char*)"In a second, the window will redraw in a slow and ugly fashion. Testing the control visuals...", FONT_NO_STRLEN_CAP) == false)
+// 	if (Window_DrawString(the_window, (char*)"In a second, the window will redraw in a slow and ugly fashion. Testing the control visuals...", GEN_NO_STRLEN_CAP) == false)
 // 	{
 // 		// oh, no! you should handle this.
 // 	}
@@ -181,97 +180,35 @@ void SwitchThemes(Window* the_window)
 
 void ToggleButtonStates(Window* the_window)
 {	
-	// inactivate some buttons to test things out
-	General_DelaySeconds(1);
-	
-	// deactivate some of the controls
 	Control*	root_control;
 	Control*	this_control;
+	int			is_active;
+	int			is_pushed;
 	
-	root_control = Window_GetRootControl(the_window);
-	this_control = root_control;
+	// toggle all controls through their states to test things out
+	General_DelaySeconds(1);
 	
-	while (this_control)
+	for (is_active = 0; is_active < 2; is_active++)
 	{
-		Control_SetActive(this_control, CONTROL_INACTIVE);
-		Control_SetPressed(this_control, CONTROL_UP);
-		
-		this_control = Control_GetNextControl(this_control);
-		Sys_Render(global_system);
-		
-		General_DelayTicks(30);
-	}
-	
+		for (is_pushed = 0; is_pushed < 2; is_pushed++)
+		{
 
-	// reactive some buttons and pretend to push them
-	General_DelaySeconds(2);
+			root_control = Window_GetRootControl(the_window);
+			this_control = root_control;
 	
-	this_control = root_control;
-	
-	while (this_control)
-	{
-		Control_SetActive(this_control, CONTROL_ACTIVE);
-		Control_SetPressed(this_control, CONTROL_DOWN);
+			while (this_control)
+			{
+				Control_SetActive(this_control, is_active);
+				Control_SetPressed(this_control, is_pushed);
 		
-		this_control = Control_GetNextControl(this_control);
-		Sys_Render(global_system);
-		
-		General_DelayTicks(30);
+				this_control = Control_GetNextControl(this_control);
+			}
+	
+			Sys_Render(global_system);
+			
+			General_DelaySeconds(2);
+		}
 	}
-}
-
-
-Control* AddControl(Window* the_window, Theme* the_theme, int x_offset, int y_offset, int width, int height, char* the_caption, uint16_t the_id, uint16_t group_id)
-{
-	Control*			the_button;
-	Control*			last_control_in_window;
-	ControlTemplate*	the_template;
-	Font*				the_font;
-	int16_t				chars_that_fit;
-	signed int			pixels_used;
-	
-	if ( the_window == NULL)
-	{
-		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
-	}
-	
-	if ( the_theme == NULL)
-	{
-		LOG_ERR(("%s %d: passed theme object was null", __func__ , __LINE__));
-		return NULL;
-	}
-	
-	if ( (the_font = Sys_LoadSystemFont()) == NULL)
-	{
-		LOG_ERR(("%s %d: Failed to load the system font", __func__, __LINE__));
-		return NULL;
-	}
-	
-	chars_that_fit = Font_MeasureStringWidth(the_font, the_caption, FONT_NO_STRLEN_CAP, width, 0, &pixels_used);
-	
-	if ( (the_template = Theme_CreateControlTemplateFlexWidth(the_theme, TEXT_BUTTON, width, height, x_offset, y_offset, H_ALIGN_LEFT, V_ALIGN_TOP, the_caption)) == NULL)
-	{
-		LOG_ERR(("%s %d: Failed to create the control template", __func__, __LINE__));
-		return NULL;
-	}
-	
-	the_button = Control_New(the_template, the_window, &the_window->content_rect_, the_id, group_id);
-
-	// need a window function for the below stuff. Window_AddControl() or similar.
-	
-	// The way that controls are associated with a window is to add them as the next_ property to the last control in the window
-	if ( (last_control_in_window = Window_GetLastControl(the_window)) != NULL)
-	{
-		Control_SetNextControl(last_control_in_window, the_button);
-		Control_SetNextControl(the_button, NULL);
-		Control_SetActive(the_button, CONTROL_ACTIVE);
-		DEBUG_OUT(("%s %d: button (%p) added!", __func__, __LINE__, the_button));
-		
-		return the_button;
-	}
-	
-	return NULL;
 }
 
 
@@ -310,32 +247,64 @@ void AddControls(Window* the_window)
 	x_offset = 100;
 	y_offset = 100;
 	
-	button_1 = AddControl(the_window, the_theme, x_offset, y_offset, width, height, caption_1, the_id++, group_id);
+	// for user docs:
+	// first way of adding a control is to call Window_AddNewControl(), and supply all the information at once. 
+	button_1 = Window_AddNewControl(the_window, TEXT_BUTTON, width, height, x_offset, y_offset, H_ALIGN_LEFT, V_ALIGN_TOP, caption_1, the_id++, group_id);
 	Control_SetPressed(button_1, CONTROL_UP);
+	
+	// for user docs:
+	// 2nd way of adding a control is to call get a control template first, then call Window_AddNewControlFromTemplate()
+	// You might do this if you had a set of similar buttons, etc, and wanted to re-use the same template for all the buttons. Don't forget to dispose of the template when done.
+	ControlTemplate*	the_template;
 	
 	width = 100;
 	y_offset += 30;
-	button_2 = AddControl(the_window, the_theme, x_offset, y_offset, width, height, caption_2, the_id++, group_id);
+
+	if ( (the_template = Theme_CreateControlTemplateFlexWidth(the_theme, TEXT_BUTTON, width, height, x_offset, y_offset, H_ALIGN_LEFT, V_ALIGN_TOP, caption_2)) == NULL)
+	{
+		LOG_ERR(("%s %d: Failed to create the control template", __func__, __LINE__));
+		return;
+	}
+
+	button_2 = Window_AddNewControlFromTemplate(the_window, the_template, the_id++, group_id);
 	Control_SetActive(button_2, CONTROL_ACTIVE);
 	Control_SetPressed(button_2, CONTROL_DOWN);
+	ControlTemplate_Destroy(&the_template);
+	
+	// for user docs:
+	// 3rd way of adding a control is to call get a control template first, then turn that into a control, then pass that control to Window_AddControl()
+
+	Control*	the_control;
 	
 	width = 120;
 	y_offset += 30;
-	button_3 = AddControl(the_window, the_theme, x_offset, y_offset, width, height, caption_3, the_id++, group_id);
-	Control_SetActive(button_3, CONTROL_INACTIVE);
-	Control_SetPressed(button_3, CONTROL_UP);
+
+	if ( (the_template = Theme_CreateControlTemplateFlexWidth(the_theme, TEXT_BUTTON, width, height, x_offset, y_offset, H_ALIGN_LEFT, V_ALIGN_TOP, caption_2)) == NULL)
+	{
+		LOG_ERR(("%s %d: Failed to create the control template", __func__, __LINE__));
+		return;
+	}
+
+	the_control = Control_New(the_template, the_window, &the_window->content_rect_, the_id++, group_id);
+
+	if ( Window_AddControl(the_window, the_control) == false)
+	{
+		LOG_ERR(("%s %d: Failed to add control to window", __func__, __LINE__));
+		return;
+	}
+	
+	Control_SetActive(the_control, CONTROL_INACTIVE);
+	Control_SetPressed(the_control, CONTROL_UP);
 
 	width = 140;
 	y_offset += 30;
-	button_4 = AddControl(the_window, the_theme, x_offset, y_offset, width, height, caption_4, the_id++, group_id);
+	button_4 = Window_AddNewControl(the_window, TEXT_BUTTON, width, height, x_offset, y_offset, H_ALIGN_LEFT, V_ALIGN_TOP, caption_4, the_id++, group_id);
 	Control_SetActive(button_4, CONTROL_INACTIVE);
 	Control_SetPressed(button_4, CONTROL_DOWN);
 	
 	
 	// temporary until event handler is written: tell system to render the screen and all windows
-	Sys_Render(global_system);
-
-	
+	Sys_Render(global_system);	
 }
 
 
@@ -369,7 +338,7 @@ void RunDemo(void)
 	// say hi
 	Window_SetPenXY(the_window, 5, 5);
 
-	if (Window_DrawString(the_window, (char*)"Hello, World", FONT_NO_STRLEN_CAP) == false)
+	if (Window_DrawString(the_window, (char*)"Hello, World", GEN_NO_STRLEN_CAP) == false)
 	{
 		// oh, no! you should handle this.
 	}
@@ -423,7 +392,7 @@ void RunDemo(void)
 	SwitchThemes(the_window);
 
 	// test out buttona states?
-	//ToggleButtonStates(the_window);
+	ToggleButtonStates(the_window);
 	
 // 	Window_Destroy(&the_window);
 

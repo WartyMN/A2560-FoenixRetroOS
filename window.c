@@ -528,7 +528,7 @@ static void Window_DrawTitle(Window* the_window)
 	}
 	
 	available_width = the_window->avail_title_width_;
-	chars_that_fit = Font_MeasureStringWidth(new_font, the_window->title_, FONT_NO_STRLEN_CAP, available_width, 0, &pixels_used);
+	chars_that_fit = Font_MeasureStringWidth(new_font, the_window->title_, GEN_NO_STRLEN_CAP, available_width, 0, &pixels_used);
 	//DEBUG_OUT(("%s %d: available_width=%i, chars_that_fit=%i", __func__, __LINE__, available_width, chars_that_fit));
 	
 	Bitmap_SetColor(the_window->bitmap_, the_theme->title_color_);
@@ -836,6 +836,110 @@ NewWinTemplate* Window_GetNewWinTemplate(char* the_win_title)
 bool Window_SetControlState(Window* the_window, uint16_t the_control_id);
 
 
+//! Add the passed control to the window's list of controls
+//! @return	Returns false in any error condition
+bool Window_AddControl(Window* the_window, Control* the_control)
+{
+	Control*	last_control_in_window;
+	
+	if ( the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return false;
+	}
+	
+	if ( the_control == NULL)
+	{
+		LOG_ERR(("%s %d: passed control was null", __func__ , __LINE__));
+		return false;
+	}
+	
+	// The way that controls are associated with a window is to add them as the next_ property to the last control in the window
+	if ( (last_control_in_window = Window_GetLastControl(the_window)) != NULL)
+	{
+		Control_SetNextControl(last_control_in_window, the_control);
+		Control_SetNextControl(the_control, NULL);
+		Control_SetActive(the_control, CONTROL_ACTIVE);
+		//DEBUG_OUT(("%s %d: control (%p, type=%i) added!", __func__, __LINE__, the_control, the_control->type_));
+		
+		return true;
+	}
+	
+	return false;
+}
+
+
+//! Instantiate a new control from the passed template, and add it to the window's list of controls
+//! @return	Returns a pointer to the new control, or NULL in any error condition
+Control* Window_AddNewControlFromTemplate(Window* the_window, ControlTemplate* the_template, uint16_t the_id, uint16_t group_id)
+{
+	Control*			the_control;
+	Control*			last_control_in_window;
+	
+	
+	if ( the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+	}
+	
+	if ( the_template == NULL)
+	{
+		LOG_ERR(("%s %d: passed control template was null", __func__ , __LINE__));
+		return NULL;
+	}
+	
+	the_control = Control_New(the_template, the_window, &the_window->content_rect_, the_id, group_id);
+
+	if (Window_AddControl(the_window, the_control) == false)
+	{
+		// we failed to add the control to the window, so need to dispose of it or nothing ever will
+		LOG_ERR(("%s %d: control created successfully, but it couldn't be added to the window", __func__ , __LINE__));
+		Control_Destroy(&the_control);
+		return false;
+	}
+	
+	return the_control;
+}
+
+
+//! Instantiate a new control of the type specified, and add it to the window's list of controls
+//! @return	Returns a pointer to the new control, or NULL in any error condition
+Control* Window_AddNewControl(Window* the_window, control_type the_type, int width, int height, int x_offset, int y_offset, h_align_type the_h_align, v_align_type the_v_align, char* the_caption, uint16_t the_id, uint16_t group_id)
+{
+	Theme*				the_theme;
+	Control*			the_control;
+	Control*			last_control_in_window;
+	ControlTemplate*	the_template;
+	
+	if ( the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+	}
+	
+	the_theme = Sys_GetTheme(global_system);
+	
+	if ( (the_template = Theme_CreateControlTemplateFlexWidth(the_theme, the_type, width, height, x_offset, y_offset, the_h_align, the_v_align, the_caption)) == NULL)
+	{
+		LOG_ERR(("%s %d: Failed to create the control template", __func__, __LINE__));
+		return NULL;
+	}
+	
+	the_control = Window_AddNewControlFromTemplate(the_window, the_template, the_id, group_id);
+
+	// control template no longer needed
+	ControlTemplate_Destroy(&the_template);
+
+	// The way that controls are associated with a window is to add them as the next_ property to the last control in the window
+	if ( the_control == NULL)
+	{
+		LOG_ERR(("%s %d: control template created successfully, but failed to add a control to the window", __func__ , __LINE__));
+		return NULL;
+	}
+	
+	return the_control;
+}
 
 
 Control* Window_GetRootControl(Window* the_window)

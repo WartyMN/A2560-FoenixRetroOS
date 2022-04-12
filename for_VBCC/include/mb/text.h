@@ -355,12 +355,12 @@ char* Text_DrawStringInBox(Screen* the_screen, signed int x1, signed int y1, sig
 //! In Text Mode, all characters have the same fixed width, so this is measuring against the font width described in the screen object.
 //! @param	the_font: this is for consistency with the graphical font code. Pass a NULL here, the result will not be used.
 //! @param	the_string: the null-terminated string to be measured.
-//! @param	the_len: the length of the passed string. If the entire string fits, this len will be returned.
+//! @param	num_chars: either the length of the passed string, or as much of the string as should be displayed. Passing GEN_NO_STRLEN_CAP will mean it will attempt to measure the entire string.
 //! @param	available_width: the width, in pixels, of the space the string is to be measured against.
 //! @param	fixed_char_width: the width, in pixels, of one character.
 //! @param	measured_width: the number of pixels needed to display the characters that fit into the available_width. If the entire string fit, this is the width in pixels of that string. If only X characters fit, it is the pixel width of those X characters.
 //! @return	returns -1 in any error condition, or the number of characters that fit. If the entire string fits, the passed len will be returned.
-signed int Text_MeasureStringWidth(Font* the_font, char* the_string, signed int the_len, signed int available_width, signed int fixed_char_width, signed int* measured_width);
+signed int Text_MeasureStringWidth(Font* the_font, char* the_string, signed int num_chars, signed int available_width, signed int fixed_char_width, signed int* measured_width);
 
 
 

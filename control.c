@@ -166,7 +166,7 @@ static void Control_DrawCaption(Control* the_control)
 	}
 	
 	available_width = the_control->avail_text_width_;	
-	chars_that_fit = Font_MeasureStringWidth(the_font, the_control->caption_, FONT_NO_STRLEN_CAP, available_width, 0, &pixels_used);
+	chars_that_fit = Font_MeasureStringWidth(the_font, the_control->caption_, GEN_NO_STRLEN_CAP, available_width, 0, &pixels_used);
 	//DEBUG_OUT(("%s %d: available_width=%i, chars_that_fit=%i", __func__, __LINE__, available_width, chars_that_fit));
 
 	x_offset = the_control->rect_.MinX + (the_control->width_ - the_control->avail_text_width_) / 2; // potentially, this could be problematic if a theme designer set up a theme with right width 10, left width 2. 
