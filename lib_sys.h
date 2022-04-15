@@ -118,6 +118,12 @@ bool Sys_InitSystem(void);
 
 
 
+
+// **** Event-handling functions *****
+
+
+
+
 // **** Screen mode/resolution/size functions *****
 
 
@@ -137,6 +143,12 @@ bool Sys_DetectScreenSize(Screen* the_screen);
 //! @return	returns false on any error/invalid input.
 bool Sys_SetVideoMode(Screen* the_screen, screen_resolution new_mode);
 
+//! Switch machine into graphics mode
+bool Sys_SetModeGraphics(System* the_system);
+
+//! Switch machine into text mode
+//! @param as_overlay: If true, sets text overlay mode (text over graphics). If false, sets full text mode (no graphics);
+bool Sys_SetModeText(System* the_system, bool as_overlay);
 
 
 
@@ -205,15 +217,7 @@ bool Sys_SetVRAMAddr(System* the_system, uint8_t the_bitmap_layer, unsigned char
 
 
 
-// **** Screen mode/resolution/size functions *****
 
-
-//! Switch machine into graphics mode
-bool Sys_SetModeGraphics(System* the_system);
-
-//! Switch machine into text mode
-//! @param as_overlay: If true, sets text overlay mode (text over graphics). If false, sets full text mode (no graphics);
-bool Sys_SetModeText(System* the_system, bool as_overlay);
 
 
 

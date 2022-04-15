@@ -120,6 +120,7 @@
 #define VICKYB_BACK_COLOR_A2560K	0xfec8000C				// vicky III channel B background color register
 #define VICKYB_CURSOR_CTRL_A2560K	VICKY_A2560K_B + 0x10	// vicky III channel B cursor control register
 #define VICKYB_CURSOR_POS_A2560K	VICKY_A2560K_B + 0x14	// vicky III channel B cursor position register
+#define VICKYB_BITMAP_L0_CTRL		0xfec80100				// vicky III channel B bitmap layer 0 control register (1=enable, +2=LUT0, +4=LUT1, +8=LUT2
 #define VICKYB_MOUSE_GRAPHIC_A2560K	0xfec80400				// vicky III channel B mouse pointer graphic stored here (16x16)
 #define VICKYB_MOUSE_CTRL_A2560K	0xfec80c00				// vicky III channel B mouse pointer control register. set to 1 to enable mouse. +2 to do whatever "pointer choice" does.
 #define VICKYB_MOUSE_PTR_POS_A2560K	0xfec80c04				// vicky III channel B mouse pointer position (Y pos in upper 16 bits, x in lower)
@@ -254,7 +255,7 @@
 #define SYS_COLOR_GRAY10	SYS_COLOR_WHITE + 10
 #define SYS_COLOR_BLACK		255
 
-#define SYS_COLOR_RED1		35
+#define SYS_COLOR_RED1		35 // = 0x23
 #define SYS_COLOR_RED2		SYS_COLOR_RED1 + 36*5+1	// 3rd lightest red
 #define SYS_COLOR_RED3		SYS_COLOR_RED2 + 3
 
@@ -262,7 +263,7 @@
 #define SYS_COLOR_GREEN2	SYS_COLOR_GREEN1 + 2
 #define SYS_COLOR_GREEN3	SYS_COLOR_GREEN2 + 2
 
-#define SYS_COLOR_BLUE1		26*8+3
+#define SYS_COLOR_BLUE1		26*8+3	// = 211 = 0xd3
 #define SYS_COLOR_BLUE2		SYS_COLOR_BLUE1 + 2
 #define SYS_COLOR_BLUE3		SYS_COLOR_BLUE2 + 2
 

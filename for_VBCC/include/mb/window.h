@@ -335,6 +335,14 @@ bool Window_SetColor(Window* the_window, uint8_t the_color);
 //! @return Returns false on any error condition
 bool Window_SetPenXY(Window* the_window, signed int x, signed int y);
 
+//! Blit from source bitmap to the window's content area, at the window's current pen coordinate
+//! The source bitmap can be the window's bitmap: you can use this to copy a chunk of pixels from one part of a window to another. If the destination location cannot fit the entirety of the copied rectangle, the copy will be truncated, but will not return an error. 
+//! @param	the_window: reference to a valid Window object.
+//! @param src_bm: the source bitmap. It must have a valid address within the VRAM memory space.
+//! @param src_x, src_y: the upper left coordinate within the source bitmap, for the rectangle you want to copy. May be negative.
+//! @param width, height: the scope of the copy, in pixels.
+bool Window_Blit(Window* the_window, Bitmap* src_bm, int src_x, int src_y, int width, int height);
+
 //! Fill a rectangle drawn from the current pen location, for the passed width/height
 //! @param	the_window: reference to a valid Window object.
 //! @param	width: width, in pixels, of the rectangle to be drawn

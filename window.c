@@ -757,7 +757,7 @@ Window* Window_New(NewWinTemplate* the_win_template)
 	// Add this window to the list of windows
 	Sys_AddToWindowList(global_system, the_window);
 	
-	Window_Print(the_window);
+	//Window_Print(the_window);
 		
 	return the_window;
 	
@@ -1355,6 +1355,24 @@ bool Window_SetPenXY(Window* the_window, signed int x, signed int y)
 	the_window->bitmap_->y_ = y + the_window->content_rect_.MinY;;
 	
 	return true;
+}
+
+
+//! Blit from source bitmap to the window's content area, at the window's current pen coordinate
+//! The source bitmap can be the window's bitmap: you can use this to copy a chunk of pixels from one part of a window to another. If the destination location cannot fit the entirety of the copied rectangle, the copy will be truncated, but will not return an error. 
+//! @param	the_window: reference to a valid Window object.
+//! @param src_bm: the source bitmap. It must have a valid address within the VRAM memory space.
+//! @param src_x, src_y: the upper left coordinate within the source bitmap, for the rectangle you want to copy. May be negative.
+//! @param width, height: the scope of the copy, in pixels.
+bool Window_Blit(Window* the_window, Bitmap* src_bm, int src_x, int src_y, int width, int height)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		Sys_Destroy(&global_system); // crash early, crash often
+	}
+	
+	return Bitmap_Blit(src_bm, src_x, src_y, the_window->bitmap_, the_window->pen_x_, the_window->pen_y_, width, height);
 }
 
 
