@@ -2560,6 +2560,18 @@ ColorIdx Theme_GetTitlebarColor(Theme* the_theme)
 }
 
 
+ColorIdx Theme_GetTitleColor(Theme* the_theme)
+{
+	if (the_theme == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return 0;
+	}
+
+	return the_theme->title_color_;
+}
+
+
 ColorIdx Theme_GetIconbarColor(Theme* the_theme)
 {
 	if (the_theme == NULL)
@@ -2605,6 +2617,30 @@ ColorIdx Theme_GetDesktopColor(Theme* the_theme)
 	}
 
 	return the_theme->desktop_color_;
+}
+
+
+ColorIdx Theme_GetInactiveBackColor(Theme* the_theme)
+{
+	if (the_theme == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return 0;
+	}
+
+	return the_theme->inactive_back_color_;
+}
+
+
+ColorIdx Theme_GetInactiveForeColor(Theme* the_theme)
+{
+	if (the_theme == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return 0;
+	}
+
+	return the_theme->inactive_fore_color_;
 }
 
 

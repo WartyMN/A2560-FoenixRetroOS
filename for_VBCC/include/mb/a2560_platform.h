@@ -323,6 +323,8 @@ typedef struct ControlBackdrop ControlBackdrop;
 typedef struct System System;
 typedef struct Bitmap Bitmap;
 typedef struct List List;
+typedef struct EventRecord EventRecord;
+typedef struct EventManager EventManager;
 
 
 

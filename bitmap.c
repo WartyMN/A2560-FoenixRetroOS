@@ -1336,7 +1336,7 @@ bool Bitmap_DrawBox(Bitmap* the_bitmap, signed int x, signed int y, signed int w
 
 	if (!Bitmap_ValidateXY(the_bitmap, x, y))
 	{
-		LOG_ERR(("%s %d: illegal coordinate", __func__, __LINE__));
+		LOG_ERR(("%s %d: illegal coordinate (%i, %i)", __func__, __LINE__, x, y));
 		return false;
 	}
 	

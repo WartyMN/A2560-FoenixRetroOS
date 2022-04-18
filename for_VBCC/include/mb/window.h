@@ -129,14 +129,14 @@ struct Window
 	signed int				pen_y_;							// V position relative to the content_rect_, of the "pen", for drawing functions
 	uint8_t					pen_color_;						// Color index of the "pen", for drawing functions
 	Font*					pen_font_;						// Font to be used by the "pen", for drawing functions
-	Rectangle				overall_rect_;					// the rect describing the total area of the window
-	Rectangle				titlebar_rect_;					// the rect describing the titlebar area
-	Rectangle				iconbar_rect_;					// the rect describing the optional iconbar area
-	Rectangle				content_rect_;					// the rect describing the content area of the window
-	Rectangle				grow_left_rect_;				// the rect defining the area in which a click/drag will resize window
-	Rectangle				grow_right_rect_;				// the rect defining the area in which a click/drag will resize window
-	Rectangle				grow_top_rect_;					// the rect defining the area in which a click/drag will resize window
-	Rectangle				grow_bottom_rect_;				// the rect defining the area in which a click/drag will resize window
+	Rectangle				overall_rect_;					// the local rect describing the total area of the window
+	Rectangle				titlebar_rect_;					// the local rect describing the titlebar area
+	Rectangle				iconbar_rect_;					// the local rect describing the optional iconbar area
+	Rectangle				content_rect_;					// the local rect describing the content area of the window
+	Rectangle				grow_left_rect_;				// the local rect defining the area in which a click/drag will resize window
+	Rectangle				grow_right_rect_;				// the local rect defining the area in which a click/drag will resize window
+	Rectangle				grow_top_rect_;					// the local rect defining the area in which a click/drag will resize window
+	Rectangle				grow_bottom_rect_;				// the local rect defining the area in which a click/drag will resize window
 	bool					show_iconbar_;					// true if the iconbar area should be rendered
 	bool					is_backdrop_;					// true if this is the backdrop (desktop) window
 	bool					visible_;						// is the window visible?
@@ -144,8 +144,9 @@ struct Window
 	bool					changes_to_save_;				// starts at false; if window is resized or repositioned, is set to true. used to know if we have to save out to icon file when window is closed.
 	bool					can_resize_;					// if true, window can be stretched or shrunk. If false, the width_ and height_ will be locked.
 	bool					invalidated_;					// if true, the window needs to be completed re-rendered on the next render pass
-	signed int				x_;								// horizontal coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
-	signed int				y_;								// vertical coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
+	signed int				x_;								// global horizontal coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
+	signed int				y_;								// global vertical coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
+	Rectangle				global_rect_;					// the global rect describing the total area of the window
 	signed int				width_;							// width of window when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
 	signed int				height_;						// height of window when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
 	signed int				min_width_;						// minimum width of window when in window-sized (normal) mode.
@@ -253,6 +254,9 @@ Control* Window_GetLastControl(Window* the_window);
 Control* Window_GetControl(Window* the_window, uint16_t the_control_id);
 uint16_t Window_GetControlID(Window* the_window, Control* the_control);
 
+//! Find the Control under the mouse
+Control* Window_GetControlAtXY(Window* the_window, int16_t x, int16_t y);
+
 
 // **** Set functions *****
 
@@ -264,6 +268,14 @@ void Window_SetTitle(Window* the_window, char* the_title);
 //! Set the passed window's visibility flag.
 //! This does not immediately cause the window to render. The window will be rendered on the next system rendering pass.
 void Window_SetVisible(Window* the_window, bool is_visible);
+
+//! Set the display order of the window
+//! Consider this a system-only function: do not use this
+void Window_SetDisplayOrder(Window* the_window, int8_t the_display_order);
+
+//! Set the passed window's active flag.
+void Window_SetActive(Window* the_window, bool is_active);
+
 
 
 // **** Get functions *****
@@ -290,6 +302,8 @@ bool Window_IsBackdrop(Window* the_window);
 // Get visible yes/no flag. returns true if window should be rendered, false if not
 bool Window_IsVisible(Window* the_window);
 
+// Get the active/inactive condition of the window
+window_state Window_IsActive(Window* the_window);
 
 
 
@@ -308,6 +322,12 @@ void Window_UpdateTheme(Window* the_window);
 
 // **** DRAW functions *****
 
+//! Convert the passed x, y global coordinates to local (to window) coordinates
+void Window_GlobalToLocal(Window* the_window, int16_t* x, int16_t* y);
+
+//! Convert the passed x, y local coordinates to global coordinates
+void Window_LocalToGlobal(Window* the_window, int16_t* x, int16_t* y);
+
 //! Set the font
 //! This is the font that will be used for any subsequent font drawing in this Window
 //! This also sets the font of the window's bitmap
@@ -325,6 +345,15 @@ bool Window_SetFont(Window* the_window, Font* the_font);
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return Returns false on any error condition
 bool Window_SetColor(Window* the_window, uint8_t the_color);
+
+//! Set the "pen" position within the content area, based on global coordinates
+//! This also sets the pen position of the window's bitmap
+//! This is the location that the next pen-based graphics function will use for a starting location
+//! @param	the_window: reference to a valid Window object.
+//! @param	x: the global horizontal position to be converted to window content-local. Will be clipped to the edges.
+//! @param	y: the global vertical position to be converted to window content-local. Will be clipped to the edges.
+//! @return Returns false on any error condition
+bool Window_SetPenXYFromGlobal(Window* the_window, signed int x, signed int y);
 
 //! Set the "pen" position within the content area
 //! This also sets the pen position of the window's bitmap
@@ -453,6 +482,8 @@ char* Window_DrawStringInBox(Window* the_window, signed int width, signed int he
 
 void Window_Print(Window* the_window);
 
+// helper function called by List class's print function: prints one window entry
+void Window_PrintBrief(void* the_payload);
 
 
 #endif /* LIB_WINDOW_H_ */

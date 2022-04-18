@@ -111,9 +111,9 @@ struct Theme
 	uint8_t					outline_color_;					//! Index to the color LUT
 	bool					flow_from_bottom_;				//! Controls the vertical flow of elements: if true, order from top will be content area->iconbar->titlebar
 	uint8_t					titlebar_height_;				//! Height of titlebar. Cannot be smaller than height of control font.
-	uint8_t					titlebar_color_;				//! Index to the color LUT	
+	uint8_t					titlebar_color_;				//! Background color of the title bar when window is active - Index to the color LUT	
 	bool					titlebar_outline_;				//! Draw an outline using the outline_color_, around the titlebar?
-	uint8_t					title_color_;					//! Index to the color LUT	
+	uint8_t					title_color_;					//! Foreground color of the title bar when window is active - Index to the color LUT	
 	h_align_type			title_h_align_;					//! whether the title text should be positioned relative to the left side, right side, or centered
 	signed int				title_x_offset_;				//! horizontal coordinate relative to the window's left or right edge. If title_h_align_ is H_ALIGN_CENTER, this value will be ignored.
 	uint8_t					iconbar_height_;				//! Height of iconbar (when displayed).
@@ -196,10 +196,13 @@ ControlTemplate* Theme_CreateControlTemplateFlexWidth(Theme* the_theme, control_
 Bitmap* Theme_GetDesktopPattern(Theme* the_theme);
 
 ColorIdx Theme_GetTitlebarColor(Theme* the_theme);
+ColorIdx Theme_GetTitleColor(Theme* the_theme);
 ColorIdx Theme_GetIconbarColor(Theme* the_theme);
 ColorIdx Theme_GetOutlineColor(Theme* the_theme);
 ColorIdx Theme_GetContentAreaColor(Theme* the_theme);
 ColorIdx Theme_GetDesktopColor(Theme* the_theme);
+ColorIdx Theme_GetInactiveBackColor(Theme* the_theme);
+ColorIdx Theme_GetInactiveForeColor(Theme* the_theme);
 
 
 

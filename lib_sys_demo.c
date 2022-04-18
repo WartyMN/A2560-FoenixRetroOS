@@ -29,6 +29,7 @@
 // A2560 includes
 #include <mcp/syscalls.h>
 #include <mb/a2560_platform.h>
+#include <mb/event.h>
 #include <mb/general.h>
 #include <mb/text.h>
 #include <mb/bitmap.h>
@@ -345,6 +346,7 @@ void Demo_Font_DrawString(Bitmap* the_bitmap, unsigned int y);
 // Bitmap* LoadFakeIconWrite(void);
 Bitmap* LoadFakeIcon(int icon_num);
 void OpenMultipleWindows(void);
+void SimulateEvents(void);
 
 
 /*****************************************************************************/
@@ -614,6 +616,7 @@ void OpenMultipleWindows(void)
 	the_win_template->y_ = 10;
 	the_win_template->width_ = 1;
 	the_win_template->height_ = 1;
+	the_win_template->title_ = (char*)"Tiny Window";
 
 	if ( (the_window[4] = Window_New(the_win_template)) == NULL)
 	{
@@ -626,6 +629,101 @@ void OpenMultipleWindows(void)
 }
 
 
+void SimulateEvents(void)
+{
+	// LOGIC: 
+	//   simulate having interrupts working, and doing an event loop
+	//   because no interrupts (of mine) are working, will fake that. 
+	
+	bool			exit_app = false;
+	EventRecord*	the_event;
+	Window*			the_window;
+	Control*		the_control;
+	
+// 	DEBUG_OUT(("%s %d: reached", __func__, __LINE__));
+
+// 	DEBUG_OUT(("%s %d: window list at start of demo", __func__, __LINE__));
+// 	List_Print(global_system->list_windows_, (void*)&Window_PrintBrief);	
+	
+	// now process the queue as if it were happening in real time
+	while ((the_event = EventManager_WaitForEvent((mouseDown|mouseUp|keyDown|keyUp|activateEvt|inactivateEvt|controlClicked))) != NULL && exit_app == false)
+	{
+		switch (the_event->what_)
+		{
+			case nullEvent:
+				DEBUG_OUT(("%s %d: null event", __func__, __LINE__));
+				break;
+		
+			case mouseDown:
+				
+				the_window = the_event->window_;
+				DEBUG_OUT(("%s %d: mouse down event in window '%s'", __func__, __LINE__, the_window->title_));
+
+				if (Window_IsBackdrop(the_window) == false)
+				{
+					Window_SetPenXYFromGlobal(the_window, the_event->x_, the_event->y_);
+					Window_DrawBox(the_window, 5, 5, SYS_COLOR_GREEN1, true);
+					Window_Render(the_window);
+					//Sys_Render(global_system);
+				}
+				
+				break;
+
+			case mouseUp:
+				the_window = the_event->window_;
+				DEBUG_OUT(("%s %d: mouse up event in window '%s'", __func__, __LINE__, the_window->title_));
+				
+				if (Window_IsBackdrop(the_window) == false)
+				{
+					Window_SetPenXYFromGlobal(the_window, the_event->x_, the_event->y_);
+					Window_DrawBox(the_window, 5, 5, SYS_COLOR_RED1, true);
+
+					if (Window_IsActive(the_window)) // temp: re-render just this window if active. if not, have to re-render all windows or it will jump to foreground
+					{
+						Window_Render(the_window);
+					}
+					else
+					{
+						Sys_Render(global_system);
+					}
+				}
+				
+				break;
+			
+			case keyDown:
+				DEBUG_OUT(("%s %d: key down event: '%c' (%x)", __func__, __LINE__, the_event->code_, the_event->code_));
+				//return App_HandleKeyDown(the_event);
+				break;
+			
+			case keyUp:
+				DEBUG_OUT(("%s %d: key up event: '%c' (%x)", __func__, __LINE__, the_event->code_, the_event->code_));
+				//return App_HandleKeyUp(the_event);
+				break;
+
+			case updateEvt:
+				DEBUG_OUT(("%s %d: updateEvt event: %c", __func__, __LINE__, the_event->code_));
+
+				break;
+			
+			case activateEvt:
+				DEBUG_OUT(("%s %d: activateEvt event: %c", __func__, __LINE__, the_event->code_));
+				
+				break;
+			
+			case inactivateEvt:
+				DEBUG_OUT(("%s %d: inactivateEvt event: %c", __func__, __LINE__, the_event->code_));
+				
+				break;
+			
+			default:
+				
+				break;
+		}
+		
+		//General_DelaySeconds(2);
+		getchar();
+	}	
+}
 
 
 void RunDemo(void)
@@ -638,12 +736,15 @@ void RunDemo(void)
 
 	Sys_SetModeGraphics(global_system);
 	
-	ShowWhatYouWantMessage();
+	//ShowWhatYouWantMessage();
 	
-	//OpenMultipleWindows();
+	OpenMultipleWindows();
 	
 	// temporary until event handler is written: tell system to render the screen and all windows
 	Sys_Render(global_system);
+
+	// test out event handling
+	SimulateEvents();
 
 // 	// delay a bit before switching
 // 	General_DelaySeconds(3);

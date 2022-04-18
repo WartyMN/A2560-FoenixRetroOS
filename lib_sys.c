@@ -18,6 +18,7 @@
 
 #include "a2560_platform.h"
 #include "bitmap.h"
+#include "event.h"
 #include "font.h"
 #include "general.h"
 #include "list.h"
@@ -66,10 +67,14 @@ System*			global_system;
 /*                       Private Function Prototypes                         */
 /*****************************************************************************/
 
+// Instruct all windows to close / clean themselves up
+void Sys_DestroyAllWindows(System* the_system);
+
 //! Instruct every window to update itself and its controls to match the system's current theme
 //! This is called as part of Sys_SetTheme().
 void Sys_UpdateWindowTheme(System* the_system);
 
+void Sys_RenumberWindows(System* the_system);
 
 // **** Debug functions *****
 
@@ -107,6 +112,44 @@ void Sys_UpdateWindowTheme(System* the_system)
 	
 	return;
 }
+
+
+void Sys_RenumberWindows(System* the_system)
+{
+ 	List*	the_item;
+ 	int8_t	win_num = 1;
+ 	int8_t	this_display_order;
+ 	
+ 	if (the_system == NULL)
+ 	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return;
+ 	}
+	
+	the_item = *(the_system->list_windows_);
+
+	while (the_item != NULL)
+	{
+		Window*		this_window = (Window*)(the_item->payload_);
+		
+		if (this_window->is_backdrop_)
+		{
+			this_display_order = SYS_WIN_Z_ORDER_BACKDROP;
+		}
+		else
+		{
+			this_display_order = SYS_MAX_WINDOWS - win_num++;
+		}
+		
+		Window_SetDisplayOrder(this_window, this_display_order);
+		
+		the_item = the_item->next_item_;
+	}
+	
+	return;
+}
+
+
 
 // // interrupt 1 is PS2 keyboard, interrupt 2 is A2560K keyboard
 // void Sys_InterruptKeyboard(void);
@@ -160,6 +203,14 @@ System* Sys_New(void)
 	}
 	LOG_ALLOC(("%s %d:	__ALLOC__	the_system	%p	size	%i", __func__ , __LINE__, the_system, sizeof(System)));
 
+	// event manager
+	if ( (the_system->event_manager_ = EventManager_New() ) == NULL)
+	{
+		LOG_ERR(("%s %d: could not allocate memory to create the event manager", __func__ , __LINE__));
+		goto error;
+	}
+	
+	// screens
 	for (i = 0; i < 2; i++)
 	{
 		if ( (the_system->screen_[i] = (Screen*)calloc(1, sizeof(Screen)) ) == NULL)
@@ -216,6 +267,17 @@ bool Sys_Destroy(System** the_system)
 		Font_Destroy(&(*the_system)->app_font_);
 	}
 
+	if ((*the_system)->event_manager_)
+	{
+		EventManager_Destroy(&(*the_system)->event_manager_);
+	}
+
+	if ((*the_system)->list_windows_)
+	{
+		Sys_DestroyAllWindows(*the_system);
+	}
+
+
 	LOG_ALLOC(("%s %d:	__FREE__	*the_system	%p	size	%i", __func__ , __LINE__, *the_system, sizeof(System)));
 	free(*the_system);
 	*the_system = NULL;
@@ -224,6 +286,44 @@ bool Sys_Destroy(System** the_system)
 }
 
 
+// Instruct all windows to close / clean themselves up
+void Sys_DestroyAllWindows(System* the_system)
+{
+	int			num_nodes = 0;
+	List*		the_item;
+	
+ 	if (the_system == NULL)
+ 	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return;
+ 	}
+	
+	if (the_system->list_windows_ == NULL)
+	{
+		DEBUG_OUT(("%s %d: the window list was NULL", __func__ , __LINE__));
+		return;
+	}
+	
+	the_item = *(the_system->list_windows_);
+
+	while (the_item != NULL)
+	{
+		Window*		this_window = (Window*)(the_item->payload_);
+		
+		Window_Destroy(&this_window);
+		++num_nodes;
+		--the_system->window_count_;
+
+		the_item = the_item->next_item_;
+	}
+
+	// now free up the list items themselves
+	List_Destroy(the_system->list_windows_);
+
+	DEBUG_OUT(("%s %d: %i windows closed", __func__ , __LINE__, num_nodes));
+
+	return;
+}
 
 
 
@@ -309,12 +409,12 @@ bool Sys_InitSystem(void)
 	
 	Sys_SetScreenBitmap(global_system, ID_CHANNEL_B, the_bitmap);
 
-	// load the splash screen and progress bar
-	if (Startup_ShowSplash() == false)
-	{
-		LOG_ERR(("%s %d: Failed to load splash screen. Oh, no!", __func__, __LINE__));
-		// but who cares, just continue on... 
-	}
+// 	// load the splash screen and progress bar
+// 	if (Startup_ShowSplash() == false)
+// 	{
+// 		LOG_ERR(("%s %d: Failed to load splash screen. Oh, no!", __func__, __LINE__));
+// 		// but who cares, just continue on... 
+// 	}
 
 	DEBUG_OUT(("%s %d: loading default theme...", __func__, __LINE__));
 	
@@ -755,10 +855,12 @@ bool Sys_SetVideoMode(Screen* the_screen, screen_resolution new_mode)
 // **** Window management functions *****
 
 
-// Add this window to the list of windows
-void Sys_AddToWindowList(System* the_system, Window* the_new_window)
+//! Add this window to the list of windows and make it the currently active window
+//! @return	Returns false if adding this window would exceed the system's hard cap on the number of available windows
+bool Sys_AddToWindowList(System* the_system, Window* the_new_window)
 {
 	List*	the_new_item;
+	int8_t	new_display_order;
 	
  	if (the_system == NULL)
  	{
@@ -766,9 +868,22 @@ void Sys_AddToWindowList(System* the_system, Window* the_new_window)
 		Sys_Destroy(&the_system); // crash early, crash often
  	}
 	
+	// are there too many windows already? 
+	if (the_system->window_count_ >= SYS_MAX_WINDOWS)
+	{
+		LOG_ERR(("%s %d: No more windows can be opened!", __func__ , __LINE__));
+		return false;
+	}
+	
 	the_new_item = List_NewItem((void*)the_new_window);
 	List_AddItem(the_system->list_windows_, the_new_item);
+	
+	new_display_order = SYS_MAX_WINDOWS;
+	Window_SetDisplayOrder(the_new_window, new_display_order);
+	
 	++the_system->window_count_;
+	
+	Sys_SetActiveWindow(the_system, the_new_window);
 }
 
 
@@ -1017,67 +1132,116 @@ Window* Sys_GetPreviousWindow(System* the_system)
 	return next_window;
 }
 
-// NOTE: 2022/04/03: this needs to be re-invented for the Foenix. Leaving Amiga code here commented out as a reminder we need a similar function. 
-// // Find the Window under the mouse -- accounts for z depth (topmost window will be found)
-// Window* Sys_FindWindowUnderMouse(System* the_system)
-// {
-// 	struct Layer_Info*	the_layer_info = &the_system->screen_->LayerInfo;
-// 	struct Layer*		the_layer;
-// 	struct Window*		the_window_under_mouse;
-// 	Window*				the_window_under_mouse;
-// 	
-// 	// LOGIC:
-// 	//   measuring just against window coords alone doesn't mean some other window wasn't in front
-// 	//   the layer library has a function WhichLayer which will tell you which window is in front at the coords passed. 
-// 	//   note from Thomas R on EAB: "intuition may change this order any time as long as you don't lock the LayerInfo-structure"
-// 	
-//  	if (the_system == NULL)
-//  	{
-// 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-// 		return NULL;
-//  	}
-// 	
-// 	LockLayerInfo(the_layer_info);
-// 	
-// 	the_layer = WhichLayer(the_layer_info, the_system->screen_->MouseX, the_system->screen_->MouseY);
-// 	
-// 	if (the_layer == NULL)
-// 	{
-// 		// don't know if this would ever return null, but...
-// 		LOG_ERR(("%s %d: Layer library returned a NULL for layer under mouse!!?", __func__ , __LINE__));
-// 		UnlockLayerInfo(the_layer_info);
-// 		Sys_Destroy(); // crash early, crash often
-// 	}
-// 	
-// 	the_window_under_mouse = the_layer->Window;	
-// 
-// 	if (the_window_under_mouse == NULL)
-// 	{
-// 		// this DOES happen. Seems to occur only under the screen's title bar. The backdrop window starts at 0,0, but maybe title bar has special layer. 
-// 		// for this system, this doesn't need to be fatal. 
-// 		DEBUG_OUT(("%s %d: Layer library thinks a layer not associated with a window was clicked.", __func__ , __LINE__));
-// 		UnlockLayerInfo(the_layer_info);
-// 		return NULL;
-// 	}
-// 	
-// 	the_window_under_mouse = Sys_FindWindowByWindow(the_system, the_window_under_mouse);
-// 		
-// 	if (the_window_under_mouse == NULL)
-// 	{
-// 		LOG_ERR(("%s %d: the window Layer library says mouse was on a window (title=%s), but that window doesn't appear to be a WB2K window", __func__ , __LINE__, the_window_under_mouse->Title)); // NOTE: maxonC has a problem with this Title, I think it is confused with reaction.h's Title () macro.
-// 		//LOG_ERR(("%s %d: the window Layer library says mouse was on a window), but that window doesn't appear to be a WB2K window", __func__ , __LINE__));
-// 		UnlockLayerInfo(the_layer_info);
-// 		Sys_Destroy(); // crash early, crash often
-// 	}
-// 
-// 	UnlockLayerInfo(the_layer_info);
-// 
-// 	return the_window_under_mouse;
-// }
-// 
+
+// Find the Window under the mouse -- accounts for z depth (topmost window will be found)
+Window* Sys_GetWindowAtXY(System* the_system, int16_t x, int16_t y)
+{
+ 	List*	the_item;
+ 	bool	in_this_win = false;
+
+ 	if (the_system == NULL)
+ 	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+ 	}
+	
+	if (the_system->window_count_ < 1)
+	{
+		return NULL;
+	}
+	
+	if (x < 0 || y < 0)
+	{
+		return NULL;
+	}
+	
+	// LOGIC:
+	//   OS/f windows are all known by the system
+	//   each window has a display order property set by the system, from low to high being backmost to frontmost
+	//   the system also keeps them sorted in its list, with first item being front most
+		
+	the_item = *(the_system->list_windows_);
+
+	while (the_item != NULL)
+	{
+		Window*		this_window = (Window*)(the_item->payload_);
+		
+		in_this_win = General_PointInRect(x, y, this_window->global_rect_);
+		
+		if (in_this_win)
+		{
+			DEBUG_OUT(("%s %d: window at %i, %i = '%s'", __func__, __LINE__, x, y, this_window->title_));
+			return this_window;
+		}
+
+		the_item = the_item->next_item_;
+	}
+	
+	return NULL;
+}
 
 
+//! Set the passed window to the active window, and marks the previously active window as inactive
+//! NOTE: This will resort the list of windows to move the (new) active one to the front
+//! NOTE: The exception to this is that the backdrop window is never moved in front of other windows
+bool Sys_SetActiveWindow(System* the_system, Window* the_window)
+{
+	if (the_system == NULL)
+ 	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return false;
+ 	}
 
+	if (the_system->active_window_ != NULL)
+	{
+		Window_SetActive(the_system->active_window_, false);
+	}
+	
+	the_system->active_window_ = the_window;
+
+	Window_SetActive(the_window, true);
+
+	if (the_window->is_backdrop_)
+	{
+		return true;
+	}
+	
+	//DEBUG_OUT(("%s %d: window list before change of active window:", __func__, __LINE__));
+	//List_Print(the_system->list_windows_, (void*)&Window_PrintBrief);
+	
+	the_window->display_order_ = SYS_WIN_Z_ORDER_NEWLY_ACTIVE;
+	List_InitMergeSort(the_system->list_windows_, &Window_CompareDisplayOrder);
+	
+	//DEBUG_OUT(("%s %d: window list after change of active window:", __func__, __LINE__));
+	//List_Print(the_system->list_windows_, (void*)&Window_PrintBrief);
+	
+	// that changes their linked order, but doesn't renumber their display_order_; need that too
+	Sys_RenumberWindows(the_system);
+	
+	// temp
+	Sys_Render(global_system);
+	
+	return true;
+}
+
+
+// List-sort compatible function for sorting windows by their display order property
+bool Window_CompareDisplayOrder(void* first_payload, void* second_payload)
+{
+	Window*		win_1 = (Window*)first_payload;
+	Window*		win_2 = (Window*)second_payload;
+
+	if (win_1->display_order_ < win_2->display_order_)
+	{
+		//DEBUG_OUT(("%s %d: win1 ('%s') behind win2 ('%s')", __func__, __LINE__, win_1->title_, win_2->title_));
+		return true;
+	}
+	else
+	{
+		//DEBUG_OUT(("%s %d: win1 ('%s') in front of win2 ('%s')", __func__, __LINE__, win_1->title_, win_2->title_));
+		return false;
+	}
+}
 
 
 
@@ -1153,6 +1317,20 @@ Bitmap* Sys_GetScreenBitmap(System* the_system, signed int channel_id)
 	
 	return the_system->screen_[channel_id]->bitmap_;
 }
+
+
+EventManager* Sys_GetEventManager(System* the_system)
+{
+	if (the_system == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+	}
+	
+	return the_system->event_manager_;
+}
+
+
 
 
 
@@ -1965,17 +2143,10 @@ void Sys_Render(System* the_system)
 	// LOGIC:
 	//   as we do not have regions and layers set up yet, we have to render every single window in its entirely, including the backdrop
 	//   therefore, it is critical that the rendering take place in the order of back to front
-	//   until there is a mouse, and event handling, there is no way to make one window in front of another, so the distinction is meaningless
-	//   for now, we render backdrop > next window created > next window created > etc.
+	//   display order is built into the system's window list: the first item is the foremost, and the last is the backmost
+	//   need to render from back of list towards front of list, so they built up over each other in right order.
 	
-	// render the backdrop window (this writes directly to the Screen's bitmap, as that is shared with the backdrop window)
-	// in effect, this wipes out any windows that had been drawn previously
-	if ( (this_window = Sys_GetBackdropWindow(the_system)) != NULL)
-	{
-		Window_Render(this_window);
-	}
-	
-	// have each window (re)render its controls/content/etc to its bitmap, and blit each one to the main screen/backdrop window bitmap
+	// have each window (re)render its controls/content/etc to its bitmap, and blit itself to the main screen/backdrop window bitmap
 	
 	if (the_system->list_windows_ == NULL)
 	{
@@ -1983,26 +2154,28 @@ void Sys_Render(System* the_system)
 		return;
 	}
 	
-	//List_Print(the_system->list_windows_, (void*)&Window_Print);
-	
-	the_item = *(the_system->list_windows_);
+	//List_Print(the_system->list_windows_, (void*)&Window_PrintBrief);
+	the_item = List_GetLast(the_system->list_windows_);
+	//the_item = *(the_system->list_windows_);
 
 	while (the_item != NULL)
 	{
 		Window*		this_window = (Window*)(the_item->payload_);
 		
-		if (Window_IsVisible(this_window) == true && Window_IsBackdrop(this_window) == false)
+		//DEBUG_OUT(("%s %d: rendering window '%s'", __func__ , __LINE__, this_window->title_));
+		
+		if (Window_IsVisible(this_window) == true)
 		{
 			++num_nodes;
 			Window_Render(this_window);
 
-			// blit to screen
-			Bitmap_Blit(this_window->bitmap_, 0, 0, the_system->screen_[ID_CHANNEL_B]->bitmap_, this_window->x_, this_window->y_, this_window->width_, this_window->height_);
+// 			// blit to screen
+// 			Bitmap_Blit(this_window->bitmap_, 0, 0, the_system->screen_[ID_CHANNEL_B]->bitmap_, this_window->x_, this_window->y_, this_window->width_, this_window->height_);
 		}
 
-		the_item = the_item->next_item_;
+		the_item = the_item->prev_item_;
 	}
 
-	DEBUG_OUT(("%s %d: %i windows rendered out of %i total window", __func__ , __LINE__, num_nodes, the_system->window_count_));
+	//DEBUG_OUT(("%s %d: %i windows rendered out of %i total window", __func__ , __LINE__, num_nodes, the_system->window_count_));
 }
 

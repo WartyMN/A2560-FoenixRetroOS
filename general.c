@@ -800,6 +800,7 @@ bool General_RectIntersect(Rectangle r1, Rectangle r2)
 // test if a point is within a rectangle
 bool General_PointInRect(signed int x, signed int y, Rectangle r)
 {
+	//DEBUG_OUT(("%s %d: x=%i, y=%i, r.MinX=%i, r.MinY=%i, r.MaxX=%i, r.MaxY=%i", __func__, __LINE__, x, y,  r.MinX, r.MinY, r.MaxX, r.MaxY));
 	if	(
 		(x > r.MaxX) ||
 		(x < r.MinX) ||
@@ -810,6 +811,8 @@ bool General_PointInRect(signed int x, signed int y, Rectangle r)
 		return false;
 	}
 
+	//DEBUG_OUT(("%s %d: x and y were in this rect", __func__, __LINE__));
+	
 	return true;
 }
 

@@ -488,6 +488,20 @@ control_type Control_GetType(Control* the_control)
 }
 
 
+//! Get the pressed/not pressed state
+//! @return	Returns true if control is pressed (down), false if up
+bool Control_GetPressed(Control* the_control)
+{
+	if (the_control == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return CONTROL_TYPE_ERROR;
+	}
+	
+	return the_control->pressed_;
+}
+
+
 //! Compare the control's right-edge coordinate to the passed value
 //! If the control is more to the right than the passed value, the passed value is updated with the control's right edge
 //! @return	Returns true if the control is further to the right than the passed value.

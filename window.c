@@ -149,71 +149,98 @@ void Window_ConfigureStructureRects(Window* the_window)
 	the_window->overall_rect_.MaxX = the_window->width_ - 1;
 	the_window->overall_rect_.MaxY = the_window->height_ - 1;
 
-	// LOGIC for VERTICAL placement of title bar, icon bar, and content area:
-	//   if theme's flow_from_bottom_ property is true, the vertical flow of elements from top will be content area->iconbar->titlebar
-	//     if false, the vertical flow of elements from top will be titlebar->iconbar->content area
+	// LOGIC for BACKDROP windows:
+	//   Backdrop windows do not have titlebars, iconbars: they are just one big content area. 
+	//   So they override rect guidance from theme on that point. 
 	
-	// LOGIC for titlebar placement:
-	//   do NOT inset the titlebar vertically or horizontally by one. Titlebar must be allowed to overwrite the overall window border
-	
-	if (the_theme->flow_from_bottom_ == false)
+	if (the_window->is_backdrop_)
 	{
-		the_window->titlebar_rect_.MinY = the_window->overall_rect_.MinY;
+		the_window->titlebar_rect_.MinY = 0;
+		the_window->titlebar_rect_.MaxY = 0;
+		the_window->titlebar_rect_.MinX = 0;
+		the_window->titlebar_rect_.MaxX = 0;
+		the_window->titlebar_rect_.MinY = 0;
+		the_window->titlebar_rect_.MaxY = 0;
+		the_window->titlebar_rect_.MinX = 1;
+		the_window->titlebar_rect_.MaxX = 1;
+		the_window->titlebar_rect_.MinY = 0;
+		the_window->titlebar_rect_.MaxY = 0;
+		the_window->titlebar_rect_.MinX = 0;
+		the_window->titlebar_rect_.MaxX = 0;
+		the_window->content_rect_.MinY = the_window->overall_rect_.MinY;
+		the_window->content_rect_.MaxY = the_window->overall_rect_.MaxY;
+		the_window->content_rect_.MinX = the_window->overall_rect_.MinX;
+		the_window->content_rect_.MaxX = the_window->overall_rect_.MaxX;
 	}
 	else
 	{
-		the_window->titlebar_rect_.MinY = the_window->overall_rect_.MaxY - the_theme->titlebar_height_;
-	}
+		// LOGIC for VERTICAL placement of title bar, icon bar, and content area:
+		//   if theme's flow_from_bottom_ property is true, the vertical flow of elements from top will be content area->iconbar->titlebar
+		//     if false, the vertical flow of elements from top will be titlebar->iconbar->content area
 	
-	the_window->titlebar_rect_.MaxY = the_window->titlebar_rect_.MinY + the_theme->titlebar_height_;
-	the_window->titlebar_rect_.MinX = 0;
-	the_window->titlebar_rect_.MaxX = the_window->width_ - 1;
+		// LOGIC for titlebar placement:
+		//   do NOT inset the titlebar vertically or horizontally by one. Titlebar must be allowed to overwrite the overall window border
 	
-
-	// LOGIC for iconbar placement:
-	//   if iconbar is set to not show, then do not allocate any vertical space for it.
-	//     Let it overlap the titlebar area exactly so that content area can position itself always relative to iconbar.
-	//   DO inset the iconbar vertically by one from the title. Iconbar must not be allowed to overwrite the titlebar border
-	//   Do NOT inset the iconbar horizontally by one from the window edge. Iconbar must be allowed to overwrite the overall window border
-	if (the_window->show_iconbar_)
-	{
 		if (the_theme->flow_from_bottom_ == false)
 		{
-			the_window->iconbar_rect_.MinY = the_window->titlebar_rect_.MaxY + 1;
+			the_window->titlebar_rect_.MinY = the_window->overall_rect_.MinY;
 		}
 		else
 		{
-			the_window->iconbar_rect_.MinY = the_window->titlebar_rect_.MinY - 1 - the_theme->iconbar_height_;
+			the_window->titlebar_rect_.MinY = the_window->overall_rect_.MaxY - the_theme->titlebar_height_;
 		}
-
-		the_window->iconbar_rect_.MaxY = the_window->iconbar_rect_.MinY + the_theme->iconbar_height_;
-		the_window->iconbar_rect_.MinX = 0;
-		the_window->iconbar_rect_.MaxX = the_window->width_ - 1;
-	}
-	else
-	{
-		the_window->iconbar_rect_.MinX = the_window->titlebar_rect_.MaxX;
-		the_window->iconbar_rect_.MaxX = the_window->titlebar_rect_.MaxX;
-		the_window->iconbar_rect_.MinY = the_window->titlebar_rect_.MinY;
-		the_window->iconbar_rect_.MaxY = the_window->titlebar_rect_.MaxY;
-	}
+	
+		the_window->titlebar_rect_.MaxY = the_window->titlebar_rect_.MinY + the_theme->titlebar_height_;
+		the_window->titlebar_rect_.MinX = 0;
+		the_window->titlebar_rect_.MaxX = the_window->width_ - 1;
 	
 
-	// LOGIC for content area placement:
-	//   DO inset the iconbar vertically and horizontally by one from the window edge and titlebar/iconbar: content area must not be allowed to overwrite any borders
-	if (the_theme->flow_from_bottom_ == false)
-	{
-		the_window->content_rect_.MinY = the_window->iconbar_rect_.MaxY + 1;
-		the_window->content_rect_.MaxY = the_window->overall_rect_.MaxY - 1;
-	}
-	else
-	{
-		the_window->content_rect_.MinY = the_window->overall_rect_.MinY + 1;
-		the_window->content_rect_.MaxY = the_window->iconbar_rect_.MinY - 1;
-	}
+		// LOGIC for iconbar placement:
+		//   if iconbar is set to not show, then do not allocate any vertical space for it.
+		//     Let it overlap the titlebar area exactly so that content area can position itself always relative to iconbar.
+		//   DO inset the iconbar vertically by one from the title. Iconbar must not be allowed to overwrite the titlebar border
+		//   Do NOT inset the iconbar horizontally by one from the window edge. Iconbar must be allowed to overwrite the overall window border
+		if (the_window->show_iconbar_)
+		{
+			if (the_theme->flow_from_bottom_ == false)
+			{
+				the_window->iconbar_rect_.MinY = the_window->titlebar_rect_.MaxY + 1;
+			}
+			else
+			{
+				the_window->iconbar_rect_.MinY = the_window->titlebar_rect_.MinY - 1 - the_theme->iconbar_height_;
+			}
 
-	the_window->content_rect_.MinX = 1;
-	the_window->content_rect_.MaxX = the_window->width_ - 1;
+			the_window->iconbar_rect_.MaxY = the_window->iconbar_rect_.MinY + the_theme->iconbar_height_;
+			the_window->iconbar_rect_.MinX = 0;
+			the_window->iconbar_rect_.MaxX = the_window->width_ - 1;
+		}
+		else
+		{
+			the_window->iconbar_rect_.MinX = the_window->titlebar_rect_.MaxX;
+			the_window->iconbar_rect_.MaxX = the_window->titlebar_rect_.MaxX;
+			the_window->iconbar_rect_.MinY = the_window->titlebar_rect_.MinY;
+			the_window->iconbar_rect_.MaxY = the_window->titlebar_rect_.MaxY;
+		}
+	
+
+		// LOGIC for content area placement:
+		//   DO inset the iconbar vertically and horizontally by one from the window edge and titlebar/iconbar: content area must not be allowed to overwrite any borders
+		if (the_theme->flow_from_bottom_ == false)
+		{
+			the_window->content_rect_.MinY = the_window->iconbar_rect_.MaxY + 1;
+			the_window->content_rect_.MaxY = the_window->overall_rect_.MaxY - 1;
+		}
+		else
+		{
+			the_window->content_rect_.MinY = the_window->overall_rect_.MinY + 1;
+			the_window->content_rect_.MaxY = the_window->iconbar_rect_.MinY - 1;
+		}
+
+		the_window->content_rect_.MinX = 1;
+		the_window->content_rect_.MaxX = the_window->width_ - 1;
+	}
+	
 
 	the_window->inner_width_ = the_window->content_rect_.MaxX - the_window->content_rect_.MinX;
 	the_window->inner_height_ = the_window->content_rect_.MaxY - the_window->content_rect_.MinY;
@@ -443,7 +470,14 @@ static void Window_DrawStructure(Window* the_window)
 	
 	the_theme = Sys_GetTheme(global_system);
 
-	Bitmap_FillBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, Theme_GetTitlebarColor(the_theme));
+	if (the_window->active_)
+	{
+		Bitmap_FillBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, Theme_GetTitlebarColor(the_theme));
+	}
+	else
+	{
+		Bitmap_FillBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, Theme_GetInactiveBackColor(the_theme));
+	}
 	
 	if (the_theme->titlebar_outline_)
 	{
@@ -531,7 +565,15 @@ static void Window_DrawTitle(Window* the_window)
 	chars_that_fit = Font_MeasureStringWidth(new_font, the_window->title_, GEN_NO_STRLEN_CAP, available_width, 0, &pixels_used);
 	//DEBUG_OUT(("%s %d: available_width=%i, chars_that_fit=%i", __func__, __LINE__, available_width, chars_that_fit));
 	
-	Bitmap_SetColor(the_window->bitmap_, the_theme->title_color_);
+	if (the_window->active_)
+	{
+		Bitmap_SetColor(the_window->bitmap_, Theme_GetTitleColor(the_theme));
+	}
+	else
+	{
+		Bitmap_SetColor(the_window->bitmap_, Theme_GetInactiveForeColor(the_theme));
+	}
+	
 	Bitmap_SetXY(the_window->bitmap_, the_window->titlebar_rect_.MinX + the_theme->title_x_offset_, the_window->titlebar_rect_.MinY + (the_theme->titlebar_height_ + new_font->nDescent) / 2 - 1);
 
 	if (Font_DrawString(the_window->bitmap_, the_window->title_, chars_that_fit) == false)
@@ -596,6 +638,15 @@ void Window_Print(Window* the_window)
 	DEBUG_OUT(("  root_control_: %p",	the_window->root_control_));	
 }
 
+
+// helper function called by List class's print function: prints one window entry
+void Window_PrintBrief(void* the_payload)
+{
+	Window*		this_window = (Window*)(the_payload);
+
+	DEBUG_OUT(("%s %d: %s (%p, %i)", __func__ , __LINE__, (this_window->is_backdrop_ == false ? this_window->title_ : (char*)"Backdrop"), this_window, this_window->display_order_ ));
+
+}
 
 
 /*****************************************************************************/
@@ -688,6 +739,10 @@ Window* Window_New(NewWinTemplate* the_win_template)
 	the_window->y_ = the_win_template->y_;
 	the_window->width_ = the_win_template->width_;
 	the_window->height_ = the_win_template->height_;
+	the_window->global_rect_.MinX = the_window->x_;
+	the_window->global_rect_.MaxX = the_window->x_ + the_window->width_;
+	the_window->global_rect_.MinY = the_window->y_;
+	the_window->global_rect_.MaxY = the_window->y_ + the_window->height_;
 	the_window->min_width_ = the_win_template->min_width_;
 	the_window->min_height_ = the_win_template->min_height_;
 	the_window->max_width_ = the_win_template->max_width_;
@@ -755,8 +810,19 @@ Window* Window_New(NewWinTemplate* the_win_template)
 	}
 	
 	// Add this window to the list of windows
-	Sys_AddToWindowList(global_system, the_window);
+	if (Sys_AddToWindowList(global_system, the_window) == false)
+	{
+		LOG_ERR(("%s %d: this window cannot be opened: '%s'", __func__, __LINE__, the_window->title_));
+		goto error;
+	}
 	
+	// display order is initially set by the system to a number equivalent to the count of windows
+	// but backdrop window needs to always be at a specially low (negative number)
+	if ( the_win_template->is_backdrop_ == true)
+	{
+		the_window->display_order_ = SYS_WIN_Z_ORDER_BACKDROP;
+	}
+
 	//Window_Print(the_window);
 		
 	return the_window;
@@ -1020,6 +1086,39 @@ uint16_t Window_GetControlID(Window* the_window, Control* the_control)
 }
 
 
+//! Find the Control under the mouse
+Control* Window_GetControlAtXY(Window* the_window, int16_t x, int16_t y)
+{
+ 	Control*	the_control;
+ 	bool		in_this_control = false;
+
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+	}
+
+	// LOGIC:
+	//   Controls are in a linked list property of the window
+	//   Unlike finding window under mouse, for control, we don't care about order
+	//   Programmer who allows overlapping controls is doing something wrong anyway!
+		
+	the_control = the_window->root_control_;
+
+	while (the_control != NULL)
+	{
+		in_this_control = General_PointInRect(x, y, the_control->rect_);
+		
+		if (in_this_control)
+		{
+			return the_control;
+		}
+
+		the_control = the_control->next_;
+	}
+	
+	return NULL;
+}
 
 
 
@@ -1059,6 +1158,10 @@ void Window_Render(Window* the_window)
 		// either way, we are currently re-rendering all controls until damage regions/etc are available.
 		Window_DrawControls(the_window);
 	}
+
+	// blit to screen
+	Bitmap_Blit(the_window->bitmap_, 0, 0, global_system->screen_[ID_CHANNEL_B]->bitmap_, the_window->x_, the_window->y_, the_window->width_, the_window->height_);
+
 }
 
 
@@ -1116,6 +1219,33 @@ void Window_SetVisible(Window* the_window, bool is_visible)
 	}
 	
 	the_window->visible_ = is_visible;
+}
+
+
+//! Set the display order of the window
+//! Consider this a system-only function: do not use this
+void Window_SetDisplayOrder(Window* the_window, int8_t the_display_order)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return;
+	}
+	
+	the_window->display_order_ = the_display_order;
+}
+
+
+//! Set the passed window's active flag.
+void Window_SetActive(Window* the_window, bool is_active)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return;
+	}
+	
+	the_window->active_ = is_active;
 }
 
 
@@ -1261,10 +1391,52 @@ bool Window_IsVisible(Window* the_window)
 }
 
 
+// Get the active/inactive condition of the window
+window_state Window_IsActive(Window* the_window)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return WIN_UNKNOWN_STATE;
+	}
+	
+	return the_window->active_;
+}
+
+
 
 
 
 // **** DRAWING functions *****
+
+
+//! Convert the passed x, y global coordinates to local (to window) coordinates
+void Window_GlobalToLocal(Window* the_window, int16_t* x, int16_t* y)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		Sys_Destroy(&global_system); // crash early, crash often
+	}
+	
+	*x = *x - the_window->x_ - the_window->content_rect_.MinX;
+	*y = *y - the_window->y_ - the_window->content_rect_.MinY;
+}
+
+
+//! Convert the passed x, y local coordinates to global coordinates
+void Window_LocalToGlobal(Window* the_window, int16_t* x, int16_t* y)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		Sys_Destroy(&global_system); // crash early, crash often
+	}
+	
+	*x = *x + the_window->x_ + the_window->content_rect_.MinX;
+	*y = *y + the_window->y_ + the_window->content_rect_.MinY;
+}
+
 
 //! Set the font
 //! This is the font that will be used for any subsequent font drawing in this Window
@@ -1311,6 +1483,32 @@ bool Window_SetColor(Window* the_window, uint8_t the_color)
 	the_window->bitmap_->color_ = the_color;
 	
 	return true;
+}
+
+
+//! Set the "pen" position within the content area, based on global coordinates
+//! This also sets the pen position of the window's bitmap
+//! This is the location that the next pen-based graphics function will use for a starting location
+//! @param	the_window: reference to a valid Window object.
+//! @param	x: the global horizontal position to be converted to window content-local. Will be clipped to the edges.
+//! @param	y: the global vertical position to be converted to window content-local. Will be clipped to the edges.
+//! @return Returns false on any error condition
+bool Window_SetPenXYFromGlobal(Window* the_window, signed int x, signed int y)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		Sys_Destroy(&global_system); // crash early, crash often
+	}
+	
+	DEBUG_OUT(("%s %d: window global rect: %i, %i - %i, %i", __func__ , __LINE__, the_window->global_rect_.MinX, the_window->global_rect_.MinY, the_window->global_rect_.MaxX, the_window->global_rect_.MaxY));
+	DEBUG_OUT(("%s %d: x/y before making local: %i, %i", __func__ , __LINE__, x, y));
+	x -= the_window->x_ - the_window->content_rect_.MinX;
+	y -= the_window->y_ - the_window->content_rect_.MinY;
+	DEBUG_OUT(("%s %d: x/y after making local: %i, %i", __func__ , __LINE__, x, y));
+	DEBUG_OUT(("%s %d: content rect: %i, %i - %i, %i", __func__ , __LINE__, the_window->content_rect_.MinX, the_window->content_rect_.MinY, the_window->content_rect_.MaxX, the_window->content_rect_.MaxY));
+	
+	return Window_SetPenXY(the_window, x, y);
 }
 
 
@@ -1390,7 +1588,7 @@ bool Window_FillBox(Window* the_window, signed int width, signed int height, uns
 		Sys_Destroy(&global_system); // crash early, crash often
 	}
 	
-	return Bitmap_FillBox(the_window->bitmap_, the_window->x_, the_window->y_, width, height, the_color);
+	return Bitmap_FillBox(the_window->bitmap_, the_window->pen_x_, the_window->pen_y_, width, height, the_color);
 }
 
 
@@ -1434,7 +1632,7 @@ bool Window_SetPixel(Window* the_window, unsigned char the_color)
 		Sys_Destroy(&global_system); // crash early, crash often
 	}
 	
-	return Bitmap_SetPixelAtXY(the_window->bitmap_, the_window->x_, the_window->y_, the_color);
+	return Bitmap_SetPixelAtXY(the_window->bitmap_, the_window->pen_x_, the_window->pen_y_, the_color);
 }
 
 
@@ -1476,7 +1674,7 @@ bool Window_DrawHLine(Window* the_window, signed int the_line_len, unsigned char
 		Sys_Destroy(&global_system); // crash early, crash often
 	}
 	
-	return Bitmap_DrawHLine(the_window->bitmap_, the_window->x_, the_window->y_, the_line_len, the_color);
+	return Bitmap_DrawHLine(the_window->bitmap_, the_window->pen_x_, the_window->pen_y_, the_line_len, the_color);
 }
 
 
@@ -1492,7 +1690,7 @@ bool Window_DrawVLine(Window* the_window, signed int the_line_len, unsigned char
 		Sys_Destroy(&global_system); // crash early, crash often
 	}
 	
-	return Bitmap_DrawVLine(the_window->bitmap_, the_window->x_, the_window->y_, the_line_len, the_color);
+	return Bitmap_DrawVLine(the_window->bitmap_, the_window->pen_x_, the_window->pen_y_, the_line_len, the_color);
 }
 
 
@@ -1565,7 +1763,7 @@ bool Window_DrawBox(Window* the_window, signed int width, signed int height, uns
 		Sys_Destroy(&global_system); // crash early, crash often
 	}
 	
-	return Bitmap_DrawBox(the_window->bitmap_, the_window->x_, the_window->y_, width, height, the_color, do_fill);
+	return Bitmap_DrawBox(the_window->bitmap_, the_window->pen_x_, the_window->pen_y_, width, height, the_color, do_fill);
 }
 
 
@@ -1585,7 +1783,7 @@ bool Window_DrawRoundBox(Window* the_window, signed int width, signed int height
 		Sys_Destroy(&global_system); // crash early, crash often
 	}
 	
-	return Bitmap_DrawRoundBox(the_window->bitmap_, the_window->x_, the_window->y_, width, height, radius, the_color, do_fill);
+	return Bitmap_DrawRoundBox(the_window->bitmap_, the_window->pen_x_, the_window->pen_y_, width, height, radius, the_color, do_fill);
 }
 
 
@@ -1600,7 +1798,7 @@ bool Window_DrawCircle(Window* the_window, signed int radius, unsigned char the_
 		Sys_Destroy(&global_system); // crash early, crash often
 	}
 	
-	return Bitmap_DrawCircle(the_window->bitmap_, the_window->x_, the_window->y_, radius, the_color);
+	return Bitmap_DrawCircle(the_window->bitmap_, the_window->pen_x_, the_window->pen_y_, radius, the_color);
 }
 
 

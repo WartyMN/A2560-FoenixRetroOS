@@ -60,6 +60,9 @@
 /*                            Macro Definitions                              */
 /*****************************************************************************/
 
+#define SYS_MAX_WINDOWS					32
+#define SYS_WIN_Z_ORDER_BACKDROP		-127
+#define SYS_WIN_Z_ORDER_NEWLY_ACTIVE	SYS_MAX_WINDOWS + 1
 
 
 /*****************************************************************************/
@@ -74,14 +77,15 @@
 
 struct System
 {
-	Font*		system_font_;
-	Font*		app_font_;
-	Screen*		screen_[2];
-	Theme*		theme_;
-	uint8_t		num_screens_;
-	List**		list_windows_;
-	Window*		active_window_;
-	uint8_t		window_count_;
+	EventManager*	event_manager_;
+	Font*			system_font_;
+	Font*			app_font_;
+	Screen*			screen_[2];
+	Theme*			theme_;
+	uint8_t			num_screens_;
+	List**			list_windows_;
+	Window*			active_window_;
+	uint8_t			window_count_;
 };
 
 
@@ -154,8 +158,9 @@ bool Sys_SetModeText(System* the_system, bool as_overlay);
 
 // **** Window management functions *****
 
-// Add this window to the list of windows
-void Sys_AddToWindowList(System* the_system, Window* the_new_window);
+//! Add this window to the list of windows and make it the currently active window
+//! @return	Returns false if adding this window would exceed the system's hard cap on the number of available windows
+bool Sys_AddToWindowList(System* the_system, Window* the_new_window);
 
 // create the backdrop window for the system
 bool Sys_CreateBackdropWindow(System* the_system);
@@ -173,8 +178,14 @@ Window* Sys_GetNextWindow(System* the_system);
 Window* Sys_GetPreviousWindow(System* the_system);
 
 // Find the Window under the mouse -- accounts for z depth (topmost window will be found)
-Window* Sys_FindWindowUnderMouse(System* the_system);
+Window* Sys_GetWindowAtXY(System* the_system, int16_t x, int16_t y);
 
+//! Set the passed window to the active window
+//! NOTE: This will resort the list of windows to move the (new) active one to the front
+bool Sys_SetActiveWindow(System* the_system, Window* the_window);
+
+// List-sort compatible function for sorting windows by their display order property
+bool Window_CompareDisplayOrder(void* first_payload, void* second_payload);
 
 
 // **** Other GET functions *****
@@ -188,6 +199,9 @@ Screen* Sys_GetScreen(System* the_system, signed int channel_id);
 Theme* Sys_GetTheme(System* the_system);
 
 Bitmap* Sys_GetScreenBitmap(System* the_system, signed int channel_id);
+
+EventManager* Sys_GetEventManager(System* the_system);
+
 
 
 // **** Other SET functions *****

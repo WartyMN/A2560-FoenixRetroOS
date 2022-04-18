@@ -216,6 +216,10 @@ uint16_t Control_GetID(Control* the_control);
 //! @return	Returns CONTROL_TYPE_ERROR (-1) on any error, or the control_type value
 control_type Control_GetType(Control* the_control);
 
+//! Get the pressed/not pressed state
+//! @return	Returns true if control is pressed (down), false if up
+bool Control_GetPressed(Control* the_control);
+
 int8_t Control_GetGroup(Control* the_control);
 
 //! Get the next control in the chain
