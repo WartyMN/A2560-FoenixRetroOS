@@ -128,7 +128,7 @@ void EventManager_GenerateRandomEvent(void)
 	//   because no interrupts (of mine) are working, will fake that. 
 	
 	event_kind	the_event_type;
-	event_kind	max_event = keyUp;
+	event_kind	max_event = mouseUp;
 	int16_t		x;
 	int16_t		y;
 	uint8_t		x_var;
@@ -510,7 +510,9 @@ EventRecord* EventManager_WaitForEvent(event_mask the_mask)
 					// TODO: think about whether the system should eat the mouseDown event if over a control
 					if (the_event->control_)
 					{
-						Control_SetPressed(the_event->control_, true);
+						DEBUG_OUT(("%s %d: ** control '%s' (id=%i) moused down!", __func__, __LINE__, the_event->control_->caption_, the_event->control_->id_));
+						Window_SetSelectedControl(the_event->window_, the_event->control_);
+						//Control_SetPressed(the_event->control_, true);
 					}
 				}
 				
@@ -547,12 +549,16 @@ EventRecord* EventManager_WaitForEvent(event_mask the_mask)
 				{
 					if (Control_GetPressed(the_event->control_))
 					{
-						DEBUG_OUT(("%s %d: found a control, and it was pressed!", __func__, __LINE__));
-						Control_SetPressed(the_event->control_, false);
+						DEBUG_OUT(("%s %d: ** control '%s' (id=%i) was down, now up!", __func__, __LINE__, the_event->control_->caption_, the_event->control_->id_));
+						//Control_SetPressed(the_event->control_, false);
 						EventManager_AddEvent(controlClicked, -1, the_event->x_, the_event->y_, 0L, the_event->window_, the_event->control_);
 						skip_this_event = true;					
 					}
 				}
+				
+				// either way, there should be no more selected control
+				Window_SetSelectedControl(the_event->window_, NULL);
+				
 				break;
 			
 			case keyDown:

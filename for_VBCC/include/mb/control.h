@@ -60,6 +60,7 @@
 /*****************************************************************************/
 
 #define CONTROL_NO_GROUP			-1	//! For any given control's group_ value, this denotes a control that is not part of any other group
+#define CONTROL_MAX_CAPTION_SIZE	128	//! The maximum length (including terminator) for the caption string
 
 
 /*****************************************************************************/

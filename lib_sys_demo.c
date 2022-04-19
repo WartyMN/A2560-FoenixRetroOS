@@ -347,6 +347,10 @@ void Demo_Font_DrawString(Bitmap* the_bitmap, unsigned int y);
 Bitmap* LoadFakeIcon(int icon_num);
 void OpenMultipleWindows(void);
 void SimulateEvents(void);
+void AddControls(Window* the_window);
+
+// open 2 windows covering most of the screen, side-by-side
+void Open2Windows(void);
 
 
 /*****************************************************************************/
@@ -565,6 +569,51 @@ void ShowWhatYouWantMessage(void)
 }
 
 
+void AddControls(Window* the_window)
+{
+#define BTN_COUNT	14
+	Theme*				the_theme;
+	Control*			button[BTN_COUNT];
+	int					x_offset;
+	int					y_offset;
+	int					width;
+	int					height;
+	char				caption_buff[CONTROL_MAX_CAPTION_SIZE];
+	char*				caption = caption_buff;
+	uint16_t			the_id;
+	uint16_t			group_id;
+	int					i;
+	
+	if ( (the_theme = Sys_GetTheme(global_system)) == NULL)
+	{
+		LOG_ERR(("%s %d: failed to get the current system theme!", __func__ , __LINE__));
+		return;
+	}
+	
+	// create 4 buttons
+
+	// all buttons need to use same height, which is height-of-button-in-the-Theme
+	height = the_theme->flex_width_backdrops_[TEXT_BUTTON].height_; // make a function for getting this from theme. 
+	group_id = 0; // will not be grouping this button with any other buttons
+	
+	width = 280;
+	the_id = 1000; // arbitrary, for use of programmer. manage them though, and keep them unique within any one window
+	x_offset = 10;
+	y_offset = 30;
+	
+	for (i = 0; i < BTN_COUNT; i++)
+	{
+		sprintf(caption, "Button #%i", i+1);
+		button[i] = Window_AddNewControl(the_window, TEXT_BUTTON, width, height, x_offset, y_offset, H_ALIGN_LEFT, V_ALIGN_TOP, caption, the_id++, group_id);
+		Control_SetPressed(button[i], CONTROL_UP);
+		y_offset += 30;		
+	}
+		
+	// temporary until event handler is written: tell system to render the screen and all windows
+	Sys_Render(global_system);	
+}
+
+
 void OpenMultipleWindows(void)
 {
 	int					win_count = 4;
@@ -579,10 +628,6 @@ void OpenMultipleWindows(void)
 	
 	srand(sys_time_jiffies());
 	//srand(time(NULL));   // Initialization, should only be called once.
-	
-	DEBUG_OUT(("%s %d: Setting graphics mode...", __func__, __LINE__));
-
-	Sys_SetModeGraphics(global_system);
 	
 	if ( (the_win_template = Window_GetNewWinTemplate(the_win_title)) == NULL)
 	{
@@ -626,6 +671,55 @@ void OpenMultipleWindows(void)
 
 	// declare the window to be visible
 	Window_SetVisible(the_window[4], true);
+}
+
+
+// open 2 windows covering most of the screen, side-by-side
+void Open2Windows(void)
+{
+	int					win_count = 2;
+	Window*				the_window[2];
+	NewWinTemplate*		the_win_template;
+	int					max_width = 300;
+	int					max_height = 460;
+	char				title_buff[WINDOW_MAX_WINTITLE_SIZE];
+	char*				the_win_title = title_buff;
+	int					win_num;
+	int					random_num;
+	
+	srand(sys_time_jiffies());
+	//srand(time(NULL));   // Initialization, should only be called once.
+		
+	if ( (the_win_template = Window_GetNewWinTemplate(the_win_title)) == NULL)
+	{
+		LOG_ERR(("%s %d: Could not get a new window template", __func__ , __LINE__));
+		return;
+	}	
+	// note: all the default values are fine for us in this case.
+	
+	for (win_num = 0; win_num < win_count; win_num++)
+	{
+		sprintf(the_win_title, "Window #%i", win_num+1);
+	
+		the_win_template->title_ = the_win_title;	// Window_GetNewWinTemplate doesn't alloc/copy; Window_New does.
+		the_win_template->x_ = 10 + (max_width + 10) * win_num;
+		the_win_template->y_ = 10;
+		the_win_template->width_ = max_width;
+		the_win_template->height_ = max_height;
+
+		if ( (the_window[win_num] = Window_New(the_win_template)) == NULL)
+		{
+			DEBUG_OUT(("%s %d: Couldn't instantiate a window", __func__, __LINE__));
+			return;
+		}
+		
+		// add controls to the window
+		AddControls(the_window[win_num]);
+	
+		// declare the window to be visible
+		Window_SetVisible(the_window[win_num], true);
+	}
+	
 }
 
 
@@ -715,6 +809,11 @@ void SimulateEvents(void)
 				
 				break;
 			
+			case controlClicked:
+				DEBUG_OUT(("%s %d: controlClicked event: %c", __func__, __LINE__, the_event->code_));
+				
+				break;
+				
 			default:
 				
 				break;
@@ -738,7 +837,9 @@ void RunDemo(void)
 	
 	//ShowWhatYouWantMessage();
 	
-	OpenMultipleWindows();
+	//OpenMultipleWindows();
+	
+	Open2Windows();
 	
 	// temporary until event handler is written: tell system to render the screen and all windows
 	Sys_Render(global_system);

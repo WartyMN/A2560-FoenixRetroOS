@@ -902,6 +902,30 @@ NewWinTemplate* Window_GetNewWinTemplate(char* the_win_title)
 bool Window_SetControlState(Window* the_window, uint16_t the_control_id);
 
 
+//! Set the passed control as the currently selected control and unselect any previously selected control
+//! @return	Returns false on any error
+bool Window_SetSelectedControl(Window* the_window, Control* the_control)
+{
+	Control*	last_control_in_window;
+	
+	if ( the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return false;
+	}
+	
+	if (the_window->selected_control_ != NULL)
+	{
+		Control_SetPressed(the_window->selected_control_, false);
+	}
+	
+	the_window->selected_control_ = the_control;
+	Control_SetPressed(the_control, true);
+	
+	return true;
+}
+
+
 //! Add the passed control to the window's list of controls
 //! @return	Returns false in any error condition
 bool Window_AddControl(Window* the_window, Control* the_control)
@@ -1017,6 +1041,20 @@ Control* Window_GetRootControl(Window* the_window)
 	}
 	
 	return the_window->root_control_;
+}
+
+
+//! Get the control listed as the currently selected control.
+//! @return	Returns a control pointer, or NULL on any error, or if there is no selected control currently
+Control* Window_GetSelectedControl(Window* the_window)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return NULL;
+	}
+	
+	return the_window->selected_control_;
 }
 
 
@@ -1419,8 +1457,8 @@ void Window_GlobalToLocal(Window* the_window, int16_t* x, int16_t* y)
 		Sys_Destroy(&global_system); // crash early, crash often
 	}
 	
-	*x = *x - the_window->x_ - the_window->content_rect_.MinX;
-	*y = *y - the_window->y_ - the_window->content_rect_.MinY;
+	*x = *x - the_window->x_;
+	*y = *y - the_window->y_;
 }
 
 
@@ -1433,8 +1471,8 @@ void Window_LocalToGlobal(Window* the_window, int16_t* x, int16_t* y)
 		Sys_Destroy(&global_system); // crash early, crash often
 	}
 	
-	*x = *x + the_window->x_ + the_window->content_rect_.MinX;
-	*y = *y + the_window->y_ + the_window->content_rect_.MinY;
+	*x = *x + the_window->x_;
+	*y = *y + the_window->y_;
 }
 
 
@@ -1486,12 +1524,12 @@ bool Window_SetColor(Window* the_window, uint8_t the_color)
 }
 
 
-//! Set the "pen" position within the content area, based on global coordinates
+//! Set the local "pen" position within the window, based on global coordinates
 //! This also sets the pen position of the window's bitmap
 //! This is the location that the next pen-based graphics function will use for a starting location
 //! @param	the_window: reference to a valid Window object.
-//! @param	x: the global horizontal position to be converted to window content-local. Will be clipped to the edges.
-//! @param	y: the global vertical position to be converted to window content-local. Will be clipped to the edges.
+//! @param	x: the global horizontal position to be converted to window-local. Will be clipped to the edges.
+//! @param	y: the global vertical position to be converted to window-local. Will be clipped to the edges.
 //! @return Returns false on any error condition
 bool Window_SetPenXYFromGlobal(Window* the_window, signed int x, signed int y)
 {
@@ -1503,8 +1541,8 @@ bool Window_SetPenXYFromGlobal(Window* the_window, signed int x, signed int y)
 	
 	DEBUG_OUT(("%s %d: window global rect: %i, %i - %i, %i", __func__ , __LINE__, the_window->global_rect_.MinX, the_window->global_rect_.MinY, the_window->global_rect_.MaxX, the_window->global_rect_.MaxY));
 	DEBUG_OUT(("%s %d: x/y before making local: %i, %i", __func__ , __LINE__, x, y));
-	x -= the_window->x_ - the_window->content_rect_.MinX;
-	y -= the_window->y_ - the_window->content_rect_.MinY;
+	x -= the_window->x_;
+	y -= the_window->y_;
 	DEBUG_OUT(("%s %d: x/y after making local: %i, %i", __func__ , __LINE__, x, y));
 	DEBUG_OUT(("%s %d: content rect: %i, %i - %i, %i", __func__ , __LINE__, the_window->content_rect_.MinX, the_window->content_rect_.MinY, the_window->content_rect_.MaxX, the_window->content_rect_.MaxY));
 	

@@ -166,6 +166,7 @@ struct Window
 	Window*					parent_window_;					// can be NULL. used for requesters that are spawned from a specific window.
 	Window*					child_window_;					// can be NULL. used when a window spawns a requester. (This is the requester). NULLs out again when requester is closed. 
 	Control*				root_control_;					// first control in the window
+	Control*				selected_control_;				// the currently selected control for the window. Only 1 can be selected per window. No guarantee that any are selected.
 
 // 	MouseTracker*			mouse_tracker_;					// tracks mouse up/down points within this window
 // 	Window*					zoom_to_window_;				// the window that contains the zoom_to_file, so we can get offset to global screen coords
@@ -232,6 +233,10 @@ NewWinTemplate* Window_GetNewWinTemplate(char* the_win_title);
 
 bool Window_SetControlState(Window* the_window, uint16_t the_control_id);
 
+//! Set the passed control as the currently selected control and unselect any previously selected control
+//! @return	Returns false on any error
+bool Window_SetSelectedControl(Window* the_window, Control* the_control);
+
 //! Add the passed control to the window's list of controls
 //! @return	Returns false in any error condition
 bool Window_AddControl(Window* the_window, Control* the_control);
@@ -247,6 +252,12 @@ Control* Window_AddNewControl(Window* the_window, control_type the_type, int wid
 
 
 Control* Window_GetRootControl(Window* the_window);
+
+//! Get the control listed as the currently selected control.
+//! @return	Returns a control pointer, or NULL on any error, or if there is no selected control currently
+Control* Window_GetSelectedControl(Window* the_window);
+
+
 //! Find and return the last control in the window's chain of controls
 //! This corresponds to the first control with a NULL value for next_
 Control* Window_GetLastControl(Window* the_window);
@@ -346,12 +357,12 @@ bool Window_SetFont(Window* the_window, Font* the_font);
 //! @return Returns false on any error condition
 bool Window_SetColor(Window* the_window, uint8_t the_color);
 
-//! Set the "pen" position within the content area, based on global coordinates
+//! Set the local "pen" position within the window, based on global coordinates
 //! This also sets the pen position of the window's bitmap
 //! This is the location that the next pen-based graphics function will use for a starting location
 //! @param	the_window: reference to a valid Window object.
-//! @param	x: the global horizontal position to be converted to window content-local. Will be clipped to the edges.
-//! @param	y: the global vertical position to be converted to window content-local. Will be clipped to the edges.
+//! @param	x: the global horizontal position to be converted to window-local. Will be clipped to the edges.
+//! @param	y: the global vertical position to be converted to window-local. Will be clipped to the edges.
 //! @return Returns false on any error condition
 bool Window_SetPenXYFromGlobal(Window* the_window, signed int x, signed int y);
 

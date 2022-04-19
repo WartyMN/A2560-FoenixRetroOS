@@ -290,6 +290,21 @@ Control* Control_New(ControlTemplate* the_template, Window* the_window, Rectangl
 	}
 	LOG_ALLOC(("%s %d:	__ALLOC__	the_control	%p	size	%i", __func__ , __LINE__, the_control, sizeof(Control)));
 
+	// copy caption; not all controls will have a caption
+	if (the_template->caption_ != NULL)
+	{
+		if ( (the_control->caption_ = General_StrlcpyWithAlloc(the_template->caption_, CONTROL_MAX_CAPTION_SIZE)) == NULL)
+		{
+			LOG_ERR(("%s %d: could not allocate memory for the control's caption string", __func__ , __LINE__));
+			goto error;
+		}
+		DEBUG_OUT(("%s %d:	__ALLOC__	the_control->caption_	%p	size	%i		'%s'", __func__ , __LINE__, the_control->caption_, General_Strnlen(the_control->caption_, CONTROL_MAX_CAPTION_SIZE) + 1, the_control->caption_));
+	}
+	else
+	{
+		the_control->caption_ = NULL;
+	}
+
 	// copy template info in before localizing to the window
 	the_control->type_ = the_template->type_;
 	the_control->h_align_ = the_template->h_align_;
@@ -304,7 +319,6 @@ Control* Control_New(ControlTemplate* the_template, Window* the_window, Rectangl
 	the_control->image_[CONTROL_INACTIVE][CONTROL_DOWN] = the_template->image_[CONTROL_INACTIVE][CONTROL_DOWN];
 	the_control->image_[CONTROL_ACTIVE][CONTROL_UP] = the_template->image_[CONTROL_ACTIVE][CONTROL_UP];
 	the_control->image_[CONTROL_ACTIVE][CONTROL_DOWN] = the_template->image_[CONTROL_ACTIVE][CONTROL_DOWN];
-	the_control->caption_ = the_template->caption_;
 	the_control->avail_text_width_ = the_template->avail_text_width_;
 	
 	// at start, all new controls are inactive, value 0, disabled, not-pressed, and invisible
@@ -340,6 +354,13 @@ bool Control_Destroy(Control** the_control)
 		return false;
 	}
 
+	if ((*the_control)->caption_ != NULL)
+	{
+		LOG_ALLOC(("%s %d:	__FREE__	(*the_control)->caption_	%p	size	%i		'%s'", __func__ , __LINE__, (*the_control)->caption_, General_Strnlen((*the_control)->caption_, CONTROL_MAX_CAPTION_SIZE) + 1, (*the_control)->caption_));
+		f_free((*the_control)->caption_, MEM_STANDARD);
+		(*the_control)->caption_ = NULL;
+	}
+	
 	LOG_ALLOC(("%s %d:	__FREE__	*the_control	%p	size	%i", __func__ , __LINE__, *the_control, sizeof(Control)));
 	f_free(*the_control, MEM_STANDARD);
 	*the_control = NULL;
