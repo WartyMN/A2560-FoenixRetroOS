@@ -340,6 +340,27 @@ bool Bitmap_Destroy(Bitmap** the_bitmap)
 
 // **** Block copy functions ****
 
+//! Blit a rect from source bitmap to distination bitmap
+//! This is a wrapper around Bitmap_Blit()
+//! The source and destination bitmaps can be the same: you can use this to copy a chunk of pixels from one part of a screen to another. If the destination location cannot fit the entirety of the copied rectangle, the copy will be truncated, but will not return an error. 
+//! @param src_bm: the source bitmap. It must have a valid address within the VRAM memory space.
+//! @param dst_bm: the destination bitmap. It must have a valid address within the VRAM memory space. It can be the same bitmap as the source.
+//! @param src_rect: the rectangle from the source bitmap to be blitted to the target bitmap
+//! @param dst_x, dst_y: the location within the destination bitmap to copy pixels to. May be negative.
+bool Bitmap_BlitRect(Bitmap* src_bm, Rectangle src_rect, Bitmap* dst_bm, int dst_x, int dst_y)
+{
+	int		width;
+	int		height;
+	
+	// LOGIC: validation checks will be done by Bitmap_Blit, no need to check them here too
+	
+	width = src_rect.MaxX - src_rect.MinX + 1;
+	height = src_rect.MaxY - src_rect.MinY + 1;
+	
+	return Bitmap_Blit(src_bm, src_rect.MinX, src_rect.MinY, dst_bm, dst_x, dst_y, width, height);
+}
+
+
 //! Blit from source bitmap to distination bitmap. 
 //! The source and destination bitmaps can be the same: you can use this to copy a chunk of pixels from one part of a screen to another. If the destination location cannot fit the entirety of the copied rectangle, the copy will be truncated, but will not return an error. 
 //! @param src_bm: the source bitmap. It must have a valid address within the VRAM memory space.
@@ -1259,7 +1280,7 @@ bool Bitmap_DrawBoxCoords(Bitmap* the_bitmap, signed int x1, signed int y1, sign
 	signed int	dy;
 	signed int	dx;
 
-	//DEBUG_OUT(("%s %d: x1=%i, y1=%i, x2=%i, y2=%i, the_color=%i", __func__, __LINE__, x1, y1, x2, y2, the_color));
+	DEBUG_OUT(("%s %d: x1=%i, y1=%i, x2=%i, y2=%i, the_color=%i", __func__, __LINE__, x1, y1, x2, y2, the_color));
 	
 	if (the_bitmap == NULL)
 	{
@@ -1275,19 +1296,19 @@ bool Bitmap_DrawBoxCoords(Bitmap* the_bitmap, signed int x1, signed int y1, sign
 	
 	if (!Bitmap_ValidateXY(the_bitmap, x2, y2))
 	{
-		LOG_ERR(("%s %d: illegal coordinate", __func__, __LINE__));
+		LOG_ERR(("%s %d: illegal coordinate %i, %i", __func__, __LINE__, x2, y2));
 		return false;
 	}
 
 	if (x1 > x2 || y1 > y2)
 	{
-		LOG_ERR(("%s %d: illegal coordinates", __func__, __LINE__));
+		LOG_ERR(("%s %d: illegal coordinates %i to %i, %i to %i", __func__, __LINE__, x1, x2, y1, y2));
 		return false;
 	}
 
 	// add 1 to line len, because desired behavior is a box that connects fully to the passed coords
-	dx = x2 - x1 + 1;
-	dy = y2 - y1 + 1;
+	dx = x2 - x1 + 0;
+	dy = y2 - y1 + 0;
 	
 	if (!Bitmap_DrawHLine(the_bitmap, x1, y1, dx, the_color))
 	{

@@ -192,7 +192,7 @@ void Window_ConfigureStructureRects(Window* the_window)
 	
 		the_window->titlebar_rect_.MaxY = the_window->titlebar_rect_.MinY + the_theme->titlebar_height_;
 		the_window->titlebar_rect_.MinX = 0;
-		the_window->titlebar_rect_.MaxX = the_window->width_ - 1;
+		the_window->titlebar_rect_.MaxX = the_window->width_;
 	
 
 		// LOGIC for iconbar placement:
@@ -212,8 +212,8 @@ void Window_ConfigureStructureRects(Window* the_window)
 			}
 
 			the_window->iconbar_rect_.MaxY = the_window->iconbar_rect_.MinY + the_theme->iconbar_height_;
-			the_window->iconbar_rect_.MinX = 0;
-			the_window->iconbar_rect_.MaxX = the_window->width_ - 1;
+			the_window->iconbar_rect_.MinX = 1;							// inset iconbar by 1 > it does not need to overwrite outer border
+			the_window->iconbar_rect_.MaxX = the_window->width_ - 1;	// inset iconbar by 1 > it does not need to overwrite outer border
 		}
 		else
 		{
@@ -1198,7 +1198,7 @@ void Window_Render(Window* the_window)
 	}
 
 	// blit to screen
-	Bitmap_Blit(the_window->bitmap_, 0, 0, global_system->screen_[ID_CHANNEL_B]->bitmap_, the_window->x_, the_window->y_, the_window->width_, the_window->height_);
+	Bitmap_BlitRect(the_window->bitmap_, the_window->overall_rect_, global_system->screen_[ID_CHANNEL_B]->bitmap_, the_window->x_, the_window->y_);
 
 }
 

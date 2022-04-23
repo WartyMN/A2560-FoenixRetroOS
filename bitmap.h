@@ -128,6 +128,15 @@ bool Bitmap_Destroy(Bitmap** the_bitmap);
 
 // **** Block copy functions ****
 
+//! Blit a rect from source bitmap to distination bitmap
+//! This is a wrapper around Bitmap_Blit()
+//! The source and destination bitmaps can be the same: you can use this to copy a chunk of pixels from one part of a screen to another. If the destination location cannot fit the entirety of the copied rectangle, the copy will be truncated, but will not return an error. 
+//! @param src_bm: the source bitmap. It must have a valid address within the VRAM memory space.
+//! @param dst_bm: the destination bitmap. It must have a valid address within the VRAM memory space. It can be the same bitmap as the source.
+//! @param src_rect: the rectangle from the source bitmap to be blitted to the target bitmap
+//! @param dst_x, dst_y: the location within the destination bitmap to copy pixels to. May be negative.
+bool Bitmap_BlitRect(Bitmap* src_bm, Rectangle src_rect, Bitmap* dst_bm, int dst_x, int dst_y);
+
 //! Blit from source bitmap to distination bitmap. 
 //! The source and destination bitmaps can be the same: you can use this to copy a chunk of pixels from one part of a screen to another. If the destination location cannot fit the entirety of the copied rectangle, the copy will be truncated, but will not return an error. 
 //! @param src_bm: the source bitmap. It must have a valid address within the VRAM memory space.

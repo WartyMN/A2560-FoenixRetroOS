@@ -77,6 +77,7 @@ void Demo_Bitmap_DrawBoxCoords(void);
 void Demo_Bitmap_DrawRoundBox(void);
 void Demo_Bitmap_DrawCircle(void);
 void Demo_Bitmap_Blit1(void);
+void Demo_Bitmap_BlitRect(void);
 void Demo_Bitmap_ScreenResolution1(void);
 void Demo_Bitmap_ScreenResolution2(void);
 
@@ -432,6 +433,49 @@ void Demo_Bitmap_Blit1(void)
 }
 
 
+void Demo_Bitmap_BlitRect(void)
+{
+	signed int		box_height = 2;
+	signed int		box_width = 2;
+	signed int		color = 1;
+	signed int		i;
+	Bitmap*			src_bm;
+	Bitmap*			dst_bm;
+	Rectangle		src_rect;
+
+	ShowDescription("Bitmap_BlitRect -> Copy a rectange of pixels from one bitmap to another");	
+
+	// draw 30 horizontal bands of color to help judge blit effects
+	
+	for (i = 0; i < 30; i++)
+	{
+		Bitmap_FillBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, 0, box_height * i, box_width * i, box_height, color);		
+		color += 4;
+	}
+	
+ 	Bitmap_DrawCircle(global_system->screen_[ID_CHANNEL_B]->bitmap_, 25, 25, 12, SYS_COLOR_RED1);
+	Bitmap_DrawCircle(global_system->screen_[ID_CHANNEL_B]->bitmap_, 25, 25, 15, SYS_COLOR_GREEN1);
+	Bitmap_DrawCircle(global_system->screen_[ID_CHANNEL_B]->bitmap_, 25, 25, 20, SYS_COLOR_BLUE1);
+
+	// copy bits of this screen to other parts of the Screen
+	src_bm = Sys_GetScreenBitmap(global_system, ID_CHANNEL_B);
+	dst_bm = Sys_GetScreenBitmap(global_system, ID_CHANNEL_B);
+	
+	src_rect.MinX = 0;
+
+	for (i = 0; i < 30; i++)
+	{
+		src_rect.MaxX = box_width * i;
+		src_rect.MinY = box_height * i;
+		src_rect.MaxY = src_rect.MinY + box_height;
+		
+		Bitmap_BlitRect(src_bm, src_rect, dst_bm, 0, 200 + box_height * i);
+	}
+	
+	WaitForUser();
+}
+
+
 // bool Bitmap_Blit(Screen* the_screen, Bitmap* src_bm, int src_x, int src_y, Bitmap* dst_bm, int dst_x, int dst_y, int width, int height);
 
 
@@ -515,14 +559,15 @@ void RunDemo(void)
 // 	
 // 	Demo_Bitmap_DrawLine();
 // 	
-	Demo_Bitmap_DrawBox();
+// 	Demo_Bitmap_DrawBox();
 // 	Demo_Bitmap_DrawBoxCoords();
 
-	Demo_Bitmap_DrawRoundBox();
+// 	Demo_Bitmap_DrawRoundBox();
 	
 // 	Demo_Bitmap_DrawCircle();
 // 	
 // 	Demo_Bitmap_Blit1();
+	Demo_Bitmap_BlitRect();
 // 	
 // 	Demo_Bitmap_ScreenResolution1();
 // 	Demo_Bitmap_ScreenResolution2();

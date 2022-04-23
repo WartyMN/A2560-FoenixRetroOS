@@ -599,6 +599,8 @@ void Control_Render(Control* the_control)
 	//DEBUG_OUT(("%s %d: pbitmap w/h=%i, %i; this MinX/MinY=%i, %i", __func__, __LINE__, the_control->parent_->bitmap_->width_, the_control->parent_->bitmap_->height_, the_control->rect_.MinX, the_control->rect_.MinY));
 	//DEBUG_OUT(("%s %d: control type=%i, active=%i, pressed=%i", __func__, __LINE__, the_control->type_, the_control->active_, the_control->pressed_));
 	//Control_Print(the_control);
+
+	// LOGIC: the control's rect is the in-window coordinates, not a 0,0xheight,width rect local to the Control
 	
 	Bitmap_Blit(the_bitmap, 0, 0, 
 				the_control->parent_win_->bitmap_, 
