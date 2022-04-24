@@ -162,12 +162,18 @@ void* f_calloc(size_t num, size_t size, mem_type the_mem_type)
 {
 	void*			the_ptr;
 	MemoryPool*		the_memory;
+	long			start_ticks;
+	long			end_ticks;
+	
+	start_ticks = sys_time_jiffies();
 	
 	the_memory = (the_mem_type == MEM_STANDARD) ? global_std_pool : global_vram_pool;
 
 	//DEBUG_OUT(("%s %d: starting f_calloc... (%i, %i, %i, %p)", __func__, __LINE__, num, size, the_mem_type, the_memory));
 
 	the_ptr = bgetz(size * num, the_memory);
+
+	end_ticks = sys_time_jiffies();
 
 	//DEBUG_OUT(("%s %d: allocated, ptr=%p", __func__, __LINE__, the_ptr));
 
@@ -178,6 +184,8 @@ void* f_calloc(size_t num, size_t size, mem_type the_mem_type)
 	}
 	LOG_ALLOC(("%s %d:	__ALLOC__	type	%i	size	%i", __func__ , __LINE__, the_mem_type, size * num));
 	
+	DEBUG_OUT(("%s %d: calloc completed in %li ticks", __func__ , __LINE__, end_ticks - start_ticks));
+
 	return the_ptr;
 }
 
@@ -215,15 +223,20 @@ void* f_malloc(size_t size, mem_type the_mem_type)
 void f_free(void* the_ptr, mem_type the_mem_type)
 {
 	MemoryPool*		the_memory;
+	long			start_ticks;
+	long			end_ticks;
 	
+	start_ticks = sys_time_jiffies();
+
 	the_memory = (the_mem_type == MEM_STANDARD) ? global_std_pool : global_vram_pool;
 
 	LOG_ALLOC(("%s %d:	__FREE__	type-%i	%p	size	-", __func__ , __LINE__, the_mem_type, the_ptr));
 
 	brel(the_ptr, the_memory);
+
+	end_ticks = sys_time_jiffies();
+	DEBUG_OUT(("%s %d: free completed in %li ticks", __func__ , __LINE__, end_ticks - start_ticks));
 }
-
-
 
 
 
@@ -638,7 +651,7 @@ void f_free(void* the_ptr, mem_type the_mem_type)
 					 how many buffer allocation attempts
 					 the test program should make. */
 
-#define SizeQuant   4		      /* Buffer allocation size quantum:
+#define SizeQuant   8		      /* Buffer allocation size quantum:
 					 all buffers allocated are a
 					 multiple of this size.  This
 					 MUST be a power of two. */
@@ -647,7 +660,7 @@ void f_free(void* the_ptr, mem_type the_mem_type)
 					 bpoold() function which dumps the
 					 buffers in a buffer pool. */
 
-#define BufValid    1		      /* Define this symbol to enable the
+#define BufValid    0		      /* Define this symbol to enable the
 					 bpoolv() function for validating
 					 a buffer pool. */ 
 
@@ -663,7 +676,7 @@ void f_free(void* the_ptr, mem_type the_mem_type)
 					 buffer, and the total space
 					 currently allocated. */
 
-#define FreeWipe    1		      /* Wipe free buffers to a guaranteed
+#define FreeWipe    0		      /* Wipe free buffers to a guaranteed
 					 pattern of garbage to trip up
 					 miscreants who attempt to use
 					 pointers into released buffers. */

@@ -59,7 +59,7 @@
 #define LOG_LEVEL_2		// warnings
 #define LOG_LEVEL_3		// infos
 #define LOG_LEVEL_4		// debug level info for programmer
-#define LOG_LEVEL_5x		// memory allocation info for programmer
+#define LOG_LEVEL_5		// memory allocation info for programmer
 
 #ifdef LOG_LEVEL_1 
 	#define LOG_ERR(x) General_LogError x

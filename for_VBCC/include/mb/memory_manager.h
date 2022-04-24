@@ -56,6 +56,7 @@
 // will estimate for now
 #define STD_RAM_START	0x00060000
 #define STD_RAM_LEN		0x00300000
+//#define STD_RAM_LEN		0x0000000F
 
 // VRAM is currently only available in VRAM Buffer A on A2560K (2022/03/21)
 #define VRAM_START		0x00800000

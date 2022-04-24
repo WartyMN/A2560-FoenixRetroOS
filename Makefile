@@ -6,7 +6,7 @@ FOENIX = $(DEVA2560)/calypsi-try3/Calypsi-m68k-hello-world/module/Calypsi-m68k-F
 TARGET = $(DEVA2560)/_target_foenix
 
 # Common source files
-LIB_SRCS = lib_sys.c memory_manager.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c
+LIB_SRCS = lib_sys.c memory_manager.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c event.c
 TEST_SRCS = bitmap_test.c font_test.c lib_sys_test.c text_test.c window_test.c general_test.c 
 DEMO_SRCS = bitmap_demo.c font_demo.c lib_sys_demo.c text_demo.c window_demo.c
 
@@ -15,7 +15,7 @@ LIB_MODEL = lc-sd
 
 FOENIX_LIB = $(FOENIX)/foenix-$(LIB_MODEL).a
 A2560U_RULES = $(FOENIX)/linker-files/a2560u-simplified.scm
-A2560K_RULES = $(FOENIX)/linker-files/a2560k-simplified.scm
+A2560K_RULES = $(FOENIX)/linker-files/a2560k-osf.scm
 
 # Object files
 OBJS = $(C_SRCS:%.c=obj/%.o)
@@ -37,17 +37,19 @@ all: headers lib tests demos
 
 headers:
 	@echo "Copying headers to target..."
-	cp lib_sys.h $(TARGET)/include/mb/
 	cp a2560_platform.h $(TARGET)/include/mb/
-	cp memory_manager.h $(TARGET)/include/mb/
-	cp theme.h $(TARGET)/include/mb/
-	cp control.h $(TARGET)/include/mb/
-	cp control_template.h $(TARGET)/include/mb/
-	cp font.h $(TARGET)/include/mb/
-	cp window.h $(TARGET)/include/mb/
-	cp general.h $(TARGET)/include/mb/
-	cp text.h $(TARGET)/include/mb/
 	cp bitmap.h $(TARGET)/include/mb/
+	cp control_template.h $(TARGET)/include/mb/
+	cp control.h $(TARGET)/include/mb/
+	cp event.h $(TARGET)/include/mb/
+	cp font.h $(TARGET)/include/mb/
+	cp general.h $(TARGET)/include/mb/
+	cp lib_sys.h $(TARGET)/include/mb/
+	cp list.h $(TARGET)/include/mb/
+	cp memory_manager.h $(TARGET)/include/mb/
+	cp text.h $(TARGET)/include/mb/
+	cp theme.h $(TARGET)/include/mb/
+	cp window.h $(TARGET)/include/mb/
 
 lib:	$(LIB_OBJS) $(FOENIX_LIB)
 	@echo "Building library..."
@@ -89,5 +91,5 @@ $(FOENIX_LIB):
 
 clean:
 	-rm $(OBJS) $(OBJS:%.o=%.lst) $(OBJS_DEBUG) $(OBJS_DEBUG:%.o=%.lst) $(FOENIX_LIB)
-	-rm -r build_calypsi
+	-rm -r build_calypsi/*
 	-(cd $(FOENIX) ; make clean)

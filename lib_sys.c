@@ -364,7 +364,7 @@ bool Sys_InitSystem(void)
 		LOG_ERR(("%s %d: could not allocate memory to create new list of windows", __func__ , __LINE__));
 		goto error;
 	}
-	LOG_ALLOC(("%s %d:	__ALLOC__	the_system->list_windows_	%p	size	%i", __func__ , __LINE__, the_system->list_windows_, sizeof(List*)));
+	LOG_ALLOC(("%s %d:	__ALLOC__	global_system->list_windows_	%p	size	%i", __func__ , __LINE__, global_system->list_windows_, sizeof(List*)));
 	
 // 	// set the global variable that other classes/libraries need access to.
 // 	global_system = the_system;

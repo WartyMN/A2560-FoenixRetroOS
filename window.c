@@ -1716,6 +1716,8 @@ bool Window_SetFont(Window* the_window, Font* the_font)
 	
 	the_window->pen_font_ = the_font;
 	the_window->bitmap_->font_ = the_font;
+	
+	return true;
 }
 
 
