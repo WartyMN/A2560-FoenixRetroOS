@@ -572,6 +572,7 @@ static void Window_DrawTitlebar(Window* the_window)
 		if (the_control != NULL)
 		{
 			Control_MarkInvalidated(the_control, true);
+			Control_SetActive(the_control, the_window->active_);
 		}
 	}
 }
