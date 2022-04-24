@@ -105,6 +105,7 @@ typedef enum window_base_control_id
 	MINIMIZE_WIDGET_ID 	= 1,
 	NORM_SIZE_WIDGET_ID	= 2,
 	MAXIMIZE_WIDGET_ID	= 3,
+	MAX_BUILT_IN_WIDGET	= 4,
 } window_base_control_id;
 
 /*****************************************************************************/
@@ -143,7 +144,8 @@ struct Window
 	bool					active_;						// keep 1 window as the active one. only active windows get regular updates
 	bool					changes_to_save_;				// starts at false; if window is resized or repositioned, is set to true. used to know if we have to save out to icon file when window is closed.
 	bool					can_resize_;					// if true, window can be stretched or shrunk. If false, the width_ and height_ will be locked.
-	bool					invalidated_;					// if true, the window needs to be completed re-rendered on the next render pass
+	bool					invalidated_;					// if true, the window needs to be completely re-rendered on the next render pass
+	bool					titlebar_invalidated_;			// if true, the titlebar needs to be redrawn and reblitted on the next render pass
 	signed int				x_;								// global horizontal coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
 	signed int				y_;								// global vertical coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
 	Rectangle				global_rect_;					// the global rect describing the total area of the window
@@ -167,6 +169,7 @@ struct Window
 	Window*					child_window_;					// can be NULL. used when a window spawns a requester. (This is the requester). NULLs out again when requester is closed. 
 	Control*				root_control_;					// first control in the window
 	Control*				selected_control_;				// the currently selected control for the window. Only 1 can be selected per window. No guarantee that any are selected.
+	ClipRect*				clip_rect_;						// one or more clipping rects; determines which parts of window need to be blitted to the main screen
 
 // 	MouseTracker*			mouse_tracker_;					// tracks mouse up/down points within this window
 // 	Window*					zoom_to_window_;				// the window that contains the zoom_to_file, so we can get offset to global screen coords
@@ -201,6 +204,14 @@ struct NewWinTemplate
 };
 
 
+struct ClipRect
+{
+	int16_t					x_;								// horizontal coordinate, relative to the parent window
+	int16_t					y_;								// vertical coordinate, relative to the parent window
+	int16_t					width_;
+	int16_t					height_;	
+	ClipRect*				next_;							// link to next clip rect
+};
 
 /*****************************************************************************/
 /*                             Global Variables                              */
@@ -226,6 +237,24 @@ bool Window_Destroy(Window** the_window);
 //! Ensures that all fields have appropriate default values
 //! Calling method must free this after creating a window with it. 
 NewWinTemplate* Window_GetNewWinTemplate(char* the_win_title);
+
+
+
+// **** CLIP RECT MANAGEMENT functions *****
+
+//! Remove and free any clip rects attached to the window
+void Window_ClearClipRects(Window* the_window);
+
+//! Copy the passed rectangle to the window's clip rect collection
+bool Window_AddClipRect(Window* the_window, Rectangle* new_rect);
+
+//! Merge and de-duplicate clip rects
+//! Consolidating the clip rects will happen reduce unnecessary reblitting
+bool Window_MergeClipRects(Window* the_window);
+
+//! Blit each clip rect to the screen, and clear all clip rects when done
+//! This is the actual mechanics of rendering the window to the screen
+bool Window_BlitClipRects(Window* the_window);
 
 
 

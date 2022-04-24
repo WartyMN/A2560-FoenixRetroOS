@@ -147,6 +147,7 @@ struct Control
 	bool					active_;						//! is the control activated or not (in appearance). Does not affect ability to receive events.
 	bool					enabled_;						//! is the control enabled or not. If not enabled, it will not receive events.
 	bool					pressed_;						//! is the control currently in a clicked/pushed/depressed state or not. Drives rendering choice. Does not affect ability to receive events.
+	bool					invalidated_;					// if true, the control needs to be re-drawn and re-blitted in the next render pass
 	int16_t					value_;							//! current value of the control
 	int16_t					min_;							//! minimum allowed value
 	int16_t					max_;							//! maximum allowed value
@@ -252,6 +253,10 @@ void Control_SetActive(Control* the_control, bool is_active);
 
 //! Set the control's pressed/unpressed state
 void Control_SetPressed(Control* the_control, bool is_pressed);
+
+//! Mark the specified control is invalidated or validated
+//! Note: Marking a control as invalidated causes it to be added to the parent window's list of rects to be reblitted to the screen in next render pass
+void Control_MarkInvalidated(Control* the_control, bool invalidated);
 
 bool Control_SetEnabled(Control* the_control, bool is_enabled);
 bool Control_SetValue(Control* the_control, int16_t the_value);

@@ -729,10 +729,11 @@ void SimulateEvents(void)
 	//   simulate having interrupts working, and doing an event loop
 	//   because no interrupts (of mine) are working, will fake that. 
 	
-	bool			exit_app = false;
-	EventRecord*	the_event;
-	Window*			the_window;
-	Control*		the_control;
+	bool				exit_app = false;
+	EventRecord*		the_event;
+	Window*				the_window;
+	Control*			the_control;
+	static Rectangle	the_rect;
 	
 // 	DEBUG_OUT(("%s %d: reached", __func__, __LINE__));
 
@@ -757,6 +758,11 @@ void SimulateEvents(void)
 				{
 					Window_SetPenXYFromGlobal(the_window, the_event->x_, the_event->y_);
 					Window_DrawBox(the_window, 5, 5, SYS_COLOR_GREEN1, true);
+					the_rect.MinX = the_event->x_ - the_window->x_;
+					the_rect.MinY = the_event->y_ - the_window->y_;
+					the_rect.MaxX = the_rect.MinX + 5;
+					the_rect.MaxY = the_rect.MinY + 5;
+					Window_AddClipRect(the_window, &the_rect);
 					Window_Render(the_window);
 					//Sys_Render(global_system);
 				}
@@ -771,6 +777,11 @@ void SimulateEvents(void)
 				{
 					Window_SetPenXYFromGlobal(the_window, the_event->x_, the_event->y_);
 					Window_DrawBox(the_window, 5, 5, SYS_COLOR_RED1, true);
+					the_rect.MinX = the_event->x_ - the_window->x_;
+					the_rect.MinY = the_event->y_ - the_window->y_;
+					the_rect.MaxX = the_rect.MinX + 5;
+					the_rect.MaxY = the_rect.MinY + 5;
+					Window_AddClipRect(the_window, &the_rect);
 
 					if (Window_IsActive(the_window)) // temp: re-render just this window if active. if not, have to re-render all windows or it will jump to foreground
 					{

@@ -122,6 +122,9 @@ void Control_AlignToWindow(Control* the_control)
 	
 	the_control->rect_.MaxY = the_control->rect_.MinY + the_control->height_;
 	
+	// ensure it will get rendered in next pass
+	the_control->invalidated_ = true;
+	
 	//DEBUG_OUT(("%s %d: Control after AlignToWindow...", __func__, __LINE__));
 	//Control_Print(the_control);
 }
@@ -236,6 +239,7 @@ void Control_Print(Control* the_control)
 	DEBUG_OUT(("  active_: %i", 			the_control->active_));
 	DEBUG_OUT(("  enabled_: %i", 			the_control->enabled_));
 	DEBUG_OUT(("  pressed_: %i", 			the_control->pressed_));
+	DEBUG_OUT(("  invalidated_: %i", 		the_control->invalidated_));
 	DEBUG_OUT(("  value_: %i",	 			the_control->value_));
 	DEBUG_OUT(("  min_: %i",	 			the_control->min_));
 	DEBUG_OUT(("  max_: %i", 				the_control->max_));
@@ -246,7 +250,6 @@ void Control_Print(Control* the_control)
 	DEBUG_OUT(("  caption_: %p", 			the_control->caption_));	
 	DEBUG_OUT(("  avail_text_width_: %i", 	the_control->avail_text_width_));
 }
-
 
 
 /*****************************************************************************/
@@ -326,6 +329,8 @@ Control* Control_New(ControlTemplate* the_template, Window* the_window, Rectangl
 	the_control->active_ = false;
 	the_control->enabled_ = false;
 	the_control->pressed_ = false;
+	the_control->invalidated_ = true;
+
 	the_control->value_ = 0;
 	
 	// localize to the parent window
@@ -413,6 +418,9 @@ bool Control_UpdateFromTemplate(Control* the_control, ControlTemplate* the_templ
 		
 	// localize to the parent window
 	Control_AlignToWindow(the_control);
+
+	// ensure it will get rendered in next pass
+	the_control->invalidated_ = true;
 	
 	//Control_Print(the_control);
 	
@@ -447,6 +455,9 @@ void Control_SetActive(Control* the_control, bool is_active)
 	}
 	
 	the_control->active_ = is_active;
+
+	// ensure it will get rendered in next pass
+	the_control->invalidated_ = true;
 }
 
 
@@ -460,8 +471,24 @@ void Control_SetPressed(Control* the_control, bool is_pressed)
 	}
 	
 	the_control->pressed_ = is_pressed;
+
+	// ensure it will get rendered in next pass
+	the_control->invalidated_ = true;
 }
 
+
+//! Mark the specified control is invalidated or validated
+//! Note: Marking a control as invalidated causes it to be added to the parent window's list of rects to be reblitted to the screen in next render pass
+void Control_MarkInvalidated(Control* the_control, bool invalidated)
+{
+	if (the_control == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return;
+	}
+	
+	the_control->invalidated_ = invalidated;
+}
 
 
 // **** Get functions *****
@@ -568,7 +595,7 @@ bool Control_IsLefter(Control* the_control, int16_t* x)
 
 void Control_Render(Control* the_control)
 {
-	Bitmap*		the_bitmap;
+	Bitmap*				the_bitmap;
 	
 	if (the_control == NULL)
 	{
@@ -586,8 +613,9 @@ void Control_Render(Control* the_control)
 	//   For an individual control, "render" consists of blitting it's bitmap onto the parent window's bitmap
 	//   Depending on the state of the control, one of 3 bitmaps will be blitted to the parent window
 	//   If control is set to invisible, none will be rendered
+	//   if a control has not been invalidated since last render, it will not be redrawn/rendered
 	
-	if (the_control->visible_ == false)
+	if (the_control->visible_ == false || the_control->invalidated_ == false)
 	{
 		return;
 	}
@@ -616,6 +644,12 @@ void Control_Render(Control* the_control)
 	{
 		Control_DrawCaption(the_control);
 	}
+	
+	// mark control as non-invalidated
+	the_control->invalidated_ = false;
+	
+	// add this control's rect to the list of clip rects that need to be blitted from window to screen
+	Window_AddClipRect(the_control->parent_win_, &the_control->rect_);
 }
 
 

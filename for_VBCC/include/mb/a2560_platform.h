@@ -313,18 +313,19 @@ typedef enum
 /*****************************************************************************/
 
 // forward declarations
-typedef struct Font Font;
-typedef struct Window Window;
-typedef struct NewWinTemplate NewWinTemplate;
-typedef struct Theme Theme;
-typedef struct Control Control;
-typedef struct ControlTemplate ControlTemplate;
-typedef struct ControlBackdrop ControlBackdrop;
-typedef struct System System;
-typedef struct Bitmap Bitmap;
-typedef struct List List;
-typedef struct EventRecord EventRecord;
-typedef struct EventManager EventManager;
+typedef struct Font Font;						// defined in font.h
+typedef struct Window Window;					// defined in window.h
+typedef struct ClipRect ClipRect;				// defined in window.h
+typedef struct NewWinTemplate NewWinTemplate;	// defined in window.h
+typedef struct Theme Theme;						// defined in theme.h
+typedef struct ControlBackdrop ControlBackdrop;	// defined in theme.h
+typedef struct Control Control;					// defined in control.h
+typedef struct ControlTemplate ControlTemplate;	// defined in control.h
+typedef struct System System;					// defined in lib_sys.h
+typedef struct Bitmap Bitmap;					// defined in bitmap.h
+typedef struct List List;						// defined in list.h
+typedef struct EventRecord EventRecord;			// defined in event.h
+typedef struct EventManager EventManager;		// defined in event.h
 
 
 

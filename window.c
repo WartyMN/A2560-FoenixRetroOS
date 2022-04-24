@@ -90,6 +90,9 @@ static void Window_DrawAll(Window* the_window);
 // draws or redraws the window controls
 static void Window_DrawControls(Window* the_window);
 
+// draws or redraws the titlebar area
+static void Window_DrawTitlebar(Window* the_window);
+
 //! Draws the title text into the titlebar using the active theme's system font
 //! @param	the_window: a valid pointer to a Window
 static void Window_DrawTitle(Window* the_window);
@@ -470,23 +473,12 @@ static void Window_DrawStructure(Window* the_window)
 	
 	the_theme = Sys_GetTheme(global_system);
 
-	if (the_window->active_)
+	if (the_window->titlebar_invalidated_ == true)
 	{
-		Bitmap_FillBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, Theme_GetTitlebarColor(the_theme));
+		Window_DrawTitlebar(the_window);
 	}
-	else
-	{
-		Bitmap_FillBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, Theme_GetInactiveBackColor(the_theme));
-	}
-	
-	if (the_theme->titlebar_outline_)
-	{
-		Bitmap_DrawBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, Theme_GetOutlineColor(the_theme));
-	}
-	
-	Bitmap_DrawBoxRect(the_window->bitmap_, &the_window->overall_rect_, Theme_GetOutlineColor(the_theme));
 
-	Window_DrawTitle(the_window);
+	Bitmap_DrawBoxRect(the_window->bitmap_, &the_window->overall_rect_, Theme_GetOutlineColor(the_theme));
 }
 
 
@@ -523,9 +515,64 @@ static void Window_DrawControls(Window* the_window)
 		this_control->enabled_ = true;
 		this_control->visible_ = true;
 	
-		Control_Render(this_control);
+		if (this_control->invalidated_)
+		{
+			Control_Render(this_control);
+		}
 		
 		this_control = this_control->next_;
+	}
+}
+
+
+// draws or redraws the titlebar area, including close/min/max/normal size controls
+static void Window_DrawTitlebar(Window* the_window)
+{
+	Theme*	the_theme;
+	int		i;
+
+	// LOGIC:
+	//   not checking for valid window, because this is only called by Window_DrawStructure, and it checks validity
+
+	// LOGIC:
+	//   order of rect rendering must be Fill titlebar > Draw overall border rect > draw titlebar rect
+	//   this allows titlebar to overwrite the overall border when it has one, but not have its fill overwrite the overall border if no titlebar border
+	
+	the_theme = Sys_GetTheme(global_system);
+
+	if (the_window->active_)
+	{
+		Bitmap_FillBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, Theme_GetTitlebarColor(the_theme));
+	}
+	else
+	{
+		Bitmap_FillBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, Theme_GetInactiveBackColor(the_theme));
+	}
+
+	if (the_theme->titlebar_outline_)
+	{
+		Bitmap_DrawBoxRect(the_window->bitmap_, &the_window->titlebar_rect_, Theme_GetOutlineColor(the_theme));
+	}
+
+	Window_DrawTitle(the_window);
+	
+	// no longer invalidated
+	the_window->titlebar_invalidated_ = false;
+
+	// add titlebar rect to the list of clip rects that need to be blitted from window to screen
+	Window_AddClipRect(the_window, &the_window->titlebar_rect_);
+	
+	// mark the controls positioned in the title bar as invalid so they get redrawn as well
+	for (i=CLOSE_WIDGET_ID; i < MAX_BUILT_IN_WIDGET; i++)
+	{
+		Control*	the_control;
+		
+		the_control = Window_GetControl(the_window, i);
+		
+		if (the_control != NULL)
+		{
+			Control_MarkInvalidated(the_control, true);
+		}
 	}
 }
 
@@ -541,11 +588,8 @@ static void Window_DrawTitle(Window* the_window)
 	int16_t		chars_that_fit;
 	signed int	pixels_used;
 
-	if (the_window == NULL)
-	{
-		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
-	}
+	// LOGIC:
+	//   not checking for valid window, because this is only called by Window_DrawStructure->Window_DrawTitlebar, and it checks validity
 
 	// Draw window title with system (app) font, being careful to reset to whatever font was before.
 	// title is to be drawn centered vertically within the titlebar Rect
@@ -753,6 +797,7 @@ Window* Window_New(NewWinTemplate* the_win_template)
 	the_window->show_iconbar_ = the_win_template->show_iconbar_;
 	the_window->is_backdrop_ = the_win_template->is_backdrop_;
 	the_window->can_resize_ = the_win_template->can_resize_;
+	the_window->clip_rect_ = NULL;
 
 	if (the_window->can_resize_)
 	{
@@ -768,6 +813,7 @@ Window* Window_New(NewWinTemplate* the_win_template)
 	
 	// all windows start out as invalidated, so that they are rendered fully next render pass
 	the_window->invalidated_ = true;
+	the_window->titlebar_invalidated_ = true;
 	
 	// pen location starts at 0,0 (relative to content area, not to window rect)
 	the_window->pen_x_ = 0;
@@ -892,6 +938,151 @@ NewWinTemplate* Window_GetNewWinTemplate(char* the_win_title)
 }
 
 
+
+
+
+
+
+// **** CLIP RECT MANAGEMENT functions *****
+
+//! Remove and free any clip rects attached to the window
+void Window_ClearClipRects(Window* the_window)
+{
+	ClipRect*	the_clip;
+	ClipRect*	next_clip;
+	
+	if ( the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return;
+	}
+	
+	//DEBUG_OUT(("%s %d: reached", __func__, __LINE__));
+	
+	the_clip = the_window->clip_rect_;
+	
+	while (the_clip)
+	{
+		next_clip = the_clip->next_;
+		
+		DEBUG_OUT(("%s %d: clearing cliprect %p (%i, %i -- %i, %i)", __func__, __LINE__, the_clip, the_clip->x_, the_clip->y_, the_clip->width_, the_clip->height_));
+		
+		f_free(the_clip, MEM_STANDARD);
+		
+		the_clip = next_clip;
+	}
+	
+	the_window->clip_rect_ = NULL;
+	
+	return;
+}
+
+
+//! Copy the passed rectangle to the window's clip rect collection
+bool Window_AddClipRect(Window* the_window, Rectangle* new_rect)
+{
+	ClipRect*	first_clip;
+	ClipRect*	the_clip;
+	
+	if ( the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return false;
+	}
+	
+	if ( new_rect == NULL)
+	{
+		LOG_ERR(("%s %d: passed rect was null", __func__ , __LINE__));
+		return false;
+	}
+	
+	if ( (the_clip = (ClipRect*)f_calloc(1, sizeof(ClipRect), MEM_STANDARD) ) == NULL)
+	{
+		LOG_ERR(("%s %d: could not allocate memory to create new ClipRect", __func__ , __LINE__));
+		return false;
+	}
+	LOG_ALLOC(("%s %d:	__ALLOC__	the_clip	%p	size	%i", __func__ , __LINE__, the_clip, sizeof(ClipRect)));
+
+	// LOGIC:
+	//   controls / etc pass on their window-local coords
+	//   but to blit to screen, we need to correct to global coords
+
+// 	the_clip->rect_.MinX = new_rect->MinX + the_window->x_;
+// 	the_clip->rect_.MaxX = new_rect->MaxX + the_window->x_;
+// 	the_clip->rect_.MinY = new_rect->MinY + the_window->y_;
+// 	the_clip->rect_.MaxY = new_rect->MaxY + the_window->y_;
+	the_clip->x_ = new_rect->MinX;
+	the_clip->y_ = new_rect->MinY;
+	the_clip->width_ = new_rect->MaxX - new_rect->MinX;
+	the_clip->height_ = new_rect->MaxY - new_rect->MinY;
+	
+	//DEBUG_OUT(("%s %d: reached", __func__, __LINE__));
+	
+	first_clip = the_window->clip_rect_;
+	
+	if (first_clip != NULL)
+	{
+		// one or more clips exist, we will insert ours at the head of the list
+		the_clip->next_ = first_clip;
+	}
+	else
+	{
+		the_clip->next_ = NULL;
+	}
+	
+	the_window->clip_rect_ = the_clip;
+	
+	return true;
+}
+
+
+//! Merge and de-duplicate clip rects
+//! Consolidating the clip rects will happen reduce unnecessary reblitting
+//bool Window_MergeClipRects(Window* the_window);
+// need to study more before trying to implement this; looks hairy. 
+
+
+//! Blit each clip rect to the screen, and clear all clip rects when done
+//! This is the actual mechanics of rendering the window to the screen
+bool Window_BlitClipRects(Window* the_window)
+{
+	ClipRect*	the_clip;
+	
+	if ( the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return false;
+	}
+	
+	the_clip = the_window->clip_rect_;
+	
+	while (the_clip)
+	{
+		DEBUG_OUT(("%s %d: blitting cliprect %p (%i, %i -- %i, %i)", __func__, __LINE__, the_clip, the_clip->x_, the_clip->y_, the_clip->width_, the_clip->height_));
+	
+		//Bitmap_BlitRect(the_window->bitmap_, the_clip->rect_, global_system->screen_[ID_CHANNEL_B]->bitmap_, the_window->x_, the_window->y_);
+		//Bitmap_BlitRect(the_window->bitmap_, the_window->overall_rect_, global_system->screen_[ID_CHANNEL_B]->bitmap_, the_window->x_, the_window->y_);
+		Bitmap_Blit(the_window->bitmap_, 
+					the_clip->x_, 
+					the_clip->y_, 
+					global_system->screen_[ID_CHANNEL_B]->bitmap_, 
+					the_clip->x_ + the_window->x_, 
+					the_clip->y_ + the_window->y_, 
+					the_clip->width_, 
+					the_clip->height_
+					);
+		
+		the_clip = the_clip->next_;
+	}
+	
+	// LOGIC: 
+	//   clip rects are one-time usage: once we have blitted them, we never want to blit them again
+	//   we want to clear the decks for the next set of updates
+	
+	Window_ClearClipRects(the_window);
+	
+	return true;
+}
 
 
 
@@ -1178,28 +1369,52 @@ void Window_Render(Window* the_window)
 	the_theme = Sys_GetTheme(global_system);
 	the_pattern = Theme_GetDesktopPattern(the_theme);
 
-	if (the_window->is_backdrop_)
+	if (the_window->visible_ == false)
+	{
+		return;
+	}
+	
+	if (the_window->is_backdrop_ && the_window->invalidated_ == true)
 	{
 		// backdrop window: fill it with its pattern. no controls, borders, etc. 
 		// tile the default theme's background pattern
 		Bitmap_Tile(the_pattern, 0, 0, the_window->bitmap_, the_theme->pattern_width_, the_theme->pattern_height_);
+		the_window->invalidated_ = false;
+		
+		return;
 	}
 	else
 	{
 		// non-backdrop window: render borders, titlebars, controls, etc, as appropriate
 
-		if (the_window->invalidated_ == true)
+		// Re-draw titlebar if invalidated and queue for render
+		// also covers the overall outline of the window if window itself is invalidated
+		if (the_window->invalidated_ == true || the_window->titlebar_invalidated_ == true)
 		{
 			Window_DrawStructure(the_window);
 		}
 
-		// either way, we are currently re-rendering all controls until damage regions/etc are available.
+		// Re-draw any controls that were invalidated and queue them for render
 		Window_DrawControls(the_window);
 	}
 
 	// blit to screen
-	Bitmap_BlitRect(the_window->bitmap_, the_window->overall_rect_, global_system->screen_[ID_CHANNEL_B]->bitmap_, the_window->x_, the_window->y_);
-
+	//Bitmap_BlitRect(the_window->bitmap_, the_window->overall_rect_, global_system->screen_[ID_CHANNEL_B]->bitmap_, the_window->x_, the_window->y_);
+	//Window_AddClipRect(the_window, &the_window->overall_rect_);
+	
+	// if the entire window has had to be redrawn, then don't bother with individual cliprects, just do one for entire window
+	if (the_window->invalidated_ == true)
+	{
+		Window_ClearClipRects(the_window);
+		//Window_AddClipRect(the_window, &the_window->overall_rect_);
+		Bitmap_BlitRect(the_window->bitmap_, the_window->overall_rect_, global_system->screen_[ID_CHANNEL_B]->bitmap_, the_window->x_, the_window->y_);
+		the_window->invalidated_ = false;
+	}
+	else
+	{
+		Window_BlitClipRects(the_window);
+	}
+	
 }
 
 
@@ -1284,6 +1499,7 @@ void Window_SetActive(Window* the_window, bool is_active)
 	}
 	
 	the_window->active_ = is_active;
+	the_window->titlebar_invalidated_ = true;
 }
 
 
@@ -1539,12 +1755,12 @@ bool Window_SetPenXYFromGlobal(Window* the_window, signed int x, signed int y)
 		Sys_Destroy(&global_system); // crash early, crash often
 	}
 	
-	DEBUG_OUT(("%s %d: window global rect: %i, %i - %i, %i", __func__ , __LINE__, the_window->global_rect_.MinX, the_window->global_rect_.MinY, the_window->global_rect_.MaxX, the_window->global_rect_.MaxY));
-	DEBUG_OUT(("%s %d: x/y before making local: %i, %i", __func__ , __LINE__, x, y));
+	//DEBUG_OUT(("%s %d: window global rect: %i, %i - %i, %i", __func__ , __LINE__, the_window->global_rect_.MinX, the_window->global_rect_.MinY, the_window->global_rect_.MaxX, the_window->global_rect_.MaxY));
+	//DEBUG_OUT(("%s %d: x/y before making local: %i, %i", __func__ , __LINE__, x, y));
 	x -= the_window->x_;
 	y -= the_window->y_;
-	DEBUG_OUT(("%s %d: x/y after making local: %i, %i", __func__ , __LINE__, x, y));
-	DEBUG_OUT(("%s %d: content rect: %i, %i - %i, %i", __func__ , __LINE__, the_window->content_rect_.MinX, the_window->content_rect_.MinY, the_window->content_rect_.MaxX, the_window->content_rect_.MaxY));
+	//DEBUG_OUT(("%s %d: x/y after making local: %i, %i", __func__ , __LINE__, x, y));
+	//DEBUG_OUT(("%s %d: content rect: %i, %i - %i, %i", __func__ , __LINE__, the_window->content_rect_.MinX, the_window->content_rect_.MinY, the_window->content_rect_.MaxX, the_window->content_rect_.MaxY));
 	
 	return Window_SetPenXY(the_window, x, y);
 }
