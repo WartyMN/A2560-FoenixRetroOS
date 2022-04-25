@@ -54,13 +54,14 @@
 // if someone configures vlink.cmd (if VBCC) differently, these aren't goint to work
 // also need to account for BSSSIZE of the system
 // will estimate for now
-#define STD_RAM_START	0x00060000
-#define STD_RAM_LEN		0x00300000
-//#define STD_RAM_LEN		0x0000000F
+//#define STD_RAM_START	0x00060000
+//#define STD_RAM_LEN		0x00300000
+#define STD_RAM_LEN		0x0000FFFF
 
 // VRAM is currently only available in VRAM Buffer A on A2560K (2022/03/21)
 #define VRAM_START		0x00800000
-#define VRAM_LEN		0x00BFFFFF - VRAM_START
+//#define VRAM_LEN		0x00BFFFFF - VRAM_START
+#define VRAM_LEN		0x00400000
 
 
 /*****************************************************************************/
