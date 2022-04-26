@@ -158,18 +158,14 @@ void Window_ConfigureStructureRects(Window* the_window)
 	
 	if (the_window->is_backdrop_)
 	{
-		the_window->titlebar_rect_.MinY = 0;
-		the_window->titlebar_rect_.MaxY = 0;
 		the_window->titlebar_rect_.MinX = 0;
 		the_window->titlebar_rect_.MaxX = 0;
 		the_window->titlebar_rect_.MinY = 0;
 		the_window->titlebar_rect_.MaxY = 0;
-		the_window->titlebar_rect_.MinX = 1;
-		the_window->titlebar_rect_.MaxX = 1;
-		the_window->titlebar_rect_.MinY = 0;
-		the_window->titlebar_rect_.MaxY = 0;
-		the_window->titlebar_rect_.MinX = 0;
-		the_window->titlebar_rect_.MaxX = 0;
+		the_window->iconbar_rect_.MinX = 1;
+		the_window->iconbar_rect_.MaxX = 1;
+		the_window->iconbar_rect_.MinY = 0;
+		the_window->iconbar_rect_.MaxY = 0;
 		the_window->content_rect_.MinY = the_window->overall_rect_.MinY;
 		the_window->content_rect_.MaxY = the_window->overall_rect_.MaxY;
 		the_window->content_rect_.MinX = the_window->overall_rect_.MinX;
@@ -391,7 +387,6 @@ static int16_t Window_CalculateTitleSpace(Window* the_window)
 	int16_t		lowest_left = -1;
 	int16_t		lowest_right = -1;
 	int16_t		this_left;
-	int16_t		avail_width;
 	
 	if (the_window == NULL)
 	{
@@ -1098,8 +1093,6 @@ bool Window_SetControlState(Window* the_window, uint16_t the_control_id);
 //! @return	Returns false on any error
 bool Window_SetSelectedControl(Window* the_window, Control* the_control)
 {
-	Control*	last_control_in_window;
-	
 	if ( the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
@@ -1156,7 +1149,6 @@ bool Window_AddControl(Window* the_window, Control* the_control)
 Control* Window_AddNewControlFromTemplate(Window* the_window, ControlTemplate* the_template, uint16_t the_id, uint16_t group_id)
 {
 	Control*			the_control;
-	Control*			last_control_in_window;
 	
 	
 	if ( the_window == NULL)
@@ -1178,7 +1170,7 @@ Control* Window_AddNewControlFromTemplate(Window* the_window, ControlTemplate* t
 		// we failed to add the control to the window, so need to dispose of it or nothing ever will
 		LOG_ERR(("%s %d: control created successfully, but it couldn't be added to the window", __func__ , __LINE__));
 		Control_Destroy(&the_control);
-		return false;
+		return NULL;
 	}
 	
 	return the_control;
@@ -1191,7 +1183,6 @@ Control* Window_AddNewControl(Window* the_window, control_type the_type, int16_t
 {
 	Theme*				the_theme;
 	Control*			the_control;
-	Control*			last_control_in_window;
 	ControlTemplate*	the_template;
 	
 	if ( the_window == NULL)
@@ -1320,7 +1311,6 @@ uint16_t Window_GetControlID(Window* the_window, Control* the_control)
 Control* Window_GetControlAtXY(Window* the_window, int16_t x, int16_t y)
 {
  	Control*	the_control;
- 	bool		in_this_control = false;
 
 	if (the_window == NULL)
 	{
@@ -1337,6 +1327,8 @@ Control* Window_GetControlAtXY(Window* the_window, int16_t x, int16_t y)
 
 	while (the_control != NULL)
 	{
+ 		bool		in_this_control;
+		
 		in_this_control = General_PointInRect(x, y, the_control->rect_);
 		
 		if (in_this_control)

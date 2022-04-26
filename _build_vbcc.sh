@@ -94,7 +94,7 @@ perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/wind
 
 
 # renew doxygen docs
-doxygen
+#doxygen
 
 
 

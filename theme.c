@@ -1890,7 +1890,6 @@ ControlTemplate* Theme_CreateDefaultControlTemplateClose(void)
 ControlTemplate* Theme_CreateDefaultControlTemplateMinimize(void)
 {
 	ControlTemplate*	the_template;
-	Bitmap*				the_bitmap;
 	int16_t				width = 12;
 	int16_t				height = 12;
 	int8_t				is_active;
@@ -1946,7 +1945,6 @@ ControlTemplate* Theme_CreateDefaultControlTemplateMinimize(void)
 ControlTemplate* Theme_CreateDefaultControlTemplateNormSize(void)
 {
 	ControlTemplate*	the_template;
-	Bitmap*				the_bitmap;
 	int16_t				width = 12;
 	int16_t				height = 12;
 	int8_t				is_active;
@@ -2003,7 +2001,6 @@ ControlTemplate* Theme_CreateDefaultControlTemplateNormSize(void)
 ControlTemplate* Theme_CreateDefaultControlTemplateMaximize(void)
 {
 	ControlTemplate*	the_template;
-	Bitmap*				the_bitmap;
 	int16_t				width = 12;
 	int16_t				height = 12;
 	int8_t				is_active;
@@ -2058,7 +2055,6 @@ ControlTemplate* Theme_CreateDefaultControlTemplateMaximize(void)
 ControlTemplate* Theme_CreateControlTemplateFlexWidth(Theme* the_theme, control_type the_type, int16_t width, int16_t height, int16_t x_offset, int16_t y_offset, h_align_type h_align, v_align_type v_align, char* caption)
 {
 	ControlTemplate*	the_template;
-	Bitmap*				the_bitmap;
 	int8_t				is_active;
 	int8_t				is_pushed;
 
@@ -2948,7 +2944,6 @@ Bitmap* Theme_CreateGreenDesktopPattern(Theme* the_theme)
 ControlTemplate* Theme_CreateGreenControlTemplateClose(void)
 {
 	ControlTemplate*	the_template;
-	Bitmap*				the_bitmap;
 	int16_t				width = 14;
 	int16_t				height = 14;
 	int8_t				is_active;
@@ -3004,7 +2999,6 @@ ControlTemplate* Theme_CreateGreenControlTemplateClose(void)
 ControlTemplate* Theme_CreateGreenControlTemplateMinimize(void)
 {
 	ControlTemplate*	the_template;
-	Bitmap*				the_bitmap;
 	int16_t				width = 14;
 	int16_t				height = 14;
 	int8_t				is_active;
@@ -3060,7 +3054,6 @@ ControlTemplate* Theme_CreateGreenControlTemplateMinimize(void)
 ControlTemplate* Theme_CreateGreenControlTemplateNormSize(void)
 {
 	ControlTemplate*	the_template;
-	Bitmap*				the_bitmap;
 	int16_t				width = 14;
 	int16_t				height = 14;
 	int8_t				is_active;
@@ -3116,7 +3109,6 @@ ControlTemplate* Theme_CreateGreenControlTemplateNormSize(void)
 ControlTemplate* Theme_CreateGreenControlTemplateMaximize(void)
 {
 	ControlTemplate*	the_template;
-	Bitmap*				the_bitmap;
 	int16_t				width = 14;
 	int16_t				height = 14;
 	int8_t				is_active;

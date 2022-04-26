@@ -1160,7 +1160,7 @@ void bufdump(void *buf)
 
 		if (dupes > 1)
 		{
-			V printf("     (%u lines (%u bytes) identical to above line skipped)\n", dupes, dupes * 16);
+			V printf("     (%u lines (%u bytes) identical to above line skipped)\n", dupes, (unsigned short)(dupes * (unsigned short)1 * 16));
 		}
 		else if (dupes == 1)
 		{

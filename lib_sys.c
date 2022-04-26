@@ -336,7 +336,6 @@ bool Sys_InitSystem(void)
 	Bitmap*		the_bitmap;
 	Font*		the_system_font;
 	Font*		the_icon_font;
-	Bitmap*		the_pattern;
 	Theme*		the_theme;
 	
 	
@@ -1021,6 +1020,7 @@ Window* Sys_GetNextWindow(System* the_system)
 	{
 		LOG_ERR(("%s %d: couldn't find current window in the list of windows", __func__ , __LINE__));
 		Sys_Destroy(&the_system); // crash early, crash often
+		return NULL; // shut up warnings
 	}
 	
 	next_window_item = current_window_item->next_item_;
@@ -1104,6 +1104,7 @@ Window* Sys_GetPreviousWindow(System* the_system)
 	{
 		LOG_ERR(("%s %d: couldn't find current window in the list of windows", __func__ , __LINE__));
 		Sys_Destroy(&the_system); // crash early, crash often
+		return NULL;
 	}
 	
 	next_window_item = current_window_item->prev_item_;
@@ -1139,7 +1140,6 @@ Window* Sys_GetPreviousWindow(System* the_system)
 Window* Sys_GetWindowAtXY(System* the_system, int16_t x, int16_t y)
 {
  	List*	the_item;
- 	bool	in_this_win = false;
 
  	if (the_system == NULL)
  	{
@@ -1166,6 +1166,7 @@ Window* Sys_GetWindowAtXY(System* the_system, int16_t x, int16_t y)
 
 	while (the_item != NULL)
 	{
+ 		bool		in_this_win;
 		Window*		this_window = (Window*)(the_item->payload_);
 		
 		in_this_win = General_PointInRect(x, y, this_window->global_rect_);
@@ -2134,7 +2135,6 @@ Font* Sys_LoadAppFont(void)
 //! NOTE: this will move to a private Sys function later, once event handling is available
 void Sys_Render(System* the_system)
 {
-	Window*		this_window;
 	int16_t		num_nodes = 0;
 	List*		the_item;
 

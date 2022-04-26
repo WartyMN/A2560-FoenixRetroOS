@@ -138,7 +138,6 @@ static void Control_DrawCaption(Control* the_control)
 {
 	Theme*		the_theme;
 	Font*		the_font;
-	Font*		old_font;
 	int16_t		available_width;
 	int16_t		x_offset;
 	int16_t		x;
@@ -206,12 +205,6 @@ static void Control_DrawCaption(Control* the_control)
 	if (Font_DrawString(the_control->parent_win_->bitmap_, the_control->caption_, chars_that_fit) == false)
 	{
 	}
-
-// 	if (Bitmap_SetFont(the_control->parent_win_->bitmap_, old_font) == false)
-// 	{
-// 		DEBUG_OUT(("%s %d: Couldn't set the bitmap's font back to what it had been", __func__, __LINE__));
-// 		Sys_Destroy(&global_system);	// crash early, crash often
-// 	}
 }
 
 
@@ -543,7 +536,7 @@ bool Control_GetPressed(Control* the_control)
 	if (the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return CONTROL_TYPE_ERROR;
+		return false;
 	}
 	
 	return the_control->pressed_;

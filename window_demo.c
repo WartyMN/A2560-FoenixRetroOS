@@ -217,7 +217,7 @@ void AddControls(Window* the_window)
 	Theme*				the_theme;
 	Control*			button_1;
 	Control*			button_2;
-	Control*			button_3;
+	//Control*			button_3;
 	Control*			button_4;
 	int16_t				x_offset;
 	int16_t				y_offset;
@@ -312,8 +312,6 @@ void RunDemo(void)
 {
 	Window*				the_window;
 	NewWinTemplate*		the_win_template;
-	int16_t				width = 500;
-	int16_t				height = 300;
 	static char*		the_win_title = "My New Window";
 	
 	DEBUG_OUT(("%s %d: Setting graphics mode...", __func__, __LINE__));

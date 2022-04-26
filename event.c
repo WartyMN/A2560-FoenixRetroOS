@@ -131,8 +131,8 @@ void EventManager_GenerateRandomEvent(void)
 	event_kind	max_event = mouseUp;
 	int16_t		x;
 	int16_t		y;
-	uint8_t		x_var;
-	uint8_t		y_var;
+// 	uint8_t		x_var;
+// 	uint8_t		y_var;
 	uint8_t		char_code;
 	
 	the_event_type = (rand() * max_event) / RAND_MAX + 1;
@@ -414,8 +414,6 @@ EventRecord* EventManager_WaitForEvent(event_mask the_mask)
 	EventManager*	the_event_manager;
 	EventRecord*	the_event;
 	uint16_t		meets_mask = 0;
-	bool			skip_this_event = false;
-// 	bool			exit_loop;
 	
 	the_event_manager = Sys_GetEventManager(global_system);
 	
@@ -434,15 +432,14 @@ EventRecord* EventManager_WaitForEvent(event_mask the_mask)
 // 	the_event = EventManager_NextEvent();
 // 	DEBUG_OUT(("%s %d: first event: %i", __func__, __LINE__, the_event->what_));
 // 	
-// 	do 
+
 	while ((the_event = EventManager_NextEvent()) != NULL && meets_mask == 0)
 	{
 		int16_t		local_x;
 		int16_t		local_y;
+		bool		skip_this_event = false;
 		
-// 		exit_loop = false;
 		meets_mask = 0;
-		skip_this_event = false;
 		
 		Event_Print(the_event);
 		
@@ -474,6 +471,12 @@ EventRecord* EventManager_WaitForEvent(event_mask the_mask)
 			
 				the_active_window = Sys_GetActiveWindow(global_system);
 				the_window = Sys_GetWindowAtXY(global_system, the_event->x_, the_event->y_);
+
+				if (the_window == NULL)
+				{
+					LOG_ERR(("%s %d: no window found at %i, %i!", __func__, __LINE__, the_event->x_, the_event->y_));
+					Sys_Destroy(&global_system);
+				}
 				DEBUG_OUT(("%s %d: active window = '%s', clicked window = '%s'", __func__, __LINE__, the_active_window->title_, the_window->title_));
 				
 				if (the_window == NULL)
@@ -528,13 +531,13 @@ EventRecord* EventManager_WaitForEvent(event_mask the_mask)
 			
 				the_active_window = Sys_GetActiveWindow(global_system);
 				the_window = Sys_GetWindowAtXY(global_system, the_event->x_, the_event->y_);
-				DEBUG_OUT(("%s %d: active window = '%s', clicked window = '%s'", __func__, __LINE__, the_active_window->title_, the_window->title_));
 
 				if (the_window == NULL)
 				{
 					LOG_ERR(("%s %d: no window found at %i, %i!", __func__, __LINE__, the_event->x_, the_event->y_));
 					Sys_Destroy(&global_system);
 				}
+				DEBUG_OUT(("%s %d: active window = '%s', clicked window = '%s'", __func__, __LINE__, the_active_window->title_, the_window->title_));
 				
 				the_event->window_ = the_window;
 				
@@ -654,24 +657,8 @@ EventRecord* EventManager_WaitForEvent(event_mask the_mask)
 			EventManager_GenerateRandomEvent();
 			EventManager_GenerateRandomEvent();
 			// TEST ****************
-		}
-		
-		
-// 		the_event = EventManager_NextEvent();
-// 		
-// 		if (the_event == NULL)
-// 		{
-// 			exit_loop = false;
-// 			DEBUG_OUT(("%s %d: event shows NULL??? event=%p", __func__, __LINE__, the_event));
-// 		}
-// 		else
-// 		{
-// 			exit_loop = true;
-// 		}
-// 		DEBUG_OUT(("%s %d: next event: %i, exit_loop=%i", __func__, __LINE__, the_event->what_, exit_loop));
-		
-	} // while ( (the_event = EventManager_NextEvent()) != NULL && (meets_mask == 0) );
-// 	} while ( exit_loop == false );
+		}		
+	}
 	
 	return the_event;
 }
