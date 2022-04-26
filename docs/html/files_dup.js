@@ -13,7 +13,6 @@ var files_dup =
     [ "memory_manager.h", "memory__manager_8h.html", "memory__manager_8h" ],
     [ "minunit.h", "minunit_8h_source.html", null ],
     [ "startup.h", "startup_8h_source.html", null ],
-    [ "text.c", "text_8c.html", "text_8c" ],
     [ "text.h", "text_8h.html", "text_8h" ],
     [ "theme.h", "theme_8h.html", "theme_8h" ],
     [ "window.h", "window_8h.html", "window_8h" ]

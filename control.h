@@ -225,7 +225,7 @@ bool Control_GetPressed(Control* the_control);
 int8_t Control_GetGroup(Control* the_control);
 
 //! Get the next control in the chain
-//! @Return	returns NULL on any error, or if this is the last control in the chain
+//! @return	Returns NULL on any error, or if this is the last control in the chain
 Control* Control_GetNextControl(Control* the_control);
 
 Window* Control_GetParent(Control* the_control);

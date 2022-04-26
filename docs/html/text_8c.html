@@ -233,7 +233,7 @@ Functions</h2></td></tr>
 <p>Copy a full screen of text attributes to an off-screen buffer. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">the_screen</td><td>valid pointer to a configured <a class="el" href="struct_screen.html">Screen</a> object (<a class="el" href="a2560__platform_8h_source.html">a2560_platform.h</a>) </td></tr>
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">the_target_buffer</td><td>valid pointer to a block of memory big enough to hold the attribute data copied from the screen. It must be at least as large as the visible rows X visible columns of the screen. </td></tr>
   </table>
   </dd>
@@ -271,7 +271,7 @@ Functions</h2></td></tr>
 <p>Copy a full screen of attr from an off-screen buffer. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">the_screen</td><td>valid pointer to a configured <a class="el" href="struct_screen.html">Screen</a> object (<a class="el" href="a2560__platform_8h_source.html">a2560_platform.h</a>) </td></tr>
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">the_source_buffer</td><td>valid pointer to attribute value data that will be copied to the screen. It must be at least as large as the visible rows X visible columns of the screen. </td></tr>
   </table>
   </dd>
@@ -309,6 +309,7 @@ Functions</h2></td></tr>
 <p>Copy a full screen of text to an off-screen buffer. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">the_target_buffer</td><td>valid pointer to a block of memory big enough to hold the character data copied from the screen. It must be at least as large as the visible rows X visible columns of the screen. </td></tr>
   </table>
   </dd>
@@ -346,6 +347,7 @@ Functions</h2></td></tr>
 <p>Copy a full screen of text from an off-screen buffer. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">the_source_buffer</td><td>valid pointer to character data that will be copied to the screen. It must be at least as large as the visible rows X visible columns of the screen. </td></tr>
   </table>
   </dd>
@@ -419,6 +421,7 @@ Functions</h2></td></tr>
 <p>Copy a rectangular area of text or attr to or from an off-screen buffer. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">the_buffer</td><td>valid pointer to a block of memory big enough to store (or alternatively act as the source of) the character or attribute data for the specified rectangle of screen memory. </td></tr>
     <tr><td class="paramname">to_screen</td><td>true to copy to the screen from the buffer, false to copy from the screen to the buffer. Recommend using SCREEN_COPY_TO_SCREEN/SCREEN_COPY_FROM_SCREEN. </td></tr>
     <tr><td class="paramname">for_attr</td><td>true to work with attribute data, false to work character data. Recommend using SCREEN_FOR_TEXT_ATTR/SCREEN_FOR_TEXT_CHAR. </td></tr>
@@ -470,6 +473,7 @@ Functions</h2></td></tr>
 <p>Copy a full screen worth of EITHER text or attribute data to OR from an off-screen buffer. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">the_buffer</td><td>valid pointer to a block of memory big enough to store (or alternatively act as the source of) the character or attribute data for the specified screen. It must be at least as large as the visible rows X visible columns of the screen. </td></tr>
     <tr><td class="paramname">to_screen</td><td>true to copy to the screen from the buffer, false to copy from the screen to the buffer. Recommend using SCREEN_COPY_TO_SCREEN/SCREEN_COPY_FROM_SCREEN. </td></tr>
     <tr><td class="paramname">for_attr</td><td>true to work with attribute data, false to work character data. Recommend using SCREEN_FOR_TEXT_ATTR/SCREEN_FOR_TEXT_CHAR. </td></tr>
@@ -551,8 +555,12 @@ Functions</h2></td></tr>
 <p>Draws a basic box based on start coords and width/height, using the specified char and/or attribute for all cells. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
+    <tr><td class="paramname">x</td><td>the starting horizontal position, between 0 and the screen's text_cols_vis_ - 1 </td></tr>
+    <tr><td class="paramname">y</td><td>the starting vertical position, between 0 and the screen's text_rows_vis_ - 1 </td></tr>
     <tr><td class="paramname">width</td><td>width, in character cells, of the rectangle to be drawn </td></tr>
     <tr><td class="paramname">height</td><td>height, in character cells, of the rectangle to be drawn </td></tr>
+    <tr><td class="paramname">the_char</td><td>the character to be used when drawing the box </td></tr>
     <tr><td class="paramname">fore_color</td><td>Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
     <tr><td class="paramname">back_color</td><td>Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
     <tr><td class="paramname">the_draw_choice</td><td>controls the scope of the action, and is one of CHAR_ONLY, ATTR_ONLY, or CHAR_AND_ATTR. See the text_draw_choice enum. </td></tr>
@@ -634,6 +642,12 @@ Functions</h2></td></tr>
 <p>Draws a basic box based on 2 sets of coords, using the specified char and/or attribute for all cells. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
+    <tr><td class="paramname">x1</td><td>the leftmost horizontal position, between 0 and the screen's text_cols_vis_ - 1 </td></tr>
+    <tr><td class="paramname">y1</td><td>the uppermost vertical position, between 0 and the screen's text_rows_vis_ - 1 </td></tr>
+    <tr><td class="paramname">x2</td><td>the rightmost horizontal position, between 0 and the screen's text_cols_vis_ - 1 </td></tr>
+    <tr><td class="paramname">y2</td><td>the lowermost vertical position, between 0 and the screen's text_rows_vis_ - 1 </td></tr>
+    <tr><td class="paramname">the_char</td><td>the character to be used when drawing the box </td></tr>
     <tr><td class="paramname">fore_color</td><td>Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
     <tr><td class="paramname">back_color</td><td>Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
     <tr><td class="paramname">the_draw_choice</td><td>controls the scope of the action, and is one of CHAR_ONLY, ATTR_ONLY, or CHAR_AND_ATTR. See the text_draw_choice enum. </td></tr>
@@ -703,6 +717,11 @@ Functions</h2></td></tr>
 <p>Draws a box based on 2 sets of coords, using the predetermined line and corner "graphics", and the passed colors. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
+    <tr><td class="paramname">x1</td><td>the leftmost horizontal position, between 0 and the screen's text_cols_vis_ - 1 </td></tr>
+    <tr><td class="paramname">y1</td><td>the uppermost vertical position, between 0 and the screen's text_rows_vis_ - 1 </td></tr>
+    <tr><td class="paramname">x2</td><td>the rightmost horizontal position, between 0 and the screen's text_cols_vis_ - 1 </td></tr>
+    <tr><td class="paramname">y2</td><td>the lowermost vertical position, between 0 and the screen's text_rows_vis_ - 1 </td></tr>
     <tr><td class="paramname">fore_color</td><td>Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
     <tr><td class="paramname">back_color</td><td>Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
   </table>
@@ -777,6 +796,7 @@ Functions</h2></td></tr>
 <p>Draws a horizontal line from specified coords, for n characters, using the specified char and/or attribute. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">the_line_len</td><td>The total length of the line, in characters, including the start and end character. </td></tr>
     <tr><td class="paramname">fore_color</td><td>Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
     <tr><td class="paramname">back_color</td><td>Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
@@ -853,6 +873,7 @@ Functions</h2></td></tr>
 <p>Draws a horizontal line from specified coords, for n characters, using the specified char and/or attribute This version uses char-by-char functions, so it is very slow. </p>
 <p >It will be removed before release. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">the_line_len</td><td>The total length of the line, in characters, including the start and end character. </td></tr>
     <tr><td class="paramname">fore_color</td><td>Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
     <tr><td class="paramname">back_color</td><td>Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
@@ -917,6 +938,7 @@ Functions</h2></td></tr>
 <p>Draw a string at a specified x, y coord, also setting the color attributes. </p>
 <p >If it is too long to display on the line it started, it will be truncated at the right edge of the screen. No word wrap is performed. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">the_string</td><td>the null-terminated string to be measured. </td></tr>
     <tr><td class="paramname">fore_color</td><td>Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
     <tr><td class="paramname">back_color</td><td>Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
@@ -998,6 +1020,7 @@ Functions</h2></td></tr>
 <p>Draw a string in a rectangular block on the screen, with wrap. </p>
 <p >If a word can't be wrapped, it will break the word and move on to the next line. So if you pass a rect with 1 char of width, it will draw a vertical line of chars down the screen. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">the_string</td><td>the null-terminated string to be displayed. </td></tr>
     <tr><td class="paramname">fore_color</td><td>Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
     <tr><td class="paramname">back_color</td><td>Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
@@ -1074,6 +1097,7 @@ Functions</h2></td></tr>
 <p>Draws a vertical line from specified coords, for n characters, using the specified char and/or attribute. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">the_line_len</td><td>The total length of the line, in characters, including the start and end character. </td></tr>
     <tr><td class="paramname">fore_color</td><td>Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
     <tr><td class="paramname">back_color</td><td>Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
@@ -1114,6 +1138,7 @@ Functions</h2></td></tr>
 <p>Fill attribute memory for the passed screen. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">the_fill</td><td>either a 1-byte character code, or a 1-byte attribute code (foreground in high nibble, background in low nibble) </td></tr>
   </table>
   </dd>
@@ -1187,6 +1212,7 @@ Functions</h2></td></tr>
 <p>Fill character and attribute memory for a specific box area. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">fore_color</td><td>Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
     <tr><td class="paramname">back_color</td><td>Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
   </table>
@@ -1255,6 +1281,7 @@ Functions</h2></td></tr>
 <p>Fill attribute memory for a specific box area. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">fore_color</td><td>Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
     <tr><td class="paramname">back_color</td><td>Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
   </table>
@@ -1315,6 +1342,12 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Fill character memory for a specific box area. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input. </dd></dl>
 
 </div>
@@ -1390,6 +1423,7 @@ Functions</h2></td></tr>
 <p>Fill character and/or attribute memory for a specific box area This version uses char-by-char functions, so it is very slow. </p>
 <p >It will be removed before release. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">fore_color</td><td>Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
     <tr><td class="paramname">back_color</td><td>Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
     <tr><td class="paramname">the_draw_choice</td><td>controls the scope of the action, and is one of CHAR_ONLY, ATTR_ONLY, or CHAR_AND_ATTR. See the text_draw_choice enum. </td></tr>
@@ -1429,6 +1463,7 @@ Functions</h2></td></tr>
 <p>Fill character memory for the passed screen. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">the_fill</td><td>either a 1-byte character code, or a 1-byte attribute code (foreground in high nibble, background in low nibble) </td></tr>
   </table>
   </dd>
@@ -1470,6 +1505,12 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Get the attribute value at a specified x, y coord. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>returns a 1-byte attribute code (foreground in high nibble, background in low nibble) </dd></dl>
 
 </div>
@@ -1507,6 +1548,12 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Get the background color at a specified x, y coord. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>returns an index (0-15) to the background color LUT </dd></dl>
 
 </div>
@@ -1544,6 +1591,12 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Get the char at a specified x, y coord. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>returns a character code </dd></dl>
 
 </div>
@@ -1581,6 +1634,12 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Get the foreground color at a specified x, y coord. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>returns an index (0-15) to the foreground color LUT </dd></dl>
 
 </div>
@@ -1630,7 +1689,13 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Invert the colors of a rectangular block. </p>
-<p >As this requires sampling each character cell, it is no faster (per cell) to do for entire screen as opposed to a subset box </p><dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input. </dd></dl>
+<p >As this requires sampling each character cell, it is no faster (per cell) to do for entire screen as opposed to a subset box </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input. </dd></dl>
 
 </div>
 </div>
@@ -1747,6 +1812,7 @@ Functions</h2></td></tr>
 <p>Set the attribute value at a specified x, y coord. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">fore_color</td><td>Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
     <tr><td class="paramname">back_color</td><td>Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
   </table>
@@ -1809,6 +1875,7 @@ Functions</h2></td></tr>
 <p>Draw a char at a specified x, y coord, also setting the color attributes. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">fore_color</td><td>Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
     <tr><td class="paramname">back_color</td><td>Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
   </table>
@@ -1857,6 +1924,12 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Set a char at a specified x, y coord. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input. </dd></dl>
 
 </div>
@@ -1890,6 +1963,7 @@ Functions</h2></td></tr>
 <p>Test function to display all 256 font characters. </p>
 <p >Characters are rendered in 8 rows of 32 characters. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">y</td><td>the starting row to draw the font characters. </td></tr>
   </table>
   </dd>
@@ -1927,6 +2001,7 @@ Functions</h2></td></tr>
 <p>replace the current font data with the data at the passed memory buffer </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">new_font_data</td><td>Pointer to 2K (256 characters x 8 lines/bytes each) of font data. Each byte represents one line of an 8x8 font glyph. </td></tr>
   </table>
   </dd>
