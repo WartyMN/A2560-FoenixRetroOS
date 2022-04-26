@@ -144,7 +144,7 @@ static void Control_DrawCaption(Control* the_control)
 	int16_t		x;
 	int16_t		y;
 	int16_t		chars_that_fit;
-	signed int	pixels_used;
+	int16_t		pixels_used;
 	uint8_t		font_color;
 
 	if (the_control == NULL)

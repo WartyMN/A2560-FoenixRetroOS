@@ -66,8 +66,8 @@ void RunDemo(void);
 // various demos
 Font* Demo_Font_LoadFontData(void);
 Font* Demo_Font_LoadHelveticaFontData(void);
-void Demo_Font_ShowChars(Bitmap* the_bitmap, unsigned int x1, unsigned int y);
-void Demo_Font_DrawString(Bitmap* the_bitmap, unsigned int y);
+void Demo_Font_ShowChars(Bitmap* the_bitmap, int16_t x1, int16_t y);
+void Demo_Font_DrawString(Bitmap* the_bitmap, int16_t y);
 void Demo_Font_DrawStringInBox1(Bitmap* the_bitmap);
 
 
@@ -91,10 +91,10 @@ void WaitForUser(void)
 // Draw fancy box on the B screen and display demo description
 void ShowDescription(char* the_message)
 {
-	signed int	x1 = 0;
-	signed int	x2 = global_system->screen_[ID_CHANNEL_B]->text_cols_vis_ - 1;
-	signed int	y1 = 0;
-	signed int	y2 = 5;
+	int16_t		x1 = 0;
+	int16_t		x2 = global_system->screen_[ID_CHANNEL_B]->text_cols_vis_ - 1;
+	int16_t		y1 = 0;
+	int16_t		y2 = 5;
 
 	// draw box and fill contents in prep for next demo description
 	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, FG_COLOR_BLUE, 0);
@@ -528,26 +528,26 @@ Font* Demo_Font_LoadFontData(void)
 // 
 // 		{
 // 			uint16_t*		font_data = the_font->image_table_ + image_offset_index;
-// 			int				row;
+// 			int32_t			row;
 // 			char			temp[512];
 // 			char*			mytemp = temp;
 // 			char*			myorigtemp = temp;
-// 			int				marker = 0;
+// 			int32_t			marker = 0;
 // 			uint8_t			this_bit;
 // 			unsigned char*	write_addr;
 // 	
 // 			//for (row = 7; row < 8; row++)
 // 			for (row = 0; row < the_font->fRectHeight; row++)
 // 			{
-// 				int				j;
+// 				int32_t			j;
 // 
 // 				write_addr = src_bm.addr_ + src_bm.width_ * row;
 // 	
 // 				//for (j = 0; j < the_font->rowWords; j++)
 // 				{
-// 					int		i;
-// 					int		pixels_moved = 0;
-// 					int		pixels_written = 0;
+// 					int32_t	i;
+// 					int32_t	pixels_moved = 0;
+// 					int32_t	pixels_written = 0;
 // 	
 // 					//DEBUG_OUT(("font_data=%u, irow=%i", *font_data, row));
 // 					
@@ -896,12 +896,12 @@ Font* Demo_Font_LoadHelveticaFontData(void)
 
 
 
-void Demo_Font_ShowChars(Bitmap* the_bitmap, unsigned int x1, unsigned int y)
+void Demo_Font_ShowChars(Bitmap* the_bitmap, int16_t x1, int16_t y)
 {
-	Font*			the_font;
-	unsigned int	x2;
-	uint8_t			i;
-	unsigned int	pix_written;
+	Font*		the_font;
+	int16_t		x2;
+	uint16_t	i;
+	int16_t		pix_written;
 	
 	
 	ShowDescription("Font_DrawChar -> draw a single character at the current pen position");	
@@ -931,10 +931,10 @@ void Demo_Font_ShowChars(Bitmap* the_bitmap, unsigned int x1, unsigned int y)
 }
 
 
-void Demo_Font_DrawString(Bitmap* the_bitmap, unsigned int y)
+void Demo_Font_DrawString(Bitmap* the_bitmap, int16_t y)
 {
 	Font*			the_font;
-	unsigned int	x;
+	int16_t			x;
 	uint8_t			row_height;
 	char*			string1 = (char*)"March 17, 2022: hiya world!";
 	char*			string2 = (char*)"This string is too long to fit";
@@ -973,15 +973,15 @@ void Demo_Font_DrawString(Bitmap* the_bitmap, unsigned int y)
 
 void Demo_Font_DrawStringInBox1(Bitmap* the_bitmap)
 {
-	signed int		x;
-	signed int		y;
-	signed int		width;
-	signed int		height;
+	int16_t			x;
+	int16_t			y;
+	int16_t			width;
+	int16_t			height;
 	char*			the_message;
-	signed int		num_chars;
+	int32_t			num_chars;
 	char			wrap_buffer[2048];
 	char*			the_wrap_buffer = wrap_buffer;
-	signed int		margin = 4;
+	int16_t			margin = 4;
 
 	ShowDescription("Font_DrawStringInBox -> Draw a string into the specified box coordinates. Wrap is performed and string is truncated after the specified space used up.");	
 
@@ -1022,8 +1022,8 @@ void RunDemo(void)
 	
 	if (the_font != NULL)
 	{
-		unsigned int	x1;
-		unsigned int	y;
+		int16_t		x1;
+		int16_t		y;
 		
 		the_bitmap->font_ = the_font;
 

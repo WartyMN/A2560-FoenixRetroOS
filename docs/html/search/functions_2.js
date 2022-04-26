@@ -1,11 +1,8 @@
 var searchData=
 [
-  ['f_5fcalloc_0',['f_calloc',['../memory__manager_8h.html#aac2e221337828cd740db078bea315a1e',1,'memory_manager.c']]],
-  ['f_5ffree_1',['f_free',['../memory__manager_8h.html#aebf82d5c7e865e1658cc662b525a749e',1,'memory_manager.c']]],
-  ['f_5fmalloc_2',['f_malloc',['../memory__manager_8h.html#a122fc56ea42ab3400b73a4498efc3f6f',1,'memory_manager.c']]],
-  ['font_5fdrawchar_3',['Font_DrawChar',['../font_8h.html#a50e92e54012b1f553d1f6634b5bda298',1,'font.c']]],
-  ['font_5fdrawstringinbox_4',['Font_DrawStringInBox',['../font_8h.html#af9c3461507780b4f3f9acb8e92ef9851',1,'font.c']]],
-  ['font_5floadfontdata_5',['Font_LoadFontData',['../font_8h.html#ad58d821517200e2db0d2ab0801de0197',1,'font.c']]],
-  ['font_5fmeasurestringwidth_6',['Font_MeasureStringWidth',['../font_8h.html#afc066e38028a4e393e01a42df6511b33',1,'font.c']]],
-  ['font_5fnew_7',['Font_New',['../font_8h.html#a5c721584a39d9c9f41f77a6b826dbe87',1,'font.c']]]
+  ['event_5fnew_0',['Event_New',['../event_8h.html#ac0f1f83e916604fe931fd4fab400fcdc',1,'event.c']]],
+  ['eventmanager_5faddevent_1',['EventManager_AddEvent',['../event_8h.html#ae5744033a61b1efd7fff24e7b151587b',1,'event.c']]],
+  ['eventmanager_5fnew_2',['EventManager_New',['../event_8h.html#acf07ba63a69007bb91d0067a46d20ed2',1,'event.c']]],
+  ['eventmanager_5fnextevent_3',['EventManager_NextEvent',['../event_8h.html#a9701a53a907a72002b4675b702015f88',1,'event.c']]],
+  ['eventmanager_5fwaitforevent_4',['EventManager_WaitForEvent',['../event_8h.html#ac41fbeef16c4d4d712cbd19dce7d6518',1,'event.c']]]
 ];

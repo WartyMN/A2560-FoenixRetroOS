@@ -1,15 +1,11 @@
 var searchData=
 [
-  ['general_5fcomparestringlength_0',['General_CompareStringLength',['../general_8h.html#a75e914e61678fae23b84e22ce27361cd',1,'general.c']]],
-  ['general_5fextractfileextensionfromfilename_1',['General_ExtractFileExtensionFromFilename',['../general_8h.html#a07938c6f1d87889b1195665eefd24389',1,'general.c']]],
-  ['general_5fround_2',['General_Round',['../general_8h.html#a43395f5398a59a82ee72cf41a500131c',1,'general.c']]],
-  ['general_5fstrlcat_3',['General_Strlcat',['../general_8h.html#a859a99b6609f93c025175b258696afba',1,'general.c']]],
-  ['general_5fstrlcpy_4',['General_Strlcpy',['../general_8h.html#a5acad0656288c01f2f4c96f5e6ca0c61',1,'general.c']]],
-  ['general_5fstrlcpywithalloc_5',['General_StrlcpyWithAlloc',['../general_8h.html#a713680694fa24efa6d58916907948703',1,'general.c']]],
-  ['general_5fstrncasecmp_6',['General_Strncasecmp',['../general_8h.html#ada9cbdf74fb211056cce03e559b177e6',1,'general.c']]],
-  ['general_5fstrncmp_7',['General_Strncmp',['../general_8h.html#ac5ed102f96548c97dd63a14b1742bb62',1,'general.c']]],
-  ['general_5fstrnlen_8',['General_Strnlen',['../general_8h.html#aae49d06d93ef7b5d1aeae704a7722822',1,'general.c']]],
-  ['general_5fstrtolower_9',['General_StrToLower',['../general_8h.html#a95ed503ba98211d0e55de13556c980b3',1,'general.c']]],
-  ['general_5ftolower_10',['General_ToLower',['../general_8h.html#aa9ef78619dd4f8a5704da0c13892a3b7',1,'general.c']]],
-  ['general_5fwrapandtrimtexttofit_11',['General_WrapAndTrimTextToFit',['../general_8h.html#a8caa9f7a3d1853cb16b5a7ab11f950ba',1,'general.c']]]
+  ['f_5fcalloc_0',['f_calloc',['../memory__manager_8h.html#aac2e221337828cd740db078bea315a1e',1,'memory_manager.c']]],
+  ['f_5ffree_1',['f_free',['../memory__manager_8h.html#aebf82d5c7e865e1658cc662b525a749e',1,'memory_manager.c']]],
+  ['f_5fmalloc_2',['f_malloc',['../memory__manager_8h.html#a122fc56ea42ab3400b73a4498efc3f6f',1,'memory_manager.c']]],
+  ['font_5fdrawchar_3',['Font_DrawChar',['../font_8h.html#a4a10a57e9a6c426a4bb57a09ca7ab433',1,'font.c']]],
+  ['font_5fdrawstringinbox_4',['Font_DrawStringInBox',['../font_8h.html#a3399c30307c48856ae99bc77e8f67c8e',1,'font.c']]],
+  ['font_5floadfontdata_5',['Font_LoadFontData',['../font_8h.html#ad58d821517200e2db0d2ab0801de0197',1,'font.c']]],
+  ['font_5fmeasurestringwidth_6',['Font_MeasureStringWidth',['../font_8h.html#a7d7cf8da78f6b772ec84b5433c3745b2',1,'font.c']]],
+  ['font_5fnew_7',['Font_New',['../font_8h.html#a5c721584a39d9c9f41f77a6b826dbe87',1,'font.c']]]
 ];

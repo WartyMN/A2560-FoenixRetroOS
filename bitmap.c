@@ -58,22 +58,22 @@
 //! \cond PRIVATE
 
 // validate the coordinates are within the bounds of the specified screen
-bool Bitmap_ValidateXY(Bitmap* the_bitmap, signed int x, signed int y);
+bool Bitmap_ValidateXY(Bitmap* the_bitmap, int16_t x, int16_t y);
 
 //! Calculate the VRAM location of the specified coordinate within the bitmap
 //! @param	the_bitmap: reference to a valid Bitmap object.
 //! @param	x: the horizontal position, between 0 and bitmap width - 1
 //! @param	y: the vertical position, between 0 and bitmap height - 1
 //! @return Returns a pointer to the VRAM location that corresponds to the passed X, Y, or NULL on any error condition
-unsigned char* Bitmap_GetMemLocForXY(Bitmap* the_bitmap, signed int x, signed int y);
+unsigned char* Bitmap_GetMemLocForXY(Bitmap* the_bitmap, int16_t x, int16_t y);
 
 //! Draw 1 to 4 quadrants of a circle
 //! Only the specified quadrants will be drawn. This makes it possible to use this to make round rects, by only passing 1 quadrant.
 //! Based on http://rosettacode.org/wiki/Bitmap/Midpoint_circle_algorithm#C
-bool Bitmap_DrawCircleQuadrants(Bitmap* the_bitmap, signed int x1, signed int y1, signed int radius, unsigned char the_color, bool ne, bool se, bool sw, bool nw);
+bool Bitmap_DrawCircleQuadrants(Bitmap* the_bitmap, int16_t x1, int16_t y1, int16_t radius, uint8_t the_color, bool ne, bool se, bool sw, bool nw);
 
 //! Perform a flood fill starting at the coordinate passed. 
-bool Bitmap_Fill(Bitmap* the_bitmap, signed int x, signed int y, unsigned char the_color);
+bool Bitmap_Fill(Bitmap* the_bitmap, int16_t x, int16_t y, uint8_t the_color);
 
 // **** Debug functions *****
 
@@ -93,10 +93,10 @@ void Bitmap_Print(Bitmap* the_bitmap);
 //! \cond PRIVATE
 
 //! Validate the coordinates are within the bounds of the specified bitmap. 
-bool Bitmap_ValidateXY(Bitmap* the_bitmap, signed int x, signed int y)
+bool Bitmap_ValidateXY(Bitmap* the_bitmap, int16_t x, int16_t y)
 {
-	signed int		max_row;
-	signed int		max_col;
+	int16_t			max_row;
+	int16_t			max_col;
 	
 	max_col = the_bitmap->width_ - 1;
 	max_row = the_bitmap->height_ - 1;
@@ -114,7 +114,7 @@ bool Bitmap_ValidateXY(Bitmap* the_bitmap, signed int x, signed int y)
 //! Only the specified quadrants will be drawn. This makes it possible to use this to make round rects, by only passing 1 quadrant.
 //! NO VALIDATION PERFORMEND ON PARAMETERS. CALLING METHOD MUST VALIDATE.
 //! Based on http://rosettacode.org/wiki/Bitmap/Midpoint_circle_algorithm#C
-bool Bitmap_DrawCircleQuadrants(Bitmap* the_bitmap, signed int x1, signed int y1, signed int radius, unsigned char the_color, bool ne, bool se, bool sw, bool nw)
+bool Bitmap_DrawCircleQuadrants(Bitmap* the_bitmap, int16_t x1, int16_t y1, int16_t radius, uint8_t the_color, bool ne, bool se, bool sw, bool nw)
 {
     int	f;
     int	ddF_x;
@@ -190,10 +190,10 @@ bool Bitmap_DrawCircleQuadrants(Bitmap* the_bitmap, signed int x1, signed int y1
 //! Perform a flood fill starting at the coordinate passed. 
 //! WARNING: this function is recursive, and if applied to a size even 1/10th the size of the screen, it can eat the stack. Either do not use this, or control its usage to just situations you can control. Or set an enormous stack size when building your app.
 //! @param	the_color: a 1-byte index to the current LUT
-bool Bitmap_Fill(Bitmap* the_bitmap, signed int x, signed int y, unsigned char the_color)
+bool Bitmap_Fill(Bitmap* the_bitmap, int16_t x, int16_t y, uint8_t the_color)
 {   
-	int		height;
-	int		width;
+	int16_t	height;
+	int16_t	width;
 	
 	width = the_bitmap->width_;
 	height = the_bitmap->height_;
@@ -242,11 +242,11 @@ void Bitmap_Print(Bitmap* the_bitmap)
 
 //! Create a new bitmap object by allocating space for the bitmap struct in regular memory, and for the graphics, in VRAM
 //! @param	Font: optional font object to associate with the Bitmap. 
-Bitmap* Bitmap_New(signed int width, signed int height, Font* the_font)
+Bitmap* Bitmap_New(int16_t width, int16_t height, Font* the_font)
 {
 	Bitmap*		the_bitmap;
 
-	//DEBUG_OUT(("%s %d: start bitmap creation... (%i, %i, %p)", __func__, __LINE__, width, height, the_font));
+	//DEBUG_OUT(("%s %d: start bitmap creation... (%i x %i, %p)", __func__, __LINE__, width, height, the_font));
 
 	// check width/height for some maximum??
 	// TODO
@@ -347,10 +347,10 @@ bool Bitmap_Destroy(Bitmap** the_bitmap)
 //! @param dst_bm: the destination bitmap. It must have a valid address within the VRAM memory space. It can be the same bitmap as the source.
 //! @param src_rect: the rectangle from the source bitmap to be blitted to the target bitmap
 //! @param dst_x, dst_y: the location within the destination bitmap to copy pixels to. May be negative.
-bool Bitmap_BlitRect(Bitmap* src_bm, Rectangle src_rect, Bitmap* dst_bm, int dst_x, int dst_y)
+bool Bitmap_BlitRect(Bitmap* src_bm, Rectangle src_rect, Bitmap* dst_bm, int16_t dst_x, int16_t dst_y)
 {
-	int		width;
-	int		height;
+	int16_t	width;
+	int16_t	height;
 	
 	// LOGIC: validation checks will be done by Bitmap_Blit, no need to check them here too
 	
@@ -368,11 +368,11 @@ bool Bitmap_BlitRect(Bitmap* src_bm, Rectangle src_rect, Bitmap* dst_bm, int dst
 //! @param src_x, src_y: the upper left coordinate within the source bitmap, for the rectangle you want to copy. May be negative.
 //! @param dst_x, dst_y: the location within the destination bitmap to copy pixels to. May be negative.
 //! @param width, height: the scope of the copy, in pixels.
-bool Bitmap_Blit(Bitmap* src_bm, int src_x, int src_y, Bitmap* dst_bm, int dst_x, int dst_y, int width, int height)
+bool Bitmap_Blit(Bitmap* src_bm, int16_t src_x, int16_t src_y, Bitmap* dst_bm, int16_t dst_x, int16_t dst_y, int16_t width, int16_t height)
 {
 	unsigned char*		the_read_loc;
 	unsigned char*		the_write_loc;
-	int					i;
+	int16_t				i;
 	
 	// TODO: move the 2 checks below to a private common function if other blit functions are added
 	
@@ -449,17 +449,17 @@ bool Bitmap_Blit(Bitmap* src_bm, int src_x, int src_y, Bitmap* dst_bm, int dst_x
 //! @param dst_bm: the destination bitmap. It must have a valid address within the VRAM memory space. It can be the same bitmap as the source.
 //! @param src_x, src_y: the upper left coordinate within the source bitmap, for the tile you want to copy. Must be non-negative.
 //! @param width, height: the size of the tile to be derived from the source bitmap, in pixels.
-bool Bitmap_Tile(Bitmap* src_bm, int src_x, int src_y, Bitmap* dst_bm, int width, int height)
+bool Bitmap_Tile(Bitmap* src_bm, int16_t src_x, int16_t src_y, Bitmap* dst_bm, int16_t width, int16_t height)
 {
 	unsigned char*		the_starting_read_loc;
 	unsigned char*		the_read_loc;
 	unsigned char*		the_write_loc;
-	int					i;
-	int					h_tiles;
-	int					h_rem;
-	int					v_tiles;
-	int					v_rem;
-	int					j;
+	int16_t				i;
+	int16_t				h_tiles;
+	int16_t				h_rem;
+	int16_t				v_tiles;
+	int16_t				v_rem;
+	int16_t				j;
 	
 	
 	// TODO: move the 2 checks below to a private common function if other blit functions are added
@@ -568,17 +568,17 @@ bool Bitmap_Tile(Bitmap* src_bm, int src_x, int src_y, Bitmap* dst_bm, int width
 //! @param dst_bm: the destination bitmap. It must have a valid address within the VRAM memory space. It can be the same bitmap as the source.
 //! @param src_x, src_y: the upper left coordinate within the source bitmap, for the tile you want to copy. Must be non-negative.
 //! @param width, height: the size of the tile to be derived from the source bitmap, in pixels.
-bool Bitmap_TileV2(Bitmap* src_bm, int src_x, int src_y, Bitmap* dst_bm, int width, int height)
+bool Bitmap_TileV2(Bitmap* src_bm, int16_t src_x, int16_t src_y, Bitmap* dst_bm, int16_t width, int16_t height)
 {
 	unsigned char*		the_starting_read_loc;
 	unsigned char*		the_read_loc;
 	unsigned char*		the_write_loc;
-	int					i;
-	int					h_tiles;
-	int					h_rem;
-	int					v_tiles;
-	int					v_rem;
-	int					j;
+	int16_t				i;
+	int16_t				h_tiles;
+	int16_t				h_rem;
+	int16_t				v_tiles;
+	int16_t				v_rem;
+	int16_t				j;
 	
 	
 	// TODO: move the 2 checks below to a private common function if other blit functions are added
@@ -694,17 +694,17 @@ bool Bitmap_TileV2(Bitmap* src_bm, int src_x, int src_y, Bitmap* dst_bm, int wid
 //! @param dst_bm: the destination bitmap. It must have a valid address within the VRAM memory space. It can be the same bitmap as the source.
 //! @param src_x, src_y: the upper left coordinate within the source bitmap, for the tile you want to copy. Must be non-negative.
 //! @param width, height: the size of the tile to be derived from the source bitmap, in pixels.
-bool Bitmap_TileV1(Bitmap* src_bm, int src_x, int src_y, Bitmap* dst_bm, int width, int height)
+bool Bitmap_TileV1(Bitmap* src_bm, int16_t src_x, int16_t src_y, Bitmap* dst_bm, int16_t width, int16_t height)
 {
 	unsigned char*		the_starting_read_loc;
 	unsigned char*		the_read_loc;
 	unsigned char*		the_write_loc;
-	int					i;
-	int					h_tiles;
-	int					h_rem;
-	int					v_tiles;
-	int					v_rem;
-	int					j;
+	int16_t				i;
+	int16_t				h_tiles;
+	int16_t				h_rem;
+	int16_t				v_tiles;
+	int16_t				v_rem;
+	int16_t				j;
 	
 	
 	// TODO: move the 2 checks below to a private common function if other blit functions are added
@@ -831,7 +831,7 @@ bool Bitmap_TileV1(Bitmap* src_bm, int src_x, int src_y, Bitmap* dst_bm, int wid
 // calling function must validate the screen ID before passing!
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return	returns false on any error/invalid input.
-bool Bitmap_FillMemory(Bitmap* the_bitmap, unsigned char the_color)
+bool Bitmap_FillMemory(Bitmap* the_bitmap, uint8_t the_color)
 {
 	unsigned char*	the_write_loc;
 	unsigned long	the_write_len;
@@ -855,7 +855,7 @@ bool Bitmap_FillMemory(Bitmap* the_bitmap, unsigned char the_color)
 //! Fill pixel values for the passed Rectangle object, using the specified LUT value
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return	returns false on any error/invalid input.
-bool Bitmap_FillBoxRect(Bitmap* the_bitmap, Rectangle* the_coords, unsigned char the_color)
+bool Bitmap_FillBoxRect(Bitmap* the_bitmap, Rectangle* the_coords, uint8_t the_color)
 {
 	return Bitmap_FillBox(the_bitmap, the_coords->MinX, the_coords->MinY, the_coords->MaxX - the_coords->MinX, the_coords->MaxY - the_coords->MinY, the_color);
 }
@@ -867,10 +867,10 @@ bool Bitmap_FillBoxRect(Bitmap* the_bitmap, Rectangle* the_coords, unsigned char
 //! @param	height: height, in pixels, of the rectangle to be filled
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return	returns false on any error/invalid input.
-bool Bitmap_FillBox(Bitmap* the_bitmap, signed int x, signed int y, signed int width, signed int height, unsigned char the_color)
+bool Bitmap_FillBox(Bitmap* the_bitmap, int16_t x, int16_t y, int16_t width, int16_t height, uint8_t the_color)
 {
 	unsigned char*	the_write_loc;
-	signed int		max_row;
+	int16_t			max_row;
 
 	if (the_bitmap == NULL)
 	{
@@ -953,7 +953,7 @@ bool Bitmap_SetColor(Bitmap* the_bitmap, uint8_t the_color)
 //! @param	x: the horizontal position, between 0 and bitmap width - 1
 //! @param	y: the vertical position, between 0 and bitmap height - 1
 //! @return Returns false on any error condition
-bool Bitmap_SetXY(Bitmap* the_bitmap, signed int x, signed int y)
+bool Bitmap_SetXY(Bitmap* the_bitmap, int16_t x, int16_t y)
 {
 	if (the_bitmap == NULL)
 	{
@@ -992,7 +992,7 @@ uint8_t Bitmap_GetColor(Bitmap* the_bitmap)
 //! Get the current X position of the pen
 //! @param	the_bitmap: reference to a valid Bitmap object.
 //! @return Returns -1 on any error
-signed int Bitmap_GetX(Bitmap* the_bitmap)
+int16_t Bitmap_GetX(Bitmap* the_bitmap)
 {
 	if (the_bitmap == NULL)
 	{
@@ -1006,7 +1006,7 @@ signed int Bitmap_GetX(Bitmap* the_bitmap)
 //! Get the current Y position of the pen
 //! @param	the_bitmap: reference to a valid Bitmap object.
 //! @return Returns -1 on any error
-signed int Bitmap_GetY(Bitmap* the_bitmap)
+int16_t Bitmap_GetY(Bitmap* the_bitmap)
 {
 	if (the_bitmap == NULL)
 	{
@@ -1039,7 +1039,7 @@ Font* Bitmap_GetFont(Bitmap* the_bitmap)
 //! @param	x: the horizontal position, between 0 and bitmap width - 1
 //! @param	y: the vertical position, between 0 and bitmap height - 1
 //! @return Returns a pointer to the VRAM location that corresponds to the passed X, Y, or NULL on any error condition
-unsigned char* Bitmap_GetMemLocForXY(Bitmap* the_bitmap, signed int x, signed int y)
+unsigned char* Bitmap_GetMemLocForXY(Bitmap* the_bitmap, int16_t x, int16_t y)
 {
 	if (the_bitmap == NULL)
 	{
@@ -1085,7 +1085,7 @@ unsigned char* Bitmap_GetMemLoc(Bitmap* the_bitmap)
 //! Set a char at a specified x, y coord
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return	returns false on any error/invalid input.
-bool Bitmap_SetPixelAtXY(Bitmap* the_bitmap, signed int x, signed int y, unsigned char the_color)
+bool Bitmap_SetPixelAtXY(Bitmap* the_bitmap, int16_t x, int16_t y, uint8_t the_color)
 {
 	unsigned char*	the_write_loc;
 	
@@ -1113,9 +1113,9 @@ bool Bitmap_SetPixelAtXY(Bitmap* the_bitmap, signed int x, signed int y, unsigne
 // **** Get pixel functions *****
 
 
-//! Get the char at a specified x, y coord
-//! @return	returns a character code
-unsigned char Bitmap_GetPixelAtXY(Bitmap* the_bitmap, signed int x, signed int y)
+//! Get the pixel CLUT index at a specified x, y coord
+//! @return	returns an 8-bit CLUT index
+uint8_t Bitmap_GetPixelAtXY(Bitmap* the_bitmap, int16_t x, int16_t y)
 {
 	unsigned char*	the_read_loc;
 	unsigned char	the_color;
@@ -1148,13 +1148,13 @@ unsigned char Bitmap_GetPixelAtXY(Bitmap* the_bitmap, signed int x, signed int y
 //! Draws a line between 2 passed coordinates.
 //! Use for any line that is not perfectly vertical or perfectly horizontal
 //! Based on http://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#C. Used in C128 Lich King. 
-bool Bitmap_DrawLine(Bitmap* the_bitmap, signed int x1, signed int y1, signed int x2, signed int y2, unsigned char the_color)
+bool Bitmap_DrawLine(Bitmap* the_bitmap, int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t the_color)
 {
-	signed int dx;
-	signed int sx;
-	signed int dy;
-	signed int sy;
-	signed int err;
+	int16_t dx;
+	int16_t sx;
+	int16_t dy;
+	int16_t sy;
+	int16_t err;
 
 	if (the_bitmap == NULL)
 	{
@@ -1176,7 +1176,7 @@ bool Bitmap_DrawLine(Bitmap* the_bitmap, signed int x1, signed int y1, signed in
 
 	for(;;)
 	{
-		signed int e2;
+		int16_t e2;
 
 		Bitmap_SetPixelAtXY(the_bitmap, x1, y1, the_color);
 
@@ -1206,7 +1206,7 @@ bool Bitmap_DrawLine(Bitmap* the_bitmap, signed int x1, signed int y1, signed in
 //! Draws a horizontal line from specified coords, for n pixels
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return	returns false on any error/invalid input.
-bool Bitmap_DrawHLine(Bitmap* the_bitmap, signed int x, signed int y, signed int the_line_len, unsigned char the_color)
+bool Bitmap_DrawHLine(Bitmap* the_bitmap, int16_t x, int16_t y, int16_t the_line_len, uint8_t the_color)
 {
 	bool			result;
 	
@@ -1236,9 +1236,9 @@ bool Bitmap_DrawHLine(Bitmap* the_bitmap, signed int x, signed int y, signed int
 //! Draws a vertical line from specified coords, for n pixels
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return	returns false on any error/invalid input.
-bool Bitmap_DrawVLine(Bitmap* the_bitmap, signed int x, signed int y, signed int the_line_len, unsigned char the_color)
+bool Bitmap_DrawVLine(Bitmap* the_bitmap, int16_t x, int16_t y, int16_t the_line_len, uint8_t the_color)
 {
-	unsigned int dy;
+	int16_t		dy;
 
 	//DEBUG_OUT(("%s %d: x=%i, y=%i, the_line_len=%i, the_color=%i", __func__, __LINE__, x, y, the_line_len, the_color));
 	
@@ -1266,7 +1266,7 @@ bool Bitmap_DrawVLine(Bitmap* the_bitmap, signed int x, signed int y, signed int
 //! Draws a rectangle based on the passed Rectangle object, using the specified LUT value
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return	returns false on any error/invalid input.
-bool Bitmap_DrawBoxRect(Bitmap* the_bitmap, Rectangle* the_coords, unsigned char the_color)
+bool Bitmap_DrawBoxRect(Bitmap* the_bitmap, Rectangle* the_coords, uint8_t the_color)
 {
 	return Bitmap_DrawBoxCoords(the_bitmap, the_coords->MinX, the_coords->MinY, the_coords->MaxX, the_coords->MaxY, the_color);
 }
@@ -1275,10 +1275,10 @@ bool Bitmap_DrawBoxRect(Bitmap* the_bitmap, Rectangle* the_coords, unsigned char
 //! Draws a rectangle based on 2 sets of coords, using the specified LUT value
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return	returns false on any error/invalid input.
-bool Bitmap_DrawBoxCoords(Bitmap* the_bitmap, signed int x1, signed int y1, signed int x2, signed int y2, unsigned char the_color)
+bool Bitmap_DrawBoxCoords(Bitmap* the_bitmap, int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t the_color)
 {
-	signed int	dy;
-	signed int	dx;
+	int16_t		dy;
+	int16_t		dx;
 
 	DEBUG_OUT(("%s %d: x1=%i, y1=%i, x2=%i, y2=%i, the_color=%i", __func__, __LINE__, x1, y1, x2, y2, the_color));
 	
@@ -1344,7 +1344,7 @@ bool Bitmap_DrawBoxCoords(Bitmap* the_bitmap, signed int x1, signed int y1, sign
 //! @param	the_color: a 1-byte index to the current LUT
 //! @param	do_fill: If true, the box will be filled with the provided color. If false, the box will only draw the outline.
 //! @return	returns false on any error/invalid input.
-bool Bitmap_DrawBox(Bitmap* the_bitmap, signed int x, signed int y, signed int width, signed int height, unsigned char the_color, bool do_fill)
+bool Bitmap_DrawBox(Bitmap* the_bitmap, int16_t x, int16_t y, int16_t width, int16_t height, uint8_t the_color, bool do_fill)
 {	
 
 	//DEBUG_OUT(("%s %d: x=%i, y=%i, width=%i, height=%i, the_color=%i", __func__, __LINE__, x, y, width, height, the_color));
@@ -1417,7 +1417,7 @@ bool Bitmap_DrawBox(Bitmap* the_bitmap, signed int x, signed int y, signed int w
 //! @param	the_color: a 1-byte index to the current color LUT
 //! @param	do_fill: If true, the box will be filled with the provided color. If false, the box will only draw the outline.
 //! @return	returns false on any error/invalid input.
-bool Bitmap_DrawRoundBox(Bitmap* the_bitmap, signed int x, signed int y, signed int width, signed int height, signed int radius, unsigned char the_color, bool do_fill)
+bool Bitmap_DrawRoundBox(Bitmap* the_bitmap, int16_t x, int16_t y, int16_t width, int16_t height, int16_t radius, uint8_t the_color, bool do_fill)
 {	
 
 	//DEBUG_OUT(("%s %d: x=%i, y=%i, width=%i, height=%i, the_color=%i", __func__, __LINE__, x, y, width, height, the_color));
@@ -1501,7 +1501,7 @@ bool Bitmap_DrawRoundBox(Bitmap* the_bitmap, signed int x, signed int y, signed 
 
 //! Draw a circle
 //! Based on http://rosettacode.org/wiki/Bitmap/Midpoint_circle_algorithm#C
-bool Bitmap_DrawCircle(Bitmap* the_bitmap, signed int x1, signed int y1, signed int radius, unsigned char the_color)
+bool Bitmap_DrawCircle(Bitmap* the_bitmap, int16_t x1, int16_t y1, int16_t radius, uint8_t the_color)
 {
 	if (the_bitmap == NULL)
 	{

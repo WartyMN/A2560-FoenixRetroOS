@@ -356,7 +356,7 @@ void Window_UpdateControlTheme(Window* the_window)
 		}
 		else if (the_control->type_ == TEXT_BUTTON)
 		{
-			signed int	new_height = the_theme->flex_width_backdrops_[TEXT_BUTTON].height_;
+			int16_t		new_height = the_theme->flex_width_backdrops_[TEXT_BUTTON].height_;
 			
 			the_control->height_ = new_height; // each theme controls the height of expandable controls, and it may differ from what control had previously.
 			
@@ -529,7 +529,7 @@ static void Window_DrawControls(Window* the_window)
 static void Window_DrawTitlebar(Window* the_window)
 {
 	Theme*	the_theme;
-	int		i;
+	int16_t	i;
 
 	// LOGIC:
 	//   not checking for valid window, because this is only called by Window_DrawStructure, and it checks validity
@@ -587,7 +587,7 @@ static void Window_DrawTitle(Window* the_window)
 	Font*		old_font;
 	int16_t		available_width;
 	int16_t		chars_that_fit;
-	signed int	pixels_used;
+	int16_t		pixels_used;
 
 	// LOGIC:
 	//   not checking for valid window, because this is only called by Window_DrawStructure->Window_DrawTitlebar, and it checks validity
@@ -743,14 +743,14 @@ Window* Window_New(NewWinTemplate* the_win_template)
 		LOG_ERR(("%s %d: could not allocate memory to create new Window", __func__ , __LINE__));
 		goto error;
 	}
-	DEBUG_OUT(("%s %d:	__ALLOC__	the_window	%p	size	%i", __func__ , __LINE__, the_window, sizeof(Window)));
+	LOG_ALLOC(("%s %d:	__ALLOC__	the_window	%p	size	%i", __func__ , __LINE__, the_window, sizeof(Window)));
 
 	if ( (the_window->title_ = General_StrlcpyWithAlloc(the_win_template->title_, WINDOW_MAX_WINTITLE_SIZE)) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory for the window name string", __func__ , __LINE__));
 		goto error;
 	}
-	DEBUG_OUT(("%s %d:	__ALLOC__	the_window->title_	%p	size	%i		'%s'", __func__ , __LINE__, the_window->title_, General_Strnlen(the_window->title_, WINDOW_MAX_WINTITLE_SIZE) + 1, the_window->title_));
+	LOG_ALLOC(("%s %d:	__ALLOC__	the_window->title_	%p	size	%i		'%s'", __func__ , __LINE__, the_window->title_, General_Strnlen(the_window->title_, WINDOW_MAX_WINTITLE_SIZE) + 1, the_window->title_));
 
 	// do check on the height, max height, min height, etc. 
 	Window_CheckDimensions(the_window, the_win_template);
@@ -917,7 +917,7 @@ NewWinTemplate* Window_GetNewWinTemplate(char* the_win_title)
 		LOG_ERR(("%s %d: could not allocate memory to create new window template", __func__ , __LINE__));
 		return NULL;
 	}
-	DEBUG_OUT(("%s %d:	__ALLOC__	the_win_template	%p	size	%i", __func__ , __LINE__, the_win_template, sizeof(NewWinTemplate)));
+	LOG_ALLOC(("%s %d:	__ALLOC__	the_win_template	%p	size	%i", __func__ , __LINE__, the_win_template, sizeof(NewWinTemplate)));
 
 	the_win_template->user_data_ = 0L;
 	the_win_template->title_ = the_win_title;
@@ -1187,7 +1187,7 @@ Control* Window_AddNewControlFromTemplate(Window* the_window, ControlTemplate* t
 
 //! Instantiate a new control of the type specified, and add it to the window's list of controls
 //! @return	Returns a pointer to the new control, or NULL in any error condition
-Control* Window_AddNewControl(Window* the_window, control_type the_type, int width, int height, int x_offset, int y_offset, h_align_type the_h_align, v_align_type the_v_align, char* the_caption, uint16_t the_id, uint16_t group_id)
+Control* Window_AddNewControl(Window* the_window, control_type the_type, int16_t width, int16_t height, int16_t x_offset, int16_t y_offset, h_align_type the_h_align, v_align_type the_v_align, char* the_caption, uint16_t the_id, uint16_t group_id)
 {
 	Theme*				the_theme;
 	Control*			the_control;
@@ -1572,7 +1572,7 @@ Bitmap* Window_GetBitmap(Window* the_window)
 }
 
 
-signed int Window_GetX(Window* the_window)
+int16_t Window_GetX(Window* the_window)
 {
 	if (the_window == NULL)
 	{
@@ -1584,7 +1584,7 @@ signed int Window_GetX(Window* the_window)
 }
 
 
-signed int Window_GetY(Window* the_window)
+int16_t Window_GetY(Window* the_window)
 {
 	if (the_window == NULL)
 	{
@@ -1596,7 +1596,7 @@ signed int Window_GetY(Window* the_window)
 }
 
 
-signed int Window_GetWidth(Window* the_window)
+int16_t Window_GetWidth(Window* the_window)
 {
 	if (the_window == NULL)
 	{
@@ -1608,7 +1608,7 @@ signed int Window_GetWidth(Window* the_window)
 }
 
 
-signed int Window_GetHeight(Window* the_window)
+int16_t Window_GetHeight(Window* the_window)
 {
 	if (the_window == NULL)
 	{
@@ -1750,7 +1750,7 @@ bool Window_SetColor(Window* the_window, uint8_t the_color)
 //! @param	x: the global horizontal position to be converted to window-local. Will be clipped to the edges.
 //! @param	y: the global vertical position to be converted to window-local. Will be clipped to the edges.
 //! @return Returns false on any error condition
-bool Window_SetPenXYFromGlobal(Window* the_window, signed int x, signed int y)
+bool Window_SetPenXYFromGlobal(Window* the_window, int16_t x, int16_t y)
 {
 	if (the_window == NULL)
 	{
@@ -1776,7 +1776,7 @@ bool Window_SetPenXYFromGlobal(Window* the_window, signed int x, signed int y)
 //! @param	x: the horizontal position within the content area of the window. Will be clipped to the edges.
 //! @param	y: the vertical position within the content area of the window. Will be clipped to the edges.
 //! @return Returns false on any error condition
-bool Window_SetPenXY(Window* the_window, signed int x, signed int y)
+bool Window_SetPenXY(Window* the_window, int16_t x, int16_t y)
 {
 	if (the_window == NULL)
 	{
@@ -1819,7 +1819,7 @@ bool Window_SetPenXY(Window* the_window, signed int x, signed int y)
 //! @param src_bm: the source bitmap. It must have a valid address within the VRAM memory space.
 //! @param src_x, src_y: the upper left coordinate within the source bitmap, for the rectangle you want to copy. May be negative.
 //! @param width, height: the scope of the copy, in pixels.
-bool Window_Blit(Window* the_window, Bitmap* src_bm, int src_x, int src_y, int width, int height)
+bool Window_Blit(Window* the_window, Bitmap* src_bm, int16_t src_x, int16_t src_y, int16_t width, int16_t height)
 {
 	if (the_window == NULL)
 	{
@@ -1837,7 +1837,7 @@ bool Window_Blit(Window* the_window, Bitmap* src_bm, int src_x, int src_y, int w
 //! @param	height: height, in pixels, of the rectangle to be drawn
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return	returns false on any error/invalid input.
-bool Window_FillBox(Window* the_window, signed int width, signed int height, unsigned char the_color)
+bool Window_FillBox(Window* the_window, int16_t width, int16_t height, uint8_t the_color)
 {
 	if (the_window == NULL)
 	{
@@ -1854,12 +1854,12 @@ bool Window_FillBox(Window* the_window, signed int width, signed int height, uns
 //! @param	the_coords: the starting and ending coordinates within the content area of the window
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return	returns false on any error/invalid input.
-bool Window_FillBoxRect(Window* the_window, Rectangle* the_coords, unsigned char the_color)
+bool Window_FillBoxRect(Window* the_window, Rectangle* the_coords, uint8_t the_color)
 {
-	signed int	x1;
-	signed int	y1;
-	signed int	x2;
-	signed int	y2;
+	int16_t		x1;
+	int16_t		y1;
+	int16_t		x2;
+	int16_t		y2;
 	
 	if (the_window == NULL)
 	{
@@ -1881,7 +1881,7 @@ bool Window_FillBoxRect(Window* the_window, Rectangle* the_coords, unsigned char
 //! @param	the_window: reference to a valid Window object.
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return	returns false on any error/invalid input.
-bool Window_SetPixel(Window* the_window, unsigned char the_color)
+bool Window_SetPixel(Window* the_window, uint8_t the_color)
 {
 	if (the_window == NULL)
 	{
@@ -1901,7 +1901,7 @@ bool Window_SetPixel(Window* the_window, unsigned char the_color)
 //! @param	x2: the ending horizontal position within the content area of the window
 //! @param	y2: the ending vertical position within the content area of the window
 //! Based on http://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#C. Used in C128 Lich King. 
-bool Window_DrawLine(Window* the_window, signed int x1, signed int y1, signed int x2, signed int y2, unsigned char the_color)
+bool Window_DrawLine(Window* the_window, int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t the_color)
 {
 	if (the_window == NULL)
 	{
@@ -1923,7 +1923,7 @@ bool Window_DrawLine(Window* the_window, signed int x1, signed int y1, signed in
 //! @param	the_window: reference to a valid Window object.
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return	returns false on any error/invalid input.
-bool Window_DrawHLine(Window* the_window, signed int the_line_len, unsigned char the_color)
+bool Window_DrawHLine(Window* the_window, int16_t the_line_len, uint8_t the_color)
 {
 	if (the_window == NULL)
 	{
@@ -1939,7 +1939,7 @@ bool Window_DrawHLine(Window* the_window, signed int the_line_len, unsigned char
 //! @param	the_window: reference to a valid Window object.
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return	returns false on any error/invalid input.
-bool Window_DrawVLine(Window* the_window, signed int the_line_len, unsigned char the_color)
+bool Window_DrawVLine(Window* the_window, int16_t the_line_len, uint8_t the_color)
 {
 	if (the_window == NULL)
 	{
@@ -1956,12 +1956,12 @@ bool Window_DrawVLine(Window* the_window, signed int the_line_len, unsigned char
 //! @param	the_coords: the starting and ending coordinates within the content area of the window
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return	returns false on any error/invalid input.
-bool Window_DrawBoxRect(Window* the_window, Rectangle* the_coords, unsigned char the_color)
+bool Window_DrawBoxRect(Window* the_window, Rectangle* the_coords, uint8_t the_color)
 {
-	signed int	x1;
-	signed int	y1;
-	signed int	x2;
-	signed int	y2;
+	int16_t		x1;
+	int16_t		y1;
+	int16_t		x2;
+	int16_t		y2;
 	
 	if (the_window == NULL)
 	{
@@ -1987,7 +1987,7 @@ bool Window_DrawBoxRect(Window* the_window, Rectangle* the_coords, unsigned char
 //! @param	y2: the ending vertical position within the content area of the window
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return	returns false on any error/invalid input.
-bool Window_DrawBoxCoords(Window* the_window, signed int x1, signed int y1, signed int x2, signed int y2, unsigned char the_color)
+bool Window_DrawBoxCoords(Window* the_window, int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t the_color)
 {
 	if (the_window == NULL)
 	{
@@ -2012,7 +2012,7 @@ bool Window_DrawBoxCoords(Window* the_window, signed int x1, signed int y1, sign
 //! @param	the_color: a 1-byte index to the current LUT
 //! @param	do_fill: If true, the box will be filled with the provided color. If false, the box will only draw the outline.
 //! @return	returns false on any error/invalid input.
-bool Window_DrawBox(Window* the_window, signed int width, signed int height, unsigned char the_color, bool do_fill)
+bool Window_DrawBox(Window* the_window, int16_t width, int16_t height, uint8_t the_color, bool do_fill)
 {
 	if (the_window == NULL)
 	{
@@ -2032,7 +2032,7 @@ bool Window_DrawBox(Window* the_window, signed int width, signed int height, uns
 //! @param	the_color: a 1-byte index to the current color LUT
 //! @param	do_fill: If true, the box will be filled with the provided color. If false, the box will only draw the outline.
 //! @return	returns false on any error/invalid input.
-bool Window_DrawRoundBox(Window* the_window, signed int width, signed int height, signed int radius, unsigned char the_color, bool do_fill)
+bool Window_DrawRoundBox(Window* the_window, int16_t width, int16_t height, int16_t radius, uint8_t the_color, bool do_fill)
 {
 	if (the_window == NULL)
 	{
@@ -2047,7 +2047,7 @@ bool Window_DrawRoundBox(Window* the_window, signed int width, signed int height
 //! Draw a circle centered on the current pen location
 //! Based on http://rosettacode.org/wiki/Bitmap/Midpoint_circle_algorithm#C
 //! @param	the_window: reference to a valid Window object.
-bool Window_DrawCircle(Window* the_window, signed int radius, unsigned char the_color)
+bool Window_DrawCircle(Window* the_window, int16_t radius, uint8_t the_color)
 {
 	if (the_window == NULL)
 	{
@@ -2064,7 +2064,7 @@ bool Window_DrawCircle(Window* the_window, signed int radius, unsigned char the_
 // No word wrap is performed. 
 // If max_chars is less than the string length, only that many characters will be drawn (as space allows)
 // If max_chars is -1, then the full string length will be drawn, as space allows.
-bool Window_DrawString(Window* the_window, char* the_string, signed int max_chars)
+bool Window_DrawString(Window* the_window, char* the_string, int16_t max_chars)
 {
 	if (the_window == NULL)
 	{
@@ -2087,7 +2087,7 @@ bool Window_DrawString(Window* the_window, char* the_string, signed int max_char
 //! @param	wrap_buffer: pointer to a pointer to a temporary text buffer that can be used to hold the wrapped ('formatted') characters. The buffer must be large enough to hold num_chars of incoming text, plus additional line break characters where necessary. 
 //! @param	continue_function: optional hook to a function that will be called if the provided text cannot fit into the specified box. If provided, the function will be called each time text exceeds available space. If the function returns true, another chunk of text will be displayed, replacing the first. If the function returns false, processing will stop. If no function is provided, processing will stop at the point text exceeds the available space.
 //! @return	returns a pointer to the first character in the string after which it stopped processing (if string is too long to be displayed in its entirety). Returns the original string if the entire string was processed successfully. Returns NULL in the event of any error.
-char* Window_DrawStringInBox(Window* the_window, signed int width, signed int height, char* the_string, signed int num_chars, char** wrap_buffer, bool (* continue_function)(void))
+char* Window_DrawStringInBox(Window* the_window, int16_t width, int16_t height, char* the_string, int16_t num_chars, char** wrap_buffer, bool (* continue_function)(void))
 {
 	if (the_window == NULL)
 	{

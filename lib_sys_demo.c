@@ -340,11 +340,11 @@ void ShowDescription(char* the_message);
 void RunDemo(void);
 
 // various demos
-void Demo_Font_ShowChars(Bitmap* the_bitmap, unsigned int x1, unsigned int y);
-void Demo_Font_DrawString(Bitmap* the_bitmap, unsigned int y);
+void Demo_Font_ShowChars(Bitmap* the_bitmap, int16_t x1, int16_t y);
+void Demo_Font_DrawString(Bitmap* the_bitmap, int16_t y);
 // Bitmap* LoadFakeIconGame(void);
 // Bitmap* LoadFakeIconWrite(void);
-Bitmap* LoadFakeIcon(int icon_num);
+Bitmap* LoadFakeIcon(int16_t icon_num);
 void OpenMultipleWindows(void);
 void SimulateEvents(void);
 void AddControls(Window* the_window);
@@ -373,10 +373,10 @@ void WaitForUser(void)
 // Draw fancy box on the B screen and display demo description
 void ShowDescription(char* the_message)
 {
-	signed int	x1 = 0;
-	signed int	x2 = global_system->screen_[ID_CHANNEL_B]->text_cols_vis_ - 1;
-	signed int	y1 = 0;
-	signed int	y2 = 5;
+	int16_t		x1 = 0;
+	int16_t		x2 = global_system->screen_[ID_CHANNEL_B]->text_cols_vis_ - 1;
+	int16_t		y1 = 0;
+	int16_t		y2 = 5;
 
 	// draw box and fill contents in prep for next demo description
 	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, FG_COLOR_BLUE, 0);
@@ -387,12 +387,12 @@ void ShowDescription(char* the_message)
 }
 
 
-void Demo_Font_ShowChars(Bitmap* the_bitmap, unsigned int x1, unsigned int y)
+void Demo_Font_ShowChars(Bitmap* the_bitmap, int16_t x1, int16_t y)
 {
-	Font*			the_font;
-	unsigned int	x2;
-	uint8_t			i;
-	unsigned int	pix_written;
+	Font*		the_font;
+	int16_t		x2;
+	uint8_t		i;
+	int16_t		pix_written;
 	
 	
 	ShowDescription("Font_DrawChar -> draw a single character at the current pen position");	
@@ -422,10 +422,10 @@ void Demo_Font_ShowChars(Bitmap* the_bitmap, unsigned int x1, unsigned int y)
 }
 
 
-void Demo_Font_DrawString(Bitmap* the_bitmap, unsigned int y)
+void Demo_Font_DrawString(Bitmap* the_bitmap, int16_t y)
 {
 	Font*			the_font;
-	unsigned int	x;
+	int16_t			x;
 	uint8_t			row_height;
 	char*			string1 = (char*)"March 17, 2022: hiya world!";
 	char*			string2 = (char*)"This string is too long to fit";
@@ -466,8 +466,8 @@ void Demo_Font_DrawString(Bitmap* the_bitmap, unsigned int y)
 // {
 // 	uint8_t*	the_icon_data = (uint8_t*)icon_64p_games;	
 // 	Bitmap*		the_bitmap;
-// 	int			width = 64;
-// 	int			height = 64;
+// 	int16_t		width = 64;
+// 	int16_t		height = 64;
 // 
 // 	if ( (the_bitmap = Bitmap_New(width, height, NULL) ) == NULL)
 // 	{
@@ -481,12 +481,12 @@ void Demo_Font_DrawString(Bitmap* the_bitmap, unsigned int y)
 // }
 
 
-Bitmap* LoadFakeIcon(int icon_num)
+Bitmap* LoadFakeIcon(int16_t icon_num)
 {
 	uint8_t*	the_icon_data = (uint8_t*)icon_64p_write;	
 	Bitmap*		the_bitmap;
-	int			width = 64;
-	int			height = 64;
+	int16_t		width = 64;
+	int16_t		height = 64;
 
 	if ( (the_bitmap = Bitmap_New(width, height, NULL) ) == NULL)
 	{
@@ -506,17 +506,17 @@ void ShowWhatYouWantMessage(void)
 {
 	static char*		the_icon_text[NUM_FAKE_ICONS] = {"Play a Game", "Write Something", "Create Music", "Manage Files"};
 	Bitmap*				the_icon_bitmaps[NUM_FAKE_ICONS];
-	int					row;
-	int					col;
-	int					icon_num = 0;
+	int16_t				row;
+	int16_t				col;
+	int16_t				icon_num = 0;
 	Window*				the_window;
 	Bitmap*				dst_bitmap;
 	NewWinTemplate*		the_win_template;
-	int					width = 500;
-	int					height = 300;
-	int					margin = 20;
-	int					usable_width = width - margin - margin;
-	int					usable_height = height - margin - margin;
+	int16_t				width = 500;
+	int16_t				height = 300;
+	int16_t				margin = 20;
+	int16_t				usable_width = width - margin - margin;
+	int16_t				usable_height = height - margin - margin;
 	static char*		the_win_title = "What do you want to do today?";
 
 	if ( (the_win_template = Window_GetNewWinTemplate(the_win_title)) == NULL)
@@ -574,15 +574,15 @@ void AddControls(Window* the_window)
 #define BTN_COUNT	14
 	Theme*				the_theme;
 	Control*			button[BTN_COUNT];
-	int					x_offset;
-	int					y_offset;
-	int					width;
-	int					height;
+	int16_t				x_offset;
+	int16_t				y_offset;
+	int16_t				width;
+	int16_t				height;
 	char				caption_buff[CONTROL_MAX_CAPTION_SIZE];
 	char*				caption = caption_buff;
 	uint16_t			the_id;
 	uint16_t			group_id;
-	int					i;
+	int16_t				i;
 	
 	if ( (the_theme = Sys_GetTheme(global_system)) == NULL)
 	{
@@ -616,15 +616,15 @@ void AddControls(Window* the_window)
 
 void OpenMultipleWindows(void)
 {
-	int					win_count = 4;
+	int16_t				win_count = 4;
 	Window*				the_window[5];
 	NewWinTemplate*		the_win_template;
-	int					max_width = 640;
-	int					max_height = 460;
+	int16_t				max_width = 640;
+	int16_t				max_height = 460;
 	char				title_buff[WINDOW_MAX_WINTITLE_SIZE];
 	char*				the_win_title = title_buff;
-	int					win_num;
-	int					random_num;
+	int16_t				win_num;
+	int16_t				random_num;
 	
 	srand(sys_time_jiffies());
 	//srand(time(NULL));   // Initialization, should only be called once.
@@ -677,15 +677,15 @@ void OpenMultipleWindows(void)
 // open 2 windows covering most of the screen, side-by-side
 void Open2Windows(void)
 {
-	int					win_count = 2;
+	int16_t				win_count = 2;
 	Window*				the_window[2];
 	NewWinTemplate*		the_win_template;
-	int					max_width = 300;
-	int					max_height = 460;
+	int16_t				max_width = 300;
+	int16_t				max_height = 460;
 	char				title_buff[WINDOW_MAX_WINTITLE_SIZE];
 	char*				the_win_title = title_buff;
-	int					win_num;
-	int					random_num;
+	int16_t				win_num;
+	int16_t				random_num;
 	
 	srand(sys_time_jiffies());
 	//srand(time(NULL));   // Initialization, should only be called once.

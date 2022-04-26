@@ -97,9 +97,11 @@ $(document).ready(function(){initNavTree('lib__sys_8h.html',''); initResizable()
   <div class="headertitle"><div class="title">lib_sys.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="memory__manager_8h_source.html">memory_manager.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;list.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="memory__manager_8h_source.html">memory_manager.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="theme_8h_source.html">theme.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="control__template_8h_source.html">control_template.h</a>&quot;</code><br />
+<code>#include &lt;stdbool.h&gt;</code><br />
 <code>#include &lt;mcp/syscalls.h&gt;</code><br />
 <code>#include &lt;mb/a2560_platform.h&gt;</code><br />
 <code>#include &lt;mb/general.h&gt;</code><br />
@@ -120,36 +122,80 @@ Functions</h2></td></tr>
 <a class="el" href="struct_system.html">System</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_New</b> (void)</td></tr>
 <tr class="memdesc:a08443288542cd1c5c531b6ec028d2980"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a <a class="el" href="struct_system.html">System</a> object. <br /></td></tr>
 <tr class="separator:a08443288542cd1c5c531b6ec028d2980"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08cbe221d964a5326ec909b30b29798a"><td class="memItemLeft" align="right" valign="top"><a id="a08cbe221d964a5326ec909b30b29798a" name="a08cbe221d964a5326ec909b30b29798a"></a>
-boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_InitSystem</b> (void)</td></tr>
-<tr class="memdesc:a08cbe221d964a5326ec909b30b29798a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the system (primary entry point for all system initialization activity) Starts up the memory manager, creates the global system object, runs autoconfigure to check the system hardware, loads system and application fonts, allocates a bitmap for the screen. <br /></td></tr>
-<tr class="separator:a08cbe221d964a5326ec909b30b29798a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa73463b198721e6578eb97260ae24d36"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#aa73463b198721e6578eb97260ae24d36">Sys_AutoConfigure</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
-<tr class="memdesc:aa73463b198721e6578eb97260ae24d36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find out what kind of machine the software is running on, and configure the passed screen accordingly Configures screen settings, RAM addresses, etc.  <a href="lib__sys_8h.html#aa73463b198721e6578eb97260ae24d36">More...</a><br /></td></tr>
-<tr class="separator:aa73463b198721e6578eb97260ae24d36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4184a35d3f1c70f3be9b9e4eb8a608fa"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a4184a35d3f1c70f3be9b9e4eb8a608fa">Sys_DetectScreenSize</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen)</td></tr>
-<tr class="memdesc:a4184a35d3f1c70f3be9b9e4eb8a608fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detect the current screen mode/resolution, and set # of columns, rows, H pixels, V pixels, accordingly.  <a href="lib__sys_8h.html#a4184a35d3f1c70f3be9b9e4eb8a608fa">More...</a><br /></td></tr>
-<tr class="separator:a4184a35d3f1c70f3be9b9e4eb8a608fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8dd79c49df86e9913fe6b02d34add0fe"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a8dd79c49df86e9913fe6b02d34add0fe">Sys_SetVideoMode</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, screen_resolution new_mode)</td></tr>
-<tr class="memdesc:a8dd79c49df86e9913fe6b02d34add0fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change video mode to the one passed.  <a href="lib__sys_8h.html#a8dd79c49df86e9913fe6b02d34add0fe">More...</a><br /></td></tr>
-<tr class="separator:a8dd79c49df86e9913fe6b02d34add0fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57984932c951a9458c8518737c3d3441"><td class="memItemLeft" align="right" valign="top"><a id="a57984932c951a9458c8518737c3d3441" name="a57984932c951a9458c8518737c3d3441"></a>
-boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_SetModeGraphics</b> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
-<tr class="memdesc:a57984932c951a9458c8518737c3d3441"><td class="mdescLeft">&#160;</td><td class="mdescRight">Switch machine into graphics mode. <br /></td></tr>
-<tr class="separator:a57984932c951a9458c8518737c3d3441"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04517241775caada721f2f47d1076929"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a04517241775caada721f2f47d1076929">Sys_SetModeText</a> (<a class="el" href="struct_system.html">System</a> *the_system, boolean as_overlay)</td></tr>
-<tr class="memdesc:a04517241775caada721f2f47d1076929"><td class="mdescLeft">&#160;</td><td class="mdescRight">Switch machine into text mode.  <a href="lib__sys_8h.html#a04517241775caada721f2f47d1076929">More...</a><br /></td></tr>
-<tr class="separator:a04517241775caada721f2f47d1076929"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3d6d271b2a789e26896de04852c77c0"><td class="memItemLeft" align="right" valign="top"><a id="ac3d6d271b2a789e26896de04852c77c0" name="ac3d6d271b2a789e26896de04852c77c0"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_InitSystem</b> (void)</td></tr>
+<tr class="memdesc:ac3d6d271b2a789e26896de04852c77c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the system (primary entry point for all system initialization activity) Starts up the memory manager, creates the global system object, runs autoconfigure to check the system hardware, loads system and application fonts, allocates a bitmap for the screen. <br /></td></tr>
+<tr class="separator:ac3d6d271b2a789e26896de04852c77c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed61a6754ace552013413feea54fd336"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#aed61a6754ace552013413feea54fd336">Sys_AutoConfigure</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
+<tr class="memdesc:aed61a6754ace552013413feea54fd336"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find out what kind of machine the software is running on, and configure the passed screen accordingly Configures screen settings, RAM addresses, etc.  <a href="lib__sys_8h.html#aed61a6754ace552013413feea54fd336">More...</a><br /></td></tr>
+<tr class="separator:aed61a6754ace552013413feea54fd336"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5e4e18b0e2066b48f050addbbe546b3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#aa5e4e18b0e2066b48f050addbbe546b3">Sys_DetectScreenSize</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen)</td></tr>
+<tr class="memdesc:aa5e4e18b0e2066b48f050addbbe546b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detect the current screen mode/resolution, and set # of columns, rows, H pixels, V pixels, accordingly.  <a href="lib__sys_8h.html#aa5e4e18b0e2066b48f050addbbe546b3">More...</a><br /></td></tr>
+<tr class="separator:aa5e4e18b0e2066b48f050addbbe546b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b11a4c19b359bffb12dc6c86cdac684"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a3b11a4c19b359bffb12dc6c86cdac684">Sys_SetVideoMode</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, screen_resolution new_mode)</td></tr>
+<tr class="memdesc:a3b11a4c19b359bffb12dc6c86cdac684"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change video mode to the one passed.  <a href="lib__sys_8h.html#a3b11a4c19b359bffb12dc6c86cdac684">More...</a><br /></td></tr>
+<tr class="separator:a3b11a4c19b359bffb12dc6c86cdac684"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a4b865a6eab764d18a3defa01844810"><td class="memItemLeft" align="right" valign="top"><a id="a4a4b865a6eab764d18a3defa01844810" name="a4a4b865a6eab764d18a3defa01844810"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_SetModeGraphics</b> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
+<tr class="memdesc:a4a4b865a6eab764d18a3defa01844810"><td class="mdescLeft">&#160;</td><td class="mdescRight">Switch machine into graphics mode. <br /></td></tr>
+<tr class="separator:a4a4b865a6eab764d18a3defa01844810"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab18b67b61dd745e75aa64c5ba73358d0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#ab18b67b61dd745e75aa64c5ba73358d0">Sys_SetModeText</a> (<a class="el" href="struct_system.html">System</a> *the_system, bool as_overlay)</td></tr>
+<tr class="memdesc:ab18b67b61dd745e75aa64c5ba73358d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Switch machine into text mode.  <a href="lib__sys_8h.html#ab18b67b61dd745e75aa64c5ba73358d0">More...</a><br /></td></tr>
+<tr class="separator:ab18b67b61dd745e75aa64c5ba73358d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31b4b6b8f93b4daabde4662d62ed66d9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a31b4b6b8f93b4daabde4662d62ed66d9">Sys_AddToWindowList</a> (<a class="el" href="struct_system.html">System</a> *the_system, <a class="el" href="struct_window.html">Window</a> *the_new_window)</td></tr>
+<tr class="memdesc:a31b4b6b8f93b4daabde4662d62ed66d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add this window to the list of windows and make it the currently active window.  <a href="lib__sys_8h.html#a31b4b6b8f93b4daabde4662d62ed66d9">More...</a><br /></td></tr>
+<tr class="separator:a31b4b6b8f93b4daabde4662d62ed66d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadad43b6c5eaa6981951eac2536ce10b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#aadad43b6c5eaa6981951eac2536ce10b">Sys_SetActiveWindow</a> (<a class="el" href="struct_system.html">System</a> *the_system, <a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:aadad43b6c5eaa6981951eac2536ce10b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the passed window to the active window NOTE: This will resort the list of windows to move the (new) active one to the front.  <a href="lib__sys_8h.html#aadad43b6c5eaa6981951eac2536ce10b">More...</a><br /></td></tr>
+<tr class="separator:aadad43b6c5eaa6981951eac2536ce10b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39f1fbbd7a6b0a38ff0c9884e188d4d4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a39f1fbbd7a6b0a38ff0c9884e188d4d4">Sys_SetTheme</a> (<a class="el" href="struct_system.html">System</a> *the_system, <a class="el" href="struct_theme.html">Theme</a> *the_theme)</td></tr>
+<tr class="memdesc:a39f1fbbd7a6b0a38ff0c9884e188d4d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the passed theme as the <a class="el" href="struct_system.html">System</a>'s current theme Note: this will dispose of the current theme after setting the new one.  <a href="lib__sys_8h.html#a39f1fbbd7a6b0a38ff0c9884e188d4d4">More...</a><br /></td></tr>
+<tr class="separator:a39f1fbbd7a6b0a38ff0c9884e188d4d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a894dcd75f3b86c56cb65687773a9f42b"><td class="memItemLeft" align="right" valign="top"><a id="a894dcd75f3b86c56cb65687773a9f42b" name="a894dcd75f3b86c56cb65687773a9f42b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_Render</b> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
+<tr class="memdesc:a894dcd75f3b86c56cb65687773a9f42b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render all visible windows NOTE: this will move to a private Sys function later, once event handling is available. <br /></td></tr>
+<tr class="separator:a894dcd75f3b86c56cb65687773a9f42b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="aa73463b198721e6578eb97260ae24d36" name="aa73463b198721e6578eb97260ae24d36"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa73463b198721e6578eb97260ae24d36">&#9670;&nbsp;</a></span>Sys_AutoConfigure()</h2>
+<a id="a31b4b6b8f93b4daabde4662d62ed66d9" name="a31b4b6b8f93b4daabde4662d62ed66d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31b4b6b8f93b4daabde4662d62ed66d9">&#9670;&nbsp;</a></span>Sys_AddToWindowList()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Sys_AutoConfigure </td>
+          <td class="memname">bool Sys_AddToWindowList </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_new_window</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add this window to the list of windows and make it the currently active window. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns false if adding this window would exceed the system's hard cap on the number of available windows </dd></dl>
+
+</div>
+</div>
+<a id="aed61a6754ace552013413feea54fd336" name="aed61a6754ace552013413feea54fd336"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed61a6754ace552013413feea54fd336">&#9670;&nbsp;</a></span>Sys_AutoConfigure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Sys_AutoConfigure </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
           <td class="paramname"><em>the_system</em></td><td>)</td>
@@ -164,14 +210,14 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_SetModeGraphic
 
 </div>
 </div>
-<a id="a4184a35d3f1c70f3be9b9e4eb8a608fa" name="a4184a35d3f1c70f3be9b9e4eb8a608fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4184a35d3f1c70f3be9b9e4eb8a608fa">&#9670;&nbsp;</a></span>Sys_DetectScreenSize()</h2>
+<a id="aa5e4e18b0e2066b48f050addbbe546b3" name="aa5e4e18b0e2066b48f050addbbe546b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5e4e18b0e2066b48f050addbbe546b3">&#9670;&nbsp;</a></span>Sys_DetectScreenSize()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Sys_DetectScreenSize </td>
+          <td class="memname">bool Sys_DetectScreenSize </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em></td><td>)</td>
@@ -185,14 +231,14 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_SetModeGraphic
 
 </div>
 </div>
-<a id="a04517241775caada721f2f47d1076929" name="a04517241775caada721f2f47d1076929"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a04517241775caada721f2f47d1076929">&#9670;&nbsp;</a></span>Sys_SetModeText()</h2>
+<a id="aadad43b6c5eaa6981951eac2536ce10b" name="aadad43b6c5eaa6981951eac2536ce10b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadad43b6c5eaa6981951eac2536ce10b">&#9670;&nbsp;</a></span>Sys_SetActiveWindow()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Sys_SetModeText </td>
+          <td class="memname">bool Sys_SetActiveWindow </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
           <td class="paramname"><em>the_system</em>, </td>
@@ -200,7 +246,38 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_SetModeGraphic
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">boolean&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the passed window to the active window NOTE: This will resort the list of windows to move the (new) active one to the front. </p>
+<p >Set the passed window to the active window NOTE: This will resort the list of windows to move the (new) active one to the front. </p>
+
+</div>
+</div>
+<a id="ab18b67b61dd745e75aa64c5ba73358d0" name="ab18b67b61dd745e75aa64c5ba73358d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab18b67b61dd745e75aa64c5ba73358d0">&#9670;&nbsp;</a></span>Sys_SetModeText()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Sys_SetModeText </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>as_overlay</em>&#160;</td>
         </tr>
         <tr>
@@ -221,14 +298,45 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_SetModeGraphic
 
 </div>
 </div>
-<a id="a8dd79c49df86e9913fe6b02d34add0fe" name="a8dd79c49df86e9913fe6b02d34add0fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8dd79c49df86e9913fe6b02d34add0fe">&#9670;&nbsp;</a></span>Sys_SetVideoMode()</h2>
+<a id="a39f1fbbd7a6b0a38ff0c9884e188d4d4" name="a39f1fbbd7a6b0a38ff0c9884e188d4d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39f1fbbd7a6b0a38ff0c9884e188d4d4">&#9670;&nbsp;</a></span>Sys_SetTheme()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Sys_SetVideoMode </td>
+          <td class="memname">bool Sys_SetTheme </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_theme.html">Theme</a> *&#160;</td>
+          <td class="paramname"><em>the_theme</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the passed theme as the <a class="el" href="struct_system.html">System</a>'s current theme Note: this will dispose of the current theme after setting the new one. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns false on any error condition </dd></dl>
+
+</div>
+</div>
+<a id="a3b11a4c19b359bffb12dc6c86cdac684" name="a3b11a4c19b359bffb12dc6c86cdac684"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b11a4c19b359bffb12dc6c86cdac684">&#9670;&nbsp;</a></span>Sys_SetVideoMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Sys_SetVideoMode </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>

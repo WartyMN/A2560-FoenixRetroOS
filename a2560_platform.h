@@ -331,32 +331,32 @@ typedef struct EventManager EventManager;		// defined in event.h
 
 typedef struct Coordinate
 {
-    int x;
-    int y;
+    int16_t x;
+    int16_t y;
 } Coordinate;
 
 typedef struct Rectangle
 {
-	signed short   MinX, MinY;
-	signed short   MaxX, MaxY;
+	int16_t		MinX, MinY;
+	int16_t		MaxX, MaxY;
 } Rectangle;
 
 typedef struct Screen
 {
-	signed int		id_;				// 0 for channel A, 1 for channel B. not all foenix's have 2 channels.
+	int16_t			id_;				// 0 for channel A, 1 for channel B. not all foenix's have 2 channels.
 	volatile unsigned long*	vicky_;				// VICKY primary register RAM loc. See VICKY_A2560K_A, VICKY_A2560K_B, VICKY_A2560U, etc.
 	Rectangle		rect_;				// the x1, y1, > x2, y2 coordinates of the screen, taking into account any borders. 
-	signed int		width_;				// for the current resolution, the max horizontal pixel count 
-	signed int		height_;			// for the current resolution, the max vertical pixel count 
-	signed int		text_cols_vis_;		// accounting for borders, the number of visible columns on screen
-	signed int		text_rows_vis_;		// accounting for borders, the number of visible rows on screen
-	signed int		text_mem_cols_;		// for the current resolution, the total number of columns per row in VRAM. Use for plotting x,y 
-	signed int		text_mem_rows_;		// for the current resolution, the total number of rows per row in VRAM. Use for plotting x,y 
+	int16_t			width_;				// for the current resolution, the max horizontal pixel count 
+	int16_t			height_;			// for the current resolution, the max vertical pixel count 
+	int16_t			text_cols_vis_;		// accounting for borders, the number of visible columns on screen
+	int16_t			text_rows_vis_;		// accounting for borders, the number of visible rows on screen
+	int16_t			text_mem_cols_;		// for the current resolution, the total number of columns per row in VRAM. Use for plotting x,y 
+	int16_t			text_mem_rows_;		// for the current resolution, the total number of rows per row in VRAM. Use for plotting x,y 
 	char*			text_ram_;
 	char*			text_attr_ram_;
 	char*			text_font_ram_;		// 2K of memory holding font definitions.
-	signed int		text_font_height_;	// in text mode, the height in pixels for the fixed width font. Should be either 8 or 16, depending on which Foenix. used for calculating text fit.
-	signed int		text_font_width_;	// in text mode, the width in pixels for the fixed width font. Unlikely to be other than '8' with Foenix machines. used for calculating text fit.
+	int16_t			text_font_height_;	// in text mode, the height in pixels for the fixed width font. Should be either 8 or 16, depending on which Foenix. used for calculating text fit.
+	int16_t			text_font_width_;	// in text mode, the width in pixels for the fixed width font. Unlikely to be other than '8' with Foenix machines. used for calculating text fit.
 	char			text_temp_buffer_1_[TEXT_COL_COUNT_FOR_PLOTTING_A2560K * TEXT_ROW_COUNT_FOR_PLOTTING_A2560K + 1];	// todo: replace with pointer, and allocate space on resolution switch. general use temp buffer - do NOT use for real storage - any utility function clobber it
 	char			text_temp_buffer_2_[TEXT_COL_COUNT_FOR_PLOTTING_A2560K * TEXT_ROW_COUNT_FOR_PLOTTING_A2560K + 1];	// todo: replace with pointer, and allocate space on resolution switch. general use temp buffer - do NOT use for real storage - any utility function clobber it
 	Bitmap*			bitmap_;			//! The bitmap associated with this screen, if any. (Text only screens do not have bitmaps available)

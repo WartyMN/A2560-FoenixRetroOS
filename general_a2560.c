@@ -72,7 +72,7 @@ static char				message_buffer[ALERT_MAX_MESSAGE_LEN];	// used for alert dialogs 
 
 /*
 // draw a line in an intuition window
-void General_DrawLine(struct RastPort* the_rastport, signed long x1, signed long y1, signed long x2, signed long y2, unsigned char the_color_pen)
+void General_DrawLine(struct RastPort* the_rastport, signed long x1, signed long y1, signed long x2, signed long y2, uint8_t the_color_pen)
 {
 	// move the pen to the first coordinate, or it will draw a line from where it is, to there
 	Move( the_rastport, x1, y1 );
@@ -86,10 +86,10 @@ void General_DrawLine(struct RastPort* the_rastport, signed long x1, signed long
 
 /*
 // draw a poly in an intuition window
-void General_DrawPoly(struct RastPort* the_rastport, short num_coords, short* the_coordinates, unsigned char the_color_pen)
+void General_DrawPoly(struct RastPort* the_rastport, int16_t num_coords, int16_t* the_coordinates, uint8_t the_color_pen)
 {
-	short	x = *(the_coordinates + 0);
-	short	y = *(the_coordinates + 1);
+	int16_t	x = *(the_coordinates + 0);
+	int16_t	y = *(the_coordinates + 1);
 
 	// move the pen to the first coordinate, or it will draw a line from where it is, to there
 	Move( the_rastport, x, y );
@@ -103,9 +103,9 @@ void General_DrawPoly(struct RastPort* the_rastport, short num_coords, short* th
 
 /*
 // draw a rectangle in the rastport passed. If do_undraw is TRUE, try to undraw it (unimplemented TODO)
-void General_DrawBox(struct RastPort* the_rastport, signed short x1, signed short y1, signed short x2, signed short y2, bool do_undraw, unsigned char the_color_pen)
+void General_DrawBox(struct RastPort* the_rastport, int16_t x1, int16_t y1, int16_t x2, int16_t y2, bool do_undraw, uint8_t the_color_pen)
 {
-	short				coordinates[10];
+	int16_t				coordinates[10];
 
 	// COMPLEMENT mode will simply inverse pixels. This makes it possible to draw once, then draw again, to restore what was there
 	SetDrMd(the_rastport, COMPLEMENT);
@@ -155,7 +155,7 @@ bool General_CheckFileExists(unsigned char* the_file_path)
 	struct FileInfoBlock*	fileInfo;
 	LONG					the_io_error;
 	unsigned char*			the_file_name_to_check;
-	int						filename_len;
+	int16_t					filename_len;
 	unsigned char*			the_directory_path;
 
 	// get a string for the directory portion of the filepath

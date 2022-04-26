@@ -59,7 +59,7 @@
 #define LOG_LEVEL_2		// warnings
 #define LOG_LEVEL_3		// infos
 #define LOG_LEVEL_4		// debug level info for programmer
-#define LOG_LEVEL_5		// memory allocation info for programmer
+#define LOG_LEVEL_5x		// memory allocation info for programmer
 
 #ifdef LOG_LEVEL_1 
 	#define LOG_ERR(x) General_LogError x
@@ -139,13 +139,13 @@ typedef enum LoggingLevel
 //! @param	the_font: the font object to be used in measuring width. This is optional and ignore if called for text mode operations.
 //! @param	measure_function: pointer to the function responsible for measuring the graphical width of a string 
 //! @return Returns number of vertical pixels required. Returns -1 in any error condition.
-signed int General_WrapAndTrimTextToFit(char** orig_string, char** formatted_string, signed int max_chars_to_format, signed int max_width, signed int max_height, signed int one_char_width, signed int one_row_height, Font* the_font, signed int (* measure_function)(Font*, char*, signed int, signed int, signed int, signed int*));
+int16_t General_WrapAndTrimTextToFit(char** orig_string, char** formatted_string, int16_t max_chars_to_format, int16_t max_width, int16_t max_height, int16_t one_char_width, int16_t one_row_height, Font* the_font, int16_t (* measure_function)(Font*, char*, int16_t, int16_t, int16_t, int16_t*));
 
 // Find the next space, dash, or other word break character and return its position within the string. If none found before end of string or max len, returns -1.
-signed int General_StrFindNextWordEnd(const char* the_string, signed int max_search_len);
+int16_t General_StrFindNextWordEnd(const char* the_string, int16_t max_search_len);
 
 // Find the next line break character and return its position within the string (+1: first char is '1'). If none found before end of string or max len, returns 0.
-signed int General_StrFindNextLineBreak(const char* the_string, signed int max_search_len);
+int16_t General_StrFindNextLineBreak(const char* the_string, int16_t max_search_len);
 
 
 
@@ -157,7 +157,7 @@ signed int General_StrFindNextLineBreak(const char* the_string, signed int max_s
 //! from: https://stackoverflow.com/questions/4572556/concise-way-to-implement-round-in-c
 //! @param	the_float: a double value to round up/down
 //! @return	Returns an int with the rounded value
-int General_Round(double the_float);
+int32_t General_Round(double the_float);
 
 
 
@@ -170,7 +170,7 @@ int General_Round(double the_float);
 void General_MakeFileSizeReadable(unsigned long size_in_bytes, char* formatted_file_size);
 
 // Convert a positive or negative string integer to a signed long integer. returns false in event of error
-bool General_StringToSignedLong(const char* the_string_value, signed long* the_conversion);
+bool General_StringToSignedLong(const char* the_string_value, int32_t* the_conversion);
 
 
 
@@ -220,7 +220,7 @@ signed long General_Strlcat(char* dst, const char* src, signed long max_len);
 //! @param	string_2: the second string to compare.
 //! @param	max_len: the maximum number of characters to compare. Even if both strings are larger than this number, only this many characters will be compared.
 //! @return	Returns 0 if the strings are equivalent (at least up to max_len). Returns a negative or positive if the strings are different.
-signed int General_Strncmp(const char* string_1, const char* string_2, size_t length);
+int16_t General_Strncmp(const char* string_1, const char* string_2, size_t length);
 
 //! Makes a case insensitive comparison of the specified number of characters of the two passed strings
 //! Stops processing once max_len has been reached, or when one of the two strings has run out of characters.
@@ -231,7 +231,7 @@ signed int General_Strncmp(const char* string_1, const char* string_2, size_t le
 //! @param	string_2: the second string to compare.
 //! @param	max_len: the maximum number of characters to compare. Even if both strings are larger than this number, only this many characters will be compared.
 //! @return	Returns 0 if the strings are equivalent (at least up to max_len). Returns a negative or positive if the strings are different.
-signed int General_Strncasecmp(const char* string_1, const char* string_2, size_t max_len);
+int16_t General_Strncasecmp(const char* string_1, const char* string_2, size_t max_len);
 
 //! Measure the length of a fixed-size string
 //! Safe(r) strlen function: will stop processing if no terminator found before max_len reached
@@ -256,7 +256,7 @@ bool General_CompareStringLength(void* first_payload, void* second_payload);
 bool General_RectIntersect(struct Rectangle r1, struct Rectangle r2);
 
 // test if a point is within a rectangle
-bool General_PointInRect(signed int x, signed int y, Rectangle r);
+bool General_PointInRect(int16_t x, int16_t y, Rectangle r);
 
 // Position one rect within the bounds of another. Horizontally: centers the hero rect within the left/right of the frame rect; Vertically: centers or or puts at 25% line
 // put the frame coords into the frame_rect, and the object to be centered into the hero_rect. ON return, the frame rect will hold the coords to be used.
@@ -327,7 +327,7 @@ bool General_LogInitialize(void);
 void General_LogCleanUp(void);
 
 // debug function to print out a chunk of memory character by character
-void General_PrintBufferCharacters(char* the_data, unsigned short the_len);
+void General_PrintBufferCharacters(char* the_data, int16_t the_len);
 
 
 #endif /* GENERAL_H_ */

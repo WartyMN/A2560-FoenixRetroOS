@@ -116,13 +116,17 @@ int8_t&#160;</td><td class="memItemRight" valign="bottom"><b>group_</b></td></tr
 <a class="el" href="struct_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>next_</b></td></tr>
 <tr class="memdesc:aaa7af82b408616fc572bbea7ef7d5d10"><td class="mdescLeft">&#160;</td><td class="mdescRight">group number, if this control is part of a group of controls. -1 (no group) is default. Typical use case: radio buttons. <br /></td></tr>
 <tr class="separator:aaa7af82b408616fc572bbea7ef7d5d10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adacc9cdf7578f89e410adfc421b8ff63"><td class="memItemLeft" align="right" valign="top"><a id="adacc9cdf7578f89e410adfc421b8ff63" name="adacc9cdf7578f89e410adfc421b8ff63"></a>
-<a class="el" href="struct_window.html">Window</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>parent_</b></td></tr>
-<tr class="memdesc:adacc9cdf7578f89e410adfc421b8ff63"><td class="mdescLeft">&#160;</td><td class="mdescRight">next control in the list <br /></td></tr>
-<tr class="separator:adacc9cdf7578f89e410adfc421b8ff63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e240e8ee6727287e22a840126ea6424"><td class="memItemLeft" align="right" valign="top"><a id="a6e240e8ee6727287e22a840126ea6424" name="a6e240e8ee6727287e22a840126ea6424"></a>
+<a class="el" href="struct_window.html">Window</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>parent_win_</b></td></tr>
+<tr class="memdesc:a6e240e8ee6727287e22a840126ea6424"><td class="mdescLeft">&#160;</td><td class="mdescRight">next control in the list <br /></td></tr>
+<tr class="separator:a6e240e8ee6727287e22a840126ea6424"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad79d04c0c770ed2b1e20e78efcc4545e"><td class="memItemLeft" align="right" valign="top"><a id="ad79d04c0c770ed2b1e20e78efcc4545e" name="ad79d04c0c770ed2b1e20e78efcc4545e"></a>
+<a class="el" href="struct_rectangle.html">Rectangle</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>parent_rect_</b></td></tr>
+<tr class="memdesc:ad79d04c0c770ed2b1e20e78efcc4545e"><td class="mdescLeft">&#160;</td><td class="mdescRight">parent window <br /></td></tr>
+<tr class="separator:ad79d04c0c770ed2b1e20e78efcc4545e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa66e6933036c76027de7b30536724cb7"><td class="memItemLeft" align="right" valign="top"><a id="aa66e6933036c76027de7b30536724cb7" name="aa66e6933036c76027de7b30536724cb7"></a>
 <a class="el" href="struct_rectangle.html">Rectangle</a>&#160;</td><td class="memItemRight" valign="bottom"><b>rect_</b></td></tr>
-<tr class="memdesc:aa66e6933036c76027de7b30536724cb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">parent window <br /></td></tr>
+<tr class="memdesc:aa66e6933036c76027de7b30536724cb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">parent rectangle (the window segment it belongs to: titlebar, contentarea, iconbar <br /></td></tr>
 <tr class="separator:aa66e6933036c76027de7b30536724cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15753baf0559398fb3b003de2fe58621"><td class="memItemLeft" align="right" valign="top"><a id="a15753baf0559398fb3b003de2fe58621" name="a15753baf0559398fb3b003de2fe58621"></a>
 h_align_type&#160;</td><td class="memItemRight" valign="bottom"><b>h_align_</b></td></tr>
@@ -132,34 +136,38 @@ h_align_type&#160;</td><td class="memItemRight" valign="bottom"><b>h_align_</b><
 v_align_type&#160;</td><td class="memItemRight" valign="bottom"><b>v_align_</b></td></tr>
 <tr class="memdesc:a7c593dd94659f062d98fc5e737e16447"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether the control should be positioned relative to the left side, right side, or centered <br /></td></tr>
 <tr class="separator:a7c593dd94659f062d98fc5e737e16447"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6902a3803ad57eda38bc16825530a0f7"><td class="memItemLeft" align="right" valign="top"><a id="a6902a3803ad57eda38bc16825530a0f7" name="a6902a3803ad57eda38bc16825530a0f7"></a>
-signed int&#160;</td><td class="memItemRight" valign="bottom"><b>x_offset_</b></td></tr>
-<tr class="memdesc:a6902a3803ad57eda38bc16825530a0f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether the control should be positioned relative to the top edge, bottom edge, or centered <br /></td></tr>
-<tr class="separator:a6902a3803ad57eda38bc16825530a0f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa06137011580bfd5d4f8bc7b47a14d6a"><td class="memItemLeft" align="right" valign="top"><a id="aa06137011580bfd5d4f8bc7b47a14d6a" name="aa06137011580bfd5d4f8bc7b47a14d6a"></a>
-signed int&#160;</td><td class="memItemRight" valign="bottom"><b>y_offset_</b></td></tr>
-<tr class="memdesc:aa06137011580bfd5d4f8bc7b47a14d6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">horizontal coordinate relative to the parent window's left or right edge. If h_align_ is H_ALIGN_CENTER, this value will be ignored. <br /></td></tr>
-<tr class="separator:aa06137011580bfd5d4f8bc7b47a14d6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a63d5602f3e311b717a82303ab2fbb9"><td class="memItemLeft" align="right" valign="top"><a id="a1a63d5602f3e311b717a82303ab2fbb9" name="a1a63d5602f3e311b717a82303ab2fbb9"></a>
-signed int&#160;</td><td class="memItemRight" valign="bottom"><b>width_</b></td></tr>
-<tr class="memdesc:a1a63d5602f3e311b717a82303ab2fbb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">vertical coordinate relative to the parent window's top or bottom edge. If v_align_ is V_ALIGN_CENTER, this value will be ignored. <br /></td></tr>
-<tr class="separator:a1a63d5602f3e311b717a82303ab2fbb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a378e6bba458d7b6a162e36a69a431981"><td class="memItemLeft" align="right" valign="top"><a id="a378e6bba458d7b6a162e36a69a431981" name="a378e6bba458d7b6a162e36a69a431981"></a>
-signed int&#160;</td><td class="memItemRight" valign="bottom"><b>height_</b></td></tr>
-<tr class="memdesc:a378e6bba458d7b6a162e36a69a431981"><td class="mdescLeft">&#160;</td><td class="mdescRight">width of the control <br /></td></tr>
-<tr class="separator:a378e6bba458d7b6a162e36a69a431981"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33f6d51280e6d4b846be34f7f3dcceee"><td class="memItemLeft" align="right" valign="top"><a id="a33f6d51280e6d4b846be34f7f3dcceee" name="a33f6d51280e6d4b846be34f7f3dcceee"></a>
-boolean&#160;</td><td class="memItemRight" valign="bottom"><b>visible_</b></td></tr>
-<tr class="memdesc:a33f6d51280e6d4b846be34f7f3dcceee"><td class="mdescLeft">&#160;</td><td class="mdescRight">height of the control <br /></td></tr>
-<tr class="separator:a33f6d51280e6d4b846be34f7f3dcceee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add9660a53565f1b4b7e3843eb890ae05"><td class="memItemLeft" align="right" valign="top"><a id="add9660a53565f1b4b7e3843eb890ae05" name="add9660a53565f1b4b7e3843eb890ae05"></a>
-boolean&#160;</td><td class="memItemRight" valign="bottom"><b>enabled_</b></td></tr>
-<tr class="memdesc:add9660a53565f1b4b7e3843eb890ae05"><td class="mdescLeft">&#160;</td><td class="mdescRight">is the control activated or not (in appearance). Does not affect ability to receive events. <br /></td></tr>
-<tr class="separator:add9660a53565f1b4b7e3843eb890ae05"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0839001a252277f37aabf9cad63e60e7"><td class="memItemLeft" align="right" valign="top"><a id="a0839001a252277f37aabf9cad63e60e7" name="a0839001a252277f37aabf9cad63e60e7"></a>
-int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>value_</b></td></tr>
-<tr class="memdesc:a0839001a252277f37aabf9cad63e60e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">is the control enabled or not. If not enabled, it will not receive events. <br /></td></tr>
-<tr class="separator:a0839001a252277f37aabf9cad63e60e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9424132171918a2acdda50b61a771bf6"><td class="memItemLeft" align="right" valign="top"><a id="a9424132171918a2acdda50b61a771bf6" name="a9424132171918a2acdda50b61a771bf6"></a>
+int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>x_offset_</b></td></tr>
+<tr class="memdesc:a9424132171918a2acdda50b61a771bf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether the control should be positioned relative to the top edge, bottom edge, or centered <br /></td></tr>
+<tr class="separator:a9424132171918a2acdda50b61a771bf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a199ea1b379b5c57eff4bf04913c009d7"><td class="memItemLeft" align="right" valign="top"><a id="a199ea1b379b5c57eff4bf04913c009d7" name="a199ea1b379b5c57eff4bf04913c009d7"></a>
+int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>y_offset_</b></td></tr>
+<tr class="memdesc:a199ea1b379b5c57eff4bf04913c009d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">horizontal coordinate relative to the parent window's left or right edge. If h_align_ is H_ALIGN_CENTER, this value will be ignored. <br /></td></tr>
+<tr class="separator:a199ea1b379b5c57eff4bf04913c009d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fe7d6bc7717f85d1b1f0daefac5d7fa"><td class="memItemLeft" align="right" valign="top"><a id="a4fe7d6bc7717f85d1b1f0daefac5d7fa" name="a4fe7d6bc7717f85d1b1f0daefac5d7fa"></a>
+int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>width_</b></td></tr>
+<tr class="memdesc:a4fe7d6bc7717f85d1b1f0daefac5d7fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">vertical coordinate relative to the parent window's top or bottom edge. If v_align_ is V_ALIGN_CENTER, this value will be ignored. <br /></td></tr>
+<tr class="separator:a4fe7d6bc7717f85d1b1f0daefac5d7fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2c69ac7c782ba0d0aaf5aafb8b4257a"><td class="memItemLeft" align="right" valign="top"><a id="ad2c69ac7c782ba0d0aaf5aafb8b4257a" name="ad2c69ac7c782ba0d0aaf5aafb8b4257a"></a>
+int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>height_</b></td></tr>
+<tr class="memdesc:ad2c69ac7c782ba0d0aaf5aafb8b4257a"><td class="mdescLeft">&#160;</td><td class="mdescRight">width of the control <br /></td></tr>
+<tr class="separator:ad2c69ac7c782ba0d0aaf5aafb8b4257a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0080e28ddbb7ff42e7c7247aba8e388c"><td class="memItemLeft" align="right" valign="top"><a id="a0080e28ddbb7ff42e7c7247aba8e388c" name="a0080e28ddbb7ff42e7c7247aba8e388c"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>visible_</b></td></tr>
+<tr class="memdesc:a0080e28ddbb7ff42e7c7247aba8e388c"><td class="mdescLeft">&#160;</td><td class="mdescRight">height of the control <br /></td></tr>
+<tr class="separator:a0080e28ddbb7ff42e7c7247aba8e388c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa56c61b646c83d8a0b4270bca86b95ea"><td class="memItemLeft" align="right" valign="top"><a id="aa56c61b646c83d8a0b4270bca86b95ea" name="aa56c61b646c83d8a0b4270bca86b95ea"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>enabled_</b></td></tr>
+<tr class="memdesc:aa56c61b646c83d8a0b4270bca86b95ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">is the control activated or not (in appearance). Does not affect ability to receive events. <br /></td></tr>
+<tr class="separator:aa56c61b646c83d8a0b4270bca86b95ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdf421fcd69b5080f03f59f848617cb1"><td class="memItemLeft" align="right" valign="top"><a id="abdf421fcd69b5080f03f59f848617cb1" name="abdf421fcd69b5080f03f59f848617cb1"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>pressed_</b></td></tr>
+<tr class="memdesc:abdf421fcd69b5080f03f59f848617cb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">is the control enabled or not. If not enabled, it will not receive events. <br /></td></tr>
+<tr class="separator:abdf421fcd69b5080f03f59f848617cb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a132516824ce548ede80c0e0e5b5c0ec9"><td class="memItemLeft" align="right" valign="top"><a id="a132516824ce548ede80c0e0e5b5c0ec9" name="a132516824ce548ede80c0e0e5b5c0ec9"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>invalidated_</b></td></tr>
+<tr class="memdesc:a132516824ce548ede80c0e0e5b5c0ec9"><td class="mdescLeft">&#160;</td><td class="mdescRight">is the control currently in a clicked/pushed/depressed state or not. Drives rendering choice. Does not affect ability to receive events. <br /></td></tr>
+<tr class="separator:a132516824ce548ede80c0e0e5b5c0ec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f7e6aa4fb28b26bfbcbc78dfaea5078"><td class="memItemLeft" align="right" valign="top"><a id="a4f7e6aa4fb28b26bfbcbc78dfaea5078" name="a4f7e6aa4fb28b26bfbcbc78dfaea5078"></a>
 int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>min_</b></td></tr>
 <tr class="memdesc:a4f7e6aa4fb28b26bfbcbc78dfaea5078"><td class="mdescLeft">&#160;</td><td class="mdescRight">current value of the control <br /></td></tr>
@@ -168,22 +176,18 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>min_</b></td></tr>
 int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>max_</b></td></tr>
 <tr class="memdesc:a6909c8627298b08a531c524b2fe0a047"><td class="mdescLeft">&#160;</td><td class="mdescRight">minimum allowed value <br /></td></tr>
 <tr class="separator:a6909c8627298b08a531c524b2fe0a047"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a548f89cf73616faad3d48ed6087d64"><td class="memItemLeft" align="right" valign="top"><a id="a1a548f89cf73616faad3d48ed6087d64" name="a1a548f89cf73616faad3d48ed6087d64"></a>
-<a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>image_inactive_</b></td></tr>
-<tr class="memdesc:a1a548f89cf73616faad3d48ed6087d64"><td class="mdescLeft">&#160;</td><td class="mdescRight">maximum allowed value <br /></td></tr>
-<tr class="separator:a1a548f89cf73616faad3d48ed6087d64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7feb45447523922eb864eee6640e3d7"><td class="memItemLeft" align="right" valign="top"><a id="ac7feb45447523922eb864eee6640e3d7" name="ac7feb45447523922eb864eee6640e3d7"></a>
-<a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>image_active_up_</b></td></tr>
-<tr class="memdesc:ac7feb45447523922eb864eee6640e3d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">image of the control in inactive state. size must match the length and width defined in the rect_. If not supplied, the control will be effectively invisible. <br /></td></tr>
-<tr class="separator:ac7feb45447523922eb864eee6640e3d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89731f4b5e3441270c20465c835e5d08"><td class="memItemLeft" align="right" valign="top"><a id="a89731f4b5e3441270c20465c835e5d08" name="a89731f4b5e3441270c20465c835e5d08"></a>
-<a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>image_active_down_</b></td></tr>
-<tr class="memdesc:a89731f4b5e3441270c20465c835e5d08"><td class="mdescLeft">&#160;</td><td class="mdescRight">image of the control when active, and not clicked/pressed. size must match the length and width defined in the rect_. If not supplied, the control will be effectively invisible. <br /></td></tr>
-<tr class="separator:a89731f4b5e3441270c20465c835e5d08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdd523074f64763feabc4805380ebcf2"><td class="memItemLeft" align="right" valign="top"><a id="afdd523074f64763feabc4805380ebcf2" name="afdd523074f64763feabc4805380ebcf2"></a>
+<a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>image_</b> [2][2]</td></tr>
+<tr class="memdesc:afdd523074f64763feabc4805380ebcf2"><td class="mdescLeft">&#160;</td><td class="mdescRight">maximum allowed value <br /></td></tr>
+<tr class="separator:afdd523074f64763feabc4805380ebcf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae02f4fc327d34777a97016325372e8bb"><td class="memItemLeft" align="right" valign="top"><a id="ae02f4fc327d34777a97016325372e8bb" name="ae02f4fc327d34777a97016325372e8bb"></a>
 char *&#160;</td><td class="memItemRight" valign="bottom"><b>caption_</b></td></tr>
-<tr class="memdesc:ae02f4fc327d34777a97016325372e8bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">image of the control when active, and clicked/depressed. size must match the length and width defined in the rect_. If not supplied, the control will be effectively invisible. <br /></td></tr>
+<tr class="memdesc:ae02f4fc327d34777a97016325372e8bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">4 image state bitmaps: [active yes/no][pushed down yes/no] <br /></td></tr>
 <tr class="separator:ae02f4fc327d34777a97016325372e8bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1830500523c9f9f0fdec309b49e3d8c1"><td class="memItemLeft" align="right" valign="top"><a id="a1830500523c9f9f0fdec309b49e3d8c1" name="a1830500523c9f9f0fdec309b49e3d8c1"></a>
+uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>avail_text_width_</b></td></tr>
+<tr class="memdesc:a1830500523c9f9f0fdec309b49e3d8c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">optional string to draw centered horizontally and vertically on the control. Typical use cases include buttons and labels. <br /></td></tr>
+<tr class="separator:a1830500523c9f9f0fdec309b49e3d8c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >This structure describes an instantiated control on a window. </p>

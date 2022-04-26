@@ -134,10 +134,10 @@ void WaitForUser(void)
 // Draw fancy box on the B screen and display demo description
 void ShowDescription(char* the_message)
 {
-	signed int	x1 = 0;
-	signed int	x2 = global_system->screen_[ID_CHANNEL_B]->text_cols_vis_ - 1;
-	signed int	y1 = 0;
-	signed int	y2 = 5;
+	int16_t		x1 = 0;
+	int16_t		x2 = global_system->screen_[ID_CHANNEL_B]->text_cols_vis_ - 1;
+	int16_t		y1 = 0;
+	int16_t		y2 = 5;
 
 	// draw box and fill contents in prep for next demo description
 	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, FG_COLOR_BLUE, BG_COLOR_DK_BLUE);
@@ -282,9 +282,9 @@ void Demo_Text_SetCharAndColorAtXY(void)
 
 void Demo_Text_DrawHLine1(void)
 {
-	signed int		x;
-	signed int		y;
-	signed int		line_len;
+	int16_t			x;
+	int16_t			y;
+	int16_t			line_len;
 
 	Text_FillCharMem(global_system->screen_[ID_CHANNEL_B], '.');
 	Text_FillAttrMem(global_system->screen_[ID_CHANNEL_B], 31);
@@ -307,9 +307,9 @@ void Demo_Text_DrawHLine1(void)
 
 void Demo_Text_DrawHLine2(void)
 {
-	signed int		x;
-	signed int		y;
-	signed int		line_len;
+	int16_t			x;
+	int16_t			y;
+	int16_t			line_len;
 
 	Text_FillCharMem(global_system->screen_[ID_CHANNEL_B], '.');
 	Text_FillAttrMem(global_system->screen_[ID_CHANNEL_B], 31);
@@ -331,9 +331,9 @@ void Demo_Text_DrawHLine2(void)
 
 void Demo_Text_DrawHLine3(void)
 {
-	signed int		x;
-	signed int		y;
-	signed int		line_len;
+	int16_t			x;
+	int16_t			y;
+	int16_t			line_len;
 
 	Text_FillCharMem(global_system->screen_[ID_CHANNEL_B], '.');
 	Text_FillAttrMem(global_system->screen_[ID_CHANNEL_B], 31);
@@ -355,12 +355,12 @@ void Demo_Text_DrawHLine3(void)
 
 void Demo_Text_NamedColors(void)
 {
-	signed int		x;
-	signed int		y;
-	signed int		line_len;
+	int16_t			x;
+	int16_t			y;
+	int16_t			line_len;
 	unsigned char	the_char;
-	signed int		i;
-	signed int		num_colors = 16;
+	int16_t			i;
+	int16_t			num_colors = 16;
 
 	ShowDescription("(using named default colors) -> Set foreground and background colors with FG_COLOR_BLACK, BG_COLOR_BLUE, etc.");	
 
@@ -400,10 +400,10 @@ void Demo_Text_NamedColors(void)
 
 void Demo_Text_DrawBox(void)
 {
-	signed int		x;
-	signed int		y;
-	signed int		h_line_len;
-	signed int		v_line_len;
+	int16_t			x;
+	int16_t			y;
+	int16_t			h_line_len;
+	int16_t			v_line_len;
 	unsigned char	the_char;
 
 	ShowDescription("Text_DrawBox -> Draw a basic box using start coordinates + width and height. All cells of the box will use the same character.");	
@@ -421,10 +421,10 @@ void Demo_Text_DrawBox(void)
 
 void Demo_Text_DrawBoxCoords(void)
 {
-	signed int		x1;
-	signed int		y1;
-	signed int		x2;
-	signed int		y2;
+	int16_t			x1;
+	int16_t			y1;
+	int16_t			x2;
+	int16_t			y2;
 	unsigned char	the_char;
 
 	ShowDescription("Text_DrawBoxCoords -> Draw a basic box using 4 coordinates. All cells of the box will use the same character.");	
@@ -442,10 +442,10 @@ void Demo_Text_DrawBoxCoords(void)
 
 void Demo_Text_DrawBoxCoordsFancy(void)
 {
-	signed int		x1;
-	signed int		y1;
-	signed int		x2;
-	signed int		y2;
+	int16_t			x1;
+	int16_t			y1;
+	int16_t			x2;
+	int16_t			y2;
 
 	ShowDescription("Text_DrawBoxCoordsFancy -> Draw a box using 4 coordinates. The pre-defined 'wall' characters are used to build the box's outline. Text_FillBox() is used to add a fill.");	
 
@@ -463,7 +463,7 @@ void Demo_Text_DrawBoxCoordsFancy(void)
 void Demo_Text_DrawStringAtXY(void)
 {
 	char*	the_message;
-	int		i;
+	int16_t	i;
 
 	ShowDescription("Text_DrawStringAtXY -> Draw a string at the specified coordinates. No wrapping is performed. Will truncate at right edge of screen.");	
 
@@ -480,10 +480,10 @@ void Demo_Text_DrawStringAtXY(void)
 
 void Demo_Text_DrawStringInBox1(void)
 {
-	signed int		x1;
-	signed int		y1;
-	signed int		x2;
-	signed int		y2;
+	int16_t			x1;
+	int16_t			y1;
+	int16_t			x2;
+	int16_t			y2;
 	char*			the_message;
 
 	ShowDescription("Text_DrawStringInBox -> Draw a string into the specified box coordinates. Wrap is performed and string is truncated after the specified space used up.");	
@@ -508,10 +508,10 @@ void Demo_Text_DrawStringInBox1(void)
 
 void Demo_Text_DrawStringInBox2(void)
 {
-	signed int		x1;
-	signed int		y1;
-	signed int		x2;
-	signed int		y2;
+	int16_t			x1;
+	int16_t			y1;
+	int16_t			x2;
+	int16_t			y2;
 	char*			the_message;
 
 	ShowDescription("Text_DrawStringInBox -> Optionally pass a pointer to a function that checks if another 'page' of content should be displayed. Demo: press any key to show more, or 'q' to stop.");	
@@ -538,7 +538,7 @@ void Demo_Text_ScreenResolution1(void)
 {
 	char			msg_buffer[80*3];
 	char*			the_message = msg_buffer;
-	int				y = 7;
+	int16_t			y = 7;
 	
 	Sys_SetVideoMode(global_system->screen_[ID_CHANNEL_B], RES_800X600);
 	ShowDescription("Sys_SetVideoMode -> (RES_800X600) Changes resolution to 800x600 if available for this screen/channel.");	
@@ -565,7 +565,7 @@ void Demo_Text_ScreenResolution2(void)
 {
 	char			msg_buffer[80*3];
 	char*			the_message = msg_buffer;
-	int				y = 7;
+	int16_t			y = 7;
 	
 	Sys_SetVideoMode(global_system->screen_[ID_CHANNEL_B], RES_640X480);
 	ShowDescription("Sys_SetVideoMode -> (RES_640X480) Changes resolution to 640x480 if available for this screen/channel.");	
@@ -592,7 +592,7 @@ void Demo_Text_ScreenResolution3(void)
 {
 	char			msg_buffer[80*3];
 	char*			the_message = msg_buffer;
-	int				y = 7;
+	int16_t			y = 7;
 	
 	Sys_SetVideoMode(global_system->screen_[ID_CHANNEL_A], RES_800X600);
 	ShowDescription("Sys_SetVideoMode -> (RES_800X600) Changes resolution to 800x600 if available for this screen/channel.");	
@@ -620,7 +620,7 @@ void Demo_Text_ScreenResolution4(void)
 {
 	char			msg_buffer[80*3];
 	char*			the_message = msg_buffer;
-	int				y = 7;
+	int16_t			y = 7;
 	
 	Sys_SetVideoMode(global_system->screen_[ID_CHANNEL_A], RES_1024X768);
 	ShowDescription("Sys_SetVideoMode -> (RES_1024X768) Changes resolution to 1024x768 if available for this screen/channel.");	

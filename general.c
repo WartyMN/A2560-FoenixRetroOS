@@ -65,17 +65,17 @@ static FILE*			global_log_file;
 //! \cond PRIVATE
 
 // Convert a (positive-only) string integer to an unsigned long integer. returns false in event of error
-bool General_StringToUnsignedLong(const char* the_string_value, unsigned long* the_conversion);
+bool General_StringToUnsignedLong(const char* the_string_value, uint32_t* the_conversion);
 
 // PRIVATE - no checking of parameters
 // copy the specified length of text from this_line_start into the write buffer, and overwrite the null terminator with a line break character
 // advance the read and write buffers to the next position
-void General_WrapParaWriteLine(char** src, char** dst, signed int write_len);
+void General_WrapParaWriteLine(char** src, char** dst, int16_t write_len);
 
 // PRIVATE - no checking of parameters
 // passed a string with no line breaks in it, and a buffer to write into, copies the string contents into the target buffer, performing line breaks as it goes
 // stops when all characters have been processed, or when all available vertical space has been used up.
-signed int General_WrapPara(char* this_line_start, char* formatted_text, signed int remaining_len, signed int max_width, signed int remaining_v_pixels, signed int one_char_width, signed int one_row_height, Font* the_font, signed int (* measure_function)(Font*, char*, signed int, signed int, signed int, signed int*));
+int16_t General_WrapPara(char* this_line_start, char* formatted_text, int16_t remaining_len, int16_t max_width, int16_t remaining_v_pixels, int16_t one_char_width, int16_t one_row_height, Font* the_font, int16_t (* measure_function)(Font*, char*, int16_t, int16_t, int16_t, int16_t*));
 
 //! \endcond
 
@@ -91,7 +91,7 @@ signed int General_WrapPara(char* this_line_start, char* formatted_text, signed 
 // PRIVATE - no checking of parameters
 // copy the specified length of text from this_line_start into the write buffer, and overwrite the null terminator with a line break character
 // advance the read and write buffers to the next position
-void General_WrapParaWriteLine(char** src, char** dst, signed int write_len)
+void General_WrapParaWriteLine(char** src, char** dst, int16_t write_len)
 {
 	General_Strlcpy(*dst, *src, write_len);
 	*(*dst + write_len - 1) = '\n'; // overwrite the \0 from strlcpy				
@@ -103,10 +103,10 @@ void General_WrapParaWriteLine(char** src, char** dst, signed int write_len)
 // PRIVATE - no checking of parameters
 // passed a string with no line breaks in it, and a buffer to write into, copies the string contents into the target buffer, performing line breaks as it goes
 // stops when all characters have been processed, or when all available vertical space has been used up.
-signed int General_WrapPara(char* this_line_start, char* formatted_text, signed int remaining_len, signed int max_width, signed int remaining_v_pixels, signed int one_char_width, signed int one_row_height, Font* the_font, signed int (* measure_function)(Font*, char*, signed int, signed int, signed int, signed int*))
+int16_t General_WrapPara(char* this_line_start, char* formatted_text, int16_t remaining_len, int16_t max_width, int16_t remaining_v_pixels, int16_t one_char_width, int16_t one_row_height, Font* the_font, int16_t (* measure_function)(Font*, char*, int16_t, int16_t, int16_t, int16_t*))
 {
-	signed int		v_pixels = 0;
-	signed int		next_line_len;
+	int16_t			v_pixels = 0;
+	int16_t			next_line_len;
 // 	char*			start_of_para = this_line_start;
 // 	char*			start_of_formatted = formatted_text;
 
@@ -120,7 +120,7 @@ signed int General_WrapPara(char* this_line_start, char* formatted_text, signed 
 	// outer loop: continue until the entire string has been copied to formatted text, or until we have exceeded the v pixel budget
 	do
 	{
-		signed int		this_line_len = 0;
+		int16_t			this_line_len = 0;
 		char*			next_line_start = this_line_start;
 		bool			line_complete;
 
@@ -129,14 +129,14 @@ signed int General_WrapPara(char* this_line_start, char* formatted_text, signed 
 		// inner loop: Each pass is one word. Process until the end of a line is reached
 		while (line_complete == false)
 		{
-			signed int			next_soft_break_pos;
+			int16_t				next_soft_break_pos;
 		
 			next_soft_break_pos = General_StrFindNextWordEnd(next_line_start, next_line_len);
 			
 			if (next_soft_break_pos < 0)
 			{
-				signed int	chars_that_fit;
-				signed int	pixels_used;
+				int16_t		chars_that_fit;
+				int16_t		pixels_used;
 
 				// there are no more word breaks in this string. 2 possible conditions:
 				//   A. We previously started a new line, and have at least 1 word. there's ONE more word then end of string
@@ -149,7 +149,7 @@ signed int General_WrapPara(char* this_line_start, char* formatted_text, signed 
 				//   A) if already have 1+ words on the line, wrap at this point, add the word, exit the function
 				//   B) if no words on line, force break the word at max width and continue.
 				
-				signed int	proposed_new_line_len = this_line_len + next_line_len;
+				int16_t		proposed_new_line_len = this_line_len + next_line_len;
 				
 				chars_that_fit = (*measure_function)(the_font, this_line_start, proposed_new_line_len, max_width, one_char_width, &pixels_used);
 				
@@ -190,9 +190,9 @@ signed int General_WrapPara(char* this_line_start, char* formatted_text, signed 
 			{
 				// we found the next word break. test if we can fit everything to that point. if so, continue on. if not, back up to last pos and break there
 
-				signed int	proposed_new_line_len = this_line_len + next_soft_break_pos;
-				signed int	chars_that_fit;
-				signed int	pixels_used;
+				int16_t		proposed_new_line_len = this_line_len + next_soft_break_pos;
+				int16_t		chars_that_fit;
+				int16_t		pixels_used;
 			
 				chars_that_fit = (*measure_function)(the_font, this_line_start, proposed_new_line_len, max_width, one_char_width, &pixels_used);
 				
@@ -216,7 +216,7 @@ signed int General_WrapPara(char* this_line_start, char* formatted_text, signed 
 					line_complete = true;
 
 					//DEBUG_OUT(("%s %d: print out of formatted_text after copy...", __func__ , __LINE__));
-					//General_PrintBufferCharacters(formatted_text-8, (unsigned short)remaining_len);
+					//General_PrintBufferCharacters(formatted_text-8, (int16_t)remaining_len);
 					//DEBUG_OUT(("%s %d: line complete. next_line_len=%i, this_line_start='%s'", __func__ , __LINE__, next_line_len, this_line_start));		
 
 					if (chars_that_fit == -1)
@@ -236,7 +236,7 @@ signed int General_WrapPara(char* this_line_start, char* formatted_text, signed 
 	} while (this_line_start != NULL && remaining_v_pixels > 0);
 	
 // 	DEBUG_OUT(("%s %d: print out of final version of para", __func__ , __LINE__));
-// 	General_PrintBufferCharacters(start_of_formatted, (unsigned short)80);
+// 	General_PrintBufferCharacters(start_of_formatted, (int16_t)80);
 // 	
 // 	DEBUG_OUT(("%s %d: remaining_v_pixels=%i, v_pixels=%i", __func__ , __LINE__, remaining_v_pixels, v_pixels));
 	
@@ -245,10 +245,10 @@ signed int General_WrapPara(char* this_line_start, char* formatted_text, signed 
 
 
 // Convert a (positive-only) string integer to an unsigned long integer. returns false in event of error
-bool General_StringToUnsignedLong(const char* the_string_value, unsigned long* the_conversion)
+bool General_StringToUnsignedLong(const char* the_string_value, uint32_t* the_conversion)
 {
 	char*			temp;
-	unsigned long	val = 0;
+	uint32_t		val = 0;
 	bool			safe_conversion = true;
 	
 	errno = 0;
@@ -273,7 +273,7 @@ bool General_StringToUnsignedLong(const char* the_string_value, unsigned long* t
 		safe_conversion = false;
 	}
 
-	*the_conversion = (unsigned long)val;
+	*the_conversion = (uint32_t)val;
 	return safe_conversion;
 }
 
@@ -303,15 +303,15 @@ bool General_StringToUnsignedLong(const char* the_string_value, unsigned long* t
 //! @param	the_font: the font object to be used in measuring width. This is optional and ignore if called for text mode operations.
 //! @param	measure_function: pointer to the function responsible for measuring the graphical width of a string 
 //! @return Returns number of vertical pixels required. Returns -1 in any error condition.
-signed int General_WrapAndTrimTextToFit(char** orig_string, char** formatted_string, signed int max_chars_to_format, signed int max_width, signed int max_height, signed int one_char_width, signed int one_row_height, Font* the_font, signed int (* measure_function)(Font*, char*, signed int, signed int, signed int, signed int*))
+int16_t General_WrapAndTrimTextToFit(char** orig_string, char** formatted_string, int16_t max_chars_to_format, int16_t max_width, int16_t max_height, int16_t one_char_width, int16_t one_row_height, Font* the_font, int16_t (* measure_function)(Font*, char*, int16_t, int16_t, int16_t, int16_t*))
 {
 	char*			formatted_text;
-	signed int		v_pixels = 0;
-	signed int		new_v_pixels_used;
+	int16_t			v_pixels = 0;
+	int16_t			new_v_pixels_used;
 	char*			remaining_text;
-	signed int		remaining_len = max_chars_to_format;
+	int16_t			remaining_len = max_chars_to_format;
 	bool			format_complete = false;
-	signed int		remaining_v_pixels;
+	int16_t			remaining_v_pixels;
 	static char		para_buff[1024];
 	char*			the_para = para_buff;
 
@@ -324,8 +324,8 @@ signed int General_WrapAndTrimTextToFit(char** orig_string, char** formatted_str
 	do
 	{
 		bool			line_complete = false;
-		signed int		dist_to_next_hard_break;
-		signed int		len_to_process;
+		int16_t			dist_to_next_hard_break;
+		int16_t			len_to_process;
 		
 		
 		dist_to_next_hard_break = General_StrFindNextLineBreak(remaining_text, remaining_len);
@@ -380,7 +380,7 @@ signed int General_WrapAndTrimTextToFit(char** orig_string, char** formatted_str
 	} while ( format_complete == false);
 
 	//DEBUG_OUT(("%s %d: print out of formatted_text after processing...", __func__ , __LINE__));
-	//General_PrintBufferCharacters(*formatted_string, (unsigned short)max_chars_to_format+10);
+	//General_PrintBufferCharacters(*formatted_string, (int16_t)max_chars_to_format+10);
 	//DEBUG_OUT(("%s %d: v pixels used=%i", __func__ , __LINE__, v_pixels));
 	
 	// update the original string pointer passed so that it now points to any remaining text (if any)
@@ -402,7 +402,7 @@ signed int General_WrapAndTrimTextToFit(char** orig_string, char** formatted_str
 //! from: https://stackoverflow.com/questions/4572556/concise-way-to-implement-round-in-c
 //! @param	the_float: a double value to round up/down
 //! @return	Returns an int with the rounded value
-int General_Round(double the_float)
+int32_t General_Round(double the_float)
 {
     if (the_float < 0.0)
         return (int)(the_float - 0.5);
@@ -462,10 +462,10 @@ void General_MakeFileSizeReadable(unsigned long size_in_bytes, char* formatted_f
 
 
 // Convert a positive or negative string integer to a signed long integer. returns false in event of error
-bool General_StringToSignedLong(const char* the_string_value, signed long* the_conversion)
+bool General_StringToSignedLong(const char* the_string_value, int32_t* the_conversion)
 {
-	signed long		signed_val = 0;
-	unsigned long	unsigned_val = 0;
+	int32_t			signed_val = 0;
+	uint32_t		unsigned_val = 0;
 	bool			safe_conversion;
 	const char*		start_of_number = the_string_value;
 	
@@ -501,8 +501,8 @@ bool General_StringToSignedLong(const char* the_string_value, signed long* the_c
 //! @return	Returns true if the string was modified by the process.
 bool General_StrToLower(char* the_string)
 {
-    int		i;
-    int		len = strlen(the_string);
+    int16_t	i;
+    int16_t	len = strlen(the_string);
     bool	change_made = false;
     
 	for (i = 0; i < len; i++)
@@ -636,7 +636,7 @@ signed long General_Strlcat(char* dst, const char* src, signed long max_len)
 //! @param	string_2: the second string to compare.
 //! @param	max_len: the maximum number of characters to compare. Even if both strings are larger than this number, only this many characters will be compared.
 //! @return	Returns 0 if the strings are equivalent (at least up to max_len). Returns a negative or positive if the strings are different.
-signed int General_Strncmp(const char* string_1, const char* string_2, size_t max_len)
+int16_t General_Strncmp(const char* string_1, const char* string_2, size_t max_len)
 {
 	register uint8_t	u;
 	
@@ -660,7 +660,7 @@ signed int General_Strncmp(const char* string_1, const char* string_2, size_t ma
 //! @param	string_2: the second string to compare.
 //! @param	max_len: the maximum number of characters to compare. Even if both strings are larger than this number, only this many characters will be compared.
 //! @return	Returns 0 if the strings are equivalent (at least up to max_len). Returns a negative or positive if the strings are different.
-signed int General_Strncasecmp(const char* string_1, const char* string_2, size_t max_len)
+int16_t General_Strncasecmp(const char* string_1, const char* string_2, size_t max_len)
 {
 	//DEBUG_OUT(("%s %d: s1='%s'; s2='%s'; max_len=%i", __func__ , __LINE__, string_1, string_2, max_len));
 
@@ -727,7 +727,7 @@ bool General_CompareStringLength(void* first_payload, void* second_payload)
 
 
 // Find the next space, dash, or other word break character and return its position within the string. If none found before end of string or max len, returns -1.
-signed int General_StrFindNextWordEnd(const char* the_string, signed int max_search_len)
+int16_t General_StrFindNextWordEnd(const char* the_string, int16_t max_search_len)
 {
 	char*	next_space;
 	char*	next_dash;
@@ -756,7 +756,7 @@ signed int General_StrFindNextWordEnd(const char* the_string, signed int max_sea
 
 
 // Find the next line break character and return its position within the string (+1: first char is '1'). If none found before end of string or max len, returns 0.
-signed int General_StrFindNextLineBreak(const char* the_string, signed int max_search_len)
+int16_t General_StrFindNextLineBreak(const char* the_string, int16_t max_search_len)
 {
 	char*	next_line_break;
  	
@@ -769,7 +769,7 @@ signed int General_StrFindNextLineBreak(const char* the_string, signed int max_s
 	
 	if (next_line_break)
 	{
-		return (signed int)((next_line_break - (char*)the_string) + 1);
+		return (int16_t)((next_line_break - (char*)the_string) + 1);
 	}
 
 	return 0;
@@ -798,7 +798,7 @@ bool General_RectIntersect(Rectangle r1, Rectangle r2)
 
 
 // test if a point is within a rectangle
-bool General_PointInRect(signed int x, signed int y, Rectangle r)
+bool General_PointInRect(int16_t x, int16_t y, Rectangle r)
 {
 	//DEBUG_OUT(("%s %d: x=%i, y=%i, r.MinX=%i, r.MinY=%i, r.MaxX=%i, r.MaxY=%i", __func__, __LINE__, x, y,  r.MinX, r.MinY, r.MaxX, r.MaxY));
 	if	(
@@ -821,9 +821,9 @@ bool General_PointInRect(signed int x, signed int y, Rectangle r)
 // put the frame coords into the frame_rect, and the object to be centered into the hero_rect. ON return, the frame rect will hold the coords to be used.
 void General_CenterRectWithinRect(Rectangle* the_frame_rect, Rectangle* the_hero_rect, bool at_25_percent_v)
 {
-	signed short	hero_height = the_hero_rect->MaxY - the_hero_rect->MinY;
-	signed short	hero_width = the_hero_rect->MaxX - the_hero_rect->MinX;
-	signed short	frame_height = the_frame_rect->MaxY - the_frame_rect->MinY;
+	int16_t			hero_height = the_hero_rect->MaxY - the_hero_rect->MinY;
+	int16_t			hero_width = the_hero_rect->MaxX - the_hero_rect->MinX;
+	int16_t			frame_height = the_frame_rect->MaxY - the_frame_rect->MinY;
 	
 	// horizontal: center left/right
 	the_frame_rect->MinX = (the_frame_rect->MaxX - the_frame_rect->MinX - hero_width) / 2 + the_frame_rect->MinX;
@@ -831,7 +831,7 @@ void General_CenterRectWithinRect(Rectangle* the_frame_rect, Rectangle* the_hero
 
 	if (at_25_percent_v == true)
 	{
-		signed short	proposed_top;
+		int16_t			proposed_top;
 
 		// set at 25% of vertical (good for showing an about window, for example)
 		proposed_top = frame_height / 4;
@@ -919,7 +919,7 @@ char* General_ExtractFilenameFromPathWithAlloc(const char* the_file_path)
 	else
 	{
 		char*	the_file_name_part = General_NamePart(the_file_path);
-		int		filename_len = General_Strnlen(the_file_name_part, FILE_MAX_PATHNAME_SIZE);
+		int16_t	filename_len = General_Strnlen(the_file_name_part, FILE_MAX_PATHNAME_SIZE);
 
 		if (filename_len == 0)
 		{
@@ -927,7 +927,7 @@ char* General_ExtractFilenameFromPathWithAlloc(const char* the_file_path)
 			// in that case, we just use the file path minus : as the name
 
 			// copy the part of the path minus the last char into the file name
-			signed int	path_len = General_Strnlen(the_file_path, FILE_MAX_PATHNAME_SIZE);
+			int16_t		path_len = General_Strnlen(the_file_path, FILE_MAX_PATHNAME_SIZE);
 			General_Strlcpy(the_file_name, the_file_path, path_len);
 		}
 		else
@@ -1014,7 +1014,7 @@ bool General_ExtractFileExtensionFromFilename(const char* the_file_name, char* t
 	//   if no dot char, then don't set extension, and return false
 	
     char*	dot = strrchr((char*)the_file_name, '.');
-    int		i;
+    int16_t	i;
 
     // (re) set the file extension to "" in case we have to return. It may have a value from whatever previous use was
     the_extension[0] = '\0';
@@ -1196,10 +1196,10 @@ void General_LogCleanUp(void)
 
 
 // debug function to print out a chunk of memory character by character
-void General_PrintBufferCharacters(char* the_data, unsigned short the_len)
+void General_PrintBufferCharacters(char* the_data, int16_t the_len)
 {
-	unsigned short	i;
-	unsigned short	bytes_out = 0;
+	int16_t			i;
+	int16_t			bytes_out = 0;
 	char*			temp = the_data;
 	char			buffer[512];
 	char*			next_field = buffer;

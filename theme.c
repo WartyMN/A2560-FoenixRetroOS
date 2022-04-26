@@ -1835,10 +1835,10 @@ Bitmap* Theme_CreateDefaultDesktopPattern(Theme* the_theme)
 ControlTemplate* Theme_CreateDefaultControlTemplateClose(void)
 {
 	ControlTemplate*	the_template;
-	signed int			width = 12;		// TODO: replace with theme-property so size can be whatever designer says
-	signed int			height = 12;	// TODO: replace with theme-property so size can be whatever designer says
-	int					is_active;
-	int					is_pushed;
+	int16_t				width = 12;		// TODO: replace with theme-property so size can be whatever designer says
+	int16_t				height = 12;	// TODO: replace with theme-property so size can be whatever designer says
+	int16_t				is_active;
+	int16_t				is_pushed;
 
 	// LOGIC:
 	//   until we have a file system in f68/MCP, need to load from ROM (memory)
@@ -1891,10 +1891,10 @@ ControlTemplate* Theme_CreateDefaultControlTemplateMinimize(void)
 {
 	ControlTemplate*	the_template;
 	Bitmap*				the_bitmap;
-	signed int			width = 12;
-	signed int			height = 12;
-	int					is_active;
-	int					is_pushed;
+	int16_t				width = 12;
+	int16_t				height = 12;
+	int8_t				is_active;
+	int8_t				is_pushed;
 
 	// LOGIC:
 	//   until we have a file system in f68/MCP, need to load from ROM (memory)
@@ -1947,10 +1947,10 @@ ControlTemplate* Theme_CreateDefaultControlTemplateNormSize(void)
 {
 	ControlTemplate*	the_template;
 	Bitmap*				the_bitmap;
-	signed int			width = 12;
-	signed int			height = 12;
-	int					is_active;
-	int					is_pushed;
+	int16_t				width = 12;
+	int16_t				height = 12;
+	int8_t				is_active;
+	int8_t				is_pushed;
 
 	
 	// LOGIC:
@@ -2004,10 +2004,10 @@ ControlTemplate* Theme_CreateDefaultControlTemplateMaximize(void)
 {
 	ControlTemplate*	the_template;
 	Bitmap*				the_bitmap;
-	signed int			width = 12;
-	signed int			height = 12;
-	int					is_active;
-	int					is_pushed;
+	int16_t				width = 12;
+	int16_t				height = 12;
+	int8_t				is_active;
+	int8_t				is_pushed;
 
 	// LOGIC:
 	//   until we have a file system in f68/MCP, need to load from ROM (memory)
@@ -2059,8 +2059,8 @@ ControlTemplate* Theme_CreateControlTemplateFlexWidth(Theme* the_theme, control_
 {
 	ControlTemplate*	the_template;
 	Bitmap*				the_bitmap;
-	int					is_active;
-	int					is_pushed;
+	int8_t				is_active;
+	int8_t				is_pushed;
 
 	// LOGIC:
 	//   until we have a file system in f68/MCP, need to load from ROM (memory)
@@ -2129,13 +2129,13 @@ ControlTemplate* Theme_CreateControlTemplateFlexWidth(Theme* the_theme, control_
 // better to just make a Bitmap_NewFromMemory() function that wraps around Bitmap_New, and copies in. but even then, you aren't saving much.
 // maybe need to have a routine that simply loads and parses an entire control from disk? .ini would have all the params here, plus paths to 4 bitmaps to load from disk. 
 // //! Generate a control template based on the passed parameters
-// ControlTemplate* Theme_CreateControlTemplate(control_type the_type, signed int width, signed int height, signed int x_offset, signed int y_offset, h_align_type the_h_align, v_align_type the_v_align, int16_t min, int16_t max, char* the_caption, const unsigned char* img_inact_up, const unsigned char* img_inact_dn, const unsigned char* img_act_up, const unsigned char* img_act_dn)
+// ControlTemplate* Theme_CreateControlTemplate(control_type the_type, int16_t width, int16_t height, int16_t x_offset, int16_t y_offset, h_align_type the_h_align, v_align_type the_v_align, int16_t min, int16_t max, char* the_caption, const unsigned char* img_inact_up, const unsigned char* img_inact_dn, const unsigned char* img_act_up, const unsigned char* img_act_dn)
 // {
 // 	ControlTemplate*	the_template;
-// // 	signed int			width = 12;
-// // 	signed int			height = 12;
-// 	int					is_active;
-// 	int					is_pushed;
+// // 	int16_t				width = 12;
+// // 	int16_t				height = 12;
+// 	int8_t				is_active;
+// 	int8_t				is_pushed;
 // 
 // 	if ( (the_template = ControlTemplate_New()) == NULL)
 // 	{
@@ -2306,6 +2306,12 @@ bool Theme_Destroy(Theme** the_theme)
 Theme* Theme_CreateDefaultTheme(void)
 {
 	Theme*		the_theme;
+	int8_t		is_active;
+	int8_t		is_pushed;
+	int16_t		width_left;
+	int16_t		width_mid;
+	int16_t		width_right;
+	int16_t		height;
 	
 	if ( (the_theme = Theme_New()) == NULL)
 	{
@@ -2367,8 +2373,6 @@ Theme* Theme_CreateDefaultTheme(void)
 	the_theme->control_t_maximize_ = Theme_CreateDefaultControlTemplateMaximize();
 
 	// get the backdrop bitmap snippets for the flexible-width controls (text buttons, text fields)
-	int					is_active;
-	int					is_pushed;
 
 	the_theme->flex_width_backdrops_[TEXT_BUTTON].left_width_ = 4;
 	the_theme->flex_width_backdrops_[TEXT_BUTTON].mid_width_ = 4;
@@ -2379,6 +2383,17 @@ Theme* Theme_CreateDefaultTheme(void)
 	the_theme->flex_width_backdrops_[TEXT_FIELD].right_width_ = 4;
 	the_theme->flex_width_backdrops_[TEXT_FIELD].height_ = 17;
 
+	// LOGIC:
+	//   height will be same for all states and parts of buttons/fields
+	//   left/mid/right widths will be same, respectively, for all states and parts of buttons/fields
+	width_left = the_theme->flex_width_backdrops_[TEXT_BUTTON].left_width_;
+	width_mid = the_theme->flex_width_backdrops_[TEXT_BUTTON].mid_width_;
+	width_right = the_theme->flex_width_backdrops_[TEXT_BUTTON].right_width_;
+	height = the_theme->flex_width_backdrops_[TEXT_BUTTON].height_;
+	DEBUG_OUT(("%s %d: button l width=%i", __func__, __LINE__, width_left));
+	DEBUG_OUT(("%s %d: button m width=%i", __func__, __LINE__, width_mid));
+	DEBUG_OUT(("%s %d: button r width=%i", __func__, __LINE__, width_right));
+		
 	for (is_active = 0; is_active < 2; is_active++)
 	{
 		for (is_pushed = 0; is_pushed < 2; is_pushed++)
@@ -2386,79 +2401,80 @@ Theme* Theme_CreateDefaultTheme(void)
 			Bitmap*		bitmap1;
 			Bitmap*		bitmap2;
 			Bitmap*		bitmap3;
+
+		
+			if ( (bitmap1 = Bitmap_New(width_left, height, NULL) ) == NULL)
+			{
+				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+				return NULL;
+			}
+			
+			memcpy(bitmap1->addr_, def_theme_textbutton_left[is_active][is_pushed], width_left * height);
+			the_theme->flex_width_backdrops_[TEXT_BUTTON].image_left_[is_active][is_pushed] = bitmap1;
+
+
+			if ( (bitmap2 = Bitmap_New(width_mid, height, NULL) ) == NULL)
+			{
+				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+				return NULL;
+			}
+			
+			memcpy(bitmap2->addr_, def_theme_textbutton_mid[is_active][is_pushed], width_mid * height);
+			the_theme->flex_width_backdrops_[TEXT_BUTTON].image_mid_[is_active][is_pushed] = bitmap2;
+
+			if ( (bitmap3 = Bitmap_New(width_right, height, NULL) ) == NULL)
+			{
+				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+				return NULL;
+			}
+			
+			memcpy(bitmap3->addr_, def_theme_textbutton_right[is_active][is_pushed], width_right * height);
+			the_theme->flex_width_backdrops_[TEXT_BUTTON].image_right_[is_active][is_pushed] = bitmap3;
+			
+		}
+	}
+
+	width_left = the_theme->flex_width_backdrops_[TEXT_FIELD].left_width_;
+	width_mid = the_theme->flex_width_backdrops_[TEXT_FIELD].mid_width_;
+	width_right = the_theme->flex_width_backdrops_[TEXT_FIELD].right_width_;
+	height = the_theme->flex_width_backdrops_[TEXT_FIELD].height_;
+	DEBUG_OUT(("%s %d: field l width=%i", __func__, __LINE__, width_left));
+	DEBUG_OUT(("%s %d: field m width=%i", __func__, __LINE__, width_mid));
+	DEBUG_OUT(("%s %d: field r width=%i", __func__, __LINE__, width_right));
+		
+	for (is_active = 0; is_active < 2; is_active++)
+	{
+		for (is_pushed = 0; is_pushed < 2; is_pushed++)
+		{
 			Bitmap*		bitmap4;
 			Bitmap*		bitmap5;
 			Bitmap*		bitmap6;
-			int16_t		width;
-			int16_t		height;
 
-			width = the_theme->flex_width_backdrops_[TEXT_BUTTON].left_width_;
-			height = the_theme->flex_width_backdrops_[TEXT_BUTTON].height_;
-			
-			if ( (bitmap1 = Bitmap_New(width, height, NULL) ) == NULL)
+			if ( (bitmap4 = Bitmap_New(width_left, height, NULL) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
 			}
 			
-			memcpy(bitmap1->addr_, def_theme_textbutton_left[is_active][is_pushed], width * height);
-			the_theme->flex_width_backdrops_[TEXT_BUTTON].image_left_[is_active][is_pushed] = bitmap1;
-
-			width = the_theme->flex_width_backdrops_[TEXT_BUTTON].mid_width_;
-
-			if ( (bitmap2 = Bitmap_New(width, height, NULL) ) == NULL)
-			{
-				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
-				return NULL;
-			}
-			
-			memcpy(bitmap2->addr_, def_theme_textbutton_mid[is_active][is_pushed], width * height);
-			the_theme->flex_width_backdrops_[TEXT_BUTTON].image_mid_[is_active][is_pushed] = bitmap2;
-
-			width = the_theme->flex_width_backdrops_[TEXT_BUTTON].right_width_;
-
-			if ( (bitmap3 = Bitmap_New(width, height, NULL) ) == NULL)
-			{
-				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
-				return NULL;
-			}
-			
-			memcpy(bitmap3->addr_, def_theme_textbutton_right[is_active][is_pushed], width * height);
-			the_theme->flex_width_backdrops_[TEXT_BUTTON].image_right_[is_active][is_pushed] = bitmap3;
-
-
-			width = the_theme->flex_width_backdrops_[TEXT_FIELD].left_width_;
-			height = the_theme->flex_width_backdrops_[TEXT_FIELD].height_;
-			
-			if ( (bitmap4 = Bitmap_New(width, height, NULL) ) == NULL)
-			{
-				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
-				return NULL;
-			}
-			
-			memcpy(bitmap4->addr_, def_theme_textbutton_left[is_active][is_pushed], width * height);
+			memcpy(bitmap4->addr_, def_theme_textbutton_left[is_active][is_pushed], width_left * height);
 			the_theme->flex_width_backdrops_[TEXT_FIELD].image_left_[is_active][is_pushed] = bitmap4;
 
-			width = the_theme->flex_width_backdrops_[TEXT_FIELD].mid_width_;
-
-			if ( (bitmap5 = Bitmap_New(width, height, NULL) ) == NULL)
+			if ( (bitmap5 = Bitmap_New(width_mid, height, NULL) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
 			}
 			
-			memcpy(bitmap5->addr_, def_theme_textbutton_mid[is_active][is_pushed], width * height);
+			memcpy(bitmap5->addr_, def_theme_textbutton_mid[is_active][is_pushed], width_mid * height);
 			the_theme->flex_width_backdrops_[TEXT_FIELD].image_mid_[is_active][is_pushed] = bitmap5;
 
-			width = the_theme->flex_width_backdrops_[TEXT_FIELD].right_width_;
-
-			if ( (bitmap6 = Bitmap_New(width, height, NULL) ) == NULL)
+			if ( (bitmap6 = Bitmap_New(width_right, height, NULL) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
 			}
 			
-			memcpy(bitmap6->addr_, def_theme_textbutton_right[is_active][is_pushed], width * height);
+			memcpy(bitmap6->addr_, def_theme_textbutton_right[is_active][is_pushed], width_right * height);
 			the_theme->flex_width_backdrops_[TEXT_FIELD].image_right_[is_active][is_pushed] = bitmap6;
 		}
 	}
@@ -2772,8 +2788,8 @@ Theme* Theme_CreateGreenTheme(void)
 	the_theme->control_t_norm_size_ = Theme_CreateGreenControlTemplateNormSize();
 	the_theme->control_t_maximize_ = Theme_CreateGreenControlTemplateMaximize();
 	// get the backdrop bitmap snippets for the flexible-width controls (text buttons, text fields)
-	int					is_active;
-	int					is_pushed;
+	int8_t				is_active;
+	int8_t				is_pushed;
 
 	the_theme->flex_width_backdrops_[TEXT_BUTTON].left_width_ = 4;
 	the_theme->flex_width_backdrops_[TEXT_BUTTON].mid_width_ = 4;
@@ -2933,10 +2949,10 @@ ControlTemplate* Theme_CreateGreenControlTemplateClose(void)
 {
 	ControlTemplate*	the_template;
 	Bitmap*				the_bitmap;
-	signed int			width = 14;
-	signed int			height = 14;
-	int					is_active;
-	int					is_pushed;
+	int16_t				width = 14;
+	int16_t				height = 14;
+	int8_t				is_active;
+	int8_t				is_pushed;
 
 	// LOGIC:
 	//   until we have a file system in f68/MCP, need to load from ROM (memory)
@@ -2989,10 +3005,10 @@ ControlTemplate* Theme_CreateGreenControlTemplateMinimize(void)
 {
 	ControlTemplate*	the_template;
 	Bitmap*				the_bitmap;
-	signed int			width = 14;
-	signed int			height = 14;
-	int					is_active;
-	int					is_pushed;
+	int16_t				width = 14;
+	int16_t				height = 14;
+	int8_t				is_active;
+	int8_t				is_pushed;
 
 	// LOGIC:
 	//   until we have a file system in f68/MCP, need to load from ROM (memory)
@@ -3045,10 +3061,10 @@ ControlTemplate* Theme_CreateGreenControlTemplateNormSize(void)
 {
 	ControlTemplate*	the_template;
 	Bitmap*				the_bitmap;
-	signed int			width = 14;
-	signed int			height = 14;
-	int					is_active;
-	int					is_pushed;
+	int16_t				width = 14;
+	int16_t				height = 14;
+	int8_t				is_active;
+	int8_t				is_pushed;
 
 	// LOGIC:
 	//   until we have a file system in f68/MCP, need to load from ROM (memory)
@@ -3101,10 +3117,10 @@ ControlTemplate* Theme_CreateGreenControlTemplateMaximize(void)
 {
 	ControlTemplate*	the_template;
 	Bitmap*				the_bitmap;
-	signed int			width = 14;
-	signed int			height = 14;
-	int					is_active;
-	int					is_pushed;
+	int16_t				width = 14;
+	int16_t				height = 14;
+	int8_t				is_active;
+	int8_t				is_pushed;
 
 	// LOGIC:
 	//   until we have a file system in f68/MCP, need to load from ROM (memory)

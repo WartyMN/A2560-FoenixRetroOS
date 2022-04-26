@@ -77,7 +77,7 @@ bool keyboard_test_2(void)
 	
 	//   keys return their keycode when pushed, and their keyboard + 128 when released.
 	
-	unsigned short	the_code;
+	int16_t		the_code;
 	
 	do
 	{
@@ -103,14 +103,14 @@ bool keyboard_test_2(void)
 // test using channel driver - TEMP - BAD
 bool keyboard_test(void)
 {
-	signed short			bytes_read = 0;
-	signed short			bytes_requested = 5;
+	int16_t					bytes_read = 0;
+	int16_t					bytes_requested = 5;
 	static unsigned char	keyboard_buff[256];
 	unsigned char*			the_keyboard_buff = keyboard_buff;
-	signed short			the_channel_id;
-	signed short			the_device_id = 0;
+	int16_t					the_channel_id;
+	int16_t					the_device_id = 0;
 	bool					stop = false;
-	signed int				y = 30;
+	int16_t					y = 30;
 	
 // 	Text_DrawStringAtXY(ID_CHANNEL_B, 0, y++, (char*)"Trying to open keyboard device...", FG_COLOR_DK_BLUE, BG_COLOR_YELLOW);
 	DEBUG_OUT(("%s %d: Trying to open keyboard device...", __func__, __LINE__));
@@ -268,10 +268,10 @@ MU_TEST(text_test_block_copy)
 
 MU_TEST(text_test_block_copy_box)
 {
-	signed int		x;
-	signed int		y;
-	signed int		h_line_len;
-	signed int		v_line_len;
+	int16_t			x;
+	int16_t			y;
+	int16_t			h_line_len;
+	int16_t			v_line_len;
 	char*			buffer1;
 	char*			buffer2;
 	
@@ -374,7 +374,7 @@ MU_TEST(text_test_fill_box)
 	// bad values
 	mu_assert( Text_FillBoxSlow(NULL, 0, 6, 15, 8, CH_CHECKERED1, COLOR_VIOLET, COLOR_CYAN, CHAR_AND_ATTR) == false, "Text_FillBoxSlow accepted an illegal screen ID" );
 	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_B], -67, 6, 72, 30, CH_CHECKERED3, COLOR_BLUE, COLOR_DK_BLUE) == false, "Text_FillBoxSlow accepted an illegal x coord" );
-	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_B], 450000, 6, 72, 30, CH_CHECKERED3, COLOR_BLUE, COLOR_DK_BLUE) == false, "Text_FillBoxSlow accepted an illegal x coord" );
+	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_B], 32767, 6, 72, 30, CH_CHECKERED3, COLOR_BLUE, COLOR_DK_BLUE) == false, "Text_FillBoxSlow accepted an illegal x coord" );
 	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_B], 5, -6, 72, 30, CH_CHECKERED3, COLOR_BLUE, COLOR_DK_BLUE) == false, "Text_FillBoxSlow accepted an illegal y coord" );
 	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_B], 5, 6000, 72, 30, CH_CHECKERED3, COLOR_BLUE, COLOR_DK_BLUE) == false, "Text_FillBoxSlow accepted an illegal y coord" );
 }
@@ -382,7 +382,7 @@ MU_TEST(text_test_fill_box)
 
 MU_TEST(text_test_invert_box)
 {
-	signed int i;
+	int32_t	i;
 	
 	for (i = 0; i < 999; i++)
 	{
@@ -422,8 +422,8 @@ MU_TEST(text_test_show_font)
 //test char placement
 MU_TEST(text_test_char_placement)
 {
-	signed int	x;
-	signed int	y;
+	int16_t		x;
+	int16_t		y;
 	
 	for (y = 4; y < 40; y = y+2)
 	{
@@ -502,8 +502,8 @@ MU_TEST(text_test_char_and_attr_reading)
 	unsigned char	the_color;
 	unsigned char	the_char;
 	unsigned char	the_attribute_value;
-	signed int		x;
-	signed int		y;
+	int16_t			x;
+	int16_t			y;
 	
 	x = 0;
 	y = 6;
@@ -538,9 +538,9 @@ MU_TEST(text_test_char_and_attr_reading)
 
 MU_TEST(text_test_line_drawing)
 {
-	signed int		x;
-	signed int		y;
-	signed int		line_len;
+	int16_t			x;
+	int16_t			y;
+	int16_t			line_len;
 	unsigned char	the_char;
 	
 	// good values	
@@ -572,10 +572,10 @@ MU_TEST(text_test_line_drawing)
 
 MU_TEST(text_test_basic_box_coords)
 {
-	signed int		x;
-	signed int		y;
-	signed int		h_line_len;
-	signed int		v_line_len;
+	int16_t			x;
+	int16_t			y;
+	int16_t			h_line_len;
+	int16_t			v_line_len;
 	unsigned char	the_char;
 	
 	x = 45;
@@ -595,10 +595,10 @@ MU_TEST(text_test_basic_box_coords)
 
 MU_TEST(text_test_basic_box_hw)
 {
-	signed int		x;
-	signed int		y;
-	signed int		h_line_len;
-	signed int		v_line_len;
+	int16_t			x;
+	int16_t			y;
+	int16_t			h_line_len;
+	int16_t			v_line_len;
 	unsigned char	the_char;
 	
 	x = 60;
@@ -622,12 +622,12 @@ MU_TEST(text_test_basic_box_hw)
 
 MU_TEST(text_test_fancy_box)
 {
-	signed int		x1;
-	signed int		y1;
-	signed int		x2;
-	signed int		y2;
-// 	signed int		h_line_len;
-// 	signed int		v_line_len;
+	int16_t			x1;
+	int16_t			y1;
+	int16_t			x2;
+	int16_t			y2;
+// 	int16_t			h_line_len;
+// 	int16_t			v_line_len;
 	char*	the_message;
 	
 	// good values	
@@ -877,14 +877,14 @@ MU_TEST(text_test_hline_speed)
 	long end1;
 	long start2;
 	long end2;
-	signed int		x;
-	signed int		y;
-	signed int		line_len;
+	int16_t			x;
+	int16_t			y;
+	int16_t			line_len;
 	unsigned char	the_char;
-	signed int		i;
-	signed int		num_passes = 90;
-	signed int		j;
-	signed int		num_cycles = 10;
+	int16_t			i;
+	int16_t			num_passes = 90;
+	int16_t			j;
+	int16_t			num_cycles = 10;
 
 	x = 1;
 	y = 1;
@@ -1026,5 +1026,6 @@ int main(int argc, char* argv[])
 // 		MU_REPORT();
 		return MU_EXIT_CODE;
 	#endif
-
+	
+	return 0;
 }

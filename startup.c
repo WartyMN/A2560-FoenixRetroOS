@@ -7022,7 +7022,7 @@ static void Splash_DrawStartupMessage(char* the_message)
 	int16_t		x;
 	int16_t		y;
 	int16_t		chars_that_fit;
-	signed int	pixels_used;
+	int16_t		pixels_used;
 	uint8_t		font_color;
 
 	// Draw control caption with parent window's current font. 
@@ -7100,19 +7100,19 @@ bool Startup_ShowSplash(void)
 	// do pointless delay to give user time to admire beautiful graphic, and show random sub-set of startup messages
 	// TODO: add equally pointless startup progress bar
 	
-	int clut_selector = 1;
-	int max_clut_selector = 5;
-	int	i;
-	int	message_num;
-	int bar_height = 10;
-	int step_width = 10;
-	int num_steps = 10;
-	int x = (global_system->screen_[ID_CHANNEL_B]->bitmap_->width_ - (num_steps * step_width)) / 2; // 10 progress blocks of 10 pixels each
-	int y = global_system->screen_[ID_CHANNEL_B]->bitmap_->height_ - 40;
+	int16_t clut_selector = 1;
+	int16_t max_clut_selector = 5;
+	int16_t	i;
+	int16_t	message_num;
+	int16_t bar_height = 10;
+	int16_t step_width = 10;
+	int16_t num_steps = 10;
+	int16_t x = (global_system->screen_[ID_CHANNEL_B]->bitmap_->width_ - (num_steps * step_width)) / 2; // 10 progress blocks of 10 pixels each
+	int16_t y = global_system->screen_[ID_CHANNEL_B]->bitmap_->height_ - 40;
 	
 	for (i = 0; i < num_steps; i++)
 	{	
-		long	the_delay = (rand() * 30) / RAND_MAX;
+		int32_t		the_delay = (rand() * 30) / RAND_MAX;
 		
 		message_num = (rand() * MESSAGE_COUNT) / RAND_MAX;
 		Splash_DrawStartupMessage(startup_messages[message_num]);

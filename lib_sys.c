@@ -191,12 +191,12 @@ void Sys_Print(System* the_system)
 System* Sys_New(void)
 {
 	System*			the_system;
-	int				i;
+	int16_t			i;
 	
 	
 	// LOGIC:
 	
-	if ( (the_system = (System*)calloc(1, sizeof(System)) ) == NULL)
+	if ( (the_system = (System*)f_calloc(1, sizeof(System), MEM_STANDARD) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new system", __func__ , __LINE__));
 		goto error;
@@ -213,7 +213,7 @@ System* Sys_New(void)
 	// screens
 	for (i = 0; i < 2; i++)
 	{
-		if ( (the_system->screen_[i] = (Screen*)calloc(1, sizeof(Screen)) ) == NULL)
+		if ( (the_system->screen_[i] = (Screen*)f_calloc(1, sizeof(Screen), MEM_STANDARD) ) == NULL)
 		{
 			LOG_ERR(("%s %d: could not allocate memory to create screen object", __func__ , __LINE__));
 			goto error;
@@ -239,7 +239,7 @@ error:
 // frees all allocated memory associated with the passed object, and the object itself
 bool Sys_Destroy(System** the_system)
 {
-	int		i;
+	int16_t	i;
 	
 	if (*the_system == NULL)
 	{
@@ -252,7 +252,7 @@ bool Sys_Destroy(System** the_system)
 		if ((*the_system)->screen_[i])
 		{
 			LOG_ALLOC(("%s %d:	__FREE__	(*the_system)->screen_[i]	%p	size	%i", __func__ , __LINE__, (*the_system)->screen_[i], sizeof(Screen)));
-			free((*the_system)->screen_[i]);
+			f_free((*the_system)->screen_[i], MEM_STANDARD);
 			(*the_system)->screen_[i] = NULL;
 		}
 	}
@@ -279,7 +279,7 @@ bool Sys_Destroy(System** the_system)
 
 
 	LOG_ALLOC(("%s %d:	__FREE__	*the_system	%p	size	%i", __func__ , __LINE__, *the_system, sizeof(System)));
-	free(*the_system);
+	f_free(*the_system, MEM_STANDARD);
 	*the_system = NULL;
 	
 	return true;
@@ -289,7 +289,7 @@ bool Sys_Destroy(System** the_system)
 // Instruct all windows to close / clean themselves up
 void Sys_DestroyAllWindows(System* the_system)
 {
-	int			num_nodes = 0;
+	int16_t		num_nodes = 0;
 	List*		the_item;
 	
  	if (the_system == NULL)
@@ -359,7 +359,7 @@ bool Sys_InitSystem(void)
 	}
 	
 	// initiate the list of windows
-	if ( (global_system->list_windows_ = (List**)calloc(1, sizeof(List*)) ) == NULL)
+	if ( (global_system->list_windows_ = (List**)f_calloc(1, sizeof(List*), MEM_STANDARD) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new list of windows", __func__ , __LINE__));
 		goto error;
@@ -491,8 +491,8 @@ error:
 bool Sys_AutoConfigure(System* the_system)
 {
 	struct s_sys_info	the_sys_info;
-	unsigned short		the_model_number;
-	int					i;
+	uint16_t			the_model_number;
+	int16_t				i;
 	
 	sys_get_info(&the_sys_info);
 	the_model_number = the_sys_info.model;
@@ -632,13 +632,13 @@ bool Sys_SetModeText(System* the_system, bool as_overlay)
 bool Sys_DetectScreenSize(Screen* the_screen)
 {
 	screen_resolution	new_mode;
-	unsigned long		the_vicky_value;
+	uint32_t			the_vicky_value;
 	unsigned char		the_video_mode_bits;
-	unsigned long		the_border_control_value;
-	int					border_x_cols;
-	int					border_y_cols;
-	int					border_x_pixels;
-	int					border_y_pixels;
+	uint32_t			the_border_control_value;
+	int16_t				border_x_cols;
+	int16_t				border_y_cols;
+	int16_t				border_x_pixels;
+	int16_t				border_y_pixels;
 	
 	if (the_screen == NULL)
 	{
@@ -884,6 +884,8 @@ bool Sys_AddToWindowList(System* the_system, Window* the_new_window)
 	++the_system->window_count_;
 	
 	Sys_SetActiveWindow(the_system, the_new_window);
+	
+	return true;
 }
 
 
@@ -1283,7 +1285,7 @@ Font* Sys_GetAppFont(System* the_system)
 }
 
 
-Screen* Sys_GetScreen(System* the_system, signed int channel_id)
+Screen* Sys_GetScreen(System* the_system, int16_t channel_id)
 {
 	if (the_system == NULL)
 	{
@@ -1301,7 +1303,7 @@ Screen* Sys_GetScreen(System* the_system, signed int channel_id)
 }
 
 
-Bitmap* Sys_GetScreenBitmap(System* the_system, signed int channel_id)
+Bitmap* Sys_GetScreenBitmap(System* the_system, int16_t channel_id)
 {
 	if (the_system == NULL)
 	{
@@ -1360,7 +1362,7 @@ void Sys_SetAppFont(System* the_system, Font* the_font)
 }
 
 
-void Sys_SetScreen(System* the_system, signed int channel_id, Screen* the_screen)
+void Sys_SetScreen(System* the_system, int16_t channel_id, Screen* the_screen)
 {
 	if (the_system == NULL)
 	{
@@ -1378,7 +1380,7 @@ void Sys_SetScreen(System* the_system, signed int channel_id, Screen* the_screen
 }
 
 
-void Sys_SetScreenBitmap(System* the_system, signed int channel_id, Bitmap* the_bitmap)
+void Sys_SetScreenBitmap(System* the_system, int16_t channel_id, Bitmap* the_bitmap)
 {
 	if (the_system == NULL)
 	{
@@ -1436,6 +1438,8 @@ bool Sys_SetTheme(System* the_system, Theme* the_theme)
 	
 	// force re-render
 	Sys_Render(global_system);
+	
+	return true;
 }
 
 
@@ -1449,9 +1453,9 @@ bool Sys_SetVRAMAddr(System* the_system, uint8_t the_bitmap_layer, unsigned char
 {
 	uint32_t			new_vicky_bitmap0_vram_value;
 	
-	DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0: want to point to bitmap at %p", __func__, __LINE__, the_address));
+	//DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0: want to point to bitmap at %p", __func__, __LINE__, the_address));
 
-	DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0 before change: 0x%x (with offset=0x%x)", __func__, __LINE__, R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L), (uint32_t)VRAM_BUFFER_A + R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L)));
+	//DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0 before change: 0x%x (with offset=0x%x)", __func__, __LINE__, R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L), (uint32_t)VRAM_BUFFER_A + R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L)));
 	
 	new_vicky_bitmap0_vram_value = (uint32_t)the_address - (uint32_t)VRAM_BUFFER_A;		
 
@@ -1459,7 +1463,7 @@ bool Sys_SetVRAMAddr(System* the_system, uint8_t the_bitmap_layer, unsigned char
 
 	R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L) = new_vicky_bitmap0_vram_value;
 	
-	DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0 now set to 0x%x (with offset=0x%x)", __func__, __LINE__, R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L), (uint32_t)VRAM_BUFFER_A + R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L)));
+	//DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0 now set to 0x%x (with offset=0x%x)", __func__, __LINE__, R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L), (uint32_t)VRAM_BUFFER_A + R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L)));
 
 	return true;
 }
@@ -2131,7 +2135,7 @@ Font* Sys_LoadAppFont(void)
 void Sys_Render(System* the_system)
 {
 	Window*		this_window;
-	int			num_nodes = 0;
+	int16_t		num_nodes = 0;
 	List*		the_item;
 
  	if (the_system == NULL)

@@ -98,7 +98,8 @@ $(document).ready(function(){initNavTree('bitmap_8h.html',''); initResizable(); 
   <div class="headertitle"><div class="title">bitmap.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;mcp/syscalls.h&gt;</code><br />
+<div class="textblock"><code>#include &lt;stdbool.h&gt;</code><br />
+<code>#include &lt;mcp/syscalls.h&gt;</code><br />
 <code>#include &lt;mb/a2560_platform.h&gt;</code><br />
 <code>#include &lt;mb/general.h&gt;</code><br />
 <code>#include &lt;mb/text.h&gt;</code><br />
@@ -155,82 +156,97 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a1488a5025a2e67283e03256ade3f7629"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a1488a5025a2e67283e03256ade3f7629">Bitmap_New</a> (signed int width, signed int height, <a class="el" href="struct_font.html">Font</a> *the_font)</td></tr>
-<tr class="memdesc:a1488a5025a2e67283e03256ade3f7629"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new bitmap object by allocating space for the bitmap struct in regular memory, and for the graphics, in VRAM.  <a href="bitmap_8h.html#a1488a5025a2e67283e03256ade3f7629">More...</a><br /></td></tr>
-<tr class="separator:a1488a5025a2e67283e03256ade3f7629"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad71bae018d214e9bb2ad452dc61190d7"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#ad71bae018d214e9bb2ad452dc61190d7">Bitmap_Blit</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *src_bm, int src_x, int src_y, <a class="el" href="struct_bitmap.html">Bitmap</a> *dst_bm, int dst_x, int dst_y, int width, int height)</td></tr>
-<tr class="memdesc:ad71bae018d214e9bb2ad452dc61190d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blit from source bitmap to distination bitmap.  <a href="bitmap_8h.html#ad71bae018d214e9bb2ad452dc61190d7">More...</a><br /></td></tr>
-<tr class="separator:ad71bae018d214e9bb2ad452dc61190d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7216efeb117734793c178d1dbd533073"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a7216efeb117734793c178d1dbd533073">Bitmap_FillMemory</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, unsigned char the_color)</td></tr>
-<tr class="separator:a7216efeb117734793c178d1dbd533073"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab692749ce5a9a653b497d032b64d7ee9"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#ab692749ce5a9a653b497d032b64d7ee9">Bitmap_FillBoxRect</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, <a class="el" href="struct_rectangle.html">Rectangle</a> *the_coords, unsigned char the_color)</td></tr>
-<tr class="memdesc:ab692749ce5a9a653b497d032b64d7ee9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill pixel values for the passed <a class="el" href="struct_rectangle.html">Rectangle</a> object, using the specified LUT value.  <a href="bitmap_8h.html#ab692749ce5a9a653b497d032b64d7ee9">More...</a><br /></td></tr>
-<tr class="separator:ab692749ce5a9a653b497d032b64d7ee9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af20c7be9ba50f9c6cc671c3ec2df2905"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#af20c7be9ba50f9c6cc671c3ec2df2905">Bitmap_FillBox</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, signed int x, signed int y, signed int width, signed int height, unsigned char the_color)</td></tr>
-<tr class="memdesc:af20c7be9ba50f9c6cc671c3ec2df2905"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill pixel values for a specific box area calling function must validate screen id, coords!  <a href="bitmap_8h.html#af20c7be9ba50f9c6cc671c3ec2df2905">More...</a><br /></td></tr>
-<tr class="separator:af20c7be9ba50f9c6cc671c3ec2df2905"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adff678160a0620f955de89d76dc4c367"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#adff678160a0620f955de89d76dc4c367">Bitmap_SetCurrentFont</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, <a class="el" href="struct_font.html">Font</a> *the_font)</td></tr>
-<tr class="memdesc:adff678160a0620f955de89d76dc4c367"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the font This is the font that will be used for all font drawing in this bitmap.  <a href="bitmap_8h.html#adff678160a0620f955de89d76dc4c367">More...</a><br /></td></tr>
-<tr class="separator:adff678160a0620f955de89d76dc4c367"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96fe03d99b26758d74e34d2d900bdf1f"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a96fe03d99b26758d74e34d2d900bdf1f">Bitmap_SetCurrentColor</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, uint8_t the_color)</td></tr>
-<tr class="memdesc:a96fe03d99b26758d74e34d2d900bdf1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the "pen" color This is the color that the next pen-based graphics function will use This only affects functions that use the pen: any graphics function that specifies a color will use that instead.  <a href="bitmap_8h.html#a96fe03d99b26758d74e34d2d900bdf1f">More...</a><br /></td></tr>
-<tr class="separator:a96fe03d99b26758d74e34d2d900bdf1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ff571e32a2943a459624ca411dab7bb"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a9ff571e32a2943a459624ca411dab7bb">Bitmap_SetCurrentXY</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, signed int x, signed int y)</td></tr>
-<tr class="memdesc:a9ff571e32a2943a459624ca411dab7bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the "pen" position This is the location that the next pen-based graphics function will use for a starting location NOTE: you are allowed to set negative values, but not values greater than the height/width of the screen.  <a href="bitmap_8h.html#a9ff571e32a2943a459624ca411dab7bb">More...</a><br /></td></tr>
-<tr class="separator:a9ff571e32a2943a459624ca411dab7bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50ad9e2c6d71a03462a4ecfd0be263c2"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a50ad9e2c6d71a03462a4ecfd0be263c2">Bitmap_GetCurrentColor</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap)</td></tr>
-<tr class="memdesc:a50ad9e2c6d71a03462a4ecfd0be263c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current color of the pen.  <a href="bitmap_8h.html#a50ad9e2c6d71a03462a4ecfd0be263c2">More...</a><br /></td></tr>
-<tr class="separator:a50ad9e2c6d71a03462a4ecfd0be263c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac409234fbbc9efb58e6048a3254f63b0"><td class="memItemLeft" align="right" valign="top">signed int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#ac409234fbbc9efb58e6048a3254f63b0">Bitmap_GetCurrentX</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap)</td></tr>
-<tr class="memdesc:ac409234fbbc9efb58e6048a3254f63b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current X position of the pen.  <a href="bitmap_8h.html#ac409234fbbc9efb58e6048a3254f63b0">More...</a><br /></td></tr>
-<tr class="separator:ac409234fbbc9efb58e6048a3254f63b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a757bd86bd28bdf0bcaa04044f11d4eaa"><td class="memItemLeft" align="right" valign="top">signed int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a757bd86bd28bdf0bcaa04044f11d4eaa">Bitmap_GetCurrentY</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap)</td></tr>
-<tr class="memdesc:a757bd86bd28bdf0bcaa04044f11d4eaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current Y position of the pen.  <a href="bitmap_8h.html#a757bd86bd28bdf0bcaa04044f11d4eaa">More...</a><br /></td></tr>
-<tr class="separator:a757bd86bd28bdf0bcaa04044f11d4eaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33cf6227636055e9595db68c4817e773"><td class="memItemLeft" align="right" valign="top">unsigned char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a33cf6227636055e9595db68c4817e773">Bitmap_GetCurrentMemLoc</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap)</td></tr>
-<tr class="memdesc:a33cf6227636055e9595db68c4817e773"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the VRAM location of the current coordinate within the bitmap.  <a href="bitmap_8h.html#a33cf6227636055e9595db68c4817e773">More...</a><br /></td></tr>
-<tr class="separator:a33cf6227636055e9595db68c4817e773"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9bfd6f3255d12ab9e787b9e44a163f4"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#ab9bfd6f3255d12ab9e787b9e44a163f4">Bitmap_SetPixelAtXY</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, signed int x, signed int y, unsigned char the_color)</td></tr>
-<tr class="memdesc:ab9bfd6f3255d12ab9e787b9e44a163f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a char at a specified x, y coord.  <a href="bitmap_8h.html#ab9bfd6f3255d12ab9e787b9e44a163f4">More...</a><br /></td></tr>
-<tr class="separator:ab9bfd6f3255d12ab9e787b9e44a163f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2f21b7645bba681ab86a7f57e9eb06b"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#af2f21b7645bba681ab86a7f57e9eb06b">Bitmap_GetPixelAtXY</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, signed int x, signed int y)</td></tr>
-<tr class="memdesc:af2f21b7645bba681ab86a7f57e9eb06b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the char at a specified x, y coord.  <a href="bitmap_8h.html#af2f21b7645bba681ab86a7f57e9eb06b">More...</a><br /></td></tr>
-<tr class="separator:af2f21b7645bba681ab86a7f57e9eb06b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab95d578285f9d1b8db7a37242743e0ca"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#ab95d578285f9d1b8db7a37242743e0ca">Bitmap_DrawLine</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, signed int x1, signed int y1, signed int x2, signed int y2, unsigned char the_color)</td></tr>
-<tr class="memdesc:ab95d578285f9d1b8db7a37242743e0ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a line between 2 passed coordinates.  <a href="bitmap_8h.html#ab95d578285f9d1b8db7a37242743e0ca">More...</a><br /></td></tr>
-<tr class="separator:ab95d578285f9d1b8db7a37242743e0ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05f91ebdc5fa72dde320fd5250bca059"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a05f91ebdc5fa72dde320fd5250bca059">Bitmap_DrawHLine</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, signed int x, signed int y, signed int the_line_len, unsigned char the_color)</td></tr>
-<tr class="memdesc:a05f91ebdc5fa72dde320fd5250bca059"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a horizontal line from specified coords, for n pixels, using the specified pixel value.  <a href="bitmap_8h.html#a05f91ebdc5fa72dde320fd5250bca059">More...</a><br /></td></tr>
-<tr class="separator:a05f91ebdc5fa72dde320fd5250bca059"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1d71a1ddeec204a76837e777e3af59e"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#af1d71a1ddeec204a76837e777e3af59e">Bitmap_DrawVLine</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, signed int x, signed int y, signed int the_line_len, unsigned char the_color)</td></tr>
-<tr class="memdesc:af1d71a1ddeec204a76837e777e3af59e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a vertical line from specified coords, for n pixels.  <a href="bitmap_8h.html#af1d71a1ddeec204a76837e777e3af59e">More...</a><br /></td></tr>
-<tr class="separator:af1d71a1ddeec204a76837e777e3af59e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0cdf17ffbf42a2e3f482dfd7c2613755"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a0cdf17ffbf42a2e3f482dfd7c2613755">Bitmap_DrawBoxRect</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, <a class="el" href="struct_rectangle.html">Rectangle</a> *the_coords, unsigned char the_color)</td></tr>
-<tr class="memdesc:a0cdf17ffbf42a2e3f482dfd7c2613755"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rectangle based on the passed <a class="el" href="struct_rectangle.html">Rectangle</a> object, using the specified LUT value.  <a href="bitmap_8h.html#a0cdf17ffbf42a2e3f482dfd7c2613755">More...</a><br /></td></tr>
-<tr class="separator:a0cdf17ffbf42a2e3f482dfd7c2613755"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a603ff22b9fafefdc04a19afa7b5d5591"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a603ff22b9fafefdc04a19afa7b5d5591">Bitmap_DrawBoxCoords</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, signed int x1, signed int y1, signed int x2, signed int y2, unsigned char the_color)</td></tr>
-<tr class="memdesc:a603ff22b9fafefdc04a19afa7b5d5591"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rectangle based on 2 sets of coords, using the specified LUT value.  <a href="bitmap_8h.html#a603ff22b9fafefdc04a19afa7b5d5591">More...</a><br /></td></tr>
-<tr class="separator:a603ff22b9fafefdc04a19afa7b5d5591"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49ae71415d3472aa137fd76072850a89"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a49ae71415d3472aa137fd76072850a89">Bitmap_DrawBox</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, signed int x, signed int y, signed int width, signed int height, unsigned char the_color, boolean do_fill)</td></tr>
-<tr class="memdesc:a49ae71415d3472aa137fd76072850a89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rectangle based on start coords and width/height, and optionally fills the rectangle.  <a href="bitmap_8h.html#a49ae71415d3472aa137fd76072850a89">More...</a><br /></td></tr>
-<tr class="separator:a49ae71415d3472aa137fd76072850a89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af606f030db2a5630c5b0a80a4890e768"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#af606f030db2a5630c5b0a80a4890e768">Bitmap_DrawRoundBox</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, signed int x, signed int y, signed int width, signed int height, signed int radius, unsigned char the_color, boolean do_fill)</td></tr>
-<tr class="memdesc:af606f030db2a5630c5b0a80a4890e768"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rounded rectangle with the specified size and radius, and optionally fills the rectangle.  <a href="bitmap_8h.html#af606f030db2a5630c5b0a80a4890e768">More...</a><br /></td></tr>
-<tr class="separator:af606f030db2a5630c5b0a80a4890e768"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fb65646af80e9e33bcb4cda82213efd"><td class="memItemLeft" align="right" valign="top"><a id="a1fb65646af80e9e33bcb4cda82213efd" name="a1fb65646af80e9e33bcb4cda82213efd"></a>
-boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle</b> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, signed int x1, signed int y1, signed int radius, unsigned char the_color)</td></tr>
-<tr class="memdesc:a1fb65646af80e9e33bcb4cda82213efd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a circle Based on <a href="http://rosettacode.org/wiki/Bitmap/Midpoint_circle_algorithm#C">http://rosettacode.org/wiki/Bitmap/Midpoint_circle_algorithm#C</a>. <br /></td></tr>
-<tr class="separator:a1fb65646af80e9e33bcb4cda82213efd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a216eca9c0c5484158047c9537aae94c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a216eca9c0c5484158047c9537aae94c1">Bitmap_New</a> (int16_t width, int16_t height, <a class="el" href="struct_font.html">Font</a> *the_font)</td></tr>
+<tr class="memdesc:a216eca9c0c5484158047c9537aae94c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new bitmap object by allocating space for the bitmap struct in regular memory, and for the graphics, in VRAM.  <a href="bitmap_8h.html#a216eca9c0c5484158047c9537aae94c1">More...</a><br /></td></tr>
+<tr class="separator:a216eca9c0c5484158047c9537aae94c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d338c4832ddb16eacaad76d26397f84"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a1d338c4832ddb16eacaad76d26397f84">Bitmap_BlitRect</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *src_bm, <a class="el" href="struct_rectangle.html">Rectangle</a> src_rect, <a class="el" href="struct_bitmap.html">Bitmap</a> *dst_bm, int16_t dst_x, int16_t dst_y)</td></tr>
+<tr class="memdesc:a1d338c4832ddb16eacaad76d26397f84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blit a rect from source bitmap to distination bitmap This is a wrapper around <a class="el" href="bitmap_8h.html#a5033e773db5a1fb8000e7b3113737e37" title="Blit from source bitmap to distination bitmap.">Bitmap_Blit()</a> The source and destination bitmaps can be the same: you can use this to copy a chunk of pixels from one part of a screen to another.  <a href="bitmap_8h.html#a1d338c4832ddb16eacaad76d26397f84">More...</a><br /></td></tr>
+<tr class="separator:a1d338c4832ddb16eacaad76d26397f84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5033e773db5a1fb8000e7b3113737e37"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a5033e773db5a1fb8000e7b3113737e37">Bitmap_Blit</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *src_bm, int16_t src_x, int16_t src_y, <a class="el" href="struct_bitmap.html">Bitmap</a> *dst_bm, int16_t dst_x, int16_t dst_y, int16_t width, int16_t height)</td></tr>
+<tr class="memdesc:a5033e773db5a1fb8000e7b3113737e37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blit from source bitmap to distination bitmap.  <a href="bitmap_8h.html#a5033e773db5a1fb8000e7b3113737e37">More...</a><br /></td></tr>
+<tr class="separator:a5033e773db5a1fb8000e7b3113737e37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3272fa959a54195930c4ec563ae1970b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a3272fa959a54195930c4ec563ae1970b">Bitmap_Tile</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *src_bm, int16_t src_x, int16_t src_y, <a class="el" href="struct_bitmap.html">Bitmap</a> *dst_bm, int16_t width, int16_t height)</td></tr>
+<tr class="memdesc:a3272fa959a54195930c4ec563ae1970b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tile the source bitmap into the destination bitmap, filling it The source and destination bitmaps can be the same: you can use this to copy a chunk of pixels from one part of a screen to another.  <a href="bitmap_8h.html#a3272fa959a54195930c4ec563ae1970b">More...</a><br /></td></tr>
+<tr class="separator:a3272fa959a54195930c4ec563ae1970b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7761f98923af89bb316a5e279ab266dd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a7761f98923af89bb316a5e279ab266dd">Bitmap_TileV1</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *src_bm, int16_t src_x, int16_t src_y, <a class="el" href="struct_bitmap.html">Bitmap</a> *dst_bm, int16_t width, int16_t height)</td></tr>
+<tr class="memdesc:a7761f98923af89bb316a5e279ab266dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tile the source bitmap into the destination bitmap, filling it The source and destination bitmaps can be the same: you can use this to copy a chunk of pixels from one part of a screen to another.  <a href="bitmap_8h.html#a7761f98923af89bb316a5e279ab266dd">More...</a><br /></td></tr>
+<tr class="separator:a7761f98923af89bb316a5e279ab266dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0431dd5565c39a0447bceec0deafc296"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a0431dd5565c39a0447bceec0deafc296">Bitmap_TileV2</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *src_bm, int16_t src_x, int16_t src_y, <a class="el" href="struct_bitmap.html">Bitmap</a> *dst_bm, int16_t width, int16_t height)</td></tr>
+<tr class="memdesc:a0431dd5565c39a0447bceec0deafc296"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tile the source bitmap into the destination bitmap, filling it The source and destination bitmaps can be the same: you can use this to copy a chunk of pixels from one part of a screen to another.  <a href="bitmap_8h.html#a0431dd5565c39a0447bceec0deafc296">More...</a><br /></td></tr>
+<tr class="separator:a0431dd5565c39a0447bceec0deafc296"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac925101dc0c8a67e031c4e33b84af768"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#ac925101dc0c8a67e031c4e33b84af768">Bitmap_FillMemory</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, uint8_t the_color)</td></tr>
+<tr class="separator:ac925101dc0c8a67e031c4e33b84af768"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4eab9e2f2f93095f4942bf2ba2d90425"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a4eab9e2f2f93095f4942bf2ba2d90425">Bitmap_FillBoxRect</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, <a class="el" href="struct_rectangle.html">Rectangle</a> *the_coords, uint8_t the_color)</td></tr>
+<tr class="memdesc:a4eab9e2f2f93095f4942bf2ba2d90425"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill pixel values for the passed <a class="el" href="struct_rectangle.html">Rectangle</a> object, using the specified LUT value.  <a href="bitmap_8h.html#a4eab9e2f2f93095f4942bf2ba2d90425">More...</a><br /></td></tr>
+<tr class="separator:a4eab9e2f2f93095f4942bf2ba2d90425"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73bc4210fda419320648ca691590966e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a73bc4210fda419320648ca691590966e">Bitmap_FillBox</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, int16_t x, int16_t y, int16_t width, int16_t height, uint8_t the_color)</td></tr>
+<tr class="memdesc:a73bc4210fda419320648ca691590966e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill pixel values for a specific box area calling function must validate screen id, coords!  <a href="bitmap_8h.html#a73bc4210fda419320648ca691590966e">More...</a><br /></td></tr>
+<tr class="separator:a73bc4210fda419320648ca691590966e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5aa17cbd948f5e6c4bb4601a1efc82f8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a5aa17cbd948f5e6c4bb4601a1efc82f8">Bitmap_SetFont</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, <a class="el" href="struct_font.html">Font</a> *the_font)</td></tr>
+<tr class="memdesc:a5aa17cbd948f5e6c4bb4601a1efc82f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the font This is the font that will be used for all font drawing in this bitmap.  <a href="bitmap_8h.html#a5aa17cbd948f5e6c4bb4601a1efc82f8">More...</a><br /></td></tr>
+<tr class="separator:a5aa17cbd948f5e6c4bb4601a1efc82f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f0e02c6f955bb61dfabb36faf1ab6ec"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a0f0e02c6f955bb61dfabb36faf1ab6ec">Bitmap_SetColor</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, uint8_t the_color)</td></tr>
+<tr class="memdesc:a0f0e02c6f955bb61dfabb36faf1ab6ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the "pen" color This is the color that the next pen-based graphics function will use This only affects functions that use the pen: any graphics function that specifies a color will use that instead.  <a href="bitmap_8h.html#a0f0e02c6f955bb61dfabb36faf1ab6ec">More...</a><br /></td></tr>
+<tr class="separator:a0f0e02c6f955bb61dfabb36faf1ab6ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa31a1573bc86e96d93df337b05ce632a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#aa31a1573bc86e96d93df337b05ce632a">Bitmap_SetXY</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, int16_t x, int16_t y)</td></tr>
+<tr class="memdesc:aa31a1573bc86e96d93df337b05ce632a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the "pen" position This is the location that the next pen-based graphics function will use for a starting location NOTE: you are allowed to set negative values, but not values greater than the height/width of the screen.  <a href="bitmap_8h.html#aa31a1573bc86e96d93df337b05ce632a">More...</a><br /></td></tr>
+<tr class="separator:aa31a1573bc86e96d93df337b05ce632a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e70bbcddae55b46542446a34bdd6b1c"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a4e70bbcddae55b46542446a34bdd6b1c">Bitmap_GetColor</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap)</td></tr>
+<tr class="memdesc:a4e70bbcddae55b46542446a34bdd6b1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current color of the pen.  <a href="bitmap_8h.html#a4e70bbcddae55b46542446a34bdd6b1c">More...</a><br /></td></tr>
+<tr class="separator:a4e70bbcddae55b46542446a34bdd6b1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a133023077dfdefaab36d11e66bb4b101"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a133023077dfdefaab36d11e66bb4b101">Bitmap_GetX</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap)</td></tr>
+<tr class="memdesc:a133023077dfdefaab36d11e66bb4b101"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current X position of the pen.  <a href="bitmap_8h.html#a133023077dfdefaab36d11e66bb4b101">More...</a><br /></td></tr>
+<tr class="separator:a133023077dfdefaab36d11e66bb4b101"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1ed084e11d653fc15c14ba9e843dd01"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#ae1ed084e11d653fc15c14ba9e843dd01">Bitmap_GetY</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap)</td></tr>
+<tr class="memdesc:ae1ed084e11d653fc15c14ba9e843dd01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current Y position of the pen.  <a href="bitmap_8h.html#ae1ed084e11d653fc15c14ba9e843dd01">More...</a><br /></td></tr>
+<tr class="separator:ae1ed084e11d653fc15c14ba9e843dd01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa92373cfecfb103fa5c8d301a05dc6f3"><td class="memItemLeft" align="right" valign="top">unsigned char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#aa92373cfecfb103fa5c8d301a05dc6f3">Bitmap_GetMemLoc</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap)</td></tr>
+<tr class="memdesc:aa92373cfecfb103fa5c8d301a05dc6f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the VRAM location of the current coordinate within the bitmap.  <a href="bitmap_8h.html#aa92373cfecfb103fa5c8d301a05dc6f3">More...</a><br /></td></tr>
+<tr class="separator:aa92373cfecfb103fa5c8d301a05dc6f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70b34a53887965e8568100f4715e5d06"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_font.html">Font</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a70b34a53887965e8568100f4715e5d06">Bitmap_GetFont</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap)</td></tr>
+<tr class="memdesc:a70b34a53887965e8568100f4715e5d06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current font of the pen.  <a href="bitmap_8h.html#a70b34a53887965e8568100f4715e5d06">More...</a><br /></td></tr>
+<tr class="separator:a70b34a53887965e8568100f4715e5d06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a890f5e90bf830a6a7f80ea9c041fb601"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a890f5e90bf830a6a7f80ea9c041fb601">Bitmap_SetPixelAtXY</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, int16_t x, int16_t y, uint8_t the_color)</td></tr>
+<tr class="memdesc:a890f5e90bf830a6a7f80ea9c041fb601"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a char at a specified x, y coord.  <a href="bitmap_8h.html#a890f5e90bf830a6a7f80ea9c041fb601">More...</a><br /></td></tr>
+<tr class="separator:a890f5e90bf830a6a7f80ea9c041fb601"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80798125dce1dbd21e53bfd0eae05f07"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a80798125dce1dbd21e53bfd0eae05f07">Bitmap_GetPixelAtXY</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, int16_t x, int16_t y)</td></tr>
+<tr class="memdesc:a80798125dce1dbd21e53bfd0eae05f07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the pixel CLUT index at a specified x, y coord.  <a href="bitmap_8h.html#a80798125dce1dbd21e53bfd0eae05f07">More...</a><br /></td></tr>
+<tr class="separator:a80798125dce1dbd21e53bfd0eae05f07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbb7b98d81dcf75e3fe97c75fb41a596"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#adbb7b98d81dcf75e3fe97c75fb41a596">Bitmap_DrawLine</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t the_color)</td></tr>
+<tr class="memdesc:adbb7b98d81dcf75e3fe97c75fb41a596"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a line between 2 passed coordinates.  <a href="bitmap_8h.html#adbb7b98d81dcf75e3fe97c75fb41a596">More...</a><br /></td></tr>
+<tr class="separator:adbb7b98d81dcf75e3fe97c75fb41a596"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32b8f821addf229daf9b57caca5d9fc6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a32b8f821addf229daf9b57caca5d9fc6">Bitmap_DrawHLine</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, int16_t x, int16_t y, int16_t the_line_len, uint8_t the_color)</td></tr>
+<tr class="memdesc:a32b8f821addf229daf9b57caca5d9fc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a horizontal line from specified coords, for n pixels, using the specified pixel value.  <a href="bitmap_8h.html#a32b8f821addf229daf9b57caca5d9fc6">More...</a><br /></td></tr>
+<tr class="separator:a32b8f821addf229daf9b57caca5d9fc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa373caaa894eebba0b9b3b4943574615"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#aa373caaa894eebba0b9b3b4943574615">Bitmap_DrawVLine</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, int16_t x, int16_t y, int16_t the_line_len, uint8_t the_color)</td></tr>
+<tr class="memdesc:aa373caaa894eebba0b9b3b4943574615"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a vertical line from specified coords, for n pixels.  <a href="bitmap_8h.html#aa373caaa894eebba0b9b3b4943574615">More...</a><br /></td></tr>
+<tr class="separator:aa373caaa894eebba0b9b3b4943574615"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0e17b0a447ab7db19222a68c43b2c17"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#ac0e17b0a447ab7db19222a68c43b2c17">Bitmap_DrawBoxRect</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, <a class="el" href="struct_rectangle.html">Rectangle</a> *the_coords, uint8_t the_color)</td></tr>
+<tr class="memdesc:ac0e17b0a447ab7db19222a68c43b2c17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rectangle based on the passed <a class="el" href="struct_rectangle.html">Rectangle</a> object, using the specified LUT value.  <a href="bitmap_8h.html#ac0e17b0a447ab7db19222a68c43b2c17">More...</a><br /></td></tr>
+<tr class="separator:ac0e17b0a447ab7db19222a68c43b2c17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4723c81c46f2e3b150ddf79ab0f8917"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#aa4723c81c46f2e3b150ddf79ab0f8917">Bitmap_DrawBoxCoords</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t the_color)</td></tr>
+<tr class="memdesc:aa4723c81c46f2e3b150ddf79ab0f8917"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rectangle based on 2 sets of coords, using the specified LUT value.  <a href="bitmap_8h.html#aa4723c81c46f2e3b150ddf79ab0f8917">More...</a><br /></td></tr>
+<tr class="separator:aa4723c81c46f2e3b150ddf79ab0f8917"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af774a4ea39722216206bec228903eee5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#af774a4ea39722216206bec228903eee5">Bitmap_DrawBox</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, int16_t x, int16_t y, int16_t width, int16_t height, uint8_t the_color, bool do_fill)</td></tr>
+<tr class="memdesc:af774a4ea39722216206bec228903eee5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rectangle based on start coords and width/height, and optionally fills the rectangle.  <a href="bitmap_8h.html#af774a4ea39722216206bec228903eee5">More...</a><br /></td></tr>
+<tr class="separator:af774a4ea39722216206bec228903eee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9137d746ff1306b83a0ac7b86fa56b4c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a9137d746ff1306b83a0ac7b86fa56b4c">Bitmap_DrawRoundBox</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, int16_t x, int16_t y, int16_t width, int16_t height, int16_t radius, uint8_t the_color, bool do_fill)</td></tr>
+<tr class="memdesc:a9137d746ff1306b83a0ac7b86fa56b4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rounded rectangle with the specified size and radius, and optionally fills the rectangle.  <a href="bitmap_8h.html#a9137d746ff1306b83a0ac7b86fa56b4c">More...</a><br /></td></tr>
+<tr class="separator:a9137d746ff1306b83a0ac7b86fa56b4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e9896e700cae34019f216f3fe0994d6"><td class="memItemLeft" align="right" valign="top"><a id="a6e9896e700cae34019f216f3fe0994d6" name="a6e9896e700cae34019f216f3fe0994d6"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle</b> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, int16_t x1, int16_t y1, int16_t radius, uint8_t the_color)</td></tr>
+<tr class="memdesc:a6e9896e700cae34019f216f3fe0994d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a circle Based on <a href="http://rosettacode.org/wiki/Bitmap/Midpoint_circle_algorithm#C">http://rosettacode.org/wiki/Bitmap/Midpoint_circle_algorithm#C</a>. <br /></td></tr>
+<tr class="separator:a6e9896e700cae34019f216f3fe0994d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ad71bae018d214e9bb2ad452dc61190d7" name="ad71bae018d214e9bb2ad452dc61190d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad71bae018d214e9bb2ad452dc61190d7">&#9670;&nbsp;</a></span>Bitmap_Blit()</h2>
+<a id="a5033e773db5a1fb8000e7b3113737e37" name="a5033e773db5a1fb8000e7b3113737e37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5033e773db5a1fb8000e7b3113737e37">&#9670;&nbsp;</a></span>Bitmap_Blit()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Bitmap_Blit </td>
+          <td class="memname">bool Bitmap_Blit </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>src_bm</em>, </td>
@@ -238,13 +254,13 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>src_x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>src_y</em>, </td>
         </tr>
         <tr>
@@ -256,25 +272,25 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>dst_x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>dst_y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>width</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>height</em>&#160;</td>
         </tr>
         <tr>
@@ -299,14 +315,71 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="a49ae71415d3472aa137fd76072850a89" name="a49ae71415d3472aa137fd76072850a89"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a49ae71415d3472aa137fd76072850a89">&#9670;&nbsp;</a></span>Bitmap_DrawBox()</h2>
+<a id="a1d338c4832ddb16eacaad76d26397f84" name="a1d338c4832ddb16eacaad76d26397f84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d338c4832ddb16eacaad76d26397f84">&#9670;&nbsp;</a></span>Bitmap_BlitRect()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Bitmap_DrawBox </td>
+          <td class="memname">bool Bitmap_BlitRect </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
+          <td class="paramname"><em>src_bm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_rectangle.html">Rectangle</a>&#160;</td>
+          <td class="paramname"><em>src_rect</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
+          <td class="paramname"><em>dst_bm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>dst_x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>dst_y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Blit a rect from source bitmap to distination bitmap This is a wrapper around <a class="el" href="bitmap_8h.html#a5033e773db5a1fb8000e7b3113737e37" title="Blit from source bitmap to distination bitmap.">Bitmap_Blit()</a> The source and destination bitmaps can be the same: you can use this to copy a chunk of pixels from one part of a screen to another. </p>
+<p >If the destination location cannot fit the entirety of the copied rectangle, the copy will be truncated, but will not return an error. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src_bm</td><td>the source bitmap. It must have a valid address within the VRAM memory space. </td></tr>
+    <tr><td class="paramname">dst_bm</td><td>the destination bitmap. It must have a valid address within the VRAM memory space. It can be the same bitmap as the source. </td></tr>
+    <tr><td class="paramname">src_rect</td><td>the rectangle from the source bitmap to be blitted to the target bitmap </td></tr>
+    <tr><td class="paramname">dst_x,dst_y</td><td>the location within the destination bitmap to copy pixels to. May be negative. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af774a4ea39722216206bec228903eee5" name="af774a4ea39722216206bec228903eee5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af774a4ea39722216206bec228903eee5">&#9670;&nbsp;</a></span>Bitmap_DrawBox()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Bitmap_DrawBox </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>the_bitmap</em>, </td>
@@ -314,37 +387,37 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>width</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>height</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>the_color</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">boolean&#160;</td>
+          <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>do_fill</em>&#160;</td>
         </tr>
         <tr>
@@ -369,14 +442,14 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="a603ff22b9fafefdc04a19afa7b5d5591" name="a603ff22b9fafefdc04a19afa7b5d5591"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a603ff22b9fafefdc04a19afa7b5d5591">&#9670;&nbsp;</a></span>Bitmap_DrawBoxCoords()</h2>
+<a id="aa4723c81c46f2e3b150ddf79ab0f8917" name="aa4723c81c46f2e3b150ddf79ab0f8917"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4723c81c46f2e3b150ddf79ab0f8917">&#9670;&nbsp;</a></span>Bitmap_DrawBoxCoords()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Bitmap_DrawBoxCoords </td>
+          <td class="memname">bool Bitmap_DrawBoxCoords </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>the_bitmap</em>, </td>
@@ -384,31 +457,31 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>the_color</em>&#160;</td>
         </tr>
         <tr>
@@ -430,14 +503,14 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="a0cdf17ffbf42a2e3f482dfd7c2613755" name="a0cdf17ffbf42a2e3f482dfd7c2613755"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0cdf17ffbf42a2e3f482dfd7c2613755">&#9670;&nbsp;</a></span>Bitmap_DrawBoxRect()</h2>
+<a id="ac0e17b0a447ab7db19222a68c43b2c17" name="ac0e17b0a447ab7db19222a68c43b2c17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0e17b0a447ab7db19222a68c43b2c17">&#9670;&nbsp;</a></span>Bitmap_DrawBoxRect()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Bitmap_DrawBoxRect </td>
+          <td class="memname">bool Bitmap_DrawBoxRect </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>the_bitmap</em>, </td>
@@ -451,7 +524,7 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>the_color</em>&#160;</td>
         </tr>
         <tr>
@@ -473,14 +546,14 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="a05f91ebdc5fa72dde320fd5250bca059" name="a05f91ebdc5fa72dde320fd5250bca059"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a05f91ebdc5fa72dde320fd5250bca059">&#9670;&nbsp;</a></span>Bitmap_DrawHLine()</h2>
+<a id="a32b8f821addf229daf9b57caca5d9fc6" name="a32b8f821addf229daf9b57caca5d9fc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32b8f821addf229daf9b57caca5d9fc6">&#9670;&nbsp;</a></span>Bitmap_DrawHLine()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Bitmap_DrawHLine </td>
+          <td class="memname">bool Bitmap_DrawHLine </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>the_bitmap</em>, </td>
@@ -488,25 +561,25 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>the_line_len</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>the_color</em>&#160;</td>
         </tr>
         <tr>
@@ -536,14 +609,14 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="ab95d578285f9d1b8db7a37242743e0ca" name="ab95d578285f9d1b8db7a37242743e0ca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab95d578285f9d1b8db7a37242743e0ca">&#9670;&nbsp;</a></span>Bitmap_DrawLine()</h2>
+<a id="adbb7b98d81dcf75e3fe97c75fb41a596" name="adbb7b98d81dcf75e3fe97c75fb41a596"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbb7b98d81dcf75e3fe97c75fb41a596">&#9670;&nbsp;</a></span>Bitmap_DrawLine()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Bitmap_DrawLine </td>
+          <td class="memname">bool Bitmap_DrawLine </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>the_bitmap</em>, </td>
@@ -551,31 +624,31 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>the_color</em>&#160;</td>
         </tr>
         <tr>
@@ -592,14 +665,14 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="af606f030db2a5630c5b0a80a4890e768" name="af606f030db2a5630c5b0a80a4890e768"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af606f030db2a5630c5b0a80a4890e768">&#9670;&nbsp;</a></span>Bitmap_DrawRoundBox()</h2>
+<a id="a9137d746ff1306b83a0ac7b86fa56b4c" name="a9137d746ff1306b83a0ac7b86fa56b4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9137d746ff1306b83a0ac7b86fa56b4c">&#9670;&nbsp;</a></span>Bitmap_DrawRoundBox()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Bitmap_DrawRoundBox </td>
+          <td class="memname">bool Bitmap_DrawRoundBox </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>the_bitmap</em>, </td>
@@ -607,43 +680,43 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>width</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>height</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>radius</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>the_color</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">boolean&#160;</td>
+          <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>do_fill</em>&#160;</td>
         </tr>
         <tr>
@@ -669,14 +742,14 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="af1d71a1ddeec204a76837e777e3af59e" name="af1d71a1ddeec204a76837e777e3af59e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af1d71a1ddeec204a76837e777e3af59e">&#9670;&nbsp;</a></span>Bitmap_DrawVLine()</h2>
+<a id="aa373caaa894eebba0b9b3b4943574615" name="aa373caaa894eebba0b9b3b4943574615"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa373caaa894eebba0b9b3b4943574615">&#9670;&nbsp;</a></span>Bitmap_DrawVLine()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Bitmap_DrawVLine </td>
+          <td class="memname">bool Bitmap_DrawVLine </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>the_bitmap</em>, </td>
@@ -684,25 +757,25 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>the_line_len</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>the_color</em>&#160;</td>
         </tr>
         <tr>
@@ -724,14 +797,14 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="af20c7be9ba50f9c6cc671c3ec2df2905" name="af20c7be9ba50f9c6cc671c3ec2df2905"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af20c7be9ba50f9c6cc671c3ec2df2905">&#9670;&nbsp;</a></span>Bitmap_FillBox()</h2>
+<a id="a73bc4210fda419320648ca691590966e" name="a73bc4210fda419320648ca691590966e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73bc4210fda419320648ca691590966e">&#9670;&nbsp;</a></span>Bitmap_FillBox()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Bitmap_FillBox </td>
+          <td class="memname">bool Bitmap_FillBox </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>the_bitmap</em>, </td>
@@ -739,31 +812,31 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>width</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>height</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>the_color</em>&#160;</td>
         </tr>
         <tr>
@@ -794,14 +867,14 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="ab692749ce5a9a653b497d032b64d7ee9" name="ab692749ce5a9a653b497d032b64d7ee9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab692749ce5a9a653b497d032b64d7ee9">&#9670;&nbsp;</a></span>Bitmap_FillBoxRect()</h2>
+<a id="a4eab9e2f2f93095f4942bf2ba2d90425" name="a4eab9e2f2f93095f4942bf2ba2d90425"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4eab9e2f2f93095f4942bf2ba2d90425">&#9670;&nbsp;</a></span>Bitmap_FillBoxRect()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Bitmap_FillBoxRect </td>
+          <td class="memname">bool Bitmap_FillBoxRect </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>the_bitmap</em>, </td>
@@ -815,7 +888,7 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>the_color</em>&#160;</td>
         </tr>
         <tr>
@@ -837,14 +910,14 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="a7216efeb117734793c178d1dbd533073" name="a7216efeb117734793c178d1dbd533073"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7216efeb117734793c178d1dbd533073">&#9670;&nbsp;</a></span>Bitmap_FillMemory()</h2>
+<a id="ac925101dc0c8a67e031c4e33b84af768" name="ac925101dc0c8a67e031c4e33b84af768"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac925101dc0c8a67e031c4e33b84af768">&#9670;&nbsp;</a></span>Bitmap_FillMemory()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Bitmap_FillMemory </td>
+          <td class="memname">bool Bitmap_FillMemory </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>the_bitmap</em>, </td>
@@ -852,7 +925,7 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>the_color</em>&#160;</td>
         </tr>
         <tr>
@@ -872,14 +945,14 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="a50ad9e2c6d71a03462a4ecfd0be263c2" name="a50ad9e2c6d71a03462a4ecfd0be263c2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a50ad9e2c6d71a03462a4ecfd0be263c2">&#9670;&nbsp;</a></span>Bitmap_GetCurrentColor()</h2>
+<a id="a4e70bbcddae55b46542446a34bdd6b1c" name="a4e70bbcddae55b46542446a34bdd6b1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e70bbcddae55b46542446a34bdd6b1c">&#9670;&nbsp;</a></span>Bitmap_GetColor()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t Bitmap_GetCurrentColor </td>
+          <td class="memname">uint8_t Bitmap_GetColor </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>the_bitmap</em></td><td>)</td>
@@ -899,14 +972,41 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="a33cf6227636055e9595db68c4817e773" name="a33cf6227636055e9595db68c4817e773"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33cf6227636055e9595db68c4817e773">&#9670;&nbsp;</a></span>Bitmap_GetCurrentMemLoc()</h2>
+<a id="a70b34a53887965e8568100f4715e5d06" name="a70b34a53887965e8568100f4715e5d06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70b34a53887965e8568100f4715e5d06">&#9670;&nbsp;</a></span>Bitmap_GetFont()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned char * Bitmap_GetCurrentMemLoc </td>
+          <td class="memname"><a class="el" href="struct_font.html">Font</a> * Bitmap_GetFont </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
+          <td class="paramname"><em>the_bitmap</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the current font of the pen. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_bitmap</td><td>reference to a valid <a class="el" href="struct_bitmap.html">Bitmap</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns NULL on any error </dd></dl>
+
+</div>
+</div>
+<a id="aa92373cfecfb103fa5c8d301a05dc6f3" name="aa92373cfecfb103fa5c8d301a05dc6f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa92373cfecfb103fa5c8d301a05dc6f3">&#9670;&nbsp;</a></span>Bitmap_GetMemLoc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned char * Bitmap_GetMemLoc </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>the_bitmap</em></td><td>)</td>
@@ -926,14 +1026,51 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="ac409234fbbc9efb58e6048a3254f63b0" name="ac409234fbbc9efb58e6048a3254f63b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac409234fbbc9efb58e6048a3254f63b0">&#9670;&nbsp;</a></span>Bitmap_GetCurrentX()</h2>
+<a id="a80798125dce1dbd21e53bfd0eae05f07" name="a80798125dce1dbd21e53bfd0eae05f07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80798125dce1dbd21e53bfd0eae05f07">&#9670;&nbsp;</a></span>Bitmap_GetPixelAtXY()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">signed int Bitmap_GetCurrentX </td>
+          <td class="memname">uint8_t Bitmap_GetPixelAtXY </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
+          <td class="paramname"><em>the_bitmap</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the pixel CLUT index at a specified x, y coord. </p>
+<dl class="section return"><dt>Returns</dt><dd>returns an 8-bit CLUT index </dd></dl>
+
+</div>
+</div>
+<a id="a133023077dfdefaab36d11e66bb4b101" name="a133023077dfdefaab36d11e66bb4b101"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a133023077dfdefaab36d11e66bb4b101">&#9670;&nbsp;</a></span>Bitmap_GetX()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int16_t Bitmap_GetX </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>the_bitmap</em></td><td>)</td>
@@ -953,14 +1090,14 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="a757bd86bd28bdf0bcaa04044f11d4eaa" name="a757bd86bd28bdf0bcaa04044f11d4eaa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a757bd86bd28bdf0bcaa04044f11d4eaa">&#9670;&nbsp;</a></span>Bitmap_GetCurrentY()</h2>
+<a id="ae1ed084e11d653fc15c14ba9e843dd01" name="ae1ed084e11d653fc15c14ba9e843dd01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1ed084e11d653fc15c14ba9e843dd01">&#9670;&nbsp;</a></span>Bitmap_GetY()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">signed int Bitmap_GetCurrentY </td>
+          <td class="memname">int16_t Bitmap_GetY </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>the_bitmap</em></td><td>)</td>
@@ -980,45 +1117,8 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="af2f21b7645bba681ab86a7f57e9eb06b" name="af2f21b7645bba681ab86a7f57e9eb06b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af2f21b7645bba681ab86a7f57e9eb06b">&#9670;&nbsp;</a></span>Bitmap_GetPixelAtXY()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned char Bitmap_GetPixelAtXY </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
-          <td class="paramname"><em>the_bitmap</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">signed int&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">signed int&#160;</td>
-          <td class="paramname"><em>y</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Get the char at a specified x, y coord. </p>
-<dl class="section return"><dt>Returns</dt><dd>returns a character code </dd></dl>
-
-</div>
-</div>
-<a id="a1488a5025a2e67283e03256ade3f7629" name="a1488a5025a2e67283e03256ade3f7629"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1488a5025a2e67283e03256ade3f7629">&#9670;&nbsp;</a></span>Bitmap_New()</h2>
+<a id="a216eca9c0c5484158047c9537aae94c1" name="a216eca9c0c5484158047c9537aae94c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a216eca9c0c5484158047c9537aae94c1">&#9670;&nbsp;</a></span>Bitmap_New()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1026,13 +1126,13 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
         <tr>
           <td class="memname"><a class="el" href="struct_bitmap.html">Bitmap</a> * Bitmap_New </td>
           <td>(</td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>width</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>height</em>, </td>
         </tr>
         <tr>
@@ -1060,14 +1160,14 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="a96fe03d99b26758d74e34d2d900bdf1f" name="a96fe03d99b26758d74e34d2d900bdf1f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96fe03d99b26758d74e34d2d900bdf1f">&#9670;&nbsp;</a></span>Bitmap_SetCurrentColor()</h2>
+<a id="a0f0e02c6f955bb61dfabb36faf1ab6ec" name="a0f0e02c6f955bb61dfabb36faf1ab6ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f0e02c6f955bb61dfabb36faf1ab6ec">&#9670;&nbsp;</a></span>Bitmap_SetColor()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Bitmap_SetCurrentColor </td>
+          <td class="memname">bool Bitmap_SetColor </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>the_bitmap</em>, </td>
@@ -1098,14 +1198,14 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="adff678160a0620f955de89d76dc4c367" name="adff678160a0620f955de89d76dc4c367"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adff678160a0620f955de89d76dc4c367">&#9670;&nbsp;</a></span>Bitmap_SetCurrentFont()</h2>
+<a id="a5aa17cbd948f5e6c4bb4601a1efc82f8" name="a5aa17cbd948f5e6c4bb4601a1efc82f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5aa17cbd948f5e6c4bb4601a1efc82f8">&#9670;&nbsp;</a></span>Bitmap_SetFont()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Bitmap_SetCurrentFont </td>
+          <td class="memname">bool Bitmap_SetFont </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>the_bitmap</em>, </td>
@@ -1136,14 +1236,14 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="a9ff571e32a2943a459624ca411dab7bb" name="a9ff571e32a2943a459624ca411dab7bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9ff571e32a2943a459624ca411dab7bb">&#9670;&nbsp;</a></span>Bitmap_SetCurrentXY()</h2>
+<a id="a890f5e90bf830a6a7f80ea9c041fb601" name="a890f5e90bf830a6a7f80ea9c041fb601"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a890f5e90bf830a6a7f80ea9c041fb601">&#9670;&nbsp;</a></span>Bitmap_SetPixelAtXY()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Bitmap_SetCurrentXY </td>
+          <td class="memname">bool Bitmap_SetPixelAtXY </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>the_bitmap</em>, </td>
@@ -1151,13 +1251,62 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>the_color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set a char at a specified x, y coord. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_color</td><td>a 1-byte index to the current LUT </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input. </dd></dl>
+
+</div>
+</div>
+<a id="aa31a1573bc86e96d93df337b05ce632a" name="aa31a1573bc86e96d93df337b05ce632a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa31a1573bc86e96d93df337b05ce632a">&#9670;&nbsp;</a></span>Bitmap_SetXY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Bitmap_SetXY </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
+          <td class="paramname"><em>the_bitmap</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>&#160;</td>
         </tr>
         <tr>
@@ -1181,35 +1330,47 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
 
 </div>
 </div>
-<a id="ab9bfd6f3255d12ab9e787b9e44a163f4" name="ab9bfd6f3255d12ab9e787b9e44a163f4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab9bfd6f3255d12ab9e787b9e44a163f4">&#9670;&nbsp;</a></span>Bitmap_SetPixelAtXY()</h2>
+<a id="a3272fa959a54195930c4ec563ae1970b" name="a3272fa959a54195930c4ec563ae1970b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3272fa959a54195930c4ec563ae1970b">&#9670;&nbsp;</a></span>Bitmap_Tile()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Bitmap_SetPixelAtXY </td>
+          <td class="memname">bool Bitmap_Tile </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
-          <td class="paramname"><em>the_bitmap</em>, </td>
+          <td class="paramname"><em>src_bm</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>src_x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
-          <td class="paramname"><em>y</em>, </td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>src_y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
-          <td class="paramname"><em>the_color</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
+          <td class="paramname"><em>dst_bm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>height</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1219,14 +1380,142 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle<
       </table>
 </div><div class="memdoc">
 
-<p>Set a char at a specified x, y coord. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Tile the source bitmap into the destination bitmap, filling it The source and destination bitmaps can be the same: you can use this to copy a chunk of pixels from one part of a screen to another. </p>
+<p >If the destination location cannot fit the entirety of the copied rectangle, the copy will be truncated, but will not return an error. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">the_color</td><td>a 1-byte index to the current LUT </td></tr>
+    <tr><td class="paramname">src_bm</td><td>the source bitmap. It must have a valid address within the VRAM memory space. </td></tr>
+    <tr><td class="paramname">dst_bm</td><td>the destination bitmap. It must have a valid address within the VRAM memory space. It can be the same bitmap as the source. </td></tr>
+    <tr><td class="paramname">src_x,src_y</td><td>the upper left coordinate within the source bitmap, for the tile you want to copy. Must be non-negative. </td></tr>
+    <tr><td class="paramname">width,height</td><td>the size of the tile to be derived from the source bitmap, in pixels. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input. </dd></dl>
+
+</div>
+</div>
+<a id="a7761f98923af89bb316a5e279ab266dd" name="a7761f98923af89bb316a5e279ab266dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7761f98923af89bb316a5e279ab266dd">&#9670;&nbsp;</a></span>Bitmap_TileV1()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Bitmap_TileV1 </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
+          <td class="paramname"><em>src_bm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>src_x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>src_y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
+          <td class="paramname"><em>dst_bm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>height</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tile the source bitmap into the destination bitmap, filling it The source and destination bitmaps can be the same: you can use this to copy a chunk of pixels from one part of a screen to another. </p>
+<p >If the destination location cannot fit the entirety of the copied rectangle, the copy will be truncated, but will not return an error. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src_bm</td><td>the source bitmap. It must have a valid address within the VRAM memory space. </td></tr>
+    <tr><td class="paramname">dst_bm</td><td>the destination bitmap. It must have a valid address within the VRAM memory space. It can be the same bitmap as the source. </td></tr>
+    <tr><td class="paramname">src_x,src_y</td><td>the upper left coordinate within the source bitmap, for the tile you want to copy. Must be non-negative. </td></tr>
+    <tr><td class="paramname">width,height</td><td>the size of the tile to be derived from the source bitmap, in pixels. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0431dd5565c39a0447bceec0deafc296" name="a0431dd5565c39a0447bceec0deafc296"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0431dd5565c39a0447bceec0deafc296">&#9670;&nbsp;</a></span>Bitmap_TileV2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Bitmap_TileV2 </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
+          <td class="paramname"><em>src_bm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>src_x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>src_y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
+          <td class="paramname"><em>dst_bm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>height</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tile the source bitmap into the destination bitmap, filling it The source and destination bitmaps can be the same: you can use this to copy a chunk of pixels from one part of a screen to another. </p>
+<p >If the destination location cannot fit the entirety of the copied rectangle, the copy will be truncated, but will not return an error. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src_bm</td><td>the source bitmap. It must have a valid address within the VRAM memory space. </td></tr>
+    <tr><td class="paramname">dst_bm</td><td>the destination bitmap. It must have a valid address within the VRAM memory space. It can be the same bitmap as the source. </td></tr>
+    <tr><td class="paramname">src_x,src_y</td><td>the upper left coordinate within the source bitmap, for the tile you want to copy. Must be non-negative. </td></tr>
+    <tr><td class="paramname">width,height</td><td>the size of the tile to be derived from the source bitmap, in pixels. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

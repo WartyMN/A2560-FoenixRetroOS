@@ -65,19 +65,19 @@
 //! This Font object is essentially the Mac "fontRecord" struct, with added pointers for the data tables. 
 //! It is designed to allow a Mac 'FONT' resource to be loaded into memory to populate this struct. 
 struct Font {
-	short               fontType;		//!< Only bit we care about is the first. See https://developer.apple.com/library/archive/documentation/mac/Text/Text-251.html#MARKER-9-442
-	short               firstChar;		//!< ASCII code of first character
-	short               lastChar;		//!< ASCII code of last character
-	short               widMax;			//!< maximum character width -- Could be used if font is fixed-width
-	short               kernMax;		//!< negative of maximum character kern
-	short               nDescent;		//!< negative of descent
-	short               fRectWidth;		//!< width of font rectangle
-	short               fRectHeight;	//!< height of font rectangle
-	unsigned short      owTLoc;			//!< offset to offset/width table
-	short               ascent;			//!< ascent
-	short               descent;		//!< descent
-	short               leading;		//!< leading
-	short               rowWords;		//!< row width of bit image / 2
+	int16_t				fontType;		//!< Only bit we care about is the first. See https://developer.apple.com/library/archive/documentation/mac/Text/Text-251.html#MARKER-9-442
+	int16_t				firstChar;		//!< ASCII code of first character
+	int16_t				lastChar;		//!< ASCII code of last character
+	int16_t				widMax;			//!< maximum character width -- Could be used if font is fixed-width
+	int16_t				kernMax;		//!< negative of maximum character kern
+	int16_t				nDescent;		//!< negative of descent
+	int16_t				fRectWidth;		//!< width of font rectangle
+	int16_t				fRectHeight;	//!< height of font rectangle
+	uint16_t			owTLoc;			//!< offset to offset/width table
+	int16_t				ascent;			//!< ascent
+	int16_t				descent;		//!< descent
+	int16_t				leading;		//!< leading
+	int16_t				rowWords;		//!< row width of bit image / 2
 	uint16_t*			image_table_;	//!< The font image data
 	uint16_t*			loc_table_;		//!< The location table
 	uint16_t*			width_table_;	//!< Table containing h offset and widths for each glyph
@@ -146,7 +146,7 @@ Font* Font_LoadFontData(unsigned char* the_data);
 // No word wrap is performed. 
 // If max_chars is less than the string length, only that many characters will be drawn (as space allows)
 // If max_chars is -1, then the full string length will be drawn, as space allows.
-bool Font_DrawString(Bitmap* the_bitmap, char* the_string, signed int max_chars);
+bool Font_DrawString(Bitmap* the_bitmap, char* the_string, int16_t max_chars);
 
 //! Draw a string in a rectangular block on the screen, with wrap.
 //! The current font, pen location, and pen color of the bitmap will be used
@@ -159,7 +159,7 @@ bool Font_DrawString(Bitmap* the_bitmap, char* the_string, signed int max_chars)
 //! @param	wrap_buffer: pointer to a pointer to a temporary text buffer that can be used to hold the wrapped ('formatted') characters. The buffer must be large enough to hold num_chars of incoming text, plus additional line break characters where necessary. 
 //! @param	continue_function: optional hook to a function that will be called if the provided text cannot fit into the specified box. If provided, the function will be called each time text exceeds available space. If the function returns true, another chunk of text will be displayed, replacing the first. If the function returns false, processing will stop. If no function is provided, processing will stop at the point text exceeds the available space.
 //! @return	returns a pointer to the first character in the string after which it stopped processing (if string is too long to be displayed in its entirety). Returns the original string if the entire string was processed successfully. Returns NULL in the event of any error.
-char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int height, char* the_string, signed int num_chars, char** wrap_buffer, bool (* continue_function)(void));
+char* Font_DrawStringInBox(Bitmap* the_bitmap, int16_t width, int16_t height, char* the_string, int16_t num_chars, char** wrap_buffer, bool (* continue_function)(void));
 
 //! Calculates how many characters of the passed string will fit into the passed pixel width.
 //! The current font of the bitmap will be used as the basis for calculating fit.
@@ -170,14 +170,14 @@ char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int heig
 //! @param	fixed_char_width: the width, in pixels, of one character. This value will be ignored. It exists to keep text-mode text-wrapping compatible with bitmap-font text-wrapping.
 //! @param	measured_width: the number of pixels needed to display the characters that fit into the available_width. If the entire string fit, this is the width in pixels of that string. If only X characters fit, it is the pixel width of those X characters.
 //! @return	returns -1 in any error condition, or the number of characters that fit. If the entire string fits, the passed len will be returned.
-signed int Font_MeasureStringWidth(Font* the_font, char* the_string, signed int num_chars, signed int available_width, signed int fixed_char_width, signed int* measured_width);
+int16_t Font_MeasureStringWidth(Font* the_font, char* the_string, int16_t num_chars, int16_t available_width, int16_t fixed_char_width, int16_t* measured_width);
 
 
 //! Draw one character on the bitmap, at the current bitmap pen coordinates
 //! NOTE: if the draw action is successful, the bitmaps current pen position will be updated in preparation for the next character draw.
 //! TODO: stop passing Font, and have the concept of a current font for a given bitmap. and maybe a default system font. 
 //! @return Returns number of horizontal pixels used, including left/right offsets
-signed int Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font);
+int16_t Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font);
 
 
 

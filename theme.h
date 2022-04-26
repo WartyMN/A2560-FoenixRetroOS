@@ -96,10 +96,10 @@ struct ControlBackdrop
 	Bitmap*					image_left_[2][2];			//! left side of 4 image state bitmaps: [active yes/no][pushed down yes/no]
 	Bitmap*					image_mid_[2][2];			//! 4 image state bitmaps: [active yes/no][pushed down yes/no]
 	Bitmap*					image_right_[2][2];			//! 4 image state bitmaps: [active yes/no][pushed down yes/no]
-	uint16_t				left_width_;				//! width of the left image
-	uint16_t				mid_width_;					//! width of the mid image
-	uint16_t				right_width_;				//! width of the right image
-	uint16_t				height_;					//! height of the images (all must have same height)
+	int16_t					left_width_;				//! width of the left image
+	int16_t					mid_width_;					//! width of the mid image
+	int16_t					right_width_;				//! width of the right image
+	int16_t					height_;					//! height of the images (all must have same height)
 };
 
 struct Theme
@@ -115,7 +115,7 @@ struct Theme
 	bool					titlebar_outline_;				//! Draw an outline using the outline_color_, around the titlebar?
 	uint8_t					title_color_;					//! Foreground color of the title bar when window is active - Index to the color LUT	
 	h_align_type			title_h_align_;					//! whether the title text should be positioned relative to the left side, right side, or centered
-	signed int				title_x_offset_;				//! horizontal coordinate relative to the window's left or right edge. If title_h_align_ is H_ALIGN_CENTER, this value will be ignored.
+	int16_t					title_x_offset_;				//! horizontal coordinate relative to the window's left or right edge. If title_h_align_ is H_ALIGN_CENTER, this value will be ignored.
 	uint8_t					iconbar_height_;				//! Height of iconbar (when displayed).
 	uint8_t					iconbar_color_;					//! Index to the color LUT
 	bool					iconbar_outline_;				//! Draw an outline using the outline_color_, around the iconbar?

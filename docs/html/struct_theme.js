@@ -1,16 +1,28 @@
 var struct_theme =
 [
+    [ "background_color_", "struct_theme.html#a4f9cc35958d6dbc349fcdc226acce0ed", null ],
+    [ "border_color_", "struct_theme.html#ae8d9b048521291e90e3e638a23fbf349", null ],
     [ "clut_", "struct_theme.html#ad507dc6f9dbafab03eae45f694ca19a8", null ],
-    [ "contentarea_color_", "struct_theme.html#a3896eb3beed9e3fbb7861b6eda7e6b6a", null ],
-    [ "contentarea_y_", "struct_theme.html#a7e5da2f7d82f1d55891e0ccdca50c088", null ],
     [ "control_t_close_", "struct_theme.html#ad548857de2926580bb1d2dbd6d0ff8ed", null ],
     [ "desktop_color_", "struct_theme.html#a7a6b671b5edc4baf0186a672c5d36d60", null ],
     [ "desktop_pattern_", "struct_theme.html#a45db07ce7d6720884925be7b9f2f8235", null ],
+    [ "flow_from_bottom_", "struct_theme.html#ab4a35dcac24301d52d079cc4062b4fe5", null ],
+    [ "highlight_back_color_", "struct_theme.html#a6525ea7d893daa23c37c46bfffe10f2c", null ],
+    [ "highlight_fore_color_", "struct_theme.html#ac5e4df77ecd5d07b994e3e357d513e68", null ],
     [ "iconbar_color_", "struct_theme.html#a9b27ce7d7167f857deff0b08752378e0", null ],
     [ "iconbar_height_", "struct_theme.html#ab8cc1c18cfbc0024776c7d21f76e6a2e", null ],
-    [ "iconbar_y_", "struct_theme.html#a13e3669e61e78c86e856769caad480d8", null ],
+    [ "iconbar_outline_", "struct_theme.html#a1a0fb4d4d5b346c3f4b1f314502145be", null ],
+    [ "inactive_back_color_", "struct_theme.html#a48553d356dbe085e814fe63a44fdfbc2", null ],
+    [ "inactive_fore_color_", "struct_theme.html#a74d62e458c663915ef354ff95398b116", null ],
     [ "outline_color_", "struct_theme.html#a8228b33d9ed62a4f41d6b8a0daafe86d", null ],
+    [ "pattern_height_", "struct_theme.html#a6c71775727543b4b8bff95e6b1fc0248", null ],
+    [ "pattern_width_", "struct_theme.html#ad20962e4d8f6fd98f5be2428c36d3e1b", null ],
+    [ "standard_back_color_", "struct_theme.html#a98914ef1cdd2d87bfd34c3df9ee4cc9d", null ],
+    [ "standard_fore_color_", "struct_theme.html#a0c9c39155b88c926144d20f2ee5884e6", null ],
+    [ "title_color_", "struct_theme.html#ae9cab53aa9ca0af484c0b00626a6e3cd", null ],
+    [ "title_h_align_", "struct_theme.html#af38d3513963d21a494f8e1017db81203", null ],
+    [ "title_x_offset_", "struct_theme.html#ad1071e16c94f5cb79935a6686a3eacad", null ],
     [ "titlebar_color_", "struct_theme.html#a7a4e0d64a622776f29e351f925b8e7bc", null ],
     [ "titlebar_height_", "struct_theme.html#a8f2e2b025e01208378b1476a8aaf1594", null ],
-    [ "titlebar_y_", "struct_theme.html#ae13b733ae8a6249426aeb59e26b7e2bf", null ]
+    [ "titlebar_outline_", "struct_theme.html#a0ce3251a98d53339b199aabe67b50235", null ]
 ];

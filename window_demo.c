@@ -89,10 +89,10 @@ void WaitForUser(void)
 // Draw fancy box on the B screen and display demo description
 void ShowDescription(char* the_message)
 {
-	signed int	x1 = 0;
-	signed int	x2 = global_system->screen_[ID_CHANNEL_B]->text_cols_vis_ - 1;
-	signed int	y1 = 0;
-	signed int	y2 = 5;
+	int16_t		x1 = 0;
+	int16_t		x2 = global_system->screen_[ID_CHANNEL_B]->text_cols_vis_ - 1;
+	int16_t		y1 = 0;
+	int16_t		y2 = 5;
 
 	// draw box and fill contents in prep for next demo description
 	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, FG_COLOR_BLUE, 0);
@@ -138,10 +138,10 @@ void SwitchThemes(Window* the_window)
 	// draw some stuff in the window we created
 	{
 		// draw some color blocks
-		int i;
-		int x = 1;
-		int y = the_window->content_rect_.MinY + 50;
-		int height = 16;
+		int16_t i;
+		int16_t x = 1;
+		int16_t y = the_window->content_rect_.MinY + 50;
+		int16_t height = 16;
 	
 		// chromatic
 		for (i=1; i<(256-41); i++)
@@ -182,8 +182,8 @@ void ToggleButtonStates(Window* the_window)
 {	
 	Control*	root_control;
 	Control*	this_control;
-	int			is_active;
-	int			is_pushed;
+	int8_t		is_active;
+	int8_t		is_pushed;
 	
 	// toggle all controls through their states to test things out
 	General_DelaySeconds(1);
@@ -219,10 +219,10 @@ void AddControls(Window* the_window)
 	Control*			button_2;
 	Control*			button_3;
 	Control*			button_4;
-	int					x_offset;
-	int					y_offset;
-	int					width;
-	int					height;
+	int16_t				x_offset;
+	int16_t				y_offset;
+	int16_t				width;
+	int16_t				height;
 	static char*		caption_1 = "Active";
 	static char*		caption_2 = "Active - pushed";
 	static char*		caption_3 = "Inactive";
@@ -312,8 +312,8 @@ void RunDemo(void)
 {
 	Window*				the_window;
 	NewWinTemplate*		the_win_template;
-	unsigned int		width = 500;
-	unsigned int		height = 300;
+	int16_t				width = 500;
+	int16_t				height = 300;
 	static char*		the_win_title = "My New Window";
 	
 	DEBUG_OUT(("%s %d: Setting graphics mode...", __func__, __LINE__));
@@ -347,10 +347,10 @@ void RunDemo(void)
 	// draw some stuff in the window we created
 	{
 		// draw some color blocks
-		int i;
-		int x = 1;
-		int y = the_window->content_rect_.MinY + 50;
-		int height = 16;
+		int16_t i;
+		int16_t x = 1;
+		int16_t y = the_window->content_rect_.MinY + 50;
+		int16_t height = 16;
 	
 		// chromatic
 		for (i=1; i<(256-41); i++)

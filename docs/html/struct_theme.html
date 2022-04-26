@@ -107,51 +107,102 @@ uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><b>clut_</b></td></
 uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>outline_color_</b></td></tr>
 <tr class="memdesc:a8228b33d9ed62a4f41d6b8a0daafe86d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Thickness of border around window, in pixels. 0 is acceptable. Border is drawn from window rect inwards (not outwards) <br /></td></tr>
 <tr class="separator:a8228b33d9ed62a4f41d6b8a0daafe86d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4a35dcac24301d52d079cc4062b4fe5"><td class="memItemLeft" align="right" valign="top"><a id="ab4a35dcac24301d52d079cc4062b4fe5" name="ab4a35dcac24301d52d079cc4062b4fe5"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>flow_from_bottom_</b></td></tr>
+<tr class="memdesc:ab4a35dcac24301d52d079cc4062b4fe5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index to the color LUT. <br /></td></tr>
+<tr class="separator:ab4a35dcac24301d52d079cc4062b4fe5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f2e2b025e01208378b1476a8aaf1594"><td class="memItemLeft" align="right" valign="top"><a id="a8f2e2b025e01208378b1476a8aaf1594" name="a8f2e2b025e01208378b1476a8aaf1594"></a>
 uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>titlebar_height_</b></td></tr>
-<tr class="memdesc:a8f2e2b025e01208378b1476a8aaf1594"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index to the color LUT. <br /></td></tr>
+<tr class="memdesc:a8f2e2b025e01208378b1476a8aaf1594"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controls the vertical flow of elements: if true, order from top will be content area-&gt;iconbar-&gt;titlebar. <br /></td></tr>
 <tr class="separator:a8f2e2b025e01208378b1476a8aaf1594"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae13b733ae8a6249426aeb59e26b7e2bf"><td class="memItemLeft" align="right" valign="top"><a id="ae13b733ae8a6249426aeb59e26b7e2bf" name="ae13b733ae8a6249426aeb59e26b7e2bf"></a>
-signed int&#160;</td><td class="memItemRight" valign="bottom"><b>titlebar_y_</b></td></tr>
-<tr class="memdesc:ae13b733ae8a6249426aeb59e26b7e2bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Height of titlebar. Cannot be smaller than height of control font. <br /></td></tr>
-<tr class="separator:ae13b733ae8a6249426aeb59e26b7e2bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a4e0d64a622776f29e351f925b8e7bc"><td class="memItemLeft" align="right" valign="top"><a id="a7a4e0d64a622776f29e351f925b8e7bc" name="a7a4e0d64a622776f29e351f925b8e7bc"></a>
 uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>titlebar_color_</b></td></tr>
-<tr class="memdesc:a7a4e0d64a622776f29e351f925b8e7bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Positive numbers position the titlebar relative to top edge of window. Negative numbers position it relative to the bottom edge of the window. <br /></td></tr>
+<tr class="memdesc:a7a4e0d64a622776f29e351f925b8e7bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Height of titlebar. Cannot be smaller than height of control font. <br /></td></tr>
 <tr class="separator:a7a4e0d64a622776f29e351f925b8e7bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ce3251a98d53339b199aabe67b50235"><td class="memItemLeft" align="right" valign="top"><a id="a0ce3251a98d53339b199aabe67b50235" name="a0ce3251a98d53339b199aabe67b50235"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>titlebar_outline_</b></td></tr>
+<tr class="memdesc:a0ce3251a98d53339b199aabe67b50235"><td class="mdescLeft">&#160;</td><td class="mdescRight">Background color of the title bar when window is active - Index to the color LUT <br  />
+ <br /></td></tr>
+<tr class="separator:a0ce3251a98d53339b199aabe67b50235"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9cab53aa9ca0af484c0b00626a6e3cd"><td class="memItemLeft" align="right" valign="top"><a id="ae9cab53aa9ca0af484c0b00626a6e3cd" name="ae9cab53aa9ca0af484c0b00626a6e3cd"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>title_color_</b></td></tr>
+<tr class="memdesc:ae9cab53aa9ca0af484c0b00626a6e3cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw an outline using the outline_color_, around the titlebar? <br /></td></tr>
+<tr class="separator:ae9cab53aa9ca0af484c0b00626a6e3cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af38d3513963d21a494f8e1017db81203"><td class="memItemLeft" align="right" valign="top"><a id="af38d3513963d21a494f8e1017db81203" name="af38d3513963d21a494f8e1017db81203"></a>
+h_align_type&#160;</td><td class="memItemRight" valign="bottom"><b>title_h_align_</b></td></tr>
+<tr class="memdesc:af38d3513963d21a494f8e1017db81203"><td class="mdescLeft">&#160;</td><td class="mdescRight">Foreground color of the title bar when window is active - Index to the color LUT <br  />
+ <br /></td></tr>
+<tr class="separator:af38d3513963d21a494f8e1017db81203"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1071e16c94f5cb79935a6686a3eacad"><td class="memItemLeft" align="right" valign="top"><a id="ad1071e16c94f5cb79935a6686a3eacad" name="ad1071e16c94f5cb79935a6686a3eacad"></a>
+int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>title_x_offset_</b></td></tr>
+<tr class="memdesc:ad1071e16c94f5cb79935a6686a3eacad"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether the title text should be positioned relative to the left side, right side, or centered <br /></td></tr>
+<tr class="separator:ad1071e16c94f5cb79935a6686a3eacad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8cc1c18cfbc0024776c7d21f76e6a2e"><td class="memItemLeft" align="right" valign="top"><a id="ab8cc1c18cfbc0024776c7d21f76e6a2e" name="ab8cc1c18cfbc0024776c7d21f76e6a2e"></a>
 uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>iconbar_height_</b></td></tr>
-<tr class="memdesc:ab8cc1c18cfbc0024776c7d21f76e6a2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index to the color LUT <br  />
- <br /></td></tr>
+<tr class="memdesc:ab8cc1c18cfbc0024776c7d21f76e6a2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">horizontal coordinate relative to the window's left or right edge. If title_h_align_ is H_ALIGN_CENTER, this value will be ignored. <br /></td></tr>
 <tr class="separator:ab8cc1c18cfbc0024776c7d21f76e6a2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a13e3669e61e78c86e856769caad480d8"><td class="memItemLeft" align="right" valign="top"><a id="a13e3669e61e78c86e856769caad480d8" name="a13e3669e61e78c86e856769caad480d8"></a>
-signed int&#160;</td><td class="memItemRight" valign="bottom"><b>iconbar_y_</b></td></tr>
-<tr class="memdesc:a13e3669e61e78c86e856769caad480d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Height of iconbar (when displayed). <br /></td></tr>
-<tr class="separator:a13e3669e61e78c86e856769caad480d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b27ce7d7167f857deff0b08752378e0"><td class="memItemLeft" align="right" valign="top"><a id="a9b27ce7d7167f857deff0b08752378e0" name="a9b27ce7d7167f857deff0b08752378e0"></a>
 uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>iconbar_color_</b></td></tr>
-<tr class="memdesc:a9b27ce7d7167f857deff0b08752378e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Positive numbers position the iconbar relative to top edge of window. Negative numbers position it relative to the bottom edge of the window. <br /></td></tr>
+<tr class="memdesc:a9b27ce7d7167f857deff0b08752378e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Height of iconbar (when displayed). <br /></td></tr>
 <tr class="separator:a9b27ce7d7167f857deff0b08752378e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e5da2f7d82f1d55891e0ccdca50c088"><td class="memItemLeft" align="right" valign="top"><a id="a7e5da2f7d82f1d55891e0ccdca50c088" name="a7e5da2f7d82f1d55891e0ccdca50c088"></a>
-signed int&#160;</td><td class="memItemRight" valign="bottom"><b>contentarea_y_</b></td></tr>
-<tr class="memdesc:a7e5da2f7d82f1d55891e0ccdca50c088"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index to the color LUT. <br /></td></tr>
-<tr class="separator:a7e5da2f7d82f1d55891e0ccdca50c088"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3896eb3beed9e3fbb7861b6eda7e6b6a"><td class="memItemLeft" align="right" valign="top"><a id="a3896eb3beed9e3fbb7861b6eda7e6b6a" name="a3896eb3beed9e3fbb7861b6eda7e6b6a"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>contentarea_color_</b></td></tr>
-<tr class="memdesc:a3896eb3beed9e3fbb7861b6eda7e6b6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Positive numbers position the content area relative to top edge of window. Negative numbers position it relative to the bottom edge of the window. <br  />
+<tr class="memitem:a1a0fb4d4d5b346c3f4b1f314502145be"><td class="memItemLeft" align="right" valign="top"><a id="a1a0fb4d4d5b346c3f4b1f314502145be" name="a1a0fb4d4d5b346c3f4b1f314502145be"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>iconbar_outline_</b></td></tr>
+<tr class="memdesc:a1a0fb4d4d5b346c3f4b1f314502145be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index to the color LUT. <br /></td></tr>
+<tr class="separator:a1a0fb4d4d5b346c3f4b1f314502145be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98914ef1cdd2d87bfd34c3df9ee4cc9d"><td class="memItemLeft" align="right" valign="top"><a id="a98914ef1cdd2d87bfd34c3df9ee4cc9d" name="a98914ef1cdd2d87bfd34c3df9ee4cc9d"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>standard_back_color_</b></td></tr>
+<tr class="memdesc:a98914ef1cdd2d87bfd34c3df9ee4cc9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw an outline using the outline_color_, around the iconbar? <br /></td></tr>
+<tr class="separator:a98914ef1cdd2d87bfd34c3df9ee4cc9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c9c39155b88c926144d20f2ee5884e6"><td class="memItemLeft" align="right" valign="top"><a id="a0c9c39155b88c926144d20f2ee5884e6" name="a0c9c39155b88c926144d20f2ee5884e6"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>standard_fore_color_</b></td></tr>
+<tr class="memdesc:a0c9c39155b88c926144d20f2ee5884e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index to the color LUT. <br /></td></tr>
+<tr class="separator:a0c9c39155b88c926144d20f2ee5884e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48553d356dbe085e814fe63a44fdfbc2"><td class="memItemLeft" align="right" valign="top"><a id="a48553d356dbe085e814fe63a44fdfbc2" name="a48553d356dbe085e814fe63a44fdfbc2"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>inactive_back_color_</b></td></tr>
+<tr class="memdesc:a48553d356dbe085e814fe63a44fdfbc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index to the color LUT <br  />
  <br /></td></tr>
-<tr class="separator:a3896eb3beed9e3fbb7861b6eda7e6b6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a48553d356dbe085e814fe63a44fdfbc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74d62e458c663915ef354ff95398b116"><td class="memItemLeft" align="right" valign="top"><a id="a74d62e458c663915ef354ff95398b116" name="a74d62e458c663915ef354ff95398b116"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>inactive_fore_color_</b></td></tr>
+<tr class="memdesc:a74d62e458c663915ef354ff95398b116"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index to the color LUT. <br /></td></tr>
+<tr class="separator:a74d62e458c663915ef354ff95398b116"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6525ea7d893daa23c37c46bfffe10f2c"><td class="memItemLeft" align="right" valign="top"><a id="a6525ea7d893daa23c37c46bfffe10f2c" name="a6525ea7d893daa23c37c46bfffe10f2c"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>highlight_back_color_</b></td></tr>
+<tr class="memdesc:a6525ea7d893daa23c37c46bfffe10f2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index to the color LUT <br  />
+ <br /></td></tr>
+<tr class="separator:a6525ea7d893daa23c37c46bfffe10f2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5e4df77ecd5d07b994e3e357d513e68"><td class="memItemLeft" align="right" valign="top"><a id="ac5e4df77ecd5d07b994e3e357d513e68" name="ac5e4df77ecd5d07b994e3e357d513e68"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>highlight_fore_color_</b></td></tr>
+<tr class="memdesc:ac5e4df77ecd5d07b994e3e357d513e68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index to the color LUT. <br /></td></tr>
+<tr class="separator:ac5e4df77ecd5d07b994e3e357d513e68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a6b671b5edc4baf0186a672c5d36d60"><td class="memItemLeft" align="right" valign="top"><a id="a7a6b671b5edc4baf0186a672c5d36d60" name="a7a6b671b5edc4baf0186a672c5d36d60"></a>
 uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>desktop_color_</b></td></tr>
-<tr class="memdesc:a7a6b671b5edc4baf0186a672c5d36d60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index to the color LUT. <br /></td></tr>
+<tr class="memdesc:a7a6b671b5edc4baf0186a672c5d36d60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index to the color LUT <br  />
+ <br /></td></tr>
 <tr class="separator:a7a6b671b5edc4baf0186a672c5d36d60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45db07ce7d6720884925be7b9f2f8235"><td class="memItemLeft" align="right" valign="top"><a id="a45db07ce7d6720884925be7b9f2f8235" name="a45db07ce7d6720884925be7b9f2f8235"></a>
 <a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>desktop_pattern_</b></td></tr>
-<tr class="memdesc:a45db07ce7d6720884925be7b9f2f8235"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required LUT index for the background color; Used when no pattern bitmap. <br /></td></tr>
+<tr class="memdesc:a45db07ce7d6720884925be7b9f2f8235"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required LUT index for the desktop color; Used when no pattern bitmap. <br /></td></tr>
 <tr class="separator:a45db07ce7d6720884925be7b9f2f8235"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad20962e4d8f6fd98f5be2428c36d3e1b"><td class="memItemLeft" align="right" valign="top"><a id="ad20962e4d8f6fd98f5be2428c36d3e1b" name="ad20962e4d8f6fd98f5be2428c36d3e1b"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>pattern_width_</b></td></tr>
+<tr class="memdesc:ad20962e4d8f6fd98f5be2428c36d3e1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional bitmap to be tiled into a desktop pattern. <br /></td></tr>
+<tr class="separator:ad20962e4d8f6fd98f5be2428c36d3e1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c71775727543b4b8bff95e6b1fc0248"><td class="memItemLeft" align="right" valign="top"><a id="a6c71775727543b4b8bff95e6b1fc0248" name="a6c71775727543b4b8bff95e6b1fc0248"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>pattern_height_</b></td></tr>
+<tr class="memdesc:a6c71775727543b4b8bff95e6b1fc0248"><td class="mdescLeft">&#160;</td><td class="mdescRight">Width of the desktop pattern. <br /></td></tr>
+<tr class="separator:a6c71775727543b4b8bff95e6b1fc0248"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f9cc35958d6dbc349fcdc226acce0ed"><td class="memItemLeft" align="right" valign="top"><a id="a4f9cc35958d6dbc349fcdc226acce0ed" name="a4f9cc35958d6dbc349fcdc226acce0ed"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>background_color_</b></td></tr>
+<tr class="memdesc:a4f9cc35958d6dbc349fcdc226acce0ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Height of the desktop pattern. <br /></td></tr>
+<tr class="separator:a4f9cc35958d6dbc349fcdc226acce0ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8d9b048521291e90e3e638a23fbf349"><td class="memItemLeft" align="right" valign="top"><a id="ae8d9b048521291e90e3e638a23fbf349" name="ae8d9b048521291e90e3e638a23fbf349"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>border_color_</b></td></tr>
+<tr class="memdesc:ae8d9b048521291e90e3e638a23fbf349"><td class="mdescLeft">&#160;</td><td class="mdescRight">32bit BGRA (A is non-functional). Used for the base background layer in the VICKY. <br /></td></tr>
+<tr class="separator:ae8d9b048521291e90e3e638a23fbf349"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad548857de2926580bb1d2dbd6d0ff8ed"><td class="memItemLeft" align="right" valign="top"><a id="ad548857de2926580bb1d2dbd6d0ff8ed" name="ad548857de2926580bb1d2dbd6d0ff8ed"></a>
 <a class="el" href="struct_control_template.html">ControlTemplate</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>control_t_close_</b></td></tr>
-<tr class="memdesc:ad548857de2926580bb1d2dbd6d0ff8ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional bitmap to be tiled into a desktop pattern. <br /></td></tr>
+<tr class="memdesc:ad548857de2926580bb1d2dbd6d0ff8ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">32bit BGRA (A is non-functional). Used for the border color in the VICKY. <br /></td></tr>
 <tr class="separator:ad548857de2926580bb1d2dbd6d0ff8ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following file:<ul>

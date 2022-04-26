@@ -98,7 +98,8 @@ $(document).ready(function(){initNavTree('control_8h.html',''); initResizable();
   <div class="headertitle"><div class="title">control.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;mcp/syscalls.h&gt;</code><br />
+<div class="textblock"><code>#include &lt;stdbool.h&gt;</code><br />
+<code>#include &lt;mcp/syscalls.h&gt;</code><br />
 <code>#include &lt;mb/a2560_platform.h&gt;</code><br />
 <code>#include &lt;mb/general.h&gt;</code><br />
 <code>#include &lt;mb/text.h&gt;</code><br />
@@ -120,10 +121,45 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aa35553cee45ba09b242ceee925f038d9"><td class="memItemLeft" align="right" valign="top"><a id="aa35553cee45ba09b242ceee925f038d9" name="aa35553cee45ba09b242ceee925f038d9"></a>
-<a class="el" href="struct_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>Control_New</b> (<a class="el" href="struct_control_template.html">ControlTemplate</a> *the_template, <a class="el" href="struct_window.html">Window</a> *the_window, uint16_t the_id, int8_t the_group)</td></tr>
-<tr class="memdesc:aa35553cee45ba09b242ceee925f038d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a <a class="el" href="struct_control.html" title="This structure describes an instantiated control on a window.">Control</a> object. <br /></td></tr>
-<tr class="separator:aa35553cee45ba09b242ceee925f038d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f247eaa87375938d47b8c62747ac973"><td class="memItemLeft" align="right" valign="top"><a id="a2f247eaa87375938d47b8c62747ac973" name="a2f247eaa87375938d47b8c62747ac973"></a>
+<a class="el" href="struct_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>Control_New</b> (<a class="el" href="struct_control_template.html">ControlTemplate</a> *the_template, <a class="el" href="struct_window.html">Window</a> *the_window, <a class="el" href="struct_rectangle.html">Rectangle</a> *the_parent_rect, uint16_t the_id, int8_t the_group)</td></tr>
+<tr class="memdesc:a2f247eaa87375938d47b8c62747ac973"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a <a class="el" href="struct_control.html" title="This structure describes an instantiated control on a window.">Control</a> object. <br /></td></tr>
+<tr class="separator:a2f247eaa87375938d47b8c62747ac973"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46769dd3cce2ceb0afa3753e9ec931ca"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="control_8h.html#a46769dd3cce2ceb0afa3753e9ec931ca">Control_GetID</a> (<a class="el" href="struct_control.html">Control</a> *the_control)</td></tr>
+<tr class="memdesc:a46769dd3cce2ceb0afa3753e9ec931ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the ID of the control.  <a href="control_8h.html#a46769dd3cce2ceb0afa3753e9ec931ca">More...</a><br /></td></tr>
+<tr class="separator:a46769dd3cce2ceb0afa3753e9ec931ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26a4bc604fe0b8ad7df7b805cfd8ee3a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="control_8h.html#a8d0ec0ac6c53b09d8759c8c35b96434d">control_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="control_8h.html#a26a4bc604fe0b8ad7df7b805cfd8ee3a">Control_GetType</a> (<a class="el" href="struct_control.html">Control</a> *the_control)</td></tr>
+<tr class="memdesc:a26a4bc604fe0b8ad7df7b805cfd8ee3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the control type.  <a href="control_8h.html#a26a4bc604fe0b8ad7df7b805cfd8ee3a">More...</a><br /></td></tr>
+<tr class="separator:a26a4bc604fe0b8ad7df7b805cfd8ee3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9644b583bb48e954eb0fdb86e2a1a6ba"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="control_8h.html#a9644b583bb48e954eb0fdb86e2a1a6ba">Control_GetPressed</a> (<a class="el" href="struct_control.html">Control</a> *the_control)</td></tr>
+<tr class="memdesc:a9644b583bb48e954eb0fdb86e2a1a6ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the pressed/not pressed state.  <a href="control_8h.html#a9644b583bb48e954eb0fdb86e2a1a6ba">More...</a><br /></td></tr>
+<tr class="separator:a9644b583bb48e954eb0fdb86e2a1a6ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a519db2f8ec577bc575f6fc0f19f97fa5"><td class="memItemLeft" align="right" valign="top"><a id="a519db2f8ec577bc575f6fc0f19f97fa5" name="a519db2f8ec577bc575f6fc0f19f97fa5"></a>
+<a class="el" href="struct_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>Control_GetNextControl</b> (<a class="el" href="struct_control.html">Control</a> *the_control)</td></tr>
+<tr class="memdesc:a519db2f8ec577bc575f6fc0f19f97fa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the next control in the chain @Return returns NULL on any error, or if this is the last control in the chain. <br /></td></tr>
+<tr class="separator:a519db2f8ec577bc575f6fc0f19f97fa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4651e6f1e7d5165fb6e348496c4b53b8"><td class="memItemLeft" align="right" valign="top"><a id="a4651e6f1e7d5165fb6e348496c4b53b8" name="a4651e6f1e7d5165fb6e348496c4b53b8"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>Control_SetActive</b> (<a class="el" href="struct_control.html">Control</a> *the_control, bool is_active)</td></tr>
+<tr class="memdesc:a4651e6f1e7d5165fb6e348496c4b53b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the control's active/inactive state. <br /></td></tr>
+<tr class="separator:a4651e6f1e7d5165fb6e348496c4b53b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fdd76f8fe30f430fdb943093d05789f"><td class="memItemLeft" align="right" valign="top"><a id="a1fdd76f8fe30f430fdb943093d05789f" name="a1fdd76f8fe30f430fdb943093d05789f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>Control_SetPressed</b> (<a class="el" href="struct_control.html">Control</a> *the_control, bool is_pressed)</td></tr>
+<tr class="memdesc:a1fdd76f8fe30f430fdb943093d05789f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the control's pressed/unpressed state. <br /></td></tr>
+<tr class="separator:a1fdd76f8fe30f430fdb943093d05789f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af118ac1bd83f672571ed5dbec27ece28"><td class="memItemLeft" align="right" valign="top"><a id="af118ac1bd83f672571ed5dbec27ece28" name="af118ac1bd83f672571ed5dbec27ece28"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>Control_MarkInvalidated</b> (<a class="el" href="struct_control.html">Control</a> *the_control, bool invalidated)</td></tr>
+<tr class="memdesc:af118ac1bd83f672571ed5dbec27ece28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mark the specified control is invalidated or validated Note: Marking a control as invalidated causes it to be added to the parent window's list of rects to be reblitted to the screen in next render pass. <br /></td></tr>
+<tr class="separator:af118ac1bd83f672571ed5dbec27ece28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bce602a52229e7da7cb00d1fac5a6c8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="control_8h.html#a4bce602a52229e7da7cb00d1fac5a6c8">Control_IsRighter</a> (<a class="el" href="struct_control.html">Control</a> *the_control, int16_t *x)</td></tr>
+<tr class="memdesc:a4bce602a52229e7da7cb00d1fac5a6c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare the control's right-edge coordinate to the passed value If the control is more to the right than the passed value, the passed value is updated with the control's right edge.  <a href="control_8h.html#a4bce602a52229e7da7cb00d1fac5a6c8">More...</a><br /></td></tr>
+<tr class="separator:a4bce602a52229e7da7cb00d1fac5a6c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84e5b8cda95ecbe0f3cb99eda72d4c6a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="control_8h.html#a84e5b8cda95ecbe0f3cb99eda72d4c6a">Control_IsLefter</a> (<a class="el" href="struct_control.html">Control</a> *the_control, int16_t *x)</td></tr>
+<tr class="memdesc:a84e5b8cda95ecbe0f3cb99eda72d4c6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare the control's left-edge coordinate to the passed value If the control is more to the left than the passed value, the passed value is updated with the control's left edge.  <a href="control_8h.html#a84e5b8cda95ecbe0f3cb99eda72d4c6a">More...</a><br /></td></tr>
+<tr class="separator:a84e5b8cda95ecbe0f3cb99eda72d4c6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b9d1bbdb43480085a70bb540189632b"><td class="memItemLeft" align="right" valign="top"><a id="a7b9d1bbdb43480085a70bb540189632b" name="a7b9d1bbdb43480085a70bb540189632b"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>Control_UpdateFromTemplate</b> (<a class="el" href="struct_control.html">Control</a> *the_control, <a class="el" href="struct_control_template.html">ControlTemplate</a> *the_template)</td></tr>
+<tr class="memdesc:a7b9d1bbdb43480085a70bb540189632b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the passed control with new theme info from the passed control template Call this when the theme has been changed It allows existing controls to be updated in place, without having to free them and create new theme controls. <br /></td></tr>
+<tr class="separator:a7b9d1bbdb43480085a70bb540189632b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a8d0ec0ac6c53b09d8759c8c35b96434d" name="a8d0ec0ac6c53b09d8759c8c35b96434d"></a>
@@ -138,11 +174,13 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a8d0ec0ac6c53b09d8759c8c35b96434da467ec74db37e5721ebf7428185347a90" name="a8d0ec0ac6c53b09d8759c8c35b96434da467ec74db37e5721ebf7428185347a90"></a>TEXT_FIELD&#160;</td><td class="fielddoc"><p >static text label </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a8d0ec0ac6c53b09d8759c8c35b96434da467ec74db37e5721ebf7428185347a90" name="a8d0ec0ac6c53b09d8759c8c35b96434da467ec74db37e5721ebf7428185347a90"></a>TEXT_FIELD&#160;</td><td class="fielddoc"><p >flexible-width button with text caption </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a8d0ec0ac6c53b09d8759c8c35b96434daad8727e0d85f7e5b1a949d278ee79101" name="a8d0ec0ac6c53b09d8759c8c35b96434daad8727e0d85f7e5b1a949d278ee79101"></a>TEXT_BOX&#160;</td><td class="fielddoc"><p >single line text input field </p>
+<tr><td class="fieldname"><a id="a8d0ec0ac6c53b09d8759c8c35b96434da54e8348e70d2faf8df7139d76a7924ba" name="a8d0ec0ac6c53b09d8759c8c35b96434da54e8348e70d2faf8df7139d76a7924ba"></a>RADIO_BUTTON&#160;</td><td class="fielddoc"><p >flexible-width single-line text input field </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a8d0ec0ac6c53b09d8759c8c35b96434dabfd9e0b72c8b59f7563aeed5ceba5ed9" name="a8d0ec0ac6c53b09d8759c8c35b96434dabfd9e0b72c8b59f7563aeed5ceba5ed9"></a>FUTURE_GROW_L&#160;</td><td class="fielddoc"><p >multi-line text input field </p>
+<tr><td class="fieldname"><a id="a8d0ec0ac6c53b09d8759c8c35b96434da2d76773215cb2fefcd446ea6cd4f78a0" name="a8d0ec0ac6c53b09d8759c8c35b96434da2d76773215cb2fefcd446ea6cd4f78a0"></a>IMAGE_BUTTON&#160;</td><td class="fielddoc"><p >multi-line text input field </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a8d0ec0ac6c53b09d8759c8c35b96434dabfd9e0b72c8b59f7563aeed5ceba5ed9" name="a8d0ec0ac6c53b09d8759c8c35b96434dabfd9e0b72c8b59f7563aeed5ceba5ed9"></a>FUTURE_GROW_L&#160;</td><td class="fielddoc"><p >static text label </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a8d0ec0ac6c53b09d8759c8c35b96434da4e3d65c448ee7d3065f4f61f3d1b5ca2" name="a8d0ec0ac6c53b09d8759c8c35b96434da4e3d65c448ee7d3065f4f61f3d1b5ca2"></a>FUTURE_GROW_R&#160;</td><td class="fielddoc"><p >not sure these will be treated as generic controls, but reserving the id </p>
 </td></tr>
@@ -150,13 +188,139 @@ Functions</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="a8d0ec0ac6c53b09d8759c8c35b96434dae52e5528a3a1e6236bcad13ba83d6726" name="a8d0ec0ac6c53b09d8759c8c35b96434dae52e5528a3a1e6236bcad13ba83d6726"></a>FUTURE_GROW_DN&#160;</td><td class="fielddoc"><p >not sure these will be treated as generic controls, but reserving the id </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a8d0ec0ac6c53b09d8759c8c35b96434da3401f88113645c341c269d49d044a020" name="a8d0ec0ac6c53b09d8759c8c35b96434da3401f88113645c341c269d49d044a020"></a>RESERVED1&#160;</td><td class="fielddoc"><p >not sure these will be treated as generic controls, but reserving the id </p>
+<tr><td class="fieldname"><a id="a8d0ec0ac6c53b09d8759c8c35b96434dacf8b148cbc0a22e38a225d7bb9cb8930" name="a8d0ec0ac6c53b09d8759c8c35b96434dacf8b148cbc0a22e38a225d7bb9cb8930"></a>RESERVED1x&#160;</td><td class="fielddoc"><p >not sure these will be treated as generic controls, but reserving the id </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a8d0ec0ac6c53b09d8759c8c35b96434da41ae559bcd93bd57005b00f3b8cf4d3d" name="a8d0ec0ac6c53b09d8759c8c35b96434da41ae559bcd93bd57005b00f3b8cf4d3d"></a>RESERVED2&#160;</td><td class="fielddoc"><p >progress bar? </p>
+<tr><td class="fieldname"><a id="a8d0ec0ac6c53b09d8759c8c35b96434dae84025be35047daa35f8259a69917256" name="a8d0ec0ac6c53b09d8759c8c35b96434dae84025be35047daa35f8259a69917256"></a>RESERVED2x&#160;</td><td class="fielddoc"><p >progress bar? </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a8d0ec0ac6c53b09d8759c8c35b96434da21f333931288d41f97ef46a2e351902c" name="a8d0ec0ac6c53b09d8759c8c35b96434da21f333931288d41f97ef46a2e351902c"></a>RESERVED3&#160;</td><td class="fielddoc"><p >image? </p>
+<tr><td class="fieldname"><a id="a8d0ec0ac6c53b09d8759c8c35b96434da3a0579588ea3a583585be078a7fa1bf2" name="a8d0ec0ac6c53b09d8759c8c35b96434da3a0579588ea3a583585be078a7fa1bf2"></a>RESERVED3x&#160;</td><td class="fielddoc"><p >image? </p>
 </td></tr>
 </table>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a46769dd3cce2ceb0afa3753e9ec931ca" name="a46769dd3cce2ceb0afa3753e9ec931ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46769dd3cce2ceb0afa3753e9ec931ca">&#9670;&nbsp;</a></span>Control_GetID()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t Control_GetID </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_control.html">Control</a> *&#160;</td>
+          <td class="paramname"><em>the_control</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the ID of the control. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns the ID, or -1 in any error condition </dd></dl>
+
+</div>
+</div>
+<a id="a9644b583bb48e954eb0fdb86e2a1a6ba" name="a9644b583bb48e954eb0fdb86e2a1a6ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9644b583bb48e954eb0fdb86e2a1a6ba">&#9670;&nbsp;</a></span>Control_GetPressed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Control_GetPressed </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_control.html">Control</a> *&#160;</td>
+          <td class="paramname"><em>the_control</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the pressed/not pressed state. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns true if control is pressed (down), false if up </dd></dl>
+
+</div>
+</div>
+<a id="a26a4bc604fe0b8ad7df7b805cfd8ee3a" name="a26a4bc604fe0b8ad7df7b805cfd8ee3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26a4bc604fe0b8ad7df7b805cfd8ee3a">&#9670;&nbsp;</a></span>Control_GetType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="control_8h.html#a8d0ec0ac6c53b09d8759c8c35b96434d">control_type</a> Control_GetType </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_control.html">Control</a> *&#160;</td>
+          <td class="paramname"><em>the_control</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the control type. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns CONTROL_TYPE_ERROR (-1) on any error, or the control_type value </dd></dl>
+
+</div>
+</div>
+<a id="a84e5b8cda95ecbe0f3cb99eda72d4c6a" name="a84e5b8cda95ecbe0f3cb99eda72d4c6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84e5b8cda95ecbe0f3cb99eda72d4c6a">&#9670;&nbsp;</a></span>Control_IsLefter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Control_IsLefter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_control.html">Control</a> *&#160;</td>
+          <td class="paramname"><em>the_control</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t *&#160;</td>
+          <td class="paramname"><em>x</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compare the control's left-edge coordinate to the passed value If the control is more to the left than the passed value, the passed value is updated with the control's left edge. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns true if the control is further to the left than the passed value. </dd></dl>
+
+</div>
+</div>
+<a id="a4bce602a52229e7da7cb00d1fac5a6c8" name="a4bce602a52229e7da7cb00d1fac5a6c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bce602a52229e7da7cb00d1fac5a6c8">&#9670;&nbsp;</a></span>Control_IsRighter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Control_IsRighter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_control.html">Control</a> *&#160;</td>
+          <td class="paramname"><em>the_control</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t *&#160;</td>
+          <td class="paramname"><em>x</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compare the control's right-edge coordinate to the passed value If the control is more to the right than the passed value, the passed value is updated with the control's right edge. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns true if the control is further to the right than the passed value. </dd></dl>
 
 </div>
 </div>

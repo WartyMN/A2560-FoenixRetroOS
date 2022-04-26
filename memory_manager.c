@@ -22,6 +22,7 @@
 //#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 
 // A2560 includes
@@ -97,10 +98,6 @@ static MemoryPool poolSysRAM =
     {&poolSysRAM, &poolSysRAM}
 };
 
-// MemoryPool* global_vram_pool = &poolVRAM;
-// MemoryPool* global_std_pool = &poolSysRAM;
-// MemoryPool* global_vram_pool = NULL;
-// MemoryPool* global_std_pool = NULL;
 const MemoryPool* global_vram_pool = &poolVRAM;
 const MemoryPool* global_std_pool = &poolSysRAM;
 
@@ -132,7 +129,6 @@ int32_t		bpoolv(void *pool);
 /*                        Public Function Definitions                        */
 /*****************************************************************************/
 
-#define STD_RAM_LEN		0x0000FFFF
 
 //! Initialize the VRAM and standard RAM memory pools'
 //! return Returns NULL if it fails to allocate enough memory to start the BGET system up
@@ -149,52 +145,16 @@ bool Memory_Initialize(void)
 		return false;
 	}
 
-	// didn't have to do this for VBCC, but Calypsi is showing poolVRAM and poolSysRAM as %p=0. 
-// 	DEBUG_OUT(("%s %d: poolVRAM=%p", __func__, __LINE__, &poolVRAM));
-// 	DEBUG_OUT(("%s %d: poolSysRAM=%p", __func__, __LINE__, &poolSysRAM));
-// 	DEBUG_OUT(("%s %d: poolVRAM.ql.blink->ql.flink=%p", __func__, __LINE__, poolVRAM.ql.blink->ql.flink));
-// 	DEBUG_OUT(("%s %d: poolVRAM.ql.flink->ql.blink=%p", __func__, __LINE__, poolVRAM.ql.flink->ql.blink));
-// 	DEBUG_OUT(("%s %d: poolSysRAM.ql.blink->ql.flink=%p", __func__, __LINE__, poolSysRAM.ql.blink->ql.flink));
-// 	DEBUG_OUT(("%s %d: poolSysRAM.ql.flink->ql.blink=%p", __func__, __LINE__, poolSysRAM.ql.flink->ql.blink));
-// 
-// 	DEBUG_OUT(("%s %d: global_vram_pool=%p", __func__, __LINE__, global_vram_pool));
-// 	DEBUG_OUT(("%s %d: global_std_pool=%p", __func__, __LINE__, global_std_pool));
-
-
-// 	global_vram_pool = &poolVRAM;
-
-// 	poolVRAM.ql.blink->ql.flink = global_vram_pool;
-// 	poolVRAM.ql.flink->ql.blink = global_vram_pool;
+	// I'm not sure why the previous arrangement didn't work, but global_vram_pool and global_std_pool were getting assigned to same pool
+	// making them constants, and setting the ql.flink/blinks here fixes issue in both Calypsi and VBCC. 
 	poolVRAM.ql.blink->ql.flink = &poolVRAM;
 	poolVRAM.ql.flink->ql.blink = &poolVRAM;
 
-// 	global_std_pool = &poolSysRAM;
-
-// 	poolSysRAM.ql.blink->ql.flink = global_std_pool;
-// 	poolSysRAM.ql.flink->ql.blink = global_std_pool;
 	poolSysRAM.ql.blink->ql.flink = &poolSysRAM;
 	poolSysRAM.ql.flink->ql.blink = &poolSysRAM;
 	
-// 	DEBUG_OUT(("%s %d: poolVRAM=%p", __func__, __LINE__, &poolVRAM));
-// 	DEBUG_OUT(("%s %d: global_vram_pool=%p", __func__, __LINE__, global_vram_pool));
-// 	DEBUG_OUT(("%s %d: global_vram_pool->ql.blink->ql.flink=%p", __func__, __LINE__, global_vram_pool->ql.blink->ql.flink));
-// 	DEBUG_OUT(("%s %d: global_vram_pool->ql.flink->ql.blink=%p", __func__, __LINE__, global_vram_pool->ql.flink->ql.blink));
-// 
-// 	DEBUG_OUT(("%s %d: poolSysRAM=%p", __func__, __LINE__, &poolSysRAM));
-// 	DEBUG_OUT(("%s %d: global_std_pool=%p", __func__, __LINE__, global_std_pool));
-// 	DEBUG_OUT(("%s %d: global_std_pool->ql.blink->ql.flink=%p", __func__, __LINE__, global_std_pool->ql.blink->ql.flink));
-// 	DEBUG_OUT(("%s %d: global_std_pool->ql.flink->ql.blink=%p", __func__, __LINE__, global_std_pool->ql.flink->ql.blink));
-// 
-// 	poolVRAM.ql.blink->ql.flink = global_vram_pool;
-// 	poolVRAM.ql.flink->ql.blink = global_vram_pool;
-// 	DEBUG_OUT(("%s %d: global_vram_pool->ql.blink->ql.flink=%p", __func__, __LINE__, global_vram_pool->ql.blink->ql.flink));
-// 	DEBUG_OUT(("%s %d: global_vram_pool->ql.flink->ql.blink=%p", __func__, __LINE__, global_vram_pool->ql.flink->ql.blink));
-// 	DEBUG_OUT(("%s %d: global_std_pool->ql.blink->ql.flink=%p", __func__, __LINE__, global_std_pool->ql.blink->ql.flink));
-// 	DEBUG_OUT(("%s %d: global_std_pool->ql.flink->ql.blink=%p", __func__, __LINE__, global_std_pool->ql.flink->ql.blink));
-	
-	//bpool((void*)STD_RAM_START, (bufsize)STD_RAM_LEN, global_std_pool);
-	bpool((void*)VRAM_START, (bufsize)VRAM_LEN, global_vram_pool);
-	bpool((void*)memory_for_bget, (bufsize)STD_RAM_LEN, global_std_pool);
+	bpool((void*)VRAM_START, (bufsize)VRAM_LEN, (MemoryPool*)global_vram_pool);
+	bpool((void*)memory_for_bget, (bufsize)STD_RAM_LEN, (MemoryPool*)global_std_pool);
 	
 	return true;
 }
@@ -210,20 +170,20 @@ void* f_calloc(size_t num, size_t size, mem_type the_mem_type)
 {
 	void*			the_ptr;
 	MemoryPool*		the_memory;
-	int32_t			start_ticks;
-	int32_t			end_ticks;
+	//int32_t			start_ticks;
+	//int32_t			end_ticks;
 	
-	start_ticks = sys_time_jiffies();
+	//start_ticks = sys_time_jiffies();
 	
-	the_memory = (the_mem_type == MEM_STANDARD) ? global_std_pool : global_vram_pool;
+	the_memory = (the_mem_type == MEM_STANDARD) ? (MemoryPool*)global_std_pool : (MemoryPool*)global_vram_pool;
 
 	//DEBUG_OUT(("%s %d: starting f_calloc... (#=%lu, sz=%lu, tot=%li, t=%i, %p)", __func__, __LINE__, num, size, size * num, the_mem_type, the_memory));
 
 	the_ptr = bgetz(size * num, the_memory);
 
-	end_ticks = sys_time_jiffies();
+	//end_ticks = sys_time_jiffies();
 
-	DEBUG_OUT(("%s %d: allocated, ptr=%p", __func__, __LINE__, the_ptr));
+	//DEBUG_OUT(("%s %d: allocated, ptr=%p", __func__, __LINE__, the_ptr));
 
 	if (the_ptr == NULL)
 	{
@@ -232,7 +192,7 @@ void* f_calloc(size_t num, size_t size, mem_type the_mem_type)
 	}
 	LOG_ALLOC(("%s %d:	__ALLOC__	type	%i	size	%i", __func__ , __LINE__, the_mem_type, size * num));
 	
-	DEBUG_OUT(("%s %d: calloc completed in %li ticks", __func__ , __LINE__, end_ticks - start_ticks));
+	//DEBUG_OUT(("%s %d: calloc completed in %li ticks", __func__ , __LINE__, end_ticks - start_ticks));
 
 	return the_ptr;
 }
@@ -246,7 +206,7 @@ void* f_malloc(size_t size, mem_type the_mem_type)
 	void*			the_ptr;
 	MemoryPool*		the_memory;
 	
-	the_memory = (the_mem_type == MEM_STANDARD) ? global_std_pool : global_vram_pool;
+	the_memory = (the_mem_type == MEM_STANDARD) ? (MemoryPool*)global_std_pool : (MemoryPool*)global_vram_pool;
 
 	//DEBUG_OUT(("%s %d: starting f_malloc... (%i, %i, %p)", __func__, __LINE__, size, the_mem_type, the_memory));
 
@@ -271,19 +231,19 @@ void* f_malloc(size_t size, mem_type the_mem_type)
 void f_free(void* the_ptr, mem_type the_mem_type)
 {
 	MemoryPool*		the_memory;
-	int32_t			start_ticks;
-	int32_t			end_ticks;
+	//int32_t			start_ticks;
+	//int32_t			end_ticks;
 	
-	start_ticks = sys_time_jiffies();
+	//start_ticks = sys_time_jiffies();
 
-	the_memory = (the_mem_type == MEM_STANDARD) ? global_std_pool : global_vram_pool;
+	the_memory = (the_mem_type == MEM_STANDARD) ? (MemoryPool*)global_std_pool : (MemoryPool*)global_vram_pool;
 
 	LOG_ALLOC(("%s %d:	__FREE__	type-%i	%p	size	-", __func__ , __LINE__, the_mem_type, the_ptr));
 
 	brel(the_ptr, the_memory);
 
-	end_ticks = sys_time_jiffies();
-	DEBUG_OUT(("%s %d: free completed in %li ticks", __func__ , __LINE__, end_ticks - start_ticks));
+	//end_ticks = sys_time_jiffies();
+	//DEBUG_OUT(("%s %d: free completed in %li ticks", __func__ , __LINE__, end_ticks - start_ticks));
 }
 
 
@@ -1064,7 +1024,7 @@ void bpool(void *buf, bufsize len, MemoryPool* the_memory)
     struct bfhead *b = BFH(buf);
     struct bhead *bn;
 
-	DEBUG_OUT(("%s %d: the_memory=%p, buf=%p, len=%li", __func__, __LINE__, the_memory, buf, len));
+	//DEBUG_OUT(("%s %d: the_memory=%p, buf=%p, len=%li", __func__, __LINE__, the_memory, buf, len));
 	
     len &= ~(SizeQuant - 1);
 
@@ -1082,8 +1042,8 @@ void bpool(void *buf, bufsize len, MemoryPool* the_memory)
 
     /* Chain the new block to the free list. */
 
-	DEBUG_OUT(("%s %d: the_memory->ql.blink->ql.flink=%p", __func__, __LINE__, the_memory->ql.blink->ql.flink));
-	DEBUG_OUT(("%s %d: the_memory->ql.flink->ql.blink=%p", __func__, __LINE__, the_memory->ql.flink->ql.blink));
+	//DEBUG_OUT(("%s %d: the_memory->ql.blink->ql.flink=%p", __func__, __LINE__, the_memory->ql.blink->ql.flink));
+	//DEBUG_OUT(("%s %d: the_memory->ql.flink->ql.blink=%p", __func__, __LINE__, the_memory->ql.flink->ql.blink));
 
     assert(the_memory->ql.blink->ql.flink == the_memory);
     assert(the_memory->ql.flink->ql.blink == the_memory);
@@ -1171,7 +1131,7 @@ void bufdump(void *buf)
     while (bdlen > 0)
     {
 		int32_t		i;
-		uint16_t	dupes = 0;
+		unsigned short	dupes = 0;
 		bufsize l = bdlen;
 		char bhex[50], bascii[20];
 
@@ -1200,9 +1160,7 @@ void bufdump(void *buf)
 
 		if (dupes > 1)
 		{
-			V printf(
-					"     (%d lines [%d bytes] identical to above line skipped)\n",
-			dupes, dupes * 16);
+			V printf("     (%u lines (%u bytes) identical to above line skipped)\n", dupes, dupes * 16);
 		}
 		else if (dupes == 1)
 		{

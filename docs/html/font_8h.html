@@ -98,7 +98,8 @@ $(document).ready(function(){initNavTree('font_8h.html',''); initResizable(); })
   <div class="headertitle"><div class="title">font.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;mcp/syscalls.h&gt;</code><br />
+<div class="textblock"><code>#include &lt;stdbool.h&gt;</code><br />
+<code>#include &lt;mcp/syscalls.h&gt;</code><br />
 <code>#include &lt;mb/a2560_platform.h&gt;</code><br />
 <code>#include &lt;mb/general.h&gt;</code><br />
 <code>#include &lt;mb/text.h&gt;</code><br />
@@ -127,25 +128,25 @@ Functions</h2></td></tr>
 <tr class="memitem:ad58d821517200e2db0d2ab0801de0197"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_font.html">Font</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="font_8h.html#ad58d821517200e2db0d2ab0801de0197">Font_LoadFontData</a> (unsigned char *the_data)</td></tr>
 <tr class="memdesc:ad58d821517200e2db0d2ab0801de0197"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a font into memory from disk, and create a font record from it NOTE: this allocates new memory for the font, and copies the font data to it from the passed buffer.  <a href="font_8h.html#ad58d821517200e2db0d2ab0801de0197">More...</a><br /></td></tr>
 <tr class="separator:ad58d821517200e2db0d2ab0801de0197"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9c3461507780b4f3f9acb8e92ef9851"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="font_8h.html#af9c3461507780b4f3f9acb8e92ef9851">Font_DrawStringInBox</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, signed int width, signed int height, char *the_string, signed int num_chars, char **wrap_buffer, boolean(*continue_function)(void))</td></tr>
-<tr class="memdesc:af9c3461507780b4f3f9acb8e92ef9851"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a string in a rectangular block on the screen, with wrap.  <a href="font_8h.html#af9c3461507780b4f3f9acb8e92ef9851">More...</a><br /></td></tr>
-<tr class="separator:af9c3461507780b4f3f9acb8e92ef9851"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc066e38028a4e393e01a42df6511b33"><td class="memItemLeft" align="right" valign="top">signed int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="font_8h.html#afc066e38028a4e393e01a42df6511b33">Font_MeasureStringWidth</a> (<a class="el" href="struct_font.html">Font</a> *the_font, char *the_string, signed int num_chars, signed int available_width, signed int fixed_char_width)</td></tr>
-<tr class="memdesc:afc066e38028a4e393e01a42df6511b33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates how many characters of the passed string will fit into the passed pixel width.  <a href="font_8h.html#afc066e38028a4e393e01a42df6511b33">More...</a><br /></td></tr>
-<tr class="separator:afc066e38028a4e393e01a42df6511b33"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50e92e54012b1f553d1f6634b5bda298"><td class="memItemLeft" align="right" valign="top">signed int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="font_8h.html#a50e92e54012b1f553d1f6634b5bda298">Font_DrawChar</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, unsigned char the_char, <a class="el" href="struct_font.html">Font</a> *the_font)</td></tr>
-<tr class="memdesc:a50e92e54012b1f553d1f6634b5bda298"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw one character on the bitmap, at the current bitmap pen coordinates NOTE: if the draw action is successful, the bitmaps current pen position will be updated in preparation for the next character draw.  <a href="font_8h.html#a50e92e54012b1f553d1f6634b5bda298">More...</a><br /></td></tr>
-<tr class="separator:a50e92e54012b1f553d1f6634b5bda298"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3399c30307c48856ae99bc77e8f67c8e"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="font_8h.html#a3399c30307c48856ae99bc77e8f67c8e">Font_DrawStringInBox</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, int16_t width, int16_t height, char *the_string, int16_t num_chars, char **wrap_buffer, bool(*continue_function)(void))</td></tr>
+<tr class="memdesc:a3399c30307c48856ae99bc77e8f67c8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a string in a rectangular block on the screen, with wrap.  <a href="font_8h.html#a3399c30307c48856ae99bc77e8f67c8e">More...</a><br /></td></tr>
+<tr class="separator:a3399c30307c48856ae99bc77e8f67c8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d7cf8da78f6b772ec84b5433c3745b2"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="font_8h.html#a7d7cf8da78f6b772ec84b5433c3745b2">Font_MeasureStringWidth</a> (<a class="el" href="struct_font.html">Font</a> *the_font, char *the_string, int16_t num_chars, int16_t available_width, int16_t fixed_char_width, int16_t *measured_width)</td></tr>
+<tr class="memdesc:a7d7cf8da78f6b772ec84b5433c3745b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates how many characters of the passed string will fit into the passed pixel width.  <a href="font_8h.html#a7d7cf8da78f6b772ec84b5433c3745b2">More...</a><br /></td></tr>
+<tr class="separator:a7d7cf8da78f6b772ec84b5433c3745b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a10a57e9a6c426a4bb57a09ca7ab433"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="font_8h.html#a4a10a57e9a6c426a4bb57a09ca7ab433">Font_DrawChar</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, unsigned char the_char, <a class="el" href="struct_font.html">Font</a> *the_font)</td></tr>
+<tr class="memdesc:a4a10a57e9a6c426a4bb57a09ca7ab433"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw one character on the bitmap, at the current bitmap pen coordinates NOTE: if the draw action is successful, the bitmaps current pen position will be updated in preparation for the next character draw.  <a href="font_8h.html#a4a10a57e9a6c426a4bb57a09ca7ab433">More...</a><br /></td></tr>
+<tr class="separator:a4a10a57e9a6c426a4bb57a09ca7ab433"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a50e92e54012b1f553d1f6634b5bda298" name="a50e92e54012b1f553d1f6634b5bda298"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a50e92e54012b1f553d1f6634b5bda298">&#9670;&nbsp;</a></span>Font_DrawChar()</h2>
+<a id="a4a10a57e9a6c426a4bb57a09ca7ab433" name="a4a10a57e9a6c426a4bb57a09ca7ab433"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a10a57e9a6c426a4bb57a09ca7ab433">&#9670;&nbsp;</a></span>Font_DrawChar()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">signed int Font_DrawChar </td>
+          <td class="memname">int16_t Font_DrawChar </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
           <td class="paramname"><em>the_bitmap</em>, </td>
@@ -179,8 +180,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="af9c3461507780b4f3f9acb8e92ef9851" name="af9c3461507780b4f3f9acb8e92ef9851"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af9c3461507780b4f3f9acb8e92ef9851">&#9670;&nbsp;</a></span>Font_DrawStringInBox()</h2>
+<a id="a3399c30307c48856ae99bc77e8f67c8e" name="a3399c30307c48856ae99bc77e8f67c8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3399c30307c48856ae99bc77e8f67c8e">&#9670;&nbsp;</a></span>Font_DrawStringInBox()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -194,13 +195,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>width</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>height</em>, </td>
         </tr>
         <tr>
@@ -212,7 +213,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>num_chars</em>, </td>
         </tr>
         <tr>
@@ -224,7 +225,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">boolean(*)(void)&#160;</td>
+          <td class="paramtype">bool(*)(void)&#160;</td>
           <td class="paramname"><em>continue_function</em>&#160;</td>
         </tr>
         <tr>
@@ -242,7 +243,7 @@ Functions</h2></td></tr>
     <tr><td class="paramname">width</td><td>the horizontal size of the text wrap box, in pixels. The total of 'width' and the current X coord of the bitmap must not be greater than width of the bitmap. </td></tr>
     <tr><td class="paramname">height</td><td>the vertical size of the text wrap box, in pixels. The total of 'height' and the current Y coord of the bitmap must not be greater than height of the bitmap. </td></tr>
     <tr><td class="paramname">the_string</td><td>the null-terminated string to be displayed. </td></tr>
-    <tr><td class="paramname">num_chars</td><td>either the length of the passed string, or as much of the string as should be displayed. </td></tr>
+    <tr><td class="paramname">num_chars</td><td>either the length of the passed string, or as much of the string as should be displayed. Passing GEN_NO_STRLEN_CAP will mean it will attempt to display the entire string if it fits. </td></tr>
     <tr><td class="paramname">wrap_buffer</td><td>pointer to a pointer to a temporary text buffer that can be used to hold the wrapped ('formatted') characters. The buffer must be large enough to hold num_chars of incoming text, plus additional line break characters where necessary. </td></tr>
     <tr><td class="paramname">continue_function</td><td>optional hook to a function that will be called if the provided text cannot fit into the specified box. If provided, the function will be called each time text exceeds available space. If the function returns true, another chunk of text will be displayed, replacing the first. If the function returns false, processing will stop. If no function is provided, processing will stop at the point text exceeds the available space. </td></tr>
   </table>
@@ -274,14 +275,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="afc066e38028a4e393e01a42df6511b33" name="afc066e38028a4e393e01a42df6511b33"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc066e38028a4e393e01a42df6511b33">&#9670;&nbsp;</a></span>Font_MeasureStringWidth()</h2>
+<a id="a7d7cf8da78f6b772ec84b5433c3745b2" name="a7d7cf8da78f6b772ec84b5433c3745b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d7cf8da78f6b772ec84b5433c3745b2">&#9670;&nbsp;</a></span>Font_MeasureStringWidth()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">signed int Font_MeasureStringWidth </td>
+          <td class="memname">int16_t Font_MeasureStringWidth </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_font.html">Font</a> *&#160;</td>
           <td class="paramname"><em>the_font</em>, </td>
@@ -295,20 +296,26 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>num_chars</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>available_width</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
-          <td class="paramname"><em>fixed_char_width</em>&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>fixed_char_width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t *&#160;</td>
+          <td class="paramname"><em>measured_width</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -323,9 +330,10 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">the_font</td><td>reference to a complete, loaded <a class="el" href="struct_font.html" title="This Font object is essentially the Mac &quot;fontRecord&quot; struct, with added pointers for the data tables.">Font</a> object. </td></tr>
     <tr><td class="paramname">the_string</td><td>the null-terminated string to be measured. </td></tr>
-    <tr><td class="paramname">num_chars</td><td>the length of the passed string. If the entire string fits, this len will be returned. </td></tr>
+    <tr><td class="paramname">num_chars</td><td>either the length of the passed string, or as much of the string as should be displayed. Passing GEN_NO_STRLEN_CAP will mean it will attempt to measure the entire string. </td></tr>
     <tr><td class="paramname">available_width</td><td>the width, in pixels, of the space the string is to be measured against. </td></tr>
     <tr><td class="paramname">fixed_char_width</td><td>the width, in pixels, of one character. This value will be ignored. It exists to keep text-mode text-wrapping compatible with bitmap-font text-wrapping. </td></tr>
+    <tr><td class="paramname">measured_width</td><td>the number of pixels needed to display the characters that fit into the available_width. If the entire string fit, this is the width in pixels of that string. If only X characters fit, it is the pixel width of those X characters. </td></tr>
   </table>
   </dd>
 </dl>

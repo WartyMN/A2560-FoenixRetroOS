@@ -97,16 +97,17 @@ $(document).ready(function(){initNavTree('memory__manager_8h.html',''); initResi
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;mb/a2560_platform.h&gt;</code><br />
+<code>#include &lt;stdbool.h&gt;</code><br />
 <code>#include &lt;stdio.h&gt;</code><br />
 </div>
 <p><a href="memory__manager_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:adb0c4971be261a93e4d396a4af1d94df"><td class="memItemLeft" align="right" valign="top"><a id="adb0c4971be261a93e4d396a4af1d94df" name="adb0c4971be261a93e4d396a4af1d94df"></a>
-boolean&#160;</td><td class="memItemRight" valign="bottom"><b>Memory_Initialize</b> (void)</td></tr>
-<tr class="memdesc:adb0c4971be261a93e4d396a4af1d94df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the VRAM and standard RAM memory pools' return Returns NULL if it fails to allocate enough memory to start the BGET system up. <br /></td></tr>
-<tr class="separator:adb0c4971be261a93e4d396a4af1d94df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd6d2aca35c7a3d5b38cda78cc210028"><td class="memItemLeft" align="right" valign="top"><a id="afd6d2aca35c7a3d5b38cda78cc210028" name="afd6d2aca35c7a3d5b38cda78cc210028"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>Memory_Initialize</b> (void)</td></tr>
+<tr class="memdesc:afd6d2aca35c7a3d5b38cda78cc210028"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the VRAM and standard RAM memory pools' return Returns NULL if it fails to allocate enough memory to start the BGET system up. <br /></td></tr>
+<tr class="separator:afd6d2aca35c7a3d5b38cda78cc210028"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac2e221337828cd740db078bea315a1e"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory__manager_8h.html#aac2e221337828cd740db078bea315a1e">f_calloc</a> (size_t num, size_t size, mem_type the_mem_type)</td></tr>
 <tr class="memdesc:aac2e221337828cd740db078bea315a1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate and initialize num*size bytes of storage from the specified memory segment Use this as you would a call to the standard C calloc() function.  <a href="memory__manager_8h.html#aac2e221337828cd740db078bea315a1e">More...</a><br /></td></tr>
 <tr class="separator:aac2e221337828cd740db078bea315a1e"><td class="memSeparator" colspan="2">&#160;</td></tr>

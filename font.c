@@ -370,14 +370,14 @@ Font* Font_LoadFontData(unsigned char* the_data)
 // No word wrap is performed. 
 // If max_chars is less than the string length, only that many characters will be drawn (as space allows)
 // If max_chars is -1, then the full string length will be drawn, as space allows.
-bool Font_DrawString(Bitmap* the_bitmap, char* the_string, signed int max_chars)
+bool Font_DrawString(Bitmap* the_bitmap, char* the_string, int16_t max_chars)
 {
-	signed int		fit_count;
-	signed int		i;
-	signed int		num_chars;
-	signed int		available_width;
-	signed int		draw_result = 0;
-	signed int		pixels_used;
+	int16_t			fit_count;
+	int16_t			i;
+	int16_t			num_chars;
+	int16_t			available_width;
+	int16_t			draw_result = 0;
+	int16_t			pixels_used;
 	
 	// LOGIC:
 	//   Determine how many characters of the string will fit in one line on the bitmap and draw that many
@@ -424,18 +424,18 @@ bool Font_DrawString(Bitmap* the_bitmap, char* the_string, signed int max_chars)
 //! @param	wrap_buffer: pointer to a pointer to a temporary text buffer that can be used to hold the wrapped ('formatted') characters. The buffer must be large enough to hold num_chars of incoming text, plus additional line break characters where necessary. 
 //! @param	continue_function: optional hook to a function that will be called if the provided text cannot fit into the specified box. If provided, the function will be called each time text exceeds available space. If the function returns true, another chunk of text will be displayed, replacing the first. If the function returns false, processing will stop. If no function is provided, processing will stop at the point text exceeds the available space.
 //! @return	returns a pointer to the first character in the string after which it stopped processing (if string is too long to be displayed in its entirety). Returns the original string if the entire string was processed successfully. Returns NULL in the event of any error.
-char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int height, char* the_string, signed int num_chars, char** wrap_buffer, bool (* continue_function)(void))
+char* Font_DrawStringInBox(Bitmap* the_bitmap, int16_t width, int16_t height, char* the_string, int16_t num_chars, char** wrap_buffer, bool (* continue_function)(void))
 {
 	Font*			the_font;
 	char*			needs_formatting;
 	char*			needed_formatting_last_round;
 	char*			formatted_string;
-	signed int		this_line_len;
+	int16_t			this_line_len;
 	bool			do_another_round = false;
-	signed int		row_height;
-	signed int		fixed_char_width;	
-	signed int		x;
-	signed int		y;
+	int16_t			row_height;
+	int16_t			fixed_char_width;	
+	int16_t			x;
+	int16_t			y;
 	
 	if (the_bitmap == NULL)
 	{
@@ -478,11 +478,11 @@ char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int heig
 	do
 	{	
 		char*			remaining_string;
-		signed int		remaining_len;
-		signed int		orig_len;
-		signed int		v_pixels;
-		signed int		num_rows;
-		signed int		the_row;
+		int16_t			remaining_len;
+		int16_t			orig_len;
+		int16_t			v_pixels;
+		int16_t			num_rows;
+		int16_t			the_row;
 
 		remaining_len = General_Strnlen(needs_formatting, num_chars + 1); // +1 for terminator. 
 		orig_len = remaining_len;
@@ -515,7 +515,7 @@ char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int heig
 	
 		do
 		{
-			signed int	this_write_len;
+			int16_t		this_write_len;
 		
 			this_line_len = General_StrFindNextLineBreak(remaining_string, orig_len); // we don't know how many chars could fit on a line so have to just use remaining string len
 
@@ -601,10 +601,10 @@ char* Font_DrawStringInBox(Bitmap* the_bitmap, signed int width, signed int heig
 //! @param	fixed_char_width: the width, in pixels, of one character. This value will be ignored. It exists to keep text-mode text-wrapping compatible with bitmap-font text-wrapping.
 //! @param	measured_width: the number of pixels needed to display the characters that fit into the available_width. If the entire string fit, this is the width in pixels of that string. If only X characters fit, it is the pixel width of those X characters.
 //! @return	returns -1 in any error condition, or the number of characters that fit. If the entire string fits, the passed len will be returned.
-signed int Font_MeasureStringWidth(Font* the_font, char* the_string, signed int num_chars, signed int available_width, signed int fixed_char_width, signed int* measured_width)
+int16_t Font_MeasureStringWidth(Font* the_font, char* the_string, int16_t num_chars, int16_t available_width, int16_t fixed_char_width, int16_t* measured_width)
 {
-	signed int		required_width = 0;
-	signed int		i;
+	int16_t			required_width = 0;
+	int16_t			i;
 	uint8_t			this_width;
 		
 	if (the_font == NULL)
@@ -663,7 +663,7 @@ signed int Font_MeasureStringWidth(Font* the_font, char* the_string, signed int 
 //! NOTE: if the draw action is successful, the bitmaps current pen position will be updated in preparation for the next character draw.
 //! TODO: stop passing Font, and have the concept of a current font for a given bitmap. and maybe a default system font. 
 //! return Returns number of horizontal pixels used, including left/right offsets, or -1 on any error condition.
-signed int Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font)
+int16_t Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font)
 {
 	uint8_t			next_char;
 	int16_t			loc_offset;
@@ -675,11 +675,11 @@ signed int Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_f
 	int8_t			h_offset_value;			//!< the horizontal offset from pen position before the first pixel should be drawn
 	int8_t			width_value;			//!< the total width of the character including any whitespace to left/right
 	uint16_t*		start_read_addr;
-	int				row;
+	int32_t			row;
 	uint8_t			this_bit;
 	uint8_t			the_color;				// shortcut to bitmap->color_
 	unsigned char*	start_write_addr;
-	int				pixels_moved;
+	int32_t			pixels_moved;
 	uint8_t			first_row;				// if no height table available, this is 0. otherwise it's first row to start drawing.
 	uint8_t			max_row;				// if no height table available, this is height of font rec. otherwise it's 1 past the last vis row
 	
@@ -802,7 +802,7 @@ signed int Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_f
 		
 		if (row >= first_row && row < max_row)
 		{
-			int		pixels_written = 0;
+			int32_t	pixels_written = 0;
 
 			// for each row, account for any H offset specified for the glyph
 			write_addr += h_offset_value;
@@ -811,7 +811,7 @@ signed int Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_f
 
 			do
 			{
-				int		i;
+				int16_t	i;
 				
 				for (i = 15; i >= 0 && pixels_written < pixel_only_width; i--)
 				{

@@ -139,10 +139,10 @@ struct Control
 	Rectangle				rect_;							//! coordinates relative to the parent window (ie, these are not global coordinates)
 	h_align_type			h_align_;						//! whether the control should be positioned relative to the left side, right side, or centered
 	v_align_type			v_align_;						//! whether the control should be positioned relative to the top edge, bottom edge, or centered
-	signed int				x_offset_;						//! horizontal coordinate relative to the parent window's left or right edge. If h_align_ is H_ALIGN_CENTER, this value will be ignored.
-	signed int				y_offset_;						//! vertical coordinate relative to the parent window's top or bottom edge. If v_align_ is V_ALIGN_CENTER, this value will be ignored.
-	signed int				width_;							//! width of the control
-	signed int				height_;						//! height of the control
+	int16_t					x_offset_;						//! horizontal coordinate relative to the parent window's left or right edge. If h_align_ is H_ALIGN_CENTER, this value will be ignored.
+	int16_t					y_offset_;						//! vertical coordinate relative to the parent window's top or bottom edge. If v_align_ is V_ALIGN_CENTER, this value will be ignored.
+	int16_t					width_;							//! width of the control
+	int16_t					height_;						//! height of the control
 	bool					visible_;
 	bool					active_;						//! is the control activated or not (in appearance). Does not affect ability to receive events.
 	bool					enabled_;						//! is the control enabled or not. If not enabled, it will not receive events.

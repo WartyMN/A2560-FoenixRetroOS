@@ -102,10 +102,10 @@ void WaitForUser(void)
 // Draw fancy box on the B screen and display demo description
 void ShowDescription(char* the_message)
 {
-	signed int	x1 = 0;
-	signed int	x2 = global_system->screen_[ID_CHANNEL_B]->text_cols_vis_ - 1;
-	signed int	y1 = 0;
-	signed int	y2 = 5;
+	int16_t		x1 = 0;
+	int16_t		x2 = global_system->screen_[ID_CHANNEL_B]->text_cols_vis_ - 1;
+	int16_t		y1 = 0;
+	int16_t		y2 = 5;
 
 	// draw box and fill contents in prep for next demo description
 	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, FG_COLOR_BLUE, BG_COLOR_DK_BLUE);
@@ -134,10 +134,10 @@ void Demo_Bitmap_FillMemory2(void)
 
 void Demo_Bitmap_FillBox1(void)
 {
-	int x = 5;
+	int16_t x = 5;
 	int	y = 8*6;
 	int	width = global_system->screen_[ID_CHANNEL_B]->width_ - x - 30;
-	int height = global_system->screen_[ID_CHANNEL_B]->height_ - y - 100;
+	int16_t height = global_system->screen_[ID_CHANNEL_B]->height_ - y - 100;
 	
 	ShowDescription("Bitmap_FillBox -> fill a square on screen with 0xff");	
 	Bitmap_FillBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y, width, height, 0xff);
@@ -147,10 +147,10 @@ void Demo_Bitmap_FillBox1(void)
 
 void Demo_Bitmap_FillBox2(void)
 {
-	int x = 500;
+	int16_t x = 500;
 	int	y = 8*6+100;
 	int	width = global_system->screen_[ID_CHANNEL_B]->width_ - x - 30;
-	int height = global_system->screen_[ID_CHANNEL_B]->height_ - y - 100;
+	int16_t height = global_system->screen_[ID_CHANNEL_B]->height_ - y - 100;
 	
 	ShowDescription("Bitmap_FillBox -> fill a square on screen with 0x05");	
 	Bitmap_FillBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y, width, height, 0x05);
@@ -160,7 +160,7 @@ void Demo_Bitmap_FillBox2(void)
 
 void Demo_Bitmap_FillBox3(void)
 {
-	int x = 5;
+	int16_t x = 5;
 	int	y = 8*6;
 	
 	ShowDescription("Bitmap_FillBox -> fill various squares with different color values");	
@@ -188,20 +188,20 @@ void Demo_Bitmap_SetPixelAtXY(void)
 
 void Demo_Bitmap_GetPixelAtXY(void)
 {
-	int				x = 1;
-	int				y = 8*8;
-	int				width = 60;
-	int				height = 200;
-	int				color = 0x20;
+	int16_t			x = 1;
+	int16_t			y = 8*8;
+	int16_t			width = 60;
+	int16_t			height = 200;
+	int16_t			color = 0x20;
 	unsigned char	i;
 	char			temp_buff[25];
-	int				text_y = (y+height)/8 + 1; // put it under the colored squares
+	int16_t			text_y = (y+height)/8 + 1; // put it under the colored squares
 	
 	ShowDescription("Bitmap_GetPixelAtXY -> Get the color value of a specified pixel");	
  	
  	for (i = 0; i < 10; i++)
  	{
-		int		detected_color;
+		int16_t	detected_color;
 
 		Bitmap_FillBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y, width, height, color);
 	 	detected_color = Bitmap_GetPixelAtXY(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y);
@@ -218,9 +218,9 @@ void Demo_Bitmap_GetPixelAtXY(void)
 
 void Demo_Bitmap_DrawHLine1(void)
 {
-	signed int		x;
-	signed int		y;
-	signed int		line_len;
+	int16_t			x;
+	int16_t			y;
+	int16_t			line_len;
 
 	ShowDescription("Text_DrawHLine / Text_DrawVLine -> Draw straight lines using a specified color");	
 	
@@ -239,11 +239,11 @@ void Demo_Bitmap_DrawHLine1(void)
 
 void Demo_Bitmap_DrawLine(void)
 {
-	signed int		x1 = 45;
-	signed int		y1 = 100;
-	signed int		x2 = 630;
-	signed int		y2 = 350;
-	signed int		i;
+	int16_t			x1 = 45;
+	int16_t			y1 = 100;
+	int16_t			x2 = 630;
+	int16_t			y2 = 350;
+	int16_t			i;
 
 	ShowDescription("Bitmap_DrawLine -> Draw a line from any coordinate to any coordinate");	
 
@@ -266,10 +266,10 @@ void Demo_Bitmap_DrawLine(void)
 
 void Demo_Bitmap_DrawBox(void)
 {
-	int x = 60;
+	int16_t x = 60;
 	int	y = 8*8;
 	int	width = global_system->screen_[ID_CHANNEL_B]->width_ - x - 60;
-	int height = 300;
+	int16_t height = 300;
 
 	ShowDescription("Bitmap_DrawBox -> Draw a filled or unfilled box. Supply start coordinates, width, height, color, and fill choice.");	
 
@@ -291,10 +291,10 @@ void Demo_Bitmap_DrawBox(void)
 
 void Demo_Bitmap_DrawBoxCoords(void)
 {
-	signed int		x1 = 45;
-	signed int		y1 = 100;
-	signed int		x2 = 630;
-	signed int		y2 = 350;
+	int16_t			x1 = 45;
+	int16_t			y1 = 100;
+	int16_t			x2 = 630;
+	int16_t			y2 = 350;
 
 	ShowDescription("Bitmap_DrawBoxCoords -> Draw a box using 4 coordinates.");	
 
@@ -305,15 +305,15 @@ void Demo_Bitmap_DrawBoxCoords(void)
 
 void Demo_Bitmap_DrawRoundBox(void)
 {
-	int 	x = 60;
-	int		y = 8*7;
-	int		width = 40;
-	int		height = 20;
-	int		radius = 8;
-	int		i;
-	int		color = 0x20;
-	int		line_color = 0xff;
-	int		xleft = 560;
+	int16_t 	x = 60;
+	int16_t	y = 8*7;
+	int16_t	width = 40;
+	int16_t	height = 20;
+	int16_t	radius = 8;
+	int16_t	i;
+	int16_t	color = 0x20;
+	int16_t	line_color = 0xff;
+	int16_t	xleft = 560;
 	
 	ShowDescription("Demo_Bitmap_DrawRoundBox -> Draw an unfilled rect with rounded corners. Specify start coords, width, height, corner radius, color, and fill/no-fill.");	
 
@@ -353,10 +353,10 @@ void Demo_Bitmap_DrawRoundBox(void)
 
 void Demo_Bitmap_DrawCircle(void)
 {
-	signed int		x1 = 320;
-	signed int		y1 = 200;
-	signed int		radius = 6;
-	signed int		i;
+	int16_t			x1 = 320;
+	int16_t			y1 = 200;
+	int16_t			radius = 6;
+	int16_t			i;
 
 	ShowDescription("Bitmap_DrawCircle -> Draw a circle");	
 
@@ -376,10 +376,10 @@ void Demo_Bitmap_DrawCircle(void)
 
 void Demo_Bitmap_Blit1(void)
 {
-	signed int		box_height = 16;
-	signed int		box_width = global_system->screen_[ID_CHANNEL_B]->width_;
-	signed int		color = 0x20;
-	signed int		i;
+	int16_t			box_height = 16;
+	int16_t			box_width = global_system->screen_[ID_CHANNEL_B]->width_;
+	int16_t			color = 0x20;
+	int16_t			i;
 	Bitmap			src_bm;
 	Bitmap			dst_bm;
 
@@ -435,10 +435,10 @@ void Demo_Bitmap_Blit1(void)
 
 void Demo_Bitmap_BlitRect(void)
 {
-	signed int		box_height = 2;
-	signed int		box_width = 2;
-	signed int		color = 1;
-	signed int		i;
+	int16_t			box_height = 2;
+	int16_t			box_width = 2;
+	int16_t			color = 1;
+	int16_t			i;
 	Bitmap*			src_bm;
 	Bitmap*			dst_bm;
 	Rectangle		src_rect;
@@ -476,7 +476,7 @@ void Demo_Bitmap_BlitRect(void)
 }
 
 
-// bool Bitmap_Blit(Screen* the_screen, Bitmap* src_bm, int src_x, int src_y, Bitmap* dst_bm, int dst_x, int dst_y, int width, int height);
+// bool Bitmap_Blit(Screen* the_screen, Bitmap* src_bm, int16_t src_x, int16_t src_y, Bitmap* dst_bm, int16_t dst_x, int16_t dst_y, int16_t width, int16_t height);
 
 
 
@@ -484,7 +484,7 @@ void Demo_Bitmap_ScreenResolution1(void)
 {
 	char			msg_buffer[80*3];
 	char*			the_message = msg_buffer;
-	int				y = 7;
+	int16_t			y = 7;
 	
 	Sys_SetVideoMode(global_system->screen_[ID_CHANNEL_B], RES_800X600);
 	ShowDescription("Sys_SetVideoMode -> (RES_800X600) Changes resolution to 800x600 if available for this screen/channel.");	
@@ -511,7 +511,7 @@ void Demo_Bitmap_ScreenResolution2(void)
 {
 	char			msg_buffer[80*3];
 	char*			the_message = msg_buffer;
-	int				y = 7;
+	int16_t			y = 7;
 	
 	Sys_SetVideoMode(global_system->screen_[ID_CHANNEL_B], RES_640X480);
 	ShowDescription("Sys_SetVideoMode -> (RES_640X480) Changes resolution to 640x480 if available for this screen/channel.");	

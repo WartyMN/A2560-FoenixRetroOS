@@ -93,13 +93,13 @@ void text_test_teardown(void)	// this is called EVERY test
 
 MU_TEST(general_test_round)
 {
-	int		expected_result[18] = {0, 0, 0, 0, 1, 1, 1, 1, 4, 10, 10, 10, 99, 100, 149999, 150001, 0, -1};
+	int32_t	expected_result[18] = {0, 0, 0, 0, 1, 1, 1, 1, 4, 10, 10, 10, 99, 100, 149999, 150001, 0, -1};
 	double	input[18] = {0.01, 0.1, 0.4, 0.49999, 0.50, 0.51, 0.99, 1.0, 4.4, 9.50, 9.99, 10.00000001, 98.5, 99.51, 149999.0000049, 150000.6, -0.01, -0.51};
-	int		i;
+	int16_t	i;
 	
 	for (i = 0; i < 18; i++)
 	{
-		int		result;
+		int32_t	result;
 
 		result = General_Round(input[i]);
 		DEBUG_OUT(("%s %d: i=%i, result='%i', expected_result[i]='%i'", __func__, __LINE__, i, result, expected_result[i]));
@@ -117,7 +117,7 @@ MU_TEST(general_test_make_filesize_readable)
 	char*			result = temp_buff;
 	char*			expected_result[12] = 	{"1 b", 	"1023 b", 	"1.0 kb", 	"10.0 kb", 	"10 kb", 	"101 kb", 	"101 kb", 	"1024 kb", 	"1.0 Mb", 	"10.0 Mb", "10 Mb", "100 Mb"};
 	unsigned long	input[12] = 			{1, 		1023, 		1024, 		10239, 		10240, 		103420, 	103424, 	1048575, 	1048576, 	10485759, 10485760, 104857600};
-	int				i;
+	int16_t			i;
 	
 	for (i = 0; i < 12; i++)
 	{
@@ -167,8 +167,8 @@ MU_TEST(general_test_strlcpy_with_alloc)
 	char*	result;
 	char*	expected_result[9] = {"1 b", "1023 b", "1.0 kb", "ACME CORPORATION", "12345678", "123456789", "1234567890", "- - - - - / ", ""};
 	char*	input[9] = {"1 b", "1023 b", "1.0 kb", "ACME CORPORATION", "1234567890", "1234567890", "1234567890", "- - - - - / ", "abc"};
-	int		max_len[9] = {100, 20, 20, 17, 9, 10, 11, 100000, -1};
-	int		i;
+	int32_t	max_len[9] = {100, 20, 20, 17, 9, 10, 11, 100000, -1};
+	int16_t	i;
 	
 	for (i = 0; i < 9; i++)
 	{
@@ -191,15 +191,15 @@ MU_TEST(general_test_strlcpy)
 {
 	char		temp_buff[30];
 	char*		copy = temp_buff;
-	signed long	expected_len[10] = {3, 6, 6, 16, 10, 10, 10, 10, 10, -1};
+	int32_t		expected_len[10] = {3, 6, 6, 16, 10, 10, 10, 10, 10, -1};
 	char*		expected_result[10] =	{"1 b", "1023 b", "1.0 kb", "ACME CORPORATION", "12345678",   "123456789",  "1234567890", "1234567890", "- - - - - / ", ""};
 	char*		input[10] = 			{"1 b", "1023 b", "1.0 kb", "ACME CORPORATION", "1234567890", "1234567890", "1234567890", "1234567890", "- - - - - / ", "abc"};
-	int			max_len[10] = {100, 20, 20, 17, 9, 10, 11, 100, 100000, -1};
-	int			i;
+	int32_t		max_len[10] = {100, 20, 20, 17, 9, 10, 11, 100, 100000, -1};
+	int16_t		i;
 	
 	for (i = 0; i < 10; i++)
 	{
-		signed long		result;
+		int32_t		result;
 
 		result = General_Strlcpy(copy, input[i], max_len[i]);
 		DEBUG_OUT(("%s %d: i=%i, result=%lu, max_len[i]=%lu, expected_len[i]=%lu, input[i]='%s', copy='%s', expected_result[i]='%s'", __func__, __LINE__, i, result, max_len[i], expected_len[i], input[i], copy, expected_result[i]));
@@ -223,8 +223,8 @@ MU_TEST(general_test_strlcat)
 	char*		expected_result[10] = 	{"1 byte",	"1023 kbytes",	"1.0 megajoules", 	"ACME CORPORATION", "12345678",  "123456789", 	"1234567890", 	"1234567890",	"- - - - - /", "abc"};
 	char*		input[10] = 			{"1 b   ",	"1023 k     ", 	"1.0           ", 	"ACME            ", "123      ", "123       ", 	"123       ",   "123       ", 	"            ", "abc   "};
 	char*		to_add[10] = 			{"yte",		"bytes", 		"megajoules", 		" CORPORATION", 	"4567890",	 "4567890", 	"4567890", 		"4567890", 		"- - - - - / ", "def"};
-	int			max_len[10] = 			{100, 		20,				20, 				17, 				9, 			 10, 			11, 			100, 			12, 			-1};
-	int			i;
+	int32_t		max_len[10] = 			{100, 		20,				20, 				17, 				9, 			 10, 			11, 			100, 			12, 			-1};
+	int16_t		i;
 	
 	// LOGIC: 
 	//   the string to be added to has extra padding on definition, to make sure it has enough storage. 
@@ -232,9 +232,9 @@ MU_TEST(general_test_strlcat)
 	
 	for (i = 0; i < 10; i++)
 	{
-		signed int		result;
+		int16_t			result;
 
-		int the_end = strlen(input[i]) - padding[i];
+		int32_t the_end = strlen(input[i]) - padding[i];
 		
 		input[i][the_end] = 0;
 		
@@ -255,11 +255,11 @@ MU_TEST(general_test_strlcat)
 
 MU_TEST(general_test_strncmp)
 {
-	signed int	expected_result[12] = 	{1, 		1, 				1, 					-1, 				0, 			 1, 			1, 				0, 				0, 				0,				0,		0};
+	int16_t		expected_result[12] = 	{1, 		1, 				1, 					-1, 				0, 			 1, 			1, 				0, 				0, 				0,				0,		0};
 	char*		string1[12] = 			{"1 byte",	"1023 kbytes",	"1.0 megajoules", 	"ACME CORPORATION", "CORPORATI", "123456789", 	"1234567890", 	"1234567890",	"!@#$%^&*()_+", "!@#$%^&*()XX", "abc", "abc"};
 	char*		string2[12] = 			{"1 b",		"1023 k     ", 	"1.0 Megajoules", 	"acme corporation", "CORPORATI", "123       ", 	"123",   		"1234567890", 	"!@#$%^&*()_+", "!@#$%^&*()ZZ", "abc", "abc"};
-	int			max_len[12] = 			{100, 		20,				20, 				17, 				9, 			 10, 			11, 			100, 			12, 			10,				-1,		0};
-	int			i;
+	int32_t		max_len[12] = 			{100, 		20,				20, 				17, 				9, 			 10, 			11, 			100, 			12, 			10,				-1,		0};
+	int16_t		i;
 	
 	// LOGIC: 
 	//   function could return 0, any negative, or any positive. 
@@ -268,7 +268,7 @@ MU_TEST(general_test_strncmp)
 	
 	for (i = 0; i < 12; i++)
 	{
-		signed int		result;
+		int16_t			result;
 
 		result = General_Strncmp(string1[i], string2[i], max_len[i]);
 		DEBUG_OUT(("%s %d: i=%i, result=%i, max_len[i]=%i, expected_result[i]=%i, string1[i]='%s', string2[i]='%s'", __func__, __LINE__, i, result, max_len[i], expected_result[i], string1[i], string2[i]));
@@ -291,11 +291,11 @@ MU_TEST(general_test_strncmp)
 
 MU_TEST(general_test_strncasecmp)
 {
-	signed int	expected_result[12] = 	{1, 		1, 				0, 					0, 					0, 			 1, 			1, 				0, 				0, 				0,				0,		0};
+	int16_t		expected_result[12] = 	{1, 		1, 				0, 					0, 					0, 			 1, 			1, 				0, 				0, 				0,				0,		0};
 	char*		string1[12] = 			{"1 byte",	"1023 kbytes",	"1.0 megajoules", 	"ACME CORPORATION", "CORPORATI", "123456789", 	"1234567890", 	"1234567890",	"!@#$%^&*()_+", "!@#$%^&*()XX", "abc", "abc"};
 	char*		string2[12] = 			{"1 b",		"1023 k     ", 	"1.0 Megajoules", 	"acme corporation", "CORPORATI", "123       ", 	"123",   		"1234567890", 	"!@#$%^&*()_+", "!@#$%^&*()ZZ", "abc", "abc"};
-	int			max_len[12] = 			{100, 		20,				20, 				17, 				9, 			 10, 			11, 			100, 			12, 			10,				-1,		0};
-	int			i;
+	int32_t		max_len[12] = 			{100, 		20,				20, 				17, 				9, 			 10, 			11, 			100, 			12, 			10,				-1,		0};
+	int16_t		i;
 	
 	// LOGIC: 
 	//   function could return 0, any negative, or any positive. 
@@ -304,7 +304,7 @@ MU_TEST(general_test_strncasecmp)
 	
 	for (i = 0; i < 12; i++)
 	{
-		signed int		result;
+		int16_t			result;
 
 		result = General_Strncasecmp(string1[i], string2[i], max_len[i]);
 		DEBUG_OUT(("%s %d: i=%i, result=%i, max_len[i]=%i, expected_result[i]=%i, string1[i]='%s', string2[i]='%s'", __func__, __LINE__, i, result, max_len[i], expected_result[i], string1[i], string2[i]));
@@ -327,14 +327,14 @@ MU_TEST(general_test_strncasecmp)
 
 MU_TEST(general_test_strnlen)
 {
-	signed int	expected_result[12] = 	{6, 		11, 			14, 				16, 				9, 			 9, 			10, 			10, 			12, 			10,				3,		0};
+	int16_t		expected_result[12] = 	{6, 		11, 			14, 				16, 				9, 			 9, 			10, 			10, 			12, 			10,				3,		0};
 	char*		string1[12] = 			{"1 byte",	"1023 kbytes",	"1.0 megajoules", 	"ACME CORPORATION", "CORPORATI", "123456789", 	"1234567890", 	"1234567890",	"!@#$%^&*()_+", "!@#$%^&*()XX", "abc", "abc"};
 	size_t		max_len[12] = 			{100, 		20,				20, 				17, 				9, 			 9, 			10, 			100, 			12, 			10,				-1,		0};
-	int			i;
+	int16_t		i;
 	
 	for (i = 0; i < 12; i++)
 	{
-		signed int		result;
+		int16_t			result;
 		
 		result = General_Strnlen(string1[i], max_len[i]);
 		DEBUG_OUT(("%s %d: i=%i, result=%i, max_len[i]=%i, expected_result[i]=%i, string1[i]='%s'", __func__, __LINE__, i, result, max_len[i], expected_result[i], string1[i]));
@@ -350,7 +350,7 @@ MU_TEST(general_test_compare_string_len)
 		"123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 "};
 	char*		string2[12] = 			{"1 b",		"1023 k     ", 	"1.0 Megajoules", 	"acme corporation", "       ",	"123       ", 	"123",   		"1234567890", 	"!@#$%^&*()_",	"!@#$%^&*()ZZ", "", 	
 		"123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 "};
-	int			i;
+	int16_t		i;
 	
 	for (i = 0; i < 12; i++)
 	{

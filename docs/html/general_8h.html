@@ -92,26 +92,44 @@ $(document).ready(function(){initNavTree('general_8h.html',''); initResizable();
 
 <div class="header">
   <div class="summary">
+<a href="#define-members">Macros</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">general.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;stdlib.h&gt;</code><br />
+<div class="textblock"><code>#include &lt;stdbool.h&gt;</code><br />
+<code>#include &lt;stdlib.h&gt;</code><br />
+<code>#include &lt;mcp/syscalls.h&gt;</code><br />
 <code>#include &lt;mb/a2560_platform.h&gt;</code><br />
 </div>
 <p><a href="general_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a99ff818a3807eebb3043279d6e6d479c"><td class="memItemLeft" align="right" valign="top"><a id="a99ff818a3807eebb3043279d6e6d479c" name="a99ff818a3807eebb3043279d6e6d479c"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_STRING_COMP_LEN</b>&#160;&#160;&#160;256</td></tr>
+<tr class="memdesc:a99ff818a3807eebb3043279d6e6d479c"><td class="mdescLeft">&#160;</td><td class="mdescRight">255 + terminator is max string size for compares <br /></td></tr>
+<tr class="separator:a99ff818a3807eebb3043279d6e6d479c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a016d1badf70ac5e79aad36d0f1e811d3"><td class="memItemLeft" align="right" valign="top"><a id="a016d1badf70ac5e79aad36d0f1e811d3" name="a016d1badf70ac5e79aad36d0f1e811d3"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>GEN_NO_STRLEN_CAP</b>&#160;&#160;&#160;-1</td></tr>
+<tr class="memdesc:a016d1badf70ac5e79aad36d0f1e811d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">for the xxx_DrawString function's max_chars parameter, the value that corresponds to 'draw the entire string if it fits, do not cap it at n characters' <br /></td></tr>
+<tr class="separator:a016d1badf70ac5e79aad36d0f1e811d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac005de778a95d82fbf99f51b4ec1b8d7"><td class="memItemLeft" align="right" valign="top"><a id="ac005de778a95d82fbf99f51b4ec1b8d7" name="ac005de778a95d82fbf99f51b4ec1b8d7"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>WORD_WRAP_MAX_LEN</b>&#160;&#160;&#160;12800</td></tr>
+<tr class="memdesc:ac005de778a95d82fbf99f51b4ec1b8d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">For the xxx_DrawStringInBox function, the strnlen char limit. 128*100 (1024x768 with 8x8 char grid). <br /></td></tr>
+<tr class="separator:ac005de778a95d82fbf99f51b4ec1b8d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a8caa9f7a3d1853cb16b5a7ab11f950ba"><td class="memItemLeft" align="right" valign="top">signed int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a8caa9f7a3d1853cb16b5a7ab11f950ba">General_WrapAndTrimTextToFit</a> (char **orig_string, char **formatted_string, signed int max_chars_to_format, signed int max_width, signed int max_height, signed int one_char_width, signed int one_row_height, <a class="el" href="struct_font.html">Font</a> *the_font, signed int(*measure_function)(<a class="el" href="struct_font.html">Font</a> *, char *, signed int, signed int, signed int))</td></tr>
-<tr class="memdesc:a8caa9f7a3d1853cb16b5a7ab11f950ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Format a string by wrapping and trimming to fit the passed width and height.  <a href="general_8h.html#a8caa9f7a3d1853cb16b5a7ab11f950ba">More...</a><br /></td></tr>
-<tr class="separator:a8caa9f7a3d1853cb16b5a7ab11f950ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43395f5398a59a82ee72cf41a500131c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a43395f5398a59a82ee72cf41a500131c">General_Round</a> (double the_float)</td></tr>
-<tr class="memdesc:a43395f5398a59a82ee72cf41a500131c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Round a float to the nearest integer value THINK C's and SAS/C's math.h don't include round() from: <a href="https://stackoverflow.com/questions/4572556/concise-way-to-implement-round-in-c">https://stackoverflow.com/questions/4572556/concise-way-to-implement-round-in-c</a>.  <a href="general_8h.html#a43395f5398a59a82ee72cf41a500131c">More...</a><br /></td></tr>
-<tr class="separator:a43395f5398a59a82ee72cf41a500131c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a95ed503ba98211d0e55de13556c980b3"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a95ed503ba98211d0e55de13556c980b3">General_StrToLower</a> (char *the_string)</td></tr>
-<tr class="memdesc:a95ed503ba98211d0e55de13556c980b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a string, in place, to lower case This overwrites the string with a lower case version of itself.  <a href="general_8h.html#a95ed503ba98211d0e55de13556c980b3">More...</a><br /></td></tr>
-<tr class="separator:a95ed503ba98211d0e55de13556c980b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9d5562510f9cb5809bc5e5b640f07a8"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#ac9d5562510f9cb5809bc5e5b640f07a8">General_WrapAndTrimTextToFit</a> (char **orig_string, char **formatted_string, int16_t max_chars_to_format, int16_t max_width, int16_t max_height, int16_t one_char_width, int16_t one_row_height, <a class="el" href="struct_font.html">Font</a> *the_font, int16_t(*measure_function)(<a class="el" href="struct_font.html">Font</a> *, char *, int16_t, int16_t, int16_t, int16_t *))</td></tr>
+<tr class="memdesc:ac9d5562510f9cb5809bc5e5b640f07a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Format a string by wrapping and trimming to fit the passed width and height.  <a href="general_8h.html#ac9d5562510f9cb5809bc5e5b640f07a8">More...</a><br /></td></tr>
+<tr class="separator:ac9d5562510f9cb5809bc5e5b640f07a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d15a10ba145726c598611b6eb97cf0d"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a6d15a10ba145726c598611b6eb97cf0d">General_Round</a> (double the_float)</td></tr>
+<tr class="memdesc:a6d15a10ba145726c598611b6eb97cf0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Round a float to the nearest integer value THINK C's and SAS/C's math.h don't include round() from: <a href="https://stackoverflow.com/questions/4572556/concise-way-to-implement-round-in-c">https://stackoverflow.com/questions/4572556/concise-way-to-implement-round-in-c</a>.  <a href="general_8h.html#a6d15a10ba145726c598611b6eb97cf0d">More...</a><br /></td></tr>
+<tr class="separator:a6d15a10ba145726c598611b6eb97cf0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1db800160346891a591a3525a25ef0c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#ad1db800160346891a591a3525a25ef0c">General_StrToLower</a> (char *the_string)</td></tr>
+<tr class="memdesc:ad1db800160346891a591a3525a25ef0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a string, in place, to lower case This overwrites the string with a lower case version of itself.  <a href="general_8h.html#ad1db800160346891a591a3525a25ef0c">More...</a><br /></td></tr>
+<tr class="separator:ad1db800160346891a591a3525a25ef0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9ef78619dd4f8a5704da0c13892a3b7"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#aa9ef78619dd4f8a5704da0c13892a3b7">General_ToLower</a> (char the_char)</td></tr>
 <tr class="memdesc:aa9ef78619dd4f8a5704da0c13892a3b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the case of the passed character from upper to lower (if necessary) Scope is limited to characters A-Z, ascii.  <a href="general_8h.html#aa9ef78619dd4f8a5704da0c13892a3b7">More...</a><br /></td></tr>
 <tr class="separator:aa9ef78619dd4f8a5704da0c13892a3b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -124,31 +142,37 @@ Functions</h2></td></tr>
 <tr class="memitem:a859a99b6609f93c025175b258696afba"><td class="memItemLeft" align="right" valign="top">signed long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a859a99b6609f93c025175b258696afba">General_Strlcat</a> (char *dst, const char *src, signed long max_len)</td></tr>
 <tr class="memdesc:a859a99b6609f93c025175b258696afba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies up to max_len - 1 characters from the NUL-terminated string src and appends to the end of dst, NUL-terminating the result.  <a href="general_8h.html#a859a99b6609f93c025175b258696afba">More...</a><br /></td></tr>
 <tr class="separator:a859a99b6609f93c025175b258696afba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5ed102f96548c97dd63a14b1742bb62"><td class="memItemLeft" align="right" valign="top">signed int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#ac5ed102f96548c97dd63a14b1742bb62">General_Strncmp</a> (const char *string_1, const char *string_2, size_t length)</td></tr>
-<tr class="memdesc:ac5ed102f96548c97dd63a14b1742bb62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes a case sensitive comparison of the specified number of characters of the two passed strings Stops processing once max_len has been reached, or when one of the two strings has run out of characters.  <a href="general_8h.html#ac5ed102f96548c97dd63a14b1742bb62">More...</a><br /></td></tr>
-<tr class="separator:ac5ed102f96548c97dd63a14b1742bb62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada9cbdf74fb211056cce03e559b177e6"><td class="memItemLeft" align="right" valign="top">signed int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#ada9cbdf74fb211056cce03e559b177e6">General_Strncasecmp</a> (const char *string_1, const char *string_2, size_t max_len)</td></tr>
-<tr class="memdesc:ada9cbdf74fb211056cce03e559b177e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes a case insensitive comparison of the specified number of characters of the two passed strings Stops processing once max_len has been reached, or when one of the two strings has run out of characters.  <a href="general_8h.html#ada9cbdf74fb211056cce03e559b177e6">More...</a><br /></td></tr>
-<tr class="separator:ada9cbdf74fb211056cce03e559b177e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea99e350b2f6f2813f64d400010e3b60"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#aea99e350b2f6f2813f64d400010e3b60">General_Strncmp</a> (const char *string_1, const char *string_2, size_t length)</td></tr>
+<tr class="memdesc:aea99e350b2f6f2813f64d400010e3b60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes a case sensitive comparison of the specified number of characters of the two passed strings Stops processing once max_len has been reached, or when one of the two strings has run out of characters.  <a href="general_8h.html#aea99e350b2f6f2813f64d400010e3b60">More...</a><br /></td></tr>
+<tr class="separator:aea99e350b2f6f2813f64d400010e3b60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ce61a7026c30f3f0d29f994e4471b61"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a6ce61a7026c30f3f0d29f994e4471b61">General_Strncasecmp</a> (const char *string_1, const char *string_2, size_t max_len)</td></tr>
+<tr class="memdesc:a6ce61a7026c30f3f0d29f994e4471b61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes a case insensitive comparison of the specified number of characters of the two passed strings Stops processing once max_len has been reached, or when one of the two strings has run out of characters.  <a href="general_8h.html#a6ce61a7026c30f3f0d29f994e4471b61">More...</a><br /></td></tr>
+<tr class="separator:a6ce61a7026c30f3f0d29f994e4471b61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae49d06d93ef7b5d1aeae704a7722822"><td class="memItemLeft" align="right" valign="top">signed long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#aae49d06d93ef7b5d1aeae704a7722822">General_Strnlen</a> (const char *the_string, size_t max_len)</td></tr>
 <tr class="memdesc:aae49d06d93ef7b5d1aeae704a7722822"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measure the length of a fixed-size string Safe(r) strlen function: will stop processing if no terminator found before max_len reached.  <a href="general_8h.html#aae49d06d93ef7b5d1aeae704a7722822">More...</a><br /></td></tr>
 <tr class="separator:aae49d06d93ef7b5d1aeae704a7722822"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75e914e61678fae23b84e22ce27361cd"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a75e914e61678fae23b84e22ce27361cd">General_CompareStringLength</a> (void *first_payload, void *second_payload)</td></tr>
-<tr class="memdesc:a75e914e61678fae23b84e22ce27361cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare the length of two strings, returning true if the first is longer than the second.  <a href="general_8h.html#a75e914e61678fae23b84e22ce27361cd">More...</a><br /></td></tr>
-<tr class="separator:a75e914e61678fae23b84e22ce27361cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07938c6f1d87889b1195665eefd24389"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a07938c6f1d87889b1195665eefd24389">General_ExtractFileExtensionFromFilename</a> (const char *the_file_name, char *the_extension)</td></tr>
-<tr class="memdesc:a07938c6f1d87889b1195665eefd24389"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract file extension into the passed char pointer, as new lowercased string pointer, if any found.  <a href="general_8h.html#a07938c6f1d87889b1195665eefd24389">More...</a><br /></td></tr>
-<tr class="separator:a07938c6f1d87889b1195665eefd24389"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56721e3b15f39cd8df76755c8befa85a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a56721e3b15f39cd8df76755c8befa85a">General_CompareStringLength</a> (void *first_payload, void *second_payload)</td></tr>
+<tr class="memdesc:a56721e3b15f39cd8df76755c8befa85a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare the length of two strings, returning true if the first is longer than the second.  <a href="general_8h.html#a56721e3b15f39cd8df76755c8befa85a">More...</a><br /></td></tr>
+<tr class="separator:a56721e3b15f39cd8df76755c8befa85a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abde981427d1921294f66061a4d7ed11b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#abde981427d1921294f66061a4d7ed11b">General_ExtractFileExtensionFromFilename</a> (const char *the_file_name, char *the_extension)</td></tr>
+<tr class="memdesc:abde981427d1921294f66061a4d7ed11b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract file extension into the passed char pointer, as new lowercased string pointer, if any found.  <a href="general_8h.html#abde981427d1921294f66061a4d7ed11b">More...</a><br /></td></tr>
+<tr class="separator:abde981427d1921294f66061a4d7ed11b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b45cc507aab82cacfea2c888ed4feee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a9b45cc507aab82cacfea2c888ed4feee">General_DelayTicks</a> (int32_t ticks)</td></tr>
+<tr class="memdesc:a9b45cc507aab82cacfea2c888ed4feee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait for the specified number of ticks before returning In multi-tasking ever becomes a thing, this is not a multi-tasking-friendly operation.  <a href="general_8h.html#a9b45cc507aab82cacfea2c888ed4feee">More...</a><br /></td></tr>
+<tr class="separator:a9b45cc507aab82cacfea2c888ed4feee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae31497a81342c86b3c2491eee833dfce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#ae31497a81342c86b3c2491eee833dfce">General_DelaySeconds</a> (uint16_t seconds)</td></tr>
+<tr class="memdesc:ae31497a81342c86b3c2491eee833dfce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait for the specified number of seconds before returning In multi-tasking ever becomes a thing, this is not a multi-tasking-friendly operation.  <a href="general_8h.html#ae31497a81342c86b3c2491eee833dfce">More...</a><br /></td></tr>
+<tr class="separator:ae31497a81342c86b3c2491eee833dfce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a75e914e61678fae23b84e22ce27361cd" name="a75e914e61678fae23b84e22ce27361cd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a75e914e61678fae23b84e22ce27361cd">&#9670;&nbsp;</a></span>General_CompareStringLength()</h2>
+<a id="a56721e3b15f39cd8df76755c8befa85a" name="a56721e3b15f39cd8df76755c8befa85a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56721e3b15f39cd8df76755c8befa85a">&#9670;&nbsp;</a></span>General_CompareStringLength()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean General_CompareStringLength </td>
+          <td class="memname">bool General_CompareStringLength </td>
           <td>(</td>
           <td class="paramtype">void *&#160;</td>
           <td class="paramname"><em>first_payload</em>, </td>
@@ -180,14 +204,58 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a07938c6f1d87889b1195665eefd24389" name="a07938c6f1d87889b1195665eefd24389"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07938c6f1d87889b1195665eefd24389">&#9670;&nbsp;</a></span>General_ExtractFileExtensionFromFilename()</h2>
+<a id="ae31497a81342c86b3c2491eee833dfce" name="ae31497a81342c86b3c2491eee833dfce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae31497a81342c86b3c2491eee833dfce">&#9670;&nbsp;</a></span>General_DelaySeconds()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean General_ExtractFileExtensionFromFilename </td>
+          <td class="memname">void General_DelaySeconds </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>seconds</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wait for the specified number of seconds before returning In multi-tasking ever becomes a thing, this is not a multi-tasking-friendly operation. </p>
+<p ><br  />
+ </p>
+
+</div>
+</div>
+<a id="a9b45cc507aab82cacfea2c888ed4feee" name="a9b45cc507aab82cacfea2c888ed4feee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b45cc507aab82cacfea2c888ed4feee">&#9670;&nbsp;</a></span>General_DelayTicks()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void General_DelayTicks </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>ticks</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wait for the specified number of ticks before returning In multi-tasking ever becomes a thing, this is not a multi-tasking-friendly operation. </p>
+<p ><br  />
+ </p>
+
+</div>
+</div>
+<a id="abde981427d1921294f66061a4d7ed11b" name="abde981427d1921294f66061a4d7ed11b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abde981427d1921294f66061a4d7ed11b">&#9670;&nbsp;</a></span>General_ExtractFileExtensionFromFilename()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool General_ExtractFileExtensionFromFilename </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>the_file_name</em>, </td>
@@ -218,14 +286,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a43395f5398a59a82ee72cf41a500131c" name="a43395f5398a59a82ee72cf41a500131c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a43395f5398a59a82ee72cf41a500131c">&#9670;&nbsp;</a></span>General_Round()</h2>
+<a id="a6d15a10ba145726c598611b6eb97cf0d" name="a6d15a10ba145726c598611b6eb97cf0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d15a10ba145726c598611b6eb97cf0d">&#9670;&nbsp;</a></span>General_Round()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int General_Round </td>
+          <td class="memname">int32_t General_Round </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>the_float</em></td><td>)</td>
@@ -373,14 +441,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ada9cbdf74fb211056cce03e559b177e6" name="ada9cbdf74fb211056cce03e559b177e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada9cbdf74fb211056cce03e559b177e6">&#9670;&nbsp;</a></span>General_Strncasecmp()</h2>
+<a id="a6ce61a7026c30f3f0d29f994e4471b61" name="a6ce61a7026c30f3f0d29f994e4471b61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ce61a7026c30f3f0d29f994e4471b61">&#9670;&nbsp;</a></span>General_Strncasecmp()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">signed int General_Strncasecmp </td>
+          <td class="memname">int16_t General_Strncasecmp </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>string_1</em>, </td>
@@ -418,14 +486,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac5ed102f96548c97dd63a14b1742bb62" name="ac5ed102f96548c97dd63a14b1742bb62"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac5ed102f96548c97dd63a14b1742bb62">&#9670;&nbsp;</a></span>General_Strncmp()</h2>
+<a id="aea99e350b2f6f2813f64d400010e3b60" name="aea99e350b2f6f2813f64d400010e3b60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea99e350b2f6f2813f64d400010e3b60">&#9670;&nbsp;</a></span>General_Strncmp()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">signed int General_Strncmp </td>
+          <td class="memname">int16_t General_Strncmp </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>string_1</em>, </td>
@@ -494,14 +562,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a95ed503ba98211d0e55de13556c980b3" name="a95ed503ba98211d0e55de13556c980b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a95ed503ba98211d0e55de13556c980b3">&#9670;&nbsp;</a></span>General_StrToLower()</h2>
+<a id="ad1db800160346891a591a3525a25ef0c" name="ad1db800160346891a591a3525a25ef0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1db800160346891a591a3525a25ef0c">&#9670;&nbsp;</a></span>General_StrToLower()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean General_StrToLower </td>
+          <td class="memname">bool General_StrToLower </td>
           <td>(</td>
           <td class="paramtype">char *&#160;</td>
           <td class="paramname"><em>the_string</em></td><td>)</td>
@@ -542,14 +610,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a8caa9f7a3d1853cb16b5a7ab11f950ba" name="a8caa9f7a3d1853cb16b5a7ab11f950ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8caa9f7a3d1853cb16b5a7ab11f950ba">&#9670;&nbsp;</a></span>General_WrapAndTrimTextToFit()</h2>
+<a id="ac9d5562510f9cb5809bc5e5b640f07a8" name="ac9d5562510f9cb5809bc5e5b640f07a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9d5562510f9cb5809bc5e5b640f07a8">&#9670;&nbsp;</a></span>General_WrapAndTrimTextToFit()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">signed int General_WrapAndTrimTextToFit </td>
+          <td class="memname">int16_t General_WrapAndTrimTextToFit </td>
           <td>(</td>
           <td class="paramtype">char **&#160;</td>
           <td class="paramname"><em>orig_string</em>, </td>
@@ -563,31 +631,31 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>max_chars_to_format</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>max_width</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>max_height</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>one_char_width</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>one_row_height</em>, </td>
         </tr>
         <tr>
@@ -599,7 +667,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int(*)(<a class="el" href="struct_font.html">Font</a> *, char *, signed int, signed int, signed int)&#160;</td>
+          <td class="paramtype">int16_t(*)(<a class="el" href="struct_font.html">Font</a> *, char *, int16_t, int16_t, int16_t, int16_t *)&#160;</td>
           <td class="paramname"><em>measure_function</em>&#160;</td>
         </tr>
         <tr>

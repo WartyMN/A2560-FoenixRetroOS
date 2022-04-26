@@ -194,11 +194,11 @@ Font* Sys_GetSystemFont(System* the_system);
 
 Font* Sys_GetAppFont(System* the_system);
 
-Screen* Sys_GetScreen(System* the_system, signed int channel_id);
+Screen* Sys_GetScreen(System* the_system, int16_t channel_id);
 
 Theme* Sys_GetTheme(System* the_system);
 
-Bitmap* Sys_GetScreenBitmap(System* the_system, signed int channel_id);
+Bitmap* Sys_GetScreenBitmap(System* the_system, int16_t channel_id);
 
 EventManager* Sys_GetEventManager(System* the_system);
 
@@ -210,9 +210,9 @@ void Sys_SetSystemFont(System* the_system, Font* the_font);
 
 void Sys_SetAppFont(System* the_system, Font* the_font);
 
-void Sys_SetScreen(System* the_system, signed int channel_id, Screen* the_screen);
+void Sys_SetScreen(System* the_system, int16_t channel_id, Screen* the_screen);
 
-void Sys_SetScreenBitmap(System* the_system, signed int channel_id, Bitmap* the_bitmap);
+void Sys_SetScreenBitmap(System* the_system, int16_t channel_id, Bitmap* the_bitmap);
 
 //! Set the passed theme as the System's current theme
 //! Note: this will dispose of the current theme after setting the new one

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['qlinks_0',['qlinks',['../structqlinks.html',1,'']]]
+  ['list_0',['List',['../struct_list.html',1,'']]]
 ];

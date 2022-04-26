@@ -2,12 +2,18 @@ var searchData=
 [
   ['screen_0',['Screen',['../struct_screen.html',1,'']]],
   ['screen_5ffor_5ftext_5fattr_1',['SCREEN_FOR_TEXT_ATTR',['../text_8h.html#a0eabf752e6ffe09710263d4ab17d606c',1,'text.h']]],
-  ['sys_5fautoconfigure_2',['Sys_AutoConfigure',['../lib__sys_8h.html#aa73463b198721e6578eb97260ae24d36',1,'lib_sys.c']]],
-  ['sys_5fdetectscreensize_3',['Sys_DetectScreenSize',['../lib__sys_8h.html#a4184a35d3f1c70f3be9b9e4eb8a608fa',1,'lib_sys.c']]],
-  ['sys_5finitsystem_4',['Sys_InitSystem',['../lib__sys_8h.html#a08cbe221d964a5326ec909b30b29798a',1,'lib_sys.c']]],
-  ['sys_5fnew_5',['Sys_New',['../lib__sys_8h.html#a08443288542cd1c5c531b6ec028d2980',1,'lib_sys.c']]],
-  ['sys_5fsetmodegraphics_6',['Sys_SetModeGraphics',['../lib__sys_8h.html#a57984932c951a9458c8518737c3d3441',1,'lib_sys.c']]],
-  ['sys_5fsetmodetext_7',['Sys_SetModeText',['../lib__sys_8h.html#a04517241775caada721f2f47d1076929',1,'lib_sys.c']]],
-  ['sys_5fsetvideomode_8',['Sys_SetVideoMode',['../lib__sys_8h.html#a8dd79c49df86e9913fe6b02d34add0fe',1,'lib_sys.c']]],
-  ['system_9',['System',['../struct_system.html',1,'']]]
+  ['standard_5fback_5fcolor_5f_2',['standard_back_color_',['../struct_theme.html#a98914ef1cdd2d87bfd34c3df9ee4cc9d',1,'Theme']]],
+  ['standard_5ffore_5fcolor_5f_3',['standard_fore_color_',['../struct_theme.html#a0c9c39155b88c926144d20f2ee5884e6',1,'Theme']]],
+  ['sys_5faddtowindowlist_4',['Sys_AddToWindowList',['../lib__sys_8h.html#a31b4b6b8f93b4daabde4662d62ed66d9',1,'lib_sys.c']]],
+  ['sys_5fautoconfigure_5',['Sys_AutoConfigure',['../lib__sys_8h.html#aed61a6754ace552013413feea54fd336',1,'lib_sys.c']]],
+  ['sys_5fdetectscreensize_6',['Sys_DetectScreenSize',['../lib__sys_8h.html#aa5e4e18b0e2066b48f050addbbe546b3',1,'lib_sys.c']]],
+  ['sys_5finitsystem_7',['Sys_InitSystem',['../lib__sys_8h.html#ac3d6d271b2a789e26896de04852c77c0',1,'lib_sys.c']]],
+  ['sys_5fnew_8',['Sys_New',['../lib__sys_8h.html#a08443288542cd1c5c531b6ec028d2980',1,'lib_sys.c']]],
+  ['sys_5frender_9',['Sys_Render',['../lib__sys_8h.html#a894dcd75f3b86c56cb65687773a9f42b',1,'lib_sys.c']]],
+  ['sys_5fsetactivewindow_10',['Sys_SetActiveWindow',['../lib__sys_8h.html#aadad43b6c5eaa6981951eac2536ce10b',1,'lib_sys.c']]],
+  ['sys_5fsetmodegraphics_11',['Sys_SetModeGraphics',['../lib__sys_8h.html#a4a4b865a6eab764d18a3defa01844810',1,'lib_sys.c']]],
+  ['sys_5fsetmodetext_12',['Sys_SetModeText',['../lib__sys_8h.html#ab18b67b61dd745e75aa64c5ba73358d0',1,'lib_sys.c']]],
+  ['sys_5fsettheme_13',['Sys_SetTheme',['../lib__sys_8h.html#a39f1fbbd7a6b0a38ff0c9884e188d4d4',1,'lib_sys.c']]],
+  ['sys_5fsetvideomode_14',['Sys_SetVideoMode',['../lib__sys_8h.html#a3b11a4c19b359bffb12dc6c86cdac684',1,'lib_sys.c']]],
+  ['system_15',['System',['../struct_system.html',1,'']]]
 ];

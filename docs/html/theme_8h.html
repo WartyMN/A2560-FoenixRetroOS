@@ -97,7 +97,8 @@ $(document).ready(function(){initNavTree('theme_8h.html',''); initResizable(); }
   <div class="headertitle"><div class="title">theme.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;mcp/syscalls.h&gt;</code><br />
+<div class="textblock"><code>#include &lt;stdbool.h&gt;</code><br />
+<code>#include &lt;mcp/syscalls.h&gt;</code><br />
 <code>#include &lt;mb/a2560_platform.h&gt;</code><br />
 <code>#include &lt;mb/general.h&gt;</code><br />
 <code>#include &lt;mb/text.h&gt;</code><br />
@@ -109,6 +110,8 @@ $(document).ready(function(){initNavTree('theme_8h.html',''); initResizable(); }
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Data Structures</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_control_backdrop.html">ControlBackdrop</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_theme.html">Theme</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -121,6 +124,18 @@ Functions</h2></td></tr>
 <tr class="memitem:ae38e9d31e0417e42ef22069805309f3f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_theme.html">Theme</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="theme_8h.html#ae38e9d31e0417e42ef22069805309f3f">Theme_CreateDefaultTheme</a> (void)</td></tr>
 <tr class="memdesc:ae38e9d31e0417e42ef22069805309f3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">create default <a class="el" href="struct_theme.html">Theme</a>.  <a href="theme_8h.html#ae38e9d31e0417e42ef22069805309f3f">More...</a><br /></td></tr>
 <tr class="separator:ae38e9d31e0417e42ef22069805309f3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91a695e7df317ea7415050cd1755ab2a"><td class="memItemLeft" align="right" valign="top"><a id="a91a695e7df317ea7415050cd1755ab2a" name="a91a695e7df317ea7415050cd1755ab2a"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>Theme_Activate</b> (<a class="el" href="struct_theme.html">Theme</a> *the_theme)</td></tr>
+<tr class="memdesc:a91a695e7df317ea7415050cd1755ab2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make the passed theme into the active <a class="el" href="struct_theme.html">Theme</a> Note: this will change the VICKY's CLUT, inform the system to change its current theme (and in future: load new icons, etc) <br  />
+ <br /></td></tr>
+<tr class="separator:a91a695e7df317ea7415050cd1755ab2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a123211f15fd9d51d41ea929e5634be5f"><td class="memItemLeft" align="right" valign="top"><a id="a123211f15fd9d51d41ea929e5634be5f" name="a123211f15fd9d51d41ea929e5634be5f"></a>
+<a class="el" href="struct_control_template.html">ControlTemplate</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>Theme_CreateControlTemplateFlexWidth</b> (<a class="el" href="struct_theme.html">Theme</a> *the_theme, <a class="el" href="control_8h.html#a8d0ec0ac6c53b09d8759c8c35b96434d">control_type</a> the_type, int16_t width, int16_t height, int16_t x_offset, int16_t y_offset, h_align_type h_align, v_align_type v_align, char *caption)</td></tr>
+<tr class="memdesc:a123211f15fd9d51d41ea929e5634be5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a control template for a flexible-width control. <br /></td></tr>
+<tr class="separator:a123211f15fd9d51d41ea929e5634be5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd5434cf6f45ff8de7d9e7ed599877d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_theme.html">Theme</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="theme_8h.html#afd5434cf6f45ff8de7d9e7ed599877d8">Theme_CreateGreenTheme</a> (void)</td></tr>
+<tr class="memdesc:afd5434cf6f45ff8de7d9e7ed599877d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">create default <a class="el" href="struct_theme.html">Theme</a>.  <a href="theme_8h.html#afd5434cf6f45ff8de7d9e7ed599877d8">More...</a><br /></td></tr>
+<tr class="separator:afd5434cf6f45ff8de7d9e7ed599877d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ae38e9d31e0417e42ef22069805309f3f" name="ae38e9d31e0417e42ef22069805309f3f"></a>
@@ -131,6 +146,27 @@ Functions</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="struct_theme.html">Theme</a> * Theme_CreateDefaultTheme </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>create default <a class="el" href="struct_theme.html">Theme</a>. </p>
+<p >used in cases where a custom theme is not specified or is not available </p>
+
+</div>
+</div>
+<a id="afd5434cf6f45ff8de7d9e7ed599877d8" name="afd5434cf6f45ff8de7d9e7ed599877d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd5434cf6f45ff8de7d9e7ed599877d8">&#9670;&nbsp;</a></span>Theme_CreateGreenTheme()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_theme.html">Theme</a> * Theme_CreateGreenTheme </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>

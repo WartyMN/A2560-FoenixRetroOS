@@ -97,6 +97,7 @@ $(document).ready(function(){initNavTree('text_8c.html',''); initResizable(); })
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="text_8h_source.html">text.h</a>&quot;</code><br />
+<code>#include &lt;stdbool.h&gt;</code><br />
 <code>#include &lt;stdarg.h&gt;</code><br />
 <code>#include &lt;stdio.h&gt;</code><br />
 <code>#include &lt;stdlib.h&gt;</code><br />
@@ -108,109 +109,109 @@ $(document).ready(function(){initNavTree('text_8c.html',''); initResizable(); })
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aecd882f2e7e6588058f32a6e3d222990"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#aecd882f2e7e6588058f32a6e3d222990">Text_CopyAttrMemToScreen</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, char *the_source_buffer)</td></tr>
-<tr class="memdesc:aecd882f2e7e6588058f32a6e3d222990"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy a full screen of attr from an off-screen buffer.  <a href="text_8c.html#aecd882f2e7e6588058f32a6e3d222990">More...</a><br /></td></tr>
-<tr class="separator:aecd882f2e7e6588058f32a6e3d222990"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a044e0193af7b1b25a0fc0d9e19bc3f26"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a044e0193af7b1b25a0fc0d9e19bc3f26">Text_CopyAttrMemFromScreen</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, char *the_target_buffer)</td></tr>
-<tr class="memdesc:a044e0193af7b1b25a0fc0d9e19bc3f26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy a full screen of text attributes to an off-screen buffer.  <a href="text_8c.html#a044e0193af7b1b25a0fc0d9e19bc3f26">More...</a><br /></td></tr>
-<tr class="separator:a044e0193af7b1b25a0fc0d9e19bc3f26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a0ad2a2f89acd432588a4391a87b2c8"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a8a0ad2a2f89acd432588a4391a87b2c8">Text_CopyCharMemToScreen</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, char *the_source_buffer)</td></tr>
-<tr class="memdesc:a8a0ad2a2f89acd432588a4391a87b2c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy a full screen of text from an off-screen buffer.  <a href="text_8c.html#a8a0ad2a2f89acd432588a4391a87b2c8">More...</a><br /></td></tr>
-<tr class="separator:a8a0ad2a2f89acd432588a4391a87b2c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a8bb3cc759f4ca2993aa189e0b5fa54"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a2a8bb3cc759f4ca2993aa189e0b5fa54">Text_CopyCharMemFromScreen</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, char *the_target_buffer)</td></tr>
-<tr class="memdesc:a2a8bb3cc759f4ca2993aa189e0b5fa54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy a full screen of text to an off-screen buffer.  <a href="text_8c.html#a2a8bb3cc759f4ca2993aa189e0b5fa54">More...</a><br /></td></tr>
-<tr class="separator:a2a8bb3cc759f4ca2993aa189e0b5fa54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b8a67c8ea7a826cd9fac9d8c067509e"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a0b8a67c8ea7a826cd9fac9d8c067509e">Text_CopyScreen</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, char *the_buffer, boolean to_screen, boolean for_attr)</td></tr>
-<tr class="memdesc:a0b8a67c8ea7a826cd9fac9d8c067509e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy a full screen worth of EITHER text or attribute data to OR from an off-screen buffer.  <a href="text_8c.html#a0b8a67c8ea7a826cd9fac9d8c067509e">More...</a><br /></td></tr>
-<tr class="separator:a0b8a67c8ea7a826cd9fac9d8c067509e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c18c1597bd02befc018e38e65c7261a"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a3c18c1597bd02befc018e38e65c7261a">Text_CopyMemBox</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, char *the_buffer, signed int x1, signed int y1, signed int x2, signed int y2, boolean to_screen, boolean for_attr)</td></tr>
-<tr class="memdesc:a3c18c1597bd02befc018e38e65c7261a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy a rectangular area of text or attr to or from an off-screen buffer.  <a href="text_8c.html#a3c18c1597bd02befc018e38e65c7261a">More...</a><br /></td></tr>
-<tr class="separator:a3c18c1597bd02befc018e38e65c7261a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb479ab86cf3cf6653e32934826ae76b"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#afb479ab86cf3cf6653e32934826ae76b">Text_FillAttrMem</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, unsigned char the_fill)</td></tr>
-<tr class="memdesc:afb479ab86cf3cf6653e32934826ae76b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill attribute memory for the passed screen.  <a href="text_8c.html#afb479ab86cf3cf6653e32934826ae76b">More...</a><br /></td></tr>
-<tr class="separator:afb479ab86cf3cf6653e32934826ae76b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad98be605a84f5409640bff05705aad0b"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#ad98be605a84f5409640bff05705aad0b">Text_FillCharMem</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, unsigned char the_fill)</td></tr>
-<tr class="memdesc:ad98be605a84f5409640bff05705aad0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill character memory for the passed screen.  <a href="text_8c.html#ad98be605a84f5409640bff05705aad0b">More...</a><br /></td></tr>
-<tr class="separator:ad98be605a84f5409640bff05705aad0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a39270674913c5aeecf568843e9b21dd6"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a39270674913c5aeecf568843e9b21dd6">Text_FillBoxSlow</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x1, signed int y1, signed int x2, signed int y2, unsigned char the_char, unsigned char fore_color, unsigned char back_color, text_draw_choice the_draw_choice)</td></tr>
-<tr class="memdesc:a39270674913c5aeecf568843e9b21dd6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill character and/or attribute memory for a specific box area This version uses char-by-char functions, so it is very slow.  <a href="text_8c.html#a39270674913c5aeecf568843e9b21dd6">More...</a><br /></td></tr>
-<tr class="separator:a39270674913c5aeecf568843e9b21dd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2568f9d40fa7250ee1620d5c924a7123"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a2568f9d40fa7250ee1620d5c924a7123">Text_FillBox</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x1, signed int y1, signed int x2, signed int y2, unsigned char the_char, unsigned char fore_color, unsigned char back_color)</td></tr>
-<tr class="memdesc:a2568f9d40fa7250ee1620d5c924a7123"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill character and attribute memory for a specific box area.  <a href="text_8c.html#a2568f9d40fa7250ee1620d5c924a7123">More...</a><br /></td></tr>
-<tr class="separator:a2568f9d40fa7250ee1620d5c924a7123"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a513ce6307e00528e3da914897864769c"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a513ce6307e00528e3da914897864769c">Text_FillBoxCharOnly</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x1, signed int y1, signed int x2, signed int y2, unsigned char the_char)</td></tr>
-<tr class="memdesc:a513ce6307e00528e3da914897864769c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill character memory for a specific box area.  <a href="text_8c.html#a513ce6307e00528e3da914897864769c">More...</a><br /></td></tr>
-<tr class="separator:a513ce6307e00528e3da914897864769c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7dbe294d0a6f49f394ffb5027f6bf3c"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#aa7dbe294d0a6f49f394ffb5027f6bf3c">Text_FillBoxAttrOnly</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x1, signed int y1, signed int x2, signed int y2, unsigned char fore_color, unsigned char back_color)</td></tr>
-<tr class="memdesc:aa7dbe294d0a6f49f394ffb5027f6bf3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill attribute memory for a specific box area.  <a href="text_8c.html#aa7dbe294d0a6f49f394ffb5027f6bf3c">More...</a><br /></td></tr>
-<tr class="separator:aa7dbe294d0a6f49f394ffb5027f6bf3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2da6f5be162e3c038637d18363186998"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a2da6f5be162e3c038637d18363186998">Text_InvertBox</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x1, signed int y1, signed int x2, signed int y2)</td></tr>
-<tr class="memdesc:a2da6f5be162e3c038637d18363186998"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invert the colors of a rectangular block.  <a href="text_8c.html#a2da6f5be162e3c038637d18363186998">More...</a><br /></td></tr>
-<tr class="separator:a2da6f5be162e3c038637d18363186998"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44cea628ddcee0ac1a8a75961bef0072"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a44cea628ddcee0ac1a8a75961bef0072">Text_UpdateFontData</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, char *new_font_data)</td></tr>
-<tr class="memdesc:a44cea628ddcee0ac1a8a75961bef0072"><td class="mdescLeft">&#160;</td><td class="mdescRight">replace the current font data with the data at the passed memory buffer  <a href="text_8c.html#a44cea628ddcee0ac1a8a75961bef0072">More...</a><br /></td></tr>
-<tr class="separator:a44cea628ddcee0ac1a8a75961bef0072"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a580eb506a1374b69a1437c85dad6e24b"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a580eb506a1374b69a1437c85dad6e24b">Text_ShowFontChars</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, unsigned int y)</td></tr>
-<tr class="memdesc:a580eb506a1374b69a1437c85dad6e24b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test function to display all 256 font characters.  <a href="text_8c.html#a580eb506a1374b69a1437c85dad6e24b">More...</a><br /></td></tr>
-<tr class="separator:a580eb506a1374b69a1437c85dad6e24b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46155f1f57562c20ef5c1debe26b27c0"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a46155f1f57562c20ef5c1debe26b27c0">Text_SetCharAtXY</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x, signed int y, unsigned char the_char)</td></tr>
-<tr class="memdesc:a46155f1f57562c20ef5c1debe26b27c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a char at a specified x, y coord.  <a href="text_8c.html#a46155f1f57562c20ef5c1debe26b27c0">More...</a><br /></td></tr>
-<tr class="separator:a46155f1f57562c20ef5c1debe26b27c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6141a2b6b2c374f204e24d36449b9da5"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a6141a2b6b2c374f204e24d36449b9da5">Text_SetAttrAtXY</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x, signed int y, unsigned char fore_color, unsigned char back_color)</td></tr>
-<tr class="memdesc:a6141a2b6b2c374f204e24d36449b9da5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the attribute value at a specified x, y coord.  <a href="text_8c.html#a6141a2b6b2c374f204e24d36449b9da5">More...</a><br /></td></tr>
-<tr class="separator:a6141a2b6b2c374f204e24d36449b9da5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad9c44311118dab960fda2a822ab13c4f"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#ad9c44311118dab960fda2a822ab13c4f">Text_SetCharAndColorAtXY</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x, signed int y, unsigned char the_char, unsigned char fore_color, unsigned char back_color)</td></tr>
-<tr class="memdesc:ad9c44311118dab960fda2a822ab13c4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a char at a specified x, y coord, also setting the color attributes.  <a href="text_8c.html#ad9c44311118dab960fda2a822ab13c4f">More...</a><br /></td></tr>
-<tr class="separator:ad9c44311118dab960fda2a822ab13c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60951746e733a1c3a42342154ebd9925"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a60951746e733a1c3a42342154ebd9925">Text_GetCharAtXY</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x, signed int y)</td></tr>
-<tr class="memdesc:a60951746e733a1c3a42342154ebd9925"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the char at a specified x, y coord.  <a href="text_8c.html#a60951746e733a1c3a42342154ebd9925">More...</a><br /></td></tr>
-<tr class="separator:a60951746e733a1c3a42342154ebd9925"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac267794307c5a7f2ea1f6c7a0a8544ab"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#ac267794307c5a7f2ea1f6c7a0a8544ab">Text_GetAttrAtXY</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x, signed int y)</td></tr>
-<tr class="memdesc:ac267794307c5a7f2ea1f6c7a0a8544ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the attribute value at a specified x, y coord.  <a href="text_8c.html#ac267794307c5a7f2ea1f6c7a0a8544ab">More...</a><br /></td></tr>
-<tr class="separator:ac267794307c5a7f2ea1f6c7a0a8544ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d759d7161e622c5c3dc797d40197c3f"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a1d759d7161e622c5c3dc797d40197c3f">Text_GetForeColorAtXY</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x, signed int y)</td></tr>
-<tr class="memdesc:a1d759d7161e622c5c3dc797d40197c3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the foreground color at a specified x, y coord.  <a href="text_8c.html#a1d759d7161e622c5c3dc797d40197c3f">More...</a><br /></td></tr>
-<tr class="separator:a1d759d7161e622c5c3dc797d40197c3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a95d3c047b5f9b94e335a5a10f0addfcb"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a95d3c047b5f9b94e335a5a10f0addfcb">Text_GetBackColorAtXY</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x, signed int y)</td></tr>
-<tr class="memdesc:a95d3c047b5f9b94e335a5a10f0addfcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the background color at a specified x, y coord.  <a href="text_8c.html#a95d3c047b5f9b94e335a5a10f0addfcb">More...</a><br /></td></tr>
-<tr class="separator:a95d3c047b5f9b94e335a5a10f0addfcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade4749c28ea4d92ad8e10746c1b5403b"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#ade4749c28ea4d92ad8e10746c1b5403b">Text_DrawHLine</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x, signed int y, signed int the_line_len, unsigned char the_char, unsigned char fore_color, unsigned char back_color, text_draw_choice the_draw_choice)</td></tr>
-<tr class="memdesc:ade4749c28ea4d92ad8e10746c1b5403b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a horizontal line from specified coords, for n characters, using the specified char and/or attribute.  <a href="text_8c.html#ade4749c28ea4d92ad8e10746c1b5403b">More...</a><br /></td></tr>
-<tr class="separator:ade4749c28ea4d92ad8e10746c1b5403b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9b36eb75ed6bf546cc4bc2d4b788801"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#ab9b36eb75ed6bf546cc4bc2d4b788801">Text_DrawHLineSlow</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x, signed int y, signed int the_line_len, unsigned char the_char, unsigned char fore_color, unsigned char back_color, text_draw_choice the_draw_choice)</td></tr>
-<tr class="memdesc:ab9b36eb75ed6bf546cc4bc2d4b788801"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a horizontal line from specified coords, for n characters, using the specified char and/or attribute This version uses char-by-char functions, so it is very slow.  <a href="text_8c.html#ab9b36eb75ed6bf546cc4bc2d4b788801">More...</a><br /></td></tr>
-<tr class="separator:ab9b36eb75ed6bf546cc4bc2d4b788801"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a889c2b98bd4af2cd3120294d9b9fe9d1"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a889c2b98bd4af2cd3120294d9b9fe9d1">Text_DrawVLine</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x, signed int y, signed int the_line_len, unsigned char the_char, unsigned char fore_color, unsigned char back_color, text_draw_choice the_draw_choice)</td></tr>
-<tr class="memdesc:a889c2b98bd4af2cd3120294d9b9fe9d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a vertical line from specified coords, for n characters, using the specified char and/or attribute.  <a href="text_8c.html#a889c2b98bd4af2cd3120294d9b9fe9d1">More...</a><br /></td></tr>
-<tr class="separator:a889c2b98bd4af2cd3120294d9b9fe9d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7a80ab0647ae6c7c9d6b0efd593e1f4"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#ab7a80ab0647ae6c7c9d6b0efd593e1f4">Text_DrawBoxCoords</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x1, signed int y1, signed int x2, signed int y2, unsigned char the_char, unsigned char fore_color, unsigned char back_color, text_draw_choice the_draw_choice)</td></tr>
-<tr class="memdesc:ab7a80ab0647ae6c7c9d6b0efd593e1f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a basic box based on 2 sets of coords, using the specified char and/or attribute for all cells.  <a href="text_8c.html#ab7a80ab0647ae6c7c9d6b0efd593e1f4">More...</a><br /></td></tr>
-<tr class="separator:ab7a80ab0647ae6c7c9d6b0efd593e1f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2b86b2ed55c45e9907cfc06e154284d"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#ad2b86b2ed55c45e9907cfc06e154284d">Text_DrawBoxCoordsFancy</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x1, signed int y1, signed int x2, signed int y2, unsigned char fore_color, unsigned char back_color)</td></tr>
-<tr class="memdesc:ad2b86b2ed55c45e9907cfc06e154284d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a box based on 2 sets of coords, using the predetermined line and corner "graphics", and the passed colors.  <a href="text_8c.html#ad2b86b2ed55c45e9907cfc06e154284d">More...</a><br /></td></tr>
-<tr class="separator:ad2b86b2ed55c45e9907cfc06e154284d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc6ceb659a9d393d554bdf1d1760972e"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#afc6ceb659a9d393d554bdf1d1760972e">Text_DrawBox</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x, signed int y, signed int width, signed int height, unsigned char the_char, unsigned char fore_color, unsigned char back_color, text_draw_choice the_draw_choice)</td></tr>
-<tr class="memdesc:afc6ceb659a9d393d554bdf1d1760972e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a basic box based on start coords and width/height, using the specified char and/or attribute for all cells.  <a href="text_8c.html#afc6ceb659a9d393d554bdf1d1760972e">More...</a><br /></td></tr>
-<tr class="separator:afc6ceb659a9d393d554bdf1d1760972e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:affd4b487aeaebf462eaefcb23b215575"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#affd4b487aeaebf462eaefcb23b215575">Text_DrawStringAtXY</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x, signed int y, char *the_string, unsigned char fore_color, unsigned char back_color)</td></tr>
-<tr class="memdesc:affd4b487aeaebf462eaefcb23b215575"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a string at a specified x, y coord, also setting the color attributes.  <a href="text_8c.html#affd4b487aeaebf462eaefcb23b215575">More...</a><br /></td></tr>
-<tr class="separator:affd4b487aeaebf462eaefcb23b215575"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90a8f5463fa9827c2b74037c386eae06"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a90a8f5463fa9827c2b74037c386eae06">Text_DrawStringInBox</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, signed int x1, signed int y1, signed int x2, signed int y2, char *the_string, unsigned char fore_color, unsigned char back_color, boolean(*continue_function)(void))</td></tr>
-<tr class="memdesc:a90a8f5463fa9827c2b74037c386eae06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a string in a rectangular block on the screen, with wrap.  <a href="text_8c.html#a90a8f5463fa9827c2b74037c386eae06">More...</a><br /></td></tr>
-<tr class="separator:a90a8f5463fa9827c2b74037c386eae06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a19133257b1f43a70622fb4ab1006a49a"><td class="memItemLeft" align="right" valign="top">signed int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a19133257b1f43a70622fb4ab1006a49a">Text_MeasureStringWidth</a> (<a class="el" href="struct_font.html">Font</a> *the_font, char *the_string, signed int the_len, signed int available_width, signed int fixed_char_width)</td></tr>
-<tr class="memdesc:a19133257b1f43a70622fb4ab1006a49a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates how many characters of the passed string will fit into the passed pixel width.  <a href="text_8c.html#a19133257b1f43a70622fb4ab1006a49a">More...</a><br /></td></tr>
-<tr class="separator:a19133257b1f43a70622fb4ab1006a49a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6e697372027d613124677154f9fdd0a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#ae6e697372027d613124677154f9fdd0a">Text_CopyAttrMemToScreen</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, char *the_source_buffer)</td></tr>
+<tr class="memdesc:ae6e697372027d613124677154f9fdd0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy a full screen of attr from an off-screen buffer.  <a href="text_8c.html#ae6e697372027d613124677154f9fdd0a">More...</a><br /></td></tr>
+<tr class="separator:ae6e697372027d613124677154f9fdd0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fbe8cdd5234aab44a24832ef495cf2f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a4fbe8cdd5234aab44a24832ef495cf2f">Text_CopyAttrMemFromScreen</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, char *the_target_buffer)</td></tr>
+<tr class="memdesc:a4fbe8cdd5234aab44a24832ef495cf2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy a full screen of text attributes to an off-screen buffer.  <a href="text_8c.html#a4fbe8cdd5234aab44a24832ef495cf2f">More...</a><br /></td></tr>
+<tr class="separator:a4fbe8cdd5234aab44a24832ef495cf2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af967a32f15c68e97fadca47505a92fae"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#af967a32f15c68e97fadca47505a92fae">Text_CopyCharMemToScreen</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, char *the_source_buffer)</td></tr>
+<tr class="memdesc:af967a32f15c68e97fadca47505a92fae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy a full screen of text from an off-screen buffer.  <a href="text_8c.html#af967a32f15c68e97fadca47505a92fae">More...</a><br /></td></tr>
+<tr class="separator:af967a32f15c68e97fadca47505a92fae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab66c531d623ae4b99ae8090443011ce0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#ab66c531d623ae4b99ae8090443011ce0">Text_CopyCharMemFromScreen</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, char *the_target_buffer)</td></tr>
+<tr class="memdesc:ab66c531d623ae4b99ae8090443011ce0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy a full screen of text to an off-screen buffer.  <a href="text_8c.html#ab66c531d623ae4b99ae8090443011ce0">More...</a><br /></td></tr>
+<tr class="separator:ab66c531d623ae4b99ae8090443011ce0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6941df9a67118d87ce37324028dc768"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#ad6941df9a67118d87ce37324028dc768">Text_CopyScreen</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, char *the_buffer, bool to_screen, bool for_attr)</td></tr>
+<tr class="memdesc:ad6941df9a67118d87ce37324028dc768"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy a full screen worth of EITHER text or attribute data to OR from an off-screen buffer.  <a href="text_8c.html#ad6941df9a67118d87ce37324028dc768">More...</a><br /></td></tr>
+<tr class="separator:ad6941df9a67118d87ce37324028dc768"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c49ab18265c8794d23f4de779e6257b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a2c49ab18265c8794d23f4de779e6257b">Text_CopyMemBox</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, char *the_buffer, int16_t x1, int16_t y1, int16_t x2, int16_t y2, bool to_screen, bool for_attr)</td></tr>
+<tr class="memdesc:a2c49ab18265c8794d23f4de779e6257b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy a rectangular area of text or attr to or from an off-screen buffer.  <a href="text_8c.html#a2c49ab18265c8794d23f4de779e6257b">More...</a><br /></td></tr>
+<tr class="separator:a2c49ab18265c8794d23f4de779e6257b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9be41a25bf5156e03877c4e405cbc99"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#af9be41a25bf5156e03877c4e405cbc99">Text_FillAttrMem</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, uint8_t the_fill)</td></tr>
+<tr class="memdesc:af9be41a25bf5156e03877c4e405cbc99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill attribute memory for the passed screen.  <a href="text_8c.html#af9be41a25bf5156e03877c4e405cbc99">More...</a><br /></td></tr>
+<tr class="separator:af9be41a25bf5156e03877c4e405cbc99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea120e69c8adf6a6a4ccb3c9ccae1d92"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#aea120e69c8adf6a6a4ccb3c9ccae1d92">Text_FillCharMem</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, unsigned char the_fill)</td></tr>
+<tr class="memdesc:aea120e69c8adf6a6a4ccb3c9ccae1d92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill character memory for the passed screen.  <a href="text_8c.html#aea120e69c8adf6a6a4ccb3c9ccae1d92">More...</a><br /></td></tr>
+<tr class="separator:aea120e69c8adf6a6a4ccb3c9ccae1d92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaeb6615a82ed6bd7cbcad7165f66ac61"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#aaeb6615a82ed6bd7cbcad7165f66ac61">Text_FillBoxSlow</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x1, int16_t y1, int16_t x2, int16_t y2, unsigned char the_char, uint8_t fore_color, uint8_t back_color, text_draw_choice the_draw_choice)</td></tr>
+<tr class="memdesc:aaeb6615a82ed6bd7cbcad7165f66ac61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill character and/or attribute memory for a specific box area This version uses char-by-char functions, so it is very slow.  <a href="text_8c.html#aaeb6615a82ed6bd7cbcad7165f66ac61">More...</a><br /></td></tr>
+<tr class="separator:aaeb6615a82ed6bd7cbcad7165f66ac61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae79e7fa4231330cd37deabe38e5b7614"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#ae79e7fa4231330cd37deabe38e5b7614">Text_FillBox</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x1, int16_t y1, int16_t x2, int16_t y2, unsigned char the_char, uint8_t fore_color, uint8_t back_color)</td></tr>
+<tr class="memdesc:ae79e7fa4231330cd37deabe38e5b7614"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill character and attribute memory for a specific box area.  <a href="text_8c.html#ae79e7fa4231330cd37deabe38e5b7614">More...</a><br /></td></tr>
+<tr class="separator:ae79e7fa4231330cd37deabe38e5b7614"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8dc29f5cdbb89554f3f268d35628e5e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#ae8dc29f5cdbb89554f3f268d35628e5e">Text_FillBoxCharOnly</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x1, int16_t y1, int16_t x2, int16_t y2, unsigned char the_char)</td></tr>
+<tr class="memdesc:ae8dc29f5cdbb89554f3f268d35628e5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill character memory for a specific box area.  <a href="text_8c.html#ae8dc29f5cdbb89554f3f268d35628e5e">More...</a><br /></td></tr>
+<tr class="separator:ae8dc29f5cdbb89554f3f268d35628e5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72c1edf7b3921e76f8a8cd79b524b210"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a72c1edf7b3921e76f8a8cd79b524b210">Text_FillBoxAttrOnly</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t fore_color, uint8_t back_color)</td></tr>
+<tr class="memdesc:a72c1edf7b3921e76f8a8cd79b524b210"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill attribute memory for a specific box area.  <a href="text_8c.html#a72c1edf7b3921e76f8a8cd79b524b210">More...</a><br /></td></tr>
+<tr class="separator:a72c1edf7b3921e76f8a8cd79b524b210"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a764c14eb24842428f448c59fbeb3679c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a764c14eb24842428f448c59fbeb3679c">Text_InvertBox</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x1, int16_t y1, int16_t x2, int16_t y2)</td></tr>
+<tr class="memdesc:a764c14eb24842428f448c59fbeb3679c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invert the colors of a rectangular block.  <a href="text_8c.html#a764c14eb24842428f448c59fbeb3679c">More...</a><br /></td></tr>
+<tr class="separator:a764c14eb24842428f448c59fbeb3679c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a638a21db1ebfdf39b5cd790a716ca9e0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a638a21db1ebfdf39b5cd790a716ca9e0">Text_UpdateFontData</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, char *new_font_data)</td></tr>
+<tr class="memdesc:a638a21db1ebfdf39b5cd790a716ca9e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">replace the current font data with the data at the passed memory buffer  <a href="text_8c.html#a638a21db1ebfdf39b5cd790a716ca9e0">More...</a><br /></td></tr>
+<tr class="separator:a638a21db1ebfdf39b5cd790a716ca9e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ff658ed17d7c2204d62a71db1e86c58"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a0ff658ed17d7c2204d62a71db1e86c58">Text_ShowFontChars</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t y)</td></tr>
+<tr class="memdesc:a0ff658ed17d7c2204d62a71db1e86c58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test function to display all 256 font characters.  <a href="text_8c.html#a0ff658ed17d7c2204d62a71db1e86c58">More...</a><br /></td></tr>
+<tr class="separator:a0ff658ed17d7c2204d62a71db1e86c58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad51b13b8021357009ce3c0f0c45a641b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#ad51b13b8021357009ce3c0f0c45a641b">Text_SetCharAtXY</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x, int16_t y, unsigned char the_char)</td></tr>
+<tr class="memdesc:ad51b13b8021357009ce3c0f0c45a641b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a char at a specified x, y coord.  <a href="text_8c.html#ad51b13b8021357009ce3c0f0c45a641b">More...</a><br /></td></tr>
+<tr class="separator:ad51b13b8021357009ce3c0f0c45a641b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47a2d8c540e81bd44642eeaa8c0b0982"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a47a2d8c540e81bd44642eeaa8c0b0982">Text_SetAttrAtXY</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x, int16_t y, uint8_t fore_color, uint8_t back_color)</td></tr>
+<tr class="memdesc:a47a2d8c540e81bd44642eeaa8c0b0982"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the attribute value at a specified x, y coord.  <a href="text_8c.html#a47a2d8c540e81bd44642eeaa8c0b0982">More...</a><br /></td></tr>
+<tr class="separator:a47a2d8c540e81bd44642eeaa8c0b0982"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a113646057a0d8ef44e1a3136f32e7053"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a113646057a0d8ef44e1a3136f32e7053">Text_SetCharAndColorAtXY</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x, int16_t y, unsigned char the_char, uint8_t fore_color, uint8_t back_color)</td></tr>
+<tr class="memdesc:a113646057a0d8ef44e1a3136f32e7053"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a char at a specified x, y coord, also setting the color attributes.  <a href="text_8c.html#a113646057a0d8ef44e1a3136f32e7053">More...</a><br /></td></tr>
+<tr class="separator:a113646057a0d8ef44e1a3136f32e7053"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a352d2ed2670f9c8a0e62b610be114b72"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a352d2ed2670f9c8a0e62b610be114b72">Text_GetCharAtXY</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x, int16_t y)</td></tr>
+<tr class="memdesc:a352d2ed2670f9c8a0e62b610be114b72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the char at a specified x, y coord.  <a href="text_8c.html#a352d2ed2670f9c8a0e62b610be114b72">More...</a><br /></td></tr>
+<tr class="separator:a352d2ed2670f9c8a0e62b610be114b72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a2c50d52c0e731fee5bfec655554683"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a9a2c50d52c0e731fee5bfec655554683">Text_GetAttrAtXY</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x, int16_t y)</td></tr>
+<tr class="memdesc:a9a2c50d52c0e731fee5bfec655554683"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the attribute value at a specified x, y coord.  <a href="text_8c.html#a9a2c50d52c0e731fee5bfec655554683">More...</a><br /></td></tr>
+<tr class="separator:a9a2c50d52c0e731fee5bfec655554683"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac59448e98b44e547951bf5cc77fbc4d3"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#ac59448e98b44e547951bf5cc77fbc4d3">Text_GetForeColorAtXY</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x, int16_t y)</td></tr>
+<tr class="memdesc:ac59448e98b44e547951bf5cc77fbc4d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the foreground color at a specified x, y coord.  <a href="text_8c.html#ac59448e98b44e547951bf5cc77fbc4d3">More...</a><br /></td></tr>
+<tr class="separator:ac59448e98b44e547951bf5cc77fbc4d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82ec36b01253bdf4d78684bd603d6c28"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a82ec36b01253bdf4d78684bd603d6c28">Text_GetBackColorAtXY</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x, int16_t y)</td></tr>
+<tr class="memdesc:a82ec36b01253bdf4d78684bd603d6c28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the background color at a specified x, y coord.  <a href="text_8c.html#a82ec36b01253bdf4d78684bd603d6c28">More...</a><br /></td></tr>
+<tr class="separator:a82ec36b01253bdf4d78684bd603d6c28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a332c0cced0dd968e975eeb6a0345e4bd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a332c0cced0dd968e975eeb6a0345e4bd">Text_DrawHLine</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x, int16_t y, int16_t the_line_len, unsigned char the_char, uint8_t fore_color, uint8_t back_color, text_draw_choice the_draw_choice)</td></tr>
+<tr class="memdesc:a332c0cced0dd968e975eeb6a0345e4bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a horizontal line from specified coords, for n characters, using the specified char and/or attribute.  <a href="text_8c.html#a332c0cced0dd968e975eeb6a0345e4bd">More...</a><br /></td></tr>
+<tr class="separator:a332c0cced0dd968e975eeb6a0345e4bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55295e628f519a9e34bf307443c5f5fd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a55295e628f519a9e34bf307443c5f5fd">Text_DrawHLineSlow</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x, int16_t y, int16_t the_line_len, unsigned char the_char, uint8_t fore_color, uint8_t back_color, text_draw_choice the_draw_choice)</td></tr>
+<tr class="memdesc:a55295e628f519a9e34bf307443c5f5fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a horizontal line from specified coords, for n characters, using the specified char and/or attribute This version uses char-by-char functions, so it is very slow.  <a href="text_8c.html#a55295e628f519a9e34bf307443c5f5fd">More...</a><br /></td></tr>
+<tr class="separator:a55295e628f519a9e34bf307443c5f5fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4641c6472157b8bce8efde6cc9bc9337"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a4641c6472157b8bce8efde6cc9bc9337">Text_DrawVLine</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x, int16_t y, int16_t the_line_len, unsigned char the_char, uint8_t fore_color, uint8_t back_color, text_draw_choice the_draw_choice)</td></tr>
+<tr class="memdesc:a4641c6472157b8bce8efde6cc9bc9337"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a vertical line from specified coords, for n characters, using the specified char and/or attribute.  <a href="text_8c.html#a4641c6472157b8bce8efde6cc9bc9337">More...</a><br /></td></tr>
+<tr class="separator:a4641c6472157b8bce8efde6cc9bc9337"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d68419edf74532511d77634d50126e8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a2d68419edf74532511d77634d50126e8">Text_DrawBoxCoords</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x1, int16_t y1, int16_t x2, int16_t y2, unsigned char the_char, uint8_t fore_color, uint8_t back_color, text_draw_choice the_draw_choice)</td></tr>
+<tr class="memdesc:a2d68419edf74532511d77634d50126e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a basic box based on 2 sets of coords, using the specified char and/or attribute for all cells.  <a href="text_8c.html#a2d68419edf74532511d77634d50126e8">More...</a><br /></td></tr>
+<tr class="separator:a2d68419edf74532511d77634d50126e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bbec136e92df0a230034f1d7e3d1ed7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a4bbec136e92df0a230034f1d7e3d1ed7">Text_DrawBoxCoordsFancy</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t fore_color, uint8_t back_color)</td></tr>
+<tr class="memdesc:a4bbec136e92df0a230034f1d7e3d1ed7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a box based on 2 sets of coords, using the predetermined line and corner "graphics", and the passed colors.  <a href="text_8c.html#a4bbec136e92df0a230034f1d7e3d1ed7">More...</a><br /></td></tr>
+<tr class="separator:a4bbec136e92df0a230034f1d7e3d1ed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6c65819e9f668873937e41e0568428c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#ad6c65819e9f668873937e41e0568428c">Text_DrawBox</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x, int16_t y, int16_t width, int16_t height, unsigned char the_char, uint8_t fore_color, uint8_t back_color, text_draw_choice the_draw_choice)</td></tr>
+<tr class="memdesc:ad6c65819e9f668873937e41e0568428c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a basic box based on start coords and width/height, using the specified char and/or attribute for all cells.  <a href="text_8c.html#ad6c65819e9f668873937e41e0568428c">More...</a><br /></td></tr>
+<tr class="separator:ad6c65819e9f668873937e41e0568428c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a102aa3fec15d7a43af197462c1c84720"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a102aa3fec15d7a43af197462c1c84720">Text_DrawStringAtXY</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x, int16_t y, char *the_string, uint8_t fore_color, uint8_t back_color)</td></tr>
+<tr class="memdesc:a102aa3fec15d7a43af197462c1c84720"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a string at a specified x, y coord, also setting the color attributes.  <a href="text_8c.html#a102aa3fec15d7a43af197462c1c84720">More...</a><br /></td></tr>
+<tr class="separator:a102aa3fec15d7a43af197462c1c84720"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a044f613306fe5b55043d623d3f7f91b5"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#a044f613306fe5b55043d623d3f7f91b5">Text_DrawStringInBox</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, int16_t x1, int16_t y1, int16_t x2, int16_t y2, char *the_string, uint8_t fore_color, uint8_t back_color, bool(*continue_function)(void))</td></tr>
+<tr class="memdesc:a044f613306fe5b55043d623d3f7f91b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a string in a rectangular block on the screen, with wrap.  <a href="text_8c.html#a044f613306fe5b55043d623d3f7f91b5">More...</a><br /></td></tr>
+<tr class="separator:a044f613306fe5b55043d623d3f7f91b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5209af72401dd7f329d37317aab0361"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8c.html#ae5209af72401dd7f329d37317aab0361">Text_MeasureStringWidth</a> (<a class="el" href="struct_font.html">Font</a> *the_font, char *the_string, int16_t num_chars, int16_t available_width, int16_t fixed_char_width, int16_t *measured_width)</td></tr>
+<tr class="memdesc:ae5209af72401dd7f329d37317aab0361"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates how many characters of the passed string will fit into the passed pixel width.  <a href="text_8c.html#ae5209af72401dd7f329d37317aab0361">More...</a><br /></td></tr>
+<tr class="separator:ae5209af72401dd7f329d37317aab0361"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a044e0193af7b1b25a0fc0d9e19bc3f26" name="a044e0193af7b1b25a0fc0d9e19bc3f26"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a044e0193af7b1b25a0fc0d9e19bc3f26">&#9670;&nbsp;</a></span>Text_CopyAttrMemFromScreen()</h2>
+<a id="a4fbe8cdd5234aab44a24832ef495cf2f" name="a4fbe8cdd5234aab44a24832ef495cf2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fbe8cdd5234aab44a24832ef495cf2f">&#9670;&nbsp;</a></span>Text_CopyAttrMemFromScreen()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_CopyAttrMemFromScreen </td>
+          <td class="memname">bool Text_CopyAttrMemFromScreen </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -241,14 +242,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aecd882f2e7e6588058f32a6e3d222990" name="aecd882f2e7e6588058f32a6e3d222990"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aecd882f2e7e6588058f32a6e3d222990">&#9670;&nbsp;</a></span>Text_CopyAttrMemToScreen()</h2>
+<a id="ae6e697372027d613124677154f9fdd0a" name="ae6e697372027d613124677154f9fdd0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6e697372027d613124677154f9fdd0a">&#9670;&nbsp;</a></span>Text_CopyAttrMemToScreen()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_CopyAttrMemToScreen </td>
+          <td class="memname">bool Text_CopyAttrMemToScreen </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -279,14 +280,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a2a8bb3cc759f4ca2993aa189e0b5fa54" name="a2a8bb3cc759f4ca2993aa189e0b5fa54"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2a8bb3cc759f4ca2993aa189e0b5fa54">&#9670;&nbsp;</a></span>Text_CopyCharMemFromScreen()</h2>
+<a id="ab66c531d623ae4b99ae8090443011ce0" name="ab66c531d623ae4b99ae8090443011ce0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab66c531d623ae4b99ae8090443011ce0">&#9670;&nbsp;</a></span>Text_CopyCharMemFromScreen()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_CopyCharMemFromScreen </td>
+          <td class="memname">bool Text_CopyCharMemFromScreen </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -316,14 +317,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a8a0ad2a2f89acd432588a4391a87b2c8" name="a8a0ad2a2f89acd432588a4391a87b2c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a0ad2a2f89acd432588a4391a87b2c8">&#9670;&nbsp;</a></span>Text_CopyCharMemToScreen()</h2>
+<a id="af967a32f15c68e97fadca47505a92fae" name="af967a32f15c68e97fadca47505a92fae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af967a32f15c68e97fadca47505a92fae">&#9670;&nbsp;</a></span>Text_CopyCharMemToScreen()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_CopyCharMemToScreen </td>
+          <td class="memname">bool Text_CopyCharMemToScreen </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -353,14 +354,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a3c18c1597bd02befc018e38e65c7261a" name="a3c18c1597bd02befc018e38e65c7261a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3c18c1597bd02befc018e38e65c7261a">&#9670;&nbsp;</a></span>Text_CopyMemBox()</h2>
+<a id="a2c49ab18265c8794d23f4de779e6257b" name="a2c49ab18265c8794d23f4de779e6257b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c49ab18265c8794d23f4de779e6257b">&#9670;&nbsp;</a></span>Text_CopyMemBox()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_CopyMemBox </td>
+          <td class="memname">bool Text_CopyMemBox </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -374,37 +375,37 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">boolean&#160;</td>
+          <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>to_screen</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">boolean&#160;</td>
+          <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>for_attr</em>&#160;</td>
         </tr>
         <tr>
@@ -428,14 +429,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a0b8a67c8ea7a826cd9fac9d8c067509e" name="a0b8a67c8ea7a826cd9fac9d8c067509e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b8a67c8ea7a826cd9fac9d8c067509e">&#9670;&nbsp;</a></span>Text_CopyScreen()</h2>
+<a id="ad6941df9a67118d87ce37324028dc768" name="ad6941df9a67118d87ce37324028dc768"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6941df9a67118d87ce37324028dc768">&#9670;&nbsp;</a></span>Text_CopyScreen()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_CopyScreen </td>
+          <td class="memname">bool Text_CopyScreen </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -449,13 +450,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">boolean&#160;</td>
+          <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>to_screen</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">boolean&#160;</td>
+          <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>for_attr</em>&#160;</td>
         </tr>
         <tr>
@@ -479,14 +480,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="afc6ceb659a9d393d554bdf1d1760972e" name="afc6ceb659a9d393d554bdf1d1760972e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc6ceb659a9d393d554bdf1d1760972e">&#9670;&nbsp;</a></span>Text_DrawBox()</h2>
+<a id="ad6c65819e9f668873937e41e0568428c" name="ad6c65819e9f668873937e41e0568428c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6c65819e9f668873937e41e0568428c">&#9670;&nbsp;</a></span>Text_DrawBox()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_DrawBox </td>
+          <td class="memname">bool Text_DrawBox </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -494,25 +495,25 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>width</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>height</em>, </td>
         </tr>
         <tr>
@@ -524,13 +525,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>fore_color</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>back_color</em>, </td>
         </tr>
         <tr>
@@ -562,14 +563,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab7a80ab0647ae6c7c9d6b0efd593e1f4" name="ab7a80ab0647ae6c7c9d6b0efd593e1f4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab7a80ab0647ae6c7c9d6b0efd593e1f4">&#9670;&nbsp;</a></span>Text_DrawBoxCoords()</h2>
+<a id="a2d68419edf74532511d77634d50126e8" name="a2d68419edf74532511d77634d50126e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d68419edf74532511d77634d50126e8">&#9670;&nbsp;</a></span>Text_DrawBoxCoords()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_DrawBoxCoords </td>
+          <td class="memname">bool Text_DrawBoxCoords </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -577,25 +578,25 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y2</em>, </td>
         </tr>
         <tr>
@@ -607,13 +608,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>fore_color</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>back_color</em>, </td>
         </tr>
         <tr>
@@ -643,14 +644,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ad2b86b2ed55c45e9907cfc06e154284d" name="ad2b86b2ed55c45e9907cfc06e154284d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2b86b2ed55c45e9907cfc06e154284d">&#9670;&nbsp;</a></span>Text_DrawBoxCoordsFancy()</h2>
+<a id="a4bbec136e92df0a230034f1d7e3d1ed7" name="a4bbec136e92df0a230034f1d7e3d1ed7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bbec136e92df0a230034f1d7e3d1ed7">&#9670;&nbsp;</a></span>Text_DrawBoxCoordsFancy()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_DrawBoxCoordsFancy </td>
+          <td class="memname">bool Text_DrawBoxCoordsFancy </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -658,37 +659,37 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>fore_color</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>back_color</em>&#160;</td>
         </tr>
         <tr>
@@ -711,14 +712,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ade4749c28ea4d92ad8e10746c1b5403b" name="ade4749c28ea4d92ad8e10746c1b5403b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade4749c28ea4d92ad8e10746c1b5403b">&#9670;&nbsp;</a></span>Text_DrawHLine()</h2>
+<a id="a332c0cced0dd968e975eeb6a0345e4bd" name="a332c0cced0dd968e975eeb6a0345e4bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a332c0cced0dd968e975eeb6a0345e4bd">&#9670;&nbsp;</a></span>Text_DrawHLine()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_DrawHLine </td>
+          <td class="memname">bool Text_DrawHLine </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -726,19 +727,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>the_line_len</em>, </td>
         </tr>
         <tr>
@@ -750,13 +751,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>fore_color</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>back_color</em>, </td>
         </tr>
         <tr>
@@ -787,14 +788,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab9b36eb75ed6bf546cc4bc2d4b788801" name="ab9b36eb75ed6bf546cc4bc2d4b788801"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab9b36eb75ed6bf546cc4bc2d4b788801">&#9670;&nbsp;</a></span>Text_DrawHLineSlow()</h2>
+<a id="a55295e628f519a9e34bf307443c5f5fd" name="a55295e628f519a9e34bf307443c5f5fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55295e628f519a9e34bf307443c5f5fd">&#9670;&nbsp;</a></span>Text_DrawHLineSlow()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_DrawHLineSlow </td>
+          <td class="memname">bool Text_DrawHLineSlow </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -802,19 +803,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>the_line_len</em>, </td>
         </tr>
         <tr>
@@ -826,13 +827,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>fore_color</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>back_color</em>, </td>
         </tr>
         <tr>
@@ -863,14 +864,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="affd4b487aeaebf462eaefcb23b215575" name="affd4b487aeaebf462eaefcb23b215575"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#affd4b487aeaebf462eaefcb23b215575">&#9670;&nbsp;</a></span>Text_DrawStringAtXY()</h2>
+<a id="a102aa3fec15d7a43af197462c1c84720" name="a102aa3fec15d7a43af197462c1c84720"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a102aa3fec15d7a43af197462c1c84720">&#9670;&nbsp;</a></span>Text_DrawStringAtXY()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_DrawStringAtXY </td>
+          <td class="memname">bool Text_DrawStringAtXY </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -878,13 +879,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
@@ -896,13 +897,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>fore_color</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>back_color</em>&#160;</td>
         </tr>
         <tr>
@@ -926,8 +927,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a90a8f5463fa9827c2b74037c386eae06" name="a90a8f5463fa9827c2b74037c386eae06"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a90a8f5463fa9827c2b74037c386eae06">&#9670;&nbsp;</a></span>Text_DrawStringInBox()</h2>
+<a id="a044f613306fe5b55043d623d3f7f91b5" name="a044f613306fe5b55043d623d3f7f91b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a044f613306fe5b55043d623d3f7f91b5">&#9670;&nbsp;</a></span>Text_DrawStringInBox()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -941,25 +942,25 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y2</em>, </td>
         </tr>
         <tr>
@@ -971,19 +972,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>fore_color</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>back_color</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">boolean(*)(void)&#160;</td>
+          <td class="paramtype">bool(*)(void)&#160;</td>
           <td class="paramname"><em>continue_function</em>&#160;</td>
         </tr>
         <tr>
@@ -1008,14 +1009,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a889c2b98bd4af2cd3120294d9b9fe9d1" name="a889c2b98bd4af2cd3120294d9b9fe9d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a889c2b98bd4af2cd3120294d9b9fe9d1">&#9670;&nbsp;</a></span>Text_DrawVLine()</h2>
+<a id="a4641c6472157b8bce8efde6cc9bc9337" name="a4641c6472157b8bce8efde6cc9bc9337"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4641c6472157b8bce8efde6cc9bc9337">&#9670;&nbsp;</a></span>Text_DrawVLine()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_DrawVLine </td>
+          <td class="memname">bool Text_DrawVLine </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -1023,19 +1024,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>the_line_len</em>, </td>
         </tr>
         <tr>
@@ -1047,13 +1048,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>fore_color</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>back_color</em>, </td>
         </tr>
         <tr>
@@ -1084,14 +1085,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="afb479ab86cf3cf6653e32934826ae76b" name="afb479ab86cf3cf6653e32934826ae76b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afb479ab86cf3cf6653e32934826ae76b">&#9670;&nbsp;</a></span>Text_FillAttrMem()</h2>
+<a id="af9be41a25bf5156e03877c4e405cbc99" name="af9be41a25bf5156e03877c4e405cbc99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9be41a25bf5156e03877c4e405cbc99">&#9670;&nbsp;</a></span>Text_FillAttrMem()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_FillAttrMem </td>
+          <td class="memname">bool Text_FillAttrMem </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -1099,7 +1100,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>the_fill</em>&#160;</td>
         </tr>
         <tr>
@@ -1121,14 +1122,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a2568f9d40fa7250ee1620d5c924a7123" name="a2568f9d40fa7250ee1620d5c924a7123"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2568f9d40fa7250ee1620d5c924a7123">&#9670;&nbsp;</a></span>Text_FillBox()</h2>
+<a id="ae79e7fa4231330cd37deabe38e5b7614" name="ae79e7fa4231330cd37deabe38e5b7614"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae79e7fa4231330cd37deabe38e5b7614">&#9670;&nbsp;</a></span>Text_FillBox()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_FillBox </td>
+          <td class="memname">bool Text_FillBox </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -1136,25 +1137,25 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y2</em>, </td>
         </tr>
         <tr>
@@ -1166,13 +1167,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>fore_color</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>back_color</em>&#160;</td>
         </tr>
         <tr>
@@ -1195,14 +1196,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aa7dbe294d0a6f49f394ffb5027f6bf3c" name="aa7dbe294d0a6f49f394ffb5027f6bf3c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa7dbe294d0a6f49f394ffb5027f6bf3c">&#9670;&nbsp;</a></span>Text_FillBoxAttrOnly()</h2>
+<a id="a72c1edf7b3921e76f8a8cd79b524b210" name="a72c1edf7b3921e76f8a8cd79b524b210"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72c1edf7b3921e76f8a8cd79b524b210">&#9670;&nbsp;</a></span>Text_FillBoxAttrOnly()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_FillBoxAttrOnly </td>
+          <td class="memname">bool Text_FillBoxAttrOnly </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -1210,37 +1211,37 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>fore_color</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>back_color</em>&#160;</td>
         </tr>
         <tr>
@@ -1263,14 +1264,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a513ce6307e00528e3da914897864769c" name="a513ce6307e00528e3da914897864769c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a513ce6307e00528e3da914897864769c">&#9670;&nbsp;</a></span>Text_FillBoxCharOnly()</h2>
+<a id="ae8dc29f5cdbb89554f3f268d35628e5e" name="ae8dc29f5cdbb89554f3f268d35628e5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8dc29f5cdbb89554f3f268d35628e5e">&#9670;&nbsp;</a></span>Text_FillBoxCharOnly()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_FillBoxCharOnly </td>
+          <td class="memname">bool Text_FillBoxCharOnly </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -1278,25 +1279,25 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y2</em>, </td>
         </tr>
         <tr>
@@ -1318,14 +1319,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a39270674913c5aeecf568843e9b21dd6" name="a39270674913c5aeecf568843e9b21dd6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a39270674913c5aeecf568843e9b21dd6">&#9670;&nbsp;</a></span>Text_FillBoxSlow()</h2>
+<a id="aaeb6615a82ed6bd7cbcad7165f66ac61" name="aaeb6615a82ed6bd7cbcad7165f66ac61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaeb6615a82ed6bd7cbcad7165f66ac61">&#9670;&nbsp;</a></span>Text_FillBoxSlow()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_FillBoxSlow </td>
+          <td class="memname">bool Text_FillBoxSlow </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -1333,25 +1334,25 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y2</em>, </td>
         </tr>
         <tr>
@@ -1363,13 +1364,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>fore_color</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>back_color</em>, </td>
         </tr>
         <tr>
@@ -1399,14 +1400,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ad98be605a84f5409640bff05705aad0b" name="ad98be605a84f5409640bff05705aad0b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad98be605a84f5409640bff05705aad0b">&#9670;&nbsp;</a></span>Text_FillCharMem()</h2>
+<a id="aea120e69c8adf6a6a4ccb3c9ccae1d92" name="aea120e69c8adf6a6a4ccb3c9ccae1d92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea120e69c8adf6a6a4ccb3c9ccae1d92">&#9670;&nbsp;</a></span>Text_FillCharMem()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_FillCharMem </td>
+          <td class="memname">bool Text_FillCharMem </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -1436,14 +1437,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac267794307c5a7f2ea1f6c7a0a8544ab" name="ac267794307c5a7f2ea1f6c7a0a8544ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac267794307c5a7f2ea1f6c7a0a8544ab">&#9670;&nbsp;</a></span>Text_GetAttrAtXY()</h2>
+<a id="a9a2c50d52c0e731fee5bfec655554683" name="a9a2c50d52c0e731fee5bfec655554683"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a2c50d52c0e731fee5bfec655554683">&#9670;&nbsp;</a></span>Text_GetAttrAtXY()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned char Text_GetAttrAtXY </td>
+          <td class="memname">uint8_t Text_GetAttrAtXY </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -1451,13 +1452,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>&#160;</td>
         </tr>
         <tr>
@@ -1473,14 +1474,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a95d3c047b5f9b94e335a5a10f0addfcb" name="a95d3c047b5f9b94e335a5a10f0addfcb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a95d3c047b5f9b94e335a5a10f0addfcb">&#9670;&nbsp;</a></span>Text_GetBackColorAtXY()</h2>
+<a id="a82ec36b01253bdf4d78684bd603d6c28" name="a82ec36b01253bdf4d78684bd603d6c28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82ec36b01253bdf4d78684bd603d6c28">&#9670;&nbsp;</a></span>Text_GetBackColorAtXY()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned char Text_GetBackColorAtXY </td>
+          <td class="memname">uint8_t Text_GetBackColorAtXY </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -1488,13 +1489,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>&#160;</td>
         </tr>
         <tr>
@@ -1510,8 +1511,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a60951746e733a1c3a42342154ebd9925" name="a60951746e733a1c3a42342154ebd9925"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60951746e733a1c3a42342154ebd9925">&#9670;&nbsp;</a></span>Text_GetCharAtXY()</h2>
+<a id="a352d2ed2670f9c8a0e62b610be114b72" name="a352d2ed2670f9c8a0e62b610be114b72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a352d2ed2670f9c8a0e62b610be114b72">&#9670;&nbsp;</a></span>Text_GetCharAtXY()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1525,13 +1526,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>&#160;</td>
         </tr>
         <tr>
@@ -1547,14 +1548,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a1d759d7161e622c5c3dc797d40197c3f" name="a1d759d7161e622c5c3dc797d40197c3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1d759d7161e622c5c3dc797d40197c3f">&#9670;&nbsp;</a></span>Text_GetForeColorAtXY()</h2>
+<a id="ac59448e98b44e547951bf5cc77fbc4d3" name="ac59448e98b44e547951bf5cc77fbc4d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac59448e98b44e547951bf5cc77fbc4d3">&#9670;&nbsp;</a></span>Text_GetForeColorAtXY()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned char Text_GetForeColorAtXY </td>
+          <td class="memname">uint8_t Text_GetForeColorAtXY </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -1562,13 +1563,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>&#160;</td>
         </tr>
         <tr>
@@ -1584,14 +1585,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a2da6f5be162e3c038637d18363186998" name="a2da6f5be162e3c038637d18363186998"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2da6f5be162e3c038637d18363186998">&#9670;&nbsp;</a></span>Text_InvertBox()</h2>
+<a id="a764c14eb24842428f448c59fbeb3679c" name="a764c14eb24842428f448c59fbeb3679c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a764c14eb24842428f448c59fbeb3679c">&#9670;&nbsp;</a></span>Text_InvertBox()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_InvertBox </td>
+          <td class="memname">bool Text_InvertBox </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -1599,25 +1600,25 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y2</em>&#160;</td>
         </tr>
         <tr>
@@ -1633,14 +1634,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a19133257b1f43a70622fb4ab1006a49a" name="a19133257b1f43a70622fb4ab1006a49a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a19133257b1f43a70622fb4ab1006a49a">&#9670;&nbsp;</a></span>Text_MeasureStringWidth()</h2>
+<a id="ae5209af72401dd7f329d37317aab0361" name="ae5209af72401dd7f329d37317aab0361"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5209af72401dd7f329d37317aab0361">&#9670;&nbsp;</a></span>Text_MeasureStringWidth()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">signed int Text_MeasureStringWidth </td>
+          <td class="memname">int16_t Text_MeasureStringWidth </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_font.html">Font</a> *&#160;</td>
           <td class="paramname"><em>the_font</em>, </td>
@@ -1654,20 +1655,26 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
-          <td class="paramname"><em>the_len</em>, </td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>num_chars</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>available_width</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
-          <td class="paramname"><em>fixed_char_width</em>&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>fixed_char_width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t *&#160;</td>
+          <td class="paramname"><em>measured_width</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1682,9 +1689,10 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">the_font</td><td>this is for consistency with the graphical font code. Pass a NULL here, the result will not be used. </td></tr>
     <tr><td class="paramname">the_string</td><td>the null-terminated string to be measured. </td></tr>
-    <tr><td class="paramname">the_len</td><td>the length of the passed string. If the entire string fits, this len will be returned. </td></tr>
+    <tr><td class="paramname">num_chars</td><td>either the length of the passed string, or as much of the string as should be displayed. Passing GEN_NO_STRLEN_CAP will mean it will attempt to measure the entire string. </td></tr>
     <tr><td class="paramname">available_width</td><td>the width, in pixels, of the space the string is to be measured against. </td></tr>
     <tr><td class="paramname">fixed_char_width</td><td>the width, in pixels, of one character. </td></tr>
+    <tr><td class="paramname">measured_width</td><td>the number of pixels needed to display the characters that fit into the available_width. If the entire string fit, this is the width in pixels of that string. If only X characters fit, it is the pixel width of those X characters. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1692,14 +1700,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a6141a2b6b2c374f204e24d36449b9da5" name="a6141a2b6b2c374f204e24d36449b9da5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6141a2b6b2c374f204e24d36449b9da5">&#9670;&nbsp;</a></span>Text_SetAttrAtXY()</h2>
+<a id="a47a2d8c540e81bd44642eeaa8c0b0982" name="a47a2d8c540e81bd44642eeaa8c0b0982"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47a2d8c540e81bd44642eeaa8c0b0982">&#9670;&nbsp;</a></span>Text_SetAttrAtXY()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_SetAttrAtXY </td>
+          <td class="memname">bool Text_SetAttrAtXY </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -1707,25 +1715,25 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>fore_color</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>back_color</em>&#160;</td>
         </tr>
         <tr>
@@ -1748,14 +1756,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ad9c44311118dab960fda2a822ab13c4f" name="ad9c44311118dab960fda2a822ab13c4f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad9c44311118dab960fda2a822ab13c4f">&#9670;&nbsp;</a></span>Text_SetCharAndColorAtXY()</h2>
+<a id="a113646057a0d8ef44e1a3136f32e7053" name="a113646057a0d8ef44e1a3136f32e7053"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a113646057a0d8ef44e1a3136f32e7053">&#9670;&nbsp;</a></span>Text_SetCharAndColorAtXY()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_SetCharAndColorAtXY </td>
+          <td class="memname">bool Text_SetCharAndColorAtXY </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -1763,13 +1771,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
@@ -1781,13 +1789,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>fore_color</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>back_color</em>&#160;</td>
         </tr>
         <tr>
@@ -1810,14 +1818,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a46155f1f57562c20ef5c1debe26b27c0" name="a46155f1f57562c20ef5c1debe26b27c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a46155f1f57562c20ef5c1debe26b27c0">&#9670;&nbsp;</a></span>Text_SetCharAtXY()</h2>
+<a id="ad51b13b8021357009ce3c0f0c45a641b" name="ad51b13b8021357009ce3c0f0c45a641b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad51b13b8021357009ce3c0f0c45a641b">&#9670;&nbsp;</a></span>Text_SetCharAtXY()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_SetCharAtXY </td>
+          <td class="memname">bool Text_SetCharAtXY </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -1825,13 +1833,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">signed int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
@@ -1853,14 +1861,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a580eb506a1374b69a1437c85dad6e24b" name="a580eb506a1374b69a1437c85dad6e24b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a580eb506a1374b69a1437c85dad6e24b">&#9670;&nbsp;</a></span>Text_ShowFontChars()</h2>
+<a id="a0ff658ed17d7c2204d62a71db1e86c58" name="a0ff658ed17d7c2204d62a71db1e86c58"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ff658ed17d7c2204d62a71db1e86c58">&#9670;&nbsp;</a></span>Text_ShowFontChars()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_ShowFontChars </td>
+          <td class="memname">bool Text_ShowFontChars </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>
@@ -1868,7 +1876,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>y</em>&#160;</td>
         </tr>
         <tr>
@@ -1890,14 +1898,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a44cea628ddcee0ac1a8a75961bef0072" name="a44cea628ddcee0ac1a8a75961bef0072"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a44cea628ddcee0ac1a8a75961bef0072">&#9670;&nbsp;</a></span>Text_UpdateFontData()</h2>
+<a id="a638a21db1ebfdf39b5cd790a716ca9e0" name="a638a21db1ebfdf39b5cd790a716ca9e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a638a21db1ebfdf39b5cd790a716ca9e0">&#9670;&nbsp;</a></span>Text_UpdateFontData()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean Text_UpdateFontData </td>
+          <td class="memname">bool Text_UpdateFontData </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
           <td class="paramname"><em>the_screen</em>, </td>

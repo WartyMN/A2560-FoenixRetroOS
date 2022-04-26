@@ -253,7 +253,7 @@ error:
 // frees all allocated memory associated with the passed object, and the object itself
 bool EventManager_Destroy(EventManager** the_event_manager)
 {
-	int		i;
+	int16_t	i;
 	
 	if (*the_event_manager == NULL)
 	{
