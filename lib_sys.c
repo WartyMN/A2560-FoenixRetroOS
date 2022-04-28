@@ -848,6 +848,29 @@ bool Sys_SetVideoMode(Screen* the_screen, screen_resolution new_mode)
 }
 
 
+//! Enable or disable the hardware cursor in text mode, for the specified screen
+//! @param	the_screen: valid pointer to the target screen to operate on
+//! @param enable_it: If true, turns the hardware blinking cursor on. If false, hides the hardware cursor;
+bool Sys_EnableTextModeCursor(System* the_system, Screen* the_screen, bool enable_it)
+{
+	if (the_screen == NULL)
+	{
+		LOG_ERR(("%s %d: passed screen was NULL", __func__, __LINE__));
+		return false;
+	}
+
+	if (enable_it)
+	{
+		R32(the_screen->vicky_ + CURSOR_CTRL_OFFSET_L) = 1;
+	}
+	else
+	{
+		R32(the_screen->vicky_ + CURSOR_CTRL_OFFSET_L) = 0;
+	}
+	
+	return true;
+}
+
 
 
 

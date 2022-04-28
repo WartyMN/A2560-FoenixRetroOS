@@ -74,6 +74,8 @@
 #define BITMAP_L1_CTRL_L			0x42		//!> for all VICKYs, the (long) offset from the VICKY control register to the bitmap layer1 control register (background layer)		
 #define BITMAP_L1_VRAM_ADDR_L		0x43		//!> for all VICKYs, the (long) offset from the VICKY control register to the bitmap layer1 VRAM address pointer)		
 
+#define CURSOR_CTRL_OFFSET_B		0x10		//!> for all VICKYs, the byte offset from the VICKY control register to the cursor control register		
+
 #define GRAPHICS_MODE_MASK		0xFFFFFF00	//!> for all VICKYs, the mask for the system control register that holds the graphics/bitmap/text/sprite mode bits
 #define GRAPHICS_MODE_TEXT		0x01	// 0b00000001	Enable the Text Mode
 #define GRAPHICS_MODE_TEXT_OVER	0x02	// 0b00000010	Enable the Overlay of the text mode on top of Graphic Mode (the Background Color is ignored)

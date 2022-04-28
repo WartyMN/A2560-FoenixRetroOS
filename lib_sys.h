@@ -139,10 +139,12 @@ bool Sys_InitSystem(void);
 bool Sys_AutoConfigure(System* the_system);
 
 //! Detect the current screen mode/resolution, and set # of columns, rows, H pixels, V pixels, accordingly
+//! @param	the_screen: valid pointer to the target screen to operate on
 //! @return	returns false on any error/invalid input.
 bool Sys_DetectScreenSize(Screen* the_screen);
 
 //! Change video mode to the one passed.
+//! @param	the_screen: valid pointer to the target screen to operate on
 //! @param	new_mode: One of the enumerated screen_resolution values. Must correspond to a valid VICKY video mode for the host machine. See VICKY_IIIA_RES_800X600_FLAGS, etc. defined in a2560_platform.h
 //! @return	returns false on any error/invalid input.
 bool Sys_SetVideoMode(Screen* the_screen, screen_resolution new_mode);
@@ -153,6 +155,11 @@ bool Sys_SetModeGraphics(System* the_system);
 //! Switch machine into text mode
 //! @param as_overlay: If true, sets text overlay mode (text over graphics). If false, sets full text mode (no graphics);
 bool Sys_SetModeText(System* the_system, bool as_overlay);
+
+//! Enable or disable the hardware cursor in text mode, for the specified screen
+//! @param	the_screen: valid pointer to the target screen to operate on
+//! @param enable_it: If true, turns the hardware blinking cursor on. If false, hides the hardware cursor;
+bool Sys_EnableTextModeCursor(System* the_system, Screen* the_screen, bool enable_it);
 
 
 

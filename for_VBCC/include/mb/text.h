@@ -127,6 +127,7 @@
 #define CH_CHECKERED1	(unsigned char)0xB0
 #define CH_CHECKERED2	(unsigned char)0xB1
 #define CH_CHECKERED3	(unsigned char)0xB2
+#define CH_SPACE		(unsigned char)0x20	// regular space
 #define CH_SOLID		(unsigned char)0xDB	// inverse space
 #define CH_WALL_H		(unsigned char)0xC4
 #define CH_WALL_V		(unsigned char)0xB3
@@ -228,15 +229,22 @@ bool Text_CopyMemBox(Screen* the_screen, char* the_buffer, int16_t x1, int16_t y
 // **** Block fill functions ****
 
 
+//! Fill the entire attribute memory of the passed screen with the specified fore- and back-color
+//! @param	the_screen: valid pointer to the target screen to operate on
+//! @param	fore_color: Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified.
+//! @param	back_color: Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified.
+//! @return	Returns false on any error/invalid input.
+bool Text_FillAttrMemForeBack(Screen* the_screen, uint8_t fore_color, uint8_t back_color);
+
 //! Fill the entire attribute memory of the passed screen
 //! @param	the_screen: valid pointer to the target screen to operate on
-//! @param	the_fill: either a 1-byte character code, or a 1-byte attribute code (foreground in high nibble, background in low nibble)
+//! @param	the_fill: a 1-byte attribute code (foreground in high nibble, background in low nibble)
 //! @return	Returns false on any error/invalid input.
 bool Text_FillAttrMem(Screen* the_screen, uint8_t the_fill);
 
 //! Fill the entire character memory of the passed screen
 //! @param	the_screen: valid pointer to the target screen to operate on
-//! @param	the_fill: either a 1-byte character code, or a 1-byte attribute code (foreground in high nibble, background in low nibble)
+//! @param	the_fill: a 1-byte character code
 //! @return	Returns false on any error/invalid input.
 bool Text_FillCharMem(Screen* the_screen, unsigned char the_fill);
 

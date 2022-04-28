@@ -523,10 +523,26 @@ bool Text_CopyMemBox(Screen* the_screen, char* the_buffer, int16_t x1, int16_t y
 
 // **** Block fill functions ****
 
+//! Fill the entire attribute memory of the passed screen with the specified fore- and back-color
+//! @param	the_screen: valid pointer to the target screen to operate on
+//! @param	fore_color: Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified.
+//! @param	back_color: Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified.
+//! @return	Returns false on any error/invalid input.
+bool Text_FillAttrMemForeBack(Screen* the_screen, uint8_t fore_color, uint8_t back_color)
+{
+	uint8_t			the_attribute_value;
+
+	// calculate attribute value from passed fore and back colors
+	// LOGIC: text mode only supports 16 colors. lower 4 bits are back, upper 4 bits are foreground
+	the_attribute_value = ((fore_color << 4) | back_color);
+	
+	return Text_FillAttrMem(the_screen, the_attribute_value);
+}
+
 
 //! Fill the entire attribute memory of the passed screen
 //! @param	the_screen: valid pointer to the target screen to operate on
-//! @param	the_fill: either a 1-byte character code, or a 1-byte attribute code (foreground in high nibble, background in low nibble)
+//! @param	the_fill: a 1-byte attribute code (foreground in high nibble, background in low nibble)
 //! @return	Returns false on any error/invalid input.
 bool Text_FillAttrMem(Screen* the_screen, uint8_t the_fill)
 {
@@ -542,7 +558,7 @@ bool Text_FillAttrMem(Screen* the_screen, uint8_t the_fill)
 
 //! Fill the entire character memory of the passed screen
 //! @param	the_screen: valid pointer to the target screen to operate on
-//! @param	the_fill: either a 1-byte character code, or a 1-byte attribute code (foreground in high nibble, background in low nibble)
+//! @param	the_fill: a 1-byte character code
 //! @return	Returns false on any error/invalid input.
 bool Text_FillCharMem(Screen* the_screen, unsigned char the_fill)
 {
@@ -624,9 +640,9 @@ bool Text_FillBoxSlow(Screen* the_screen, int16_t x1, int16_t y1, int16_t x2, in
 //! @return	Returns false on any error/invalid input.
 bool Text_FillBox(Screen* the_screen, int16_t x1, int16_t y1, int16_t x2, int16_t y2, unsigned char the_char, uint8_t fore_color, uint8_t back_color)
 {
-	int16_t			dy;
-	int16_t			dx;
-	unsigned char	the_attribute_value;
+	int16_t		dy;
+	int16_t		dx;
+	uint8_t		the_attribute_value;
 	
 	if (the_screen == NULL)
 	{
@@ -722,7 +738,7 @@ bool Text_FillBoxAttrOnly(Screen* the_screen, int16_t x1, int16_t y1, int16_t x2
 {
 	int16_t			dy;
 	int16_t			dx;
-	unsigned char	the_attribute_value;
+	uint8_t			the_attribute_value;
 	
 	if (the_screen == NULL)
 	{
@@ -770,8 +786,8 @@ bool Text_FillBoxAttrOnly(Screen* the_screen, int16_t x1, int16_t y1, int16_t x2
 //! @return	Returns false on any error/invalid input.
 bool Text_InvertBox(Screen* the_screen, int16_t x1, int16_t y1, int16_t x2, int16_t y2)
 {
-	unsigned char	the_attribute_value;
-	unsigned char	the_inversed_value;
+	uint8_t			the_attribute_value;
+	uint8_t			the_inversed_value;
 	char*			the_write_loc;
 	int16_t			the_col;
 	int16_t			skip_len;
@@ -931,7 +947,7 @@ bool Text_SetCharAtXY(Screen* the_screen, int16_t x, int16_t y, unsigned char th
 bool Text_SetAttrAtXY(Screen* the_screen, int16_t x, int16_t y, uint8_t fore_color, uint8_t back_color)
 {
 	char*			the_write_loc;
-	unsigned char	the_attribute_value;
+	uint8_t			the_attribute_value;
 	
 	if (the_screen == NULL)
 	{
@@ -967,7 +983,7 @@ bool Text_SetAttrAtXY(Screen* the_screen, int16_t x, int16_t y, uint8_t fore_col
 bool Text_SetCharAndColorAtXY(Screen* the_screen, int16_t x, int16_t y, unsigned char the_char, uint8_t fore_color, uint8_t back_color)
 {
 	char*			the_write_loc;
-	unsigned char	the_attribute_value;
+	uint8_t			the_attribute_value;
 	
 	if (the_screen == NULL)
 	{
@@ -1162,7 +1178,7 @@ bool Text_DrawHLine(Screen* the_screen, int16_t x, int16_t y, int16_t the_line_l
 		// calculate attribute value from passed fore and back colors
 		// LOGIC: text mode only supports 16 colors. lower 4 bits are back, upper 4 bits are foreground
 
-		unsigned char	the_attribute_value;
+		uint8_t			the_attribute_value;
 
 		the_attribute_value = ((fore_color << 4) | back_color);
 	
@@ -1518,7 +1534,7 @@ bool Text_DrawStringAtXY(Screen* the_screen, int16_t x, int16_t y, char* the_str
 {
 	char*			the_char_loc;
 	char*			the_attr_loc;
-	unsigned char	the_attribute_value;
+	uint8_t			the_attribute_value;
 	int16_t			i;
 	int16_t			max_col;
 	int16_t			draw_len;
@@ -1582,7 +1598,7 @@ char* Text_DrawStringInBox(Screen* the_screen, int16_t x1, int16_t y1, int16_t x
 	char*			needs_formatting;
 	char*			needed_formatting_last_round;
 	char*			formatted_string;
-	unsigned char	the_attribute_value;
+	uint8_t			the_attribute_value;
 	int16_t			max_col;
 	int16_t			max_pix_width;
 	int16_t			max_pix_height;
