@@ -6952,7 +6952,7 @@ static char*	startup_messages[MESSAGE_COUNT] =
 //! Copy the splash screen's CLUT (color table) into the VICKY's CLUT RAM space, in the 2nd spot
 //! Note: this will leave the system theme's CLUT as is (it is in the 1st spot)
 //! @return	Returns false on any error condition
-bool Startup_CopyCLUTtoVicky(void);
+bool Startup_CopyCLUTtoVicky(Screen* the_screen);
 
 //! load splash screen bitmap
 Bitmap* Startup_LoadSplashBitmap(void);
@@ -6970,10 +6970,12 @@ static void Splash_DrawStartupMessage(char* the_message);
 //! Copy the splash screen's CLUT (color table) into the VICKY's CLUT RAM space, in the 2nd spot
 //! Note: this will leave the system theme's CLUT as is (it is in the 1st spot)
 //! @return	Returns false on any error condition
-bool Startup_CopyCLUTtoVicky(void)
+bool Startup_CopyCLUTtoVicky(Screen* the_screen)
 {
-	char*		dest = (char*)VICKY_IIIB_CLUT0;
+	char*		dest;
 	size_t		data_size = 0x400;
+	
+	dest = (char*)P32(the_screen->vicky_ + CLUT0_OFFSET_L);
 	
 	memcpy(dest, (uint8_t*)splash_clut, data_size);
 	
@@ -7073,7 +7075,7 @@ bool Startup_ShowSplash(void)
 	srand(sys_time_jiffies());
 
 	// load splash palette into 2nd CLUT spot (leaving #1 for system theme palette)
-	Startup_CopyCLUTtoVicky();
+	Startup_CopyCLUTtoVicky(global_system->screen_[ID_CHANNEL_B]);
 	
 	// switch bitmap layer0 control register to put to LUT1, not LUT0
 	// value: 5= bitmap layer0 enabled + LUT1

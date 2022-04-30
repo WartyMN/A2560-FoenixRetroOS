@@ -91,7 +91,12 @@
 // matters: f68 has a special log feature at 0xffffffff-4 that will not work on real machine
 #define _f68_	1	// undefine "_f68_" when building for real hardware
 
+#define __TARGET_C256_FMX__X	1	// undefine "__TARGET_C256_FMX__" when building for m68K
 
+#if defined __TARGET_C256_FMX__
+	#define sys_time_jiffies()	1	// no MCP in C256 right now
+	#define sys_get_info(x)	x->model = MACHINE_C256_FMX;	// no MCP in C256 right now
+#endif
 
 /*****************************************************************************/
 /*                               Enumerations                                */

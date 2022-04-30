@@ -858,7 +858,8 @@ int main(int argc, char* argv[])
 	if (Sys_InitSystem() == false)
 	{
 		DEBUG_OUT(("%s %d: Couldn't initialize the system", __func__, __LINE__));
-		exit(0);
+		//exit(0); // maybe this isn't doing anything on FMX?
+		return 0;
 	}
 
 	// try flushing channel.. something about graphics mode makes getchar() not work any more? 

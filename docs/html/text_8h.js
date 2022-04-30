@@ -16,6 +16,7 @@ var text_8h =
     [ "Text_DrawStringInBox", "text_8h.html#a044f613306fe5b55043d623d3f7f91b5", null ],
     [ "Text_DrawVLine", "text_8h.html#a4641c6472157b8bce8efde6cc9bc9337", null ],
     [ "Text_FillAttrMem", "text_8h.html#af9be41a25bf5156e03877c4e405cbc99", null ],
+    [ "Text_FillAttrMemForeBack", "text_8h.html#a4a524fb33d13ea81ae9d61959c4f1c07", null ],
     [ "Text_FillBox", "text_8h.html#ae79e7fa4231330cd37deabe38e5b7614", null ],
     [ "Text_FillBoxAttrOnly", "text_8h.html#a72c1edf7b3921e76f8a8cd79b524b210", null ],
     [ "Text_FillBoxCharOnly", "text_8h.html#ae8dc29f5cdbb89554f3f268d35628e5e", null ],

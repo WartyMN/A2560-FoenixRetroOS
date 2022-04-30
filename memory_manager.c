@@ -1,5 +1,5 @@
 /*
- * control.c
+ * memory_manager.c
  *
  *  Created on: Mar 21, 2022
  *      Author: micahbly
@@ -36,7 +36,10 @@
 
 #define assert(expr) \
     if (!(expr)) \
-        DEBUG_OUT(("%s %d: assertion failed", __func__, __LINE__));
+	{ \
+        DEBUG_OUT(("%s %d: assertion failed", __func__, __LINE__)); \
+        exit(0); \
+    }
 
 /*****************************************************************************/
 /*                                 Structs                                   */
@@ -140,10 +143,14 @@ bool Memory_Initialize(void)
 	
 	char*	memory_for_bget;
 	
+	DEBUG_OUT(("%s %d: about to malloc for standard ram of len %lu", __func__, __LINE__, (bufsize)STD_RAM_LEN));
+
 	if ((memory_for_bget = (char*)malloc(STD_RAM_LEN)) == NULL)
 	{
 		return false;
 	}
+
+// 	DEBUG_OUT(("%s %d: standard RAM malloc'ed ok at %p", __func__, __LINE__, memory_for_bget));
 
 	// I'm not sure why the previous arrangement didn't work, but global_vram_pool and global_std_pool were getting assigned to same pool
 	// making them constants, and setting the ql.flink/blinks here fixes issue in both Calypsi and VBCC. 
@@ -152,8 +159,18 @@ bool Memory_Initialize(void)
 
 	poolSysRAM.ql.blink->ql.flink = &poolSysRAM;
 	poolSysRAM.ql.flink->ql.blink = &poolSysRAM;
-	
+
+// 	DEBUG_OUT(("%s %d: poolVRAM=%p, global_vram_pool=%p", __func__, __LINE__, &poolVRAM, global_vram_pool));
+// 	DEBUG_OUT(("%s %d: poolVRAM.ql.blink->ql.flink=%p, poolVRAM=%p", __func__, __LINE__, poolVRAM.ql.blink->ql.flink));
+// 	DEBUG_OUT(("%s %d: poolVRAM.ql.flink->ql.blink=%p, poolVRAM=%p", __func__, __LINE__, poolVRAM.ql.flink->ql.blink));
+// 	DEBUG_OUT(("%s %d: poolSysRAM=%p, global_std_pool=%p", __func__, __LINE__, &poolSysRAM, global_std_pool));
+// 	DEBUG_OUT(("%s %d: poolSysRAM.ql.blink->ql.flink=%p, poolVRAM=%p", __func__, __LINE__, poolSysRAM.ql.blink->ql.flink));
+// 	DEBUG_OUT(("%s %d: poolSysRAM.ql.flink->ql.blink=%p, poolVRAM=%p", __func__, __LINE__, poolSysRAM.ql.flink->ql.blink));
+// 	
+// 	DEBUG_OUT(("%s %d: getting VRAM at %p for %lu bytes", __func__, __LINE__, (void*)VRAM_START, (bufsize)VRAM_LEN));
 	bpool((void*)VRAM_START, (bufsize)VRAM_LEN, (MemoryPool*)global_vram_pool);
+
+// 	DEBUG_OUT(("%s %d: getting STD RAM at %p for %lu bytes", __func__, __LINE__, memory_for_bget, (bufsize)STD_RAM_LEN));
 	bpool((void*)memory_for_bget, (bufsize)STD_RAM_LEN, (MemoryPool*)global_std_pool);
 	
 	return true;
@@ -165,7 +182,10 @@ bool Memory_Initialize(void)
 
 //! Allocate and initialize num*size bytes of storage from the specified memory segment
 //! Use this as you would a call to the standard C calloc() function
+//! @param	num: number of objects
+//! @param	size: size of each object
 //! @param	the_mem_type: if MEM_STANDARD, the memory will be allocated in the system memory space (will change in future to SDRAM 64 MB area). If MEM_VRAM, it will be allocated in VRAM buffer A. Always (and only) specify VRAM if you are setting up a Bitmap object that either represents a graphics screen, or will be blitted to the graphics screen. 
+//! @return	On success, returns the pointer to the beginning of newly allocated memory. On failure, returns a null pointer.
 void* f_calloc(size_t num, size_t size, mem_type the_mem_type)
 {
 	void*			the_ptr;
@@ -200,7 +220,9 @@ void* f_calloc(size_t num, size_t size, mem_type the_mem_type)
 
 //! Allocate size bytes of uninitialized storage from the specified memory segment
 //! Use this as you would a call to the standard C malloc() function
-//! @param	the_mem_type: if STANDARD, the memory will be allocated in the system memory space (will change in future to SDRAM 64 MB area). If VRAM, it will be allocated in VRAM buffer A. Always (and only) specify VRAM if you are setting up a Bitmap object that either represents a graphics screen, or will be blitted to the graphics screen. 
+//! @param	size: number of bytes to allocate
+//! @param	the_mem_type: if STANDARD, the memory will be allocated in the system memory space (will change in future to SDRAM 64 MB area). If VRAM, it will be allocated in VRAM buffer A. Always (and only) specify VRAM if you are setting up a Bitmap object that either represents a graphics screen, or will be blitted to the graphics screen.
+//! @return	On success, returns the pointer to the beginning of newly allocated memory. On failure, returns a null pointer.
 void* f_malloc(size_t size, mem_type the_mem_type)
 {
 	void*			the_ptr;
@@ -227,6 +249,7 @@ void* f_malloc(size_t size, mem_type the_mem_type)
 
 //! Deallocate the storage previously allocated by f_calloc() or f_malloc()
 //! Use this as you would a call to the standard C free() function
+//! @param	the_ptr: pointer to the memory to deallocate
 //! @param	the_mem_type: The memory type (corresponds to memory segment) of the pointer being freed. 
 void f_free(void* the_ptr, mem_type the_mem_type)
 {
@@ -654,7 +677,7 @@ void f_free(void* the_ptr, mem_type the_mem_type)
     ==================
 */
 
-#define TestProg    0	      /* Generate built-in test program
+#define TestProgX    0	      /* Generate built-in test program
 					 if defined.  The value specifies
 					 how many buffer allocation attempts
 					 the test program should make. */
@@ -664,38 +687,38 @@ void f_free(void* the_ptr, mem_type the_mem_type)
 					 multiple of this size.  This
 					 MUST be a power of two. */
 
-#define BufDump     1		      /* Define this symbol to enable the
+#define BufDumpX     1		      /* Define this symbol to enable the
 					 bpoold() function which dumps the
 					 buffers in a buffer pool. */
 
-#define BufValid    0		      /* Define this symbol to enable the
+#define BufValidX    0		      /* Define this symbol to enable the
 					 bpoolv() function for validating
 					 a buffer pool. */ 
 
-#define DumpData    1		      /* Define this symbol to enable the
+#define DumpDataX    1		      /* Define this symbol to enable the
 					 bufdump() function which allows
 					 dumping the contents of an allocated
 					 or free buffer. */
 
-#define BufStats    1		      /* Define this symbol to enable the
+#define BufStatsX    1		      /* Define this symbol to enable the
 					 bstats() function which calculates
 					 the total free space in the buffer
 					 pool, the largest available
 					 buffer, and the total space
 					 currently allocated. */
 
-#define FreeWipe    0		      /* Wipe free buffers to a guaranteed
+#define FreeWipeX    0		      /* Wipe free buffers to a guaranteed
 					 pattern of garbage to trip up
 					 miscreants who attempt to use
 					 pointers into released buffers. */
 
-#define BestFit     0		      /* Use a best fit algorithm when
+#define BestFitX     0		      /* Use a best fit algorithm when
 					 searching for space for an
 					 allocation request.  This uses
 					 memory more efficiently, but
 					 allocation will be much slower. */
 
-#define BECtl	    0		      /* Define this symbol to enable the
+#define BECtlX	    0		      /* Define this symbol to enable the
 					 bectl() function for automatic
 					 pool space control.  */
 
@@ -859,24 +882,27 @@ void *bget(bufsize requested_size, MemoryPool* the_memory)
 
 void *bgetz(bufsize size, MemoryPool* the_memory)
 {
+	//DEBUG_OUT(("%s %d: about to bget %lu bytes...", __func__, __LINE__, size));
+    
     char *buf = (char *) bget(size, the_memory);
 
-    if (buf != NULL) {
-	struct bhead *b;
-	bufsize rsize;
+    if (buf != NULL)
+    {
+		struct bhead *b;
+		bufsize rsize;
 
-	b = BH(buf - sizeof(struct bhead));
-	rsize = -(b->bsize);
-	if (rsize == 0) {
-	    struct bdhead *bd;
+		b = BH(buf - sizeof(struct bhead));
+		rsize = -(b->bsize);
+		if (rsize == 0) {
+			struct bdhead *bd;
 
-	    bd = BDH(buf - sizeof(struct bdhead));
-	    rsize = bd->tsize - sizeof(struct bdhead);
-	} else {
-	    rsize -= sizeof(struct bhead);
-	}
-	assert(rsize >= size);
-	V memset(buf, 0, (MemSize) rsize);
+			bd = BDH(buf - sizeof(struct bdhead));
+			rsize = bd->tsize - sizeof(struct bdhead);
+		} else {
+			rsize -= sizeof(struct bhead);
+		}
+		assert(rsize >= size);
+		V memset(buf, 0, (MemSize) rsize);
     }
     return ((void *) buf);
 }
@@ -1032,7 +1058,15 @@ void bpool(void *buf, bufsize len, MemoryPool* the_memory)
        it  had	better	not  be  (much) larger than the largest buffer
        whose size we can store in bhead.bsize. */
 
-    assert(len - sizeof(struct bhead) <= -((bufsize) ESent + 1));
+	DEBUG_OUT(("%s %d: asserting something about size of bhead...", __func__, __LINE__));
+	DEBUG_OUT(("%s %d: len=%lu, sz bhead=%li, ESent+1=%li", __func__, __LINE__, len, sizeof(struct bhead), ((bufsize)ESent + 1) ));
+//#define ESent	((bufsize) (-(((1L << (sizeof(bufsize) * 8 - 2)) - 1) * 2) - 2))
+	DEBUG_OUT(("%s %d: sizeof(bufsize)*8=%lu", __func__, __LINE__, sizeof(bufsize) * 8 ));
+	DEBUG_OUT(("%s %d: (sizeof(bufsize) * 8 - 2)=%lu", __func__, __LINE__, (sizeof(bufsize) * 8 - 2) ));
+	DEBUG_OUT(("%s %d: 1L << (sizeof(bufsize) * 8 - 2)=%li", __func__, __LINE__, 1L << (sizeof(bufsize) * 8 - 2) ));
+	DEBUG_OUT(("%s %d: ((1L << (sizeof(bufsize) * 8 - 2)) - 1) * 2=%li", __func__, __LINE__, ((1L << (sizeof(bufsize) * 8 - 2)) - 1) * 2 ));
+
+    //assert(len - sizeof(struct bhead) <= -((bufsize) ESent + 1));
 
     /* Clear  the  backpointer at  the start of the block to indicate that
        there  is  no  free  block  prior  to  this   one.    That   blocks
@@ -1045,12 +1079,16 @@ void bpool(void *buf, bufsize len, MemoryPool* the_memory)
 	//DEBUG_OUT(("%s %d: the_memory->ql.blink->ql.flink=%p", __func__, __LINE__, the_memory->ql.blink->ql.flink));
 	//DEBUG_OUT(("%s %d: the_memory->ql.flink->ql.blink=%p", __func__, __LINE__, the_memory->ql.flink->ql.blink));
 
-    assert(the_memory->ql.blink->ql.flink == the_memory);
-    assert(the_memory->ql.flink->ql.blink == the_memory);
-    b->ql.flink = the_memory;
-    b->ql.blink = the_memory->ql.blink;
-    the_memory->ql.blink = b;
-    b->ql.blink->ql.flink = b;
+// 	DEBUG_OUT(("%s %d: asserting ql.blink->ql.flink == the_memory)...", __func__, __LINE__));
+// 	DEBUG_OUT(("%s %d: the_memory=%p, ql.blink->ql.flink=%p", __func__, __LINE__, the_memory, the_memory->ql.blink->ql.flink));
+// 	DEBUG_OUT(("%s %d: asserting ql.flink->ql.blink == the_memory)...", __func__, __LINE__));
+
+	assert(the_memory->ql.blink->ql.flink == the_memory);
+	assert(the_memory->ql.flink->ql.blink == the_memory);
+	b->ql.flink = the_memory;
+	b->ql.blink = the_memory->ql.blink;
+	the_memory->ql.blink = b;
+	b->ql.blink->ql.flink = b;
 
     /* Create a dummy allocated buffer at the end of the pool.	This dummy
        buffer is seen when a buffer at the end of the pool is released and
@@ -1066,11 +1104,12 @@ void bpool(void *buf, bufsize len, MemoryPool* the_memory)
     V memset(((char *) b) + sizeof(struct bfhead), 0x55,
 	     (MemSize) (len - sizeof(struct bfhead)));
 #endif
-    bn = BH(((char *) b) + len);
-    bn->prevfree = (bufsize) len;
-    /* Definition of ESent assumes two's complement! */
-    assert((~0) == -1);
-    bn->bsize = ESent;
+	bn = BH(((char *) b) + len);
+	bn->prevfree = (bufsize) len;
+	/* Definition of ESent assumes two's complement! */
+// 	DEBUG_OUT(("%s %d: asserting (~0) == -1...", __func__, __LINE__));
+	assert((~0) == -1);
+	bn->bsize = ESent;
 }
 
 #ifdef BufStats

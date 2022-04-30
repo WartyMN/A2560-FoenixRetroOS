@@ -210,8 +210,20 @@ System* Sys_New(void)
 		goto error;
 	}
 	
+	DEBUG_OUT(("%s %d: EventManager created ok. Detecting hardware...", __func__ , __LINE__));
+	
+	// check what kind of hardware the system is running on
+	// LOGIC: we need to know how many screens it has before allocating screen objects
+	if (Sys_AutoDetectMachine(the_system) == false)
+	{
+		LOG_ERR(("%s %d: Detected machine hardware is incompatible with this software", __func__ , __LINE__));
+		goto error;
+	}
+	
+	DEBUG_OUT(("%s %d: Hardware detected (%u screens). Creating screens...", __func__ , __LINE__, the_system->num_screens_));
+
 	// screens
-	for (i = 0; i < 2; i++)
+	for (i = 0; i < the_system->num_screens_; i++)
 	{
 		if ( (the_system->screen_[i] = (Screen*)f_calloc(1, sizeof(Screen), MEM_STANDARD) ) == NULL)
 		{
@@ -223,6 +235,16 @@ System* Sys_New(void)
 		the_system->screen_[i]->id_ = i;
 	}
 
+	DEBUG_OUT(("%s %d: Screen(s) created ok.", __func__ , __LINE__, i));
+	
+	// for systems with only one screen, we will point the 2nd screen to the first, so that any call to 2nd screen works as if it was a call to the first. 
+	if (the_system->num_screens_ == 1)
+	{
+		the_system->screen_[1] = the_system->screen_[0];
+	}
+
+	DEBUG_OUT(("%s %d: returning to SysInit()...", __func__ , __LINE__, i));
+	
 	// LOGIC: we don't have font info yet; just want to make it clear these are not set and not rely on compiler behavior
 	the_system->system_font_ = NULL;
 	the_system->app_font_ = NULL;
@@ -356,6 +378,8 @@ bool Sys_InitSystem(void)
 		LOG_ERR(("%s %d: Couldn't instantiate system object", __func__, __LINE__));
 		goto error;
 	}
+
+	DEBUG_OUT(("%s %d: System object created ok. Initiating list of windows...", __func__, __LINE__));
 	
 	// initiate the list of windows
 	if ( (global_system->list_windows_ = (List**)f_calloc(1, sizeof(List*), MEM_STANDARD) ) == NULL)
@@ -439,7 +463,7 @@ bool Sys_InitSystem(void)
 	}
 	
 	// Enable mouse pointer -- no idea if this works, f68 emulator doesn't support mouse yet. 
-	R32(VICKYB_MOUSE_CTRL_A2560K) = 1;
+	//R32(VICKYB_MOUSE_CTRL_A2560K) = 1;
 	
 	// set interrupt handlers
 // 	global_old_keyboard_interrupt = sys_int_register(INT_KBD_PS2, &Sys_InterruptKeyboard);
@@ -482,28 +506,70 @@ error:
 // **** Screen mode/resolution/size functions *****
 
 
-//! Find out what kind of machine the software is running on, and configure the passed screen accordingly
-//! Configures screen settings, RAM addresses, etc. based on known info about machine types
-//! Configures screen width, height, total text rows and cols, and visible text rows and cols by checking hardware
-//! For machines with 2 screens, call this once per screen
+//! Find out what kind of machine the software is running on, and determine # of screens available
 //! @return	Returns false if the machine is known to be incompatible with this software. 
-bool Sys_AutoConfigure(System* the_system)
+bool Sys_AutoDetectMachine(System* the_system)
 {
-	struct s_sys_info	the_sys_info;
-	uint16_t			the_model_number;
-	int16_t				i;
+	struct s_sys_info	sys_info;
+	struct s_sys_info*	the_sys_info = &sys_info; // doing this convoluted thing so that C256 macro can fake having sys_get_info
+
+	sys_get_info(the_sys_info);
+	the_system->model_number_ = the_sys_info->model;
 	
-	sys_get_info(&the_sys_info);
-	the_model_number = the_sys_info.model;
-	
-	switch (the_model_number)
+	switch (the_system->model_number_)
 	{
-		case MACHINE_C256_FMX:
 		case MACHINE_C256_U:
 		case MACHINE_C256_GENX:
 		case MACHINE_C256_UPLUS:
-			DEBUG_OUT(("%s %d: this application is not compatible with the %s.", __func__, __LINE__, the_sys_info.model_name));
+			DEBUG_OUT(("%s %d: this application is not compatible with the %s.", __func__, __LINE__, the_sys_info->model_name));
 			return false;
+			break;
+			
+		case MACHINE_C256_FMX:
+			the_system->num_screens_ = 1;
+			break;
+			
+		case MACHINE_A2560U_PLUS:
+		case MACHINE_A2560U:
+			the_system->num_screens_ = 1;
+			break;
+			
+		case MACHINE_A2560X:
+		case MACHINE_A2560K:
+			the_system->num_screens_ = 2;		
+			break;
+	}
+	
+	return true;
+}
+
+
+//! Find out what kind of machine the software is running on, and configure the passed screen accordingly
+//! Configures screen settings, RAM addresses, etc. based on known info about machine types
+//! Configures screen width, height, total text rows and cols, and visible text rows and cols by checking hardware
+//! @return	Returns false if the machine is known to be incompatible with this software. 
+bool Sys_AutoConfigure(System* the_system)
+{
+	int16_t				i;
+	
+	switch (the_system->model_number_)
+	{
+		case MACHINE_C256_U:
+		case MACHINE_C256_GENX:
+		case MACHINE_C256_UPLUS:
+			DEBUG_OUT(("%s %d: this application is not compatible with Foenix hardware ID %u.", __func__, __LINE__, the_system->model_number_));
+			return false;
+			break;
+			
+		case MACHINE_C256_FMX:
+			the_system->screen_[ID_CHANNEL_A]->vicky_ = P32(VICKY_C256FMX);
+			the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXTA_RAM_C256FMX;
+			the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXTA_ATTR_C256FMX;
+			the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANK_C256FMX;
+			the_system->screen_[ID_CHANNEL_B]->vicky_ = P32(VICKY_C256FMX);
+			the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXTA_RAM_C256FMX;
+			the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXTA_ATTR_C256FMX;
+			the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANK_C256FMX;
 			break;
 			
 		case MACHINE_A2560U_PLUS:
@@ -512,13 +578,10 @@ bool Sys_AutoConfigure(System* the_system)
 			the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXT_RAM_A2560U;
 			the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXT_ATTR_A2560U;
 			the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANK_A2560U;
-			the_system->num_screens_ = 1;
 			break;
 			
 		case MACHINE_A2560X:
-		case MACHINE_A2560K:
-			the_system->num_screens_ = 2;
-			
+		case MACHINE_A2560K:			
 			the_system->screen_[ID_CHANNEL_A]->vicky_ = P32(VICKY_A2560K_A);
 			the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXTA_RAM_A2560K;
 			the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXTA_ATTR_A2560K;
@@ -708,6 +771,23 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 			new_mode = RES_640X480;
 		}
 	}
+	else if (the_screen->vicky_ == P32(VICKY_C256FMX))
+	{
+ 		//   C256FMX has 1 channel with 2 video modes, 800x600 and 640x480
+		//   if bit 8 is set, it's 800x600, if not set it's 640x400. VIDEO_MODE_BIT0/VIDEO_MODE_BIT1
+		//   if bit 9 is set, it doubles pixel size, bringing resolution down to 400x300 or 320x200. VICKY_II_PIX_DOUBLER_FLAGS
+
+		//DEBUG_OUT(("%s %d: vicky identified as VICKY_C256FMX", __func__, __LINE__));
+
+		if (the_video_mode_bits & VIDEO_MODE_BIT1)
+		{
+			new_mode = RES_800X600;
+		}
+		else
+		{
+			new_mode = RES_640X480;
+		}
+	}
 	else
 	{
 		LOG_ERR(("%s %d: The VICKY register on this machine doesn't match one I know of. I won't be able to figure out what the screen size is.", __func__, __LINE__));
@@ -814,6 +894,18 @@ bool Sys_SetVideoMode(Screen* the_screen, screen_resolution new_mode)
 			new_mode_flag = VICKY_II_RES_640X400_FLAGS;
 		}
 		else if (new_mode == RES_640X480)
+		{
+			new_mode_flag = VICKY_II_RES_640X480_FLAGS;
+		}
+		else if (new_mode == RES_800X600)
+		{
+			new_mode_flag = VICKY_II_RES_800X600_FLAGS;
+		}
+	}
+	else if (the_screen->vicky_ == P32(VICKY_C256FMX))
+	{
+ 		//DEBUG_OUT(("%s %d: vicky identified as VICKY_C256FMX", __func__, __LINE__));
+		if (new_mode == RES_640X480)
 		{
 			new_mode_flag = VICKY_II_RES_640X480_FLAGS;
 		}

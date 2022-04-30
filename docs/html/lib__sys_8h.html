@@ -126,6 +126,9 @@ Functions</h2></td></tr>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_InitSystem</b> (void)</td></tr>
 <tr class="memdesc:ac3d6d271b2a789e26896de04852c77c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the system (primary entry point for all system initialization activity) Starts up the memory manager, creates the global system object, runs autoconfigure to check the system hardware, loads system and application fonts, allocates a bitmap for the screen. <br /></td></tr>
 <tr class="separator:ac3d6d271b2a789e26896de04852c77c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a492835a9360cea71b17ddfb29ff7e44c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a492835a9360cea71b17ddfb29ff7e44c">Sys_AutoDetectMachine</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
+<tr class="memdesc:a492835a9360cea71b17ddfb29ff7e44c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find out what kind of machine the software is running on, and determine # of screens available.  <a href="lib__sys_8h.html#a492835a9360cea71b17ddfb29ff7e44c">More...</a><br /></td></tr>
+<tr class="separator:a492835a9360cea71b17ddfb29ff7e44c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed61a6754ace552013413feea54fd336"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#aed61a6754ace552013413feea54fd336">Sys_AutoConfigure</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
 <tr class="memdesc:aed61a6754ace552013413feea54fd336"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find out what kind of machine the software is running on, and configure the passed screen accordingly Configures screen settings, RAM addresses, etc.  <a href="lib__sys_8h.html#aed61a6754ace552013413feea54fd336">More...</a><br /></td></tr>
 <tr class="separator:aed61a6754ace552013413feea54fd336"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -142,6 +145,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_SetModeGraphics</
 <tr class="memitem:ab18b67b61dd745e75aa64c5ba73358d0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#ab18b67b61dd745e75aa64c5ba73358d0">Sys_SetModeText</a> (<a class="el" href="struct_system.html">System</a> *the_system, bool as_overlay)</td></tr>
 <tr class="memdesc:ab18b67b61dd745e75aa64c5ba73358d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Switch machine into text mode.  <a href="lib__sys_8h.html#ab18b67b61dd745e75aa64c5ba73358d0">More...</a><br /></td></tr>
 <tr class="separator:ab18b67b61dd745e75aa64c5ba73358d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cc43e2be125e57916a9df424f909f60"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a0cc43e2be125e57916a9df424f909f60">Sys_EnableTextModeCursor</a> (<a class="el" href="struct_system.html">System</a> *the_system, <a class="el" href="struct_screen.html">Screen</a> *the_screen, bool enable_it)</td></tr>
+<tr class="memdesc:a0cc43e2be125e57916a9df424f909f60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable or disable the hardware cursor in text mode, for the specified screen.  <a href="lib__sys_8h.html#a0cc43e2be125e57916a9df424f909f60">More...</a><br /></td></tr>
+<tr class="separator:a0cc43e2be125e57916a9df424f909f60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31b4b6b8f93b4daabde4662d62ed66d9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a31b4b6b8f93b4daabde4662d62ed66d9">Sys_AddToWindowList</a> (<a class="el" href="struct_system.html">System</a> *the_system, <a class="el" href="struct_window.html">Window</a> *the_new_window)</td></tr>
 <tr class="memdesc:a31b4b6b8f93b4daabde4662d62ed66d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add this window to the list of windows and make it the currently active window.  <a href="lib__sys_8h.html#a31b4b6b8f93b4daabde4662d62ed66d9">More...</a><br /></td></tr>
 <tr class="separator:a31b4b6b8f93b4daabde4662d62ed66d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -205,7 +211,29 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_Render</b> (<a cl
 </div><div class="memdoc">
 
 <p>Find out what kind of machine the software is running on, and configure the passed screen accordingly Configures screen settings, RAM addresses, etc. </p>
-<p >based on known info about machine types Configures screen width, height, total text rows and cols, and visible text rows and cols by checking hardware For machines with 2 screens, call this once per screen </p><dl class="section return"><dt>Returns</dt><dd>Returns false if the machine is known to be incompatible with this software. <br  />
+<p >based on known info about machine types Configures screen width, height, total text rows and cols, and visible text rows and cols by checking hardware </p><dl class="section return"><dt>Returns</dt><dd>Returns false if the machine is known to be incompatible with this software. <br  />
+ </dd></dl>
+
+</div>
+</div>
+<a id="a492835a9360cea71b17ddfb29ff7e44c" name="a492835a9360cea71b17ddfb29ff7e44c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a492835a9360cea71b17ddfb29ff7e44c">&#9670;&nbsp;</a></span>Sys_AutoDetectMachine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Sys_AutoDetectMachine </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Find out what kind of machine the software is running on, and determine # of screens available. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns false if the machine is known to be incompatible with this software. <br  />
  </dd></dl>
 
 </div>
@@ -227,7 +255,56 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_Render</b> (<a cl
 </div><div class="memdoc">
 
 <p>Detect the current screen mode/resolution, and set # of columns, rows, H pixels, V pixels, accordingly. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input. </dd></dl>
+
+</div>
+</div>
+<a id="a0cc43e2be125e57916a9df424f909f60" name="a0cc43e2be125e57916a9df424f909f60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cc43e2be125e57916a9df424f909f60">&#9670;&nbsp;</a></span>Sys_EnableTextModeCursor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Sys_EnableTextModeCursor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
+          <td class="paramname"><em>the_screen</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enable_it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enable or disable the hardware cursor in text mode, for the specified screen. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
+    <tr><td class="paramname">enable_it</td><td>If true, turns the hardware blinking cursor on. If false, hides the hardware cursor; </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -356,6 +433,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_Render</b> (<a cl
 </div><div class="memdoc">
 
 <p>Change video mode to the one passed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
+    <tr><td class="paramname">new_mode</td><td>One of the enumerated screen_resolution values. Must correspond to a valid VICKY video mode for the host machine. See VICKY_IIIA_RES_800X600_FLAGS, etc. defined in <a class="el" href="a2560__platform_8h_source.html">a2560_platform.h</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">new_mode</td><td>One of the enumerated screen_resolution values. Must correspond to a valid VICKY video mode for the host machine. See VICKY_IIIA_RES_800X600_FLAGS, etc. defined in <a class="el" href="a2560__platform_8h_source.html">a2560_platform.h</a> </td></tr>

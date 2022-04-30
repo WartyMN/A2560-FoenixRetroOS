@@ -9,6 +9,7 @@ TARGET = $(DEVA2560)/_target_foenix
 LIB_SRCS = lib_sys.c memory_manager.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c event.c
 TEST_SRCS = bitmap_test.c font_test.c lib_sys_test.c text_test.c window_test.c general_test.c 
 DEMO_SRCS = bitmap_demo.c font_demo.c lib_sys_demo.c text_demo.c window_demo.c
+TUTORIAL_SRCS = blackjack.c
 
 MODEL = --code-model=large --data-model=small
 LIB_MODEL = lc-sd
@@ -23,6 +24,7 @@ OBJS_DEBUG = $(C_SRCS:%.c=build_calypsi/obj/%-debug.o)
 LIB_OBJS = $(LIB_SRCS:%.c=build_calypsi/obj/%.o)
 TEST_OBJS = $(TEST_SRCS:%.c=build_calypsi/obj/%.o)
 DEMO_OBJS = $(DEMO_SRCS:%.c=build_calypsi/obj/%.o)
+TUTORIAL_OBJS = $(TUTORIAL_SRCS:%.c=build_calypsi/obj/%.o)
 
 build_calypsi/obj/%.o: %.c
 	cc68k --core=68000 $(MODEL) --debug -I$(TARGET)/include/ --list-file=$(@:%.o=%.lst) -o $@ $<
@@ -74,6 +76,10 @@ demos:	$(DEMO_OBJS) $(FOENIX_LIB)
 	ln68k -o build_calypsi/lib_sys_demo.pgz build_calypsi/obj/lib_sys_demo.o $(A2560K_RULES) clib-68000-$(LIB_MODEL)-Foenix.a $(FOENIX)/foenix-lc-sd.a build_calypsi/a2560_sys.a --hosted --output-format=pgz --list-file=build_calypsi/lib_sys_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
 	ln68k -o build_calypsi/text_demo.pgz build_calypsi/obj/text_demo.o $(A2560K_RULES) clib-68000-$(LIB_MODEL)-Foenix.a $(FOENIX)/foenix-lc-sd.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/text_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
 	ln68k -o build_calypsi/window_demo.pgz build_calypsi/obj/window_demo.o $(A2560K_RULES) clib-68000-$(LIB_MODEL)-Foenix.a $(FOENIX)/foenix-lc-sd.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/window_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
+
+tutorials:	$(TUTORIAL_OBJS) $(FOENIX_LIB)
+	@echo "Building tutorials..."
+	ln68k -o build_calypsi/blackjack.pgz build_calypsi/obj/blackjack.o $(A2560K_RULES) clib-68000-$(LIB_MODEL)-Foenix.a $(FOENIX)/foenix-lc-sd.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/blackjack.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
 
 	#ln68k -o  build_calypsi/$@ $^ $(A2560K_RULES) clib-68000-$(LIB_MODEL)-Foenix.a build_calypsi/a2560_sys.a --output-format=pgz -l --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
 	

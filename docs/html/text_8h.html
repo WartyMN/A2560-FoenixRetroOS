@@ -130,6 +130,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a2c49ab18265c8794d23f4de779e6257b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8h.html#a2c49ab18265c8794d23f4de779e6257b">Text_CopyMemBox</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, char *the_buffer, int16_t x1, int16_t y1, int16_t x2, int16_t y2, bool to_screen, bool for_attr)</td></tr>
 <tr class="memdesc:a2c49ab18265c8794d23f4de779e6257b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy a rectangular area of text or attr to or from an off-screen buffer.  <a href="text_8h.html#a2c49ab18265c8794d23f4de779e6257b">More...</a><br /></td></tr>
 <tr class="separator:a2c49ab18265c8794d23f4de779e6257b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a524fb33d13ea81ae9d61959c4f1c07"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8h.html#a4a524fb33d13ea81ae9d61959c4f1c07">Text_FillAttrMemForeBack</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, uint8_t fore_color, uint8_t back_color)</td></tr>
+<tr class="memdesc:a4a524fb33d13ea81ae9d61959c4f1c07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill the entire attribute memory of the passed screen with the specified fore- and back-color.  <a href="text_8h.html#a4a524fb33d13ea81ae9d61959c4f1c07">More...</a><br /></td></tr>
+<tr class="separator:a4a524fb33d13ea81ae9d61959c4f1c07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9be41a25bf5156e03877c4e405cbc99"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="text_8h.html#af9be41a25bf5156e03877c4e405cbc99">Text_FillAttrMem</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, uint8_t the_fill)</td></tr>
 <tr class="memdesc:af9be41a25bf5156e03877c4e405cbc99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill the entire attribute memory of the passed screen.  <a href="text_8h.html#af9be41a25bf5156e03877c4e405cbc99">More...</a><br /></td></tr>
 <tr class="separator:af9be41a25bf5156e03877c4e405cbc99"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1161,7 +1164,52 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
-    <tr><td class="paramname">the_fill</td><td>either a 1-byte character code, or a 1-byte attribute code (foreground in high nibble, background in low nibble) </td></tr>
+    <tr><td class="paramname">the_fill</td><td>a 1-byte attribute code (foreground in high nibble, background in low nibble) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns false on any error/invalid input. </dd></dl>
+
+</div>
+</div>
+<a id="a4a524fb33d13ea81ae9d61959c4f1c07" name="a4a524fb33d13ea81ae9d61959c4f1c07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a524fb33d13ea81ae9d61959c4f1c07">&#9670;&nbsp;</a></span>Text_FillAttrMemForeBack()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Text_FillAttrMemForeBack </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
+          <td class="paramname"><em>the_screen</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>fore_color</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>back_color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Fill the entire attribute memory of the passed screen with the specified fore- and back-color. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
+    <tr><td class="paramname">fore_color</td><td>Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
+    <tr><td class="paramname">back_color</td><td>Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1505,7 +1553,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
-    <tr><td class="paramname">the_fill</td><td>either a 1-byte character code, or a 1-byte attribute code (foreground in high nibble, background in low nibble) </td></tr>
+    <tr><td class="paramname">the_fill</td><td>a 1-byte character code </td></tr>
   </table>
   </dd>
 </dl>

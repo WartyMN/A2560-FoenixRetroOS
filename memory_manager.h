@@ -41,6 +41,7 @@
 
 // A2560 includes
 #include <mb/a2560_platform.h>
+#include <mb/general.h>
 
 // C includes
 #include <stdbool.h>
@@ -59,7 +60,12 @@
 #define STD_RAM_LEN		0x0000FFFF
 
 // VRAM is currently only available in VRAM Buffer A on A2560K (2022/03/21)
-#define VRAM_START		0x00800000
+#if defined __TARGET_C256_FMX__
+	#define VRAM_START		0x00B00000
+#else
+	#define VRAM_START		0x00800000
+#endif
+
 //#define VRAM_LEN		0x00BFFFFF - VRAM_START
 #define VRAM_LEN		0x00400000
 
@@ -102,8 +108,25 @@ bool Memory_Initialize(void);
 
 // **** BGET wrapper functions *****
 
+//! Allocate and initialize num*size bytes of storage from the specified memory segment
+//! Use this as you would a call to the standard C calloc() function
+//! @param	num: number of objects
+//! @param	size: size of each object
+//! @param	the_mem_type: if MEM_STANDARD, the memory will be allocated in the system memory space (will change in future to SDRAM 64 MB area). If MEM_VRAM, it will be allocated in VRAM buffer A. Always (and only) specify VRAM if you are setting up a Bitmap object that either represents a graphics screen, or will be blitted to the graphics screen. 
+//! @return	On success, returns the pointer to the beginning of newly allocated memory. On failure, returns a null pointer.
 void* f_calloc(size_t num, size_t size, mem_type the_mem_type);
+
+//! Allocate size bytes of uninitialized storage from the specified memory segment
+//! Use this as you would a call to the standard C malloc() function
+//! @param	size: number of bytes to allocate
+//! @param	the_mem_type: if STANDARD, the memory will be allocated in the system memory space (will change in future to SDRAM 64 MB area). If VRAM, it will be allocated in VRAM buffer A. Always (and only) specify VRAM if you are setting up a Bitmap object that either represents a graphics screen, or will be blitted to the graphics screen.
+//! @return	On success, returns the pointer to the beginning of newly allocated memory. On failure, returns a null pointer.
 void* f_malloc(size_t size, mem_type the_mem_type);
+
+//! Deallocate the storage previously allocated by f_calloc() or f_malloc()
+//! Use this as you would a call to the standard C free() function
+//! @param	the_ptr: pointer to the memory to deallocate
+//! @param	the_mem_type: The memory type (corresponds to memory segment) of the pointer being freed. 
 void f_free(void* the_ptr, mem_type the_mem_type);
 
 

@@ -97,6 +97,7 @@ $(document).ready(function(){initNavTree('memory__manager_8h.html',''); initResi
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;mb/a2560_platform.h&gt;</code><br />
+<code>#include &lt;mb/general.h&gt;</code><br />
 <code>#include &lt;stdbool.h&gt;</code><br />
 <code>#include &lt;stdio.h&gt;</code><br />
 </div>
@@ -154,11 +155,13 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Memory_Initialize</b>
 <p>Allocate and initialize num*size bytes of storage from the specified memory segment Use this as you would a call to the standard C calloc() function. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">the_mem_type</td><td>if MEM_STANDARD, the memory will be allocated in the system memory space (will change in future to SDRAM 64 MB area). If MEM_VRAM, it will be allocated in VRAM buffer A. Always (and only) specify VRAM if you are setting up a <a class="el" href="struct_bitmap.html">Bitmap</a> object that either represents a graphics screen, or will be blitted to the graphics screen. <br  />
- </td></tr>
+    <tr><td class="paramname">num</td><td>number of objects </td></tr>
+    <tr><td class="paramname">size</td><td>size of each object </td></tr>
+    <tr><td class="paramname">the_mem_type</td><td>if MEM_STANDARD, the memory will be allocated in the system memory space (will change in future to SDRAM 64 MB area). If MEM_VRAM, it will be allocated in VRAM buffer A. Always (and only) specify VRAM if you are setting up a <a class="el" href="struct_bitmap.html">Bitmap</a> object that either represents a graphics screen, or will be blitted to the graphics screen. </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>On success, returns the pointer to the beginning of newly allocated memory. On failure, returns a null pointer. </dd></dl>
 
 </div>
 </div>
@@ -191,6 +194,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Memory_Initialize</b>
 <p>Deallocate the storage previously allocated by <a class="el" href="memory__manager_8h.html#aac2e221337828cd740db078bea315a1e" title="Allocate and initialize num*size bytes of storage from the specified memory segment Use this as you w...">f_calloc()</a> or <a class="el" href="memory__manager_8h.html#a122fc56ea42ab3400b73a4498efc3f6f" title="Allocate size bytes of uninitialized storage from the specified memory segment Use this as you would ...">f_malloc()</a> Use this as you would a call to the standard C free() function. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_ptr</td><td>pointer to the memory to deallocate </td></tr>
     <tr><td class="paramname">the_mem_type</td><td>The memory type (corresponds to memory segment) of the pointer being freed. <br  />
  </td></tr>
   </table>
@@ -228,11 +232,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Memory_Initialize</b>
 <p>Allocate size bytes of uninitialized storage from the specified memory segment Use this as you would a call to the standard C malloc() function. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">the_mem_type</td><td>if STANDARD, the memory will be allocated in the system memory space (will change in future to SDRAM 64 MB area). If VRAM, it will be allocated in VRAM buffer A. Always (and only) specify VRAM if you are setting up a <a class="el" href="struct_bitmap.html">Bitmap</a> object that either represents a graphics screen, or will be blitted to the graphics screen. <br  />
- </td></tr>
+    <tr><td class="paramname">size</td><td>number of bytes to allocate </td></tr>
+    <tr><td class="paramname">the_mem_type</td><td>if STANDARD, the memory will be allocated in the system memory space (will change in future to SDRAM 64 MB area). If VRAM, it will be allocated in VRAM buffer A. Always (and only) specify VRAM if you are setting up a <a class="el" href="struct_bitmap.html">Bitmap</a> object that either represents a graphics screen, or will be blitted to the graphics screen. </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>On success, returns the pointer to the beginning of newly allocated memory. On failure, returns a null pointer. </dd></dl>
 
 </div>
 </div>

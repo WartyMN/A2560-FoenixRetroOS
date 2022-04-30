@@ -61,7 +61,7 @@
 /*                            Macro Definitions                              */
 /*****************************************************************************/
 
-#define EVENT_QUEUE_SIZE	256		//! number of event records in the circular buffer
+#define EVENT_QUEUE_SIZE	64		//! number of event records in the circular buffer
 
 
 /*****************************************************************************/

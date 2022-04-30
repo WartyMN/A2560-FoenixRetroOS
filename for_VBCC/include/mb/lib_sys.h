@@ -86,6 +86,7 @@ struct System
 	List**			list_windows_;
 	Window*			active_window_;
 	uint8_t			window_count_;
+	uint16_t		model_number_;
 };
 
 
@@ -130,11 +131,13 @@ bool Sys_InitSystem(void);
 
 // **** Screen mode/resolution/size functions *****
 
+//! Find out what kind of machine the software is running on, and determine # of screens available
+//! @return	Returns false if the machine is known to be incompatible with this software. 
+bool Sys_AutoDetectMachine(System* the_system);
 
 //! Find out what kind of machine the software is running on, and configure the passed screen accordingly
 //! Configures screen settings, RAM addresses, etc. based on known info about machine types
 //! Configures screen width, height, total text rows and cols, and visible text rows and cols by checking hardware
-//! For machines with 2 screens, call this once per screen
 //! @return	Returns false if the machine is known to be incompatible with this software. 
 bool Sys_AutoConfigure(System* the_system);
 

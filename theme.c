@@ -1783,8 +1783,13 @@ ControlTemplate* Theme_CreateControlTemplateTextButton(int16_t width, int16_t he
 //! @return	Returns false on any error condition
 bool Theme_CopyCLUTtoVicky(Theme* the_theme)
 {
-	char*		dest = (char*)VICKY_IIIB_CLUT0;
+	char*		dest;
 	size_t		data_size = 0x400;
+	Screen*		the_screen;
+	
+	the_screen = Sys_GetScreen(global_system, ID_CHANNEL_B);
+	
+	dest = (char*)P32(the_screen->vicky_ + CLUT0_OFFSET_L);
 	
 	if (the_theme == NULL)
 	{
@@ -2479,8 +2484,11 @@ Theme* Theme_CreateDefaultTheme(void)
 	//Theme_Print(the_theme);
 	
 	// temp: set background color to theme color (test)
-	R32(VICKYB_BORDER_COLOR_A2560K) = 0;
-	R32(VICKYB_BACK_COLOR_A2560K) = 0;
+	Screen*		the_screen;
+	
+	the_screen = Sys_GetScreen(global_system, ID_CHANNEL_B);
+	R32(the_screen->vicky_ + BORDER_COLOR_OFFSET_L) = 0;
+	R32(the_screen->vicky_ + BORDER_BACK_COLOR_OFFSET_L) = 0;
 
 	return the_theme;
 	
@@ -2885,8 +2893,11 @@ Theme* Theme_CreateGreenTheme(void)
 	Theme_Print(the_theme);
 	
 	// temp: set background color to theme color (test)
-	R32(VICKYB_BORDER_COLOR_A2560K) = the_theme->border_color_;
-	R32(VICKYB_BACK_COLOR_A2560K) = the_theme->background_color_;
+	Screen*		the_screen;
+	
+	the_screen = Sys_GetScreen(global_system, ID_CHANNEL_B);
+	R32(the_screen->vicky_ + BORDER_COLOR_OFFSET_L) = the_theme->border_color_;
+	R32(the_screen->vicky_ + BORDER_BACK_COLOR_OFFSET_L) = the_theme->background_color_;
 
 	return the_theme;
 	

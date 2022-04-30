@@ -119,7 +119,7 @@ Data Structures</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a5eb073f2aa6c0878484c4cf33b597630"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_window.html">Window</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a5eb073f2aa6c0878484c4cf33b597630">Window_New</a> (<a class="el" href="struct_new_win_template.html">NewWinTemplate</a> *the_win_template)</td></tr>
-<tr class="memdesc:a5eb073f2aa6c0878484c4cf33b597630"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a <a class="el" href="struct_window.html">Window</a> object.  <a href="window_8h.html#a5eb073f2aa6c0878484c4cf33b597630">More...</a><br /></td></tr>
+<tr class="memdesc:a5eb073f2aa6c0878484c4cf33b597630"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a <a class="el" href="struct_window.html">Window</a> object the_win_template-&gt;width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH, cannot be greater than WIN_DEFAULT_MAX_WIDTH the_win_template-&gt;height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT, cannot be greater than WIN_DEFAULT_MAX_HEIGHT the_win_template-&gt;min_width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH the_win_template-&gt;min_height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT the_win_template-&gt;max_width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH the_win_template-&gt;max_height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT.  <a href="window_8h.html#a5eb073f2aa6c0878484c4cf33b597630">More...</a><br /></td></tr>
 <tr class="separator:a5eb073f2aa6c0878484c4cf33b597630"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a87dc477da203456e5a58d26d0512e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_new_win_template.html">NewWinTemplate</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a1a87dc477da203456e5a58d26d0512e4">Window_GetNewWinTemplate</a> (char *the_win_title)</td></tr>
 <tr class="memdesc:a1a87dc477da203456e5a58d26d0512e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate and populate a new window template object Ensures that all fields have appropriate default values Calling method must free this after creating a window with it.  <a href="window_8h.html#a1a87dc477da203456e5a58d26d0512e4">More...</a><br /></td></tr>
@@ -688,6 +688,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">radius</td><td>radius, in pixels, measured from the window's current pen location </td></tr>
+    <tr><td class="paramname">the_color</td><td>a 1-byte index to the current color LUT </td></tr>
   </table>
   </dd>
 </dl>
@@ -730,6 +732,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">the_line_len</td><td>The total length of the line, in pixels </td></tr>
     <tr><td class="paramname">the_color</td><td>a 1-byte index to the current LUT </td></tr>
   </table>
   </dd>
@@ -795,7 +798,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
     <tr><td class="paramname">x1</td><td>the starting horizontal position within the content area of the window </td></tr>
     <tr><td class="paramname">y1</td><td>the starting vertical position within the content area of the window </td></tr>
     <tr><td class="paramname">x2</td><td>the ending horizontal position within the content area of the window </td></tr>
-    <tr><td class="paramname">y2</td><td>the ending vertical position within the content area of the window Based on <a href="http://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#C">http://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#C</a>. Used in C128 Lich King. <br  />
+    <tr><td class="paramname">y2</td><td>the ending vertical position within the content area of the window </td></tr>
+    <tr><td class="paramname">the_color</td><td>a 1-byte index to the current color LUT Based on <a href="http://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#C">http://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#C</a>. Used in C128 Lich King. <br  />
  </td></tr>
   </table>
   </dd>
@@ -928,7 +932,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
 <p>Draw a string in a rectangular block on the window, with wrap. </p>
 <p >The current font, pen location, and pen color of the window will be used If a word can't be wrapped, it will break the word and move on to the next line. So if you pass a rect with 1 char of width, it will draw a vertical line of chars down the screen. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">the_bitmap</td><td>a valid <a class="el" href="struct_bitmap.html">Bitmap</a> object, with a valid font_ property </td></tr>
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
     <tr><td class="paramname">width</td><td>the horizontal size of the text wrap box, in pixels. The total of 'width' and the current X coord of the bitmap must not be greater than width of the window's content area. </td></tr>
     <tr><td class="paramname">height</td><td>the vertical size of the text wrap box, in pixels. The total of 'height' and the current Y coord of the bitmap must not be greater than height of the window's content area. </td></tr>
     <tr><td class="paramname">the_string</td><td>the null-terminated string to be displayed. </td></tr>
@@ -978,6 +982,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">the_line_len</td><td>The total length of the line, in pixels </td></tr>
     <tr><td class="paramname">the_color</td><td>a 1-byte index to the current LUT </td></tr>
   </table>
   </dd>
@@ -1142,15 +1147,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
       </table>
 </div><div class="memdoc">
 
-<p>Allocate a <a class="el" href="struct_window.html">Window</a> object. </p>
+<p>Allocate a <a class="el" href="struct_window.html">Window</a> object the_win_template-&gt;width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH, cannot be greater than WIN_DEFAULT_MAX_WIDTH the_win_template-&gt;height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT, cannot be greater than WIN_DEFAULT_MAX_HEIGHT the_win_template-&gt;min_width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH the_win_template-&gt;min_height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT the_win_template-&gt;max_width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH the_win_template-&gt;max_height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">the_win_template-&gt;width_</td><td>cannot be smaller than WIN_DEFAULT_MIN_WIDTH, cannot be greater than WIN_DEFAULT_MAX_WIDTH </td></tr>
-    <tr><td class="paramname">the_win_template-&gt;height_</td><td>cannot be smaller than WIN_DEFAULT_MIN_HEIGHT, cannot be greater than WIN_DEFAULT_MAX_HEIGHT </td></tr>
-    <tr><td class="paramname">the_win_template-&gt;min_width_</td><td>cannot be smaller than WIN_DEFAULT_MIN_WIDTH </td></tr>
-    <tr><td class="paramname">the_win_template-&gt;min_height_</td><td>cannot be smaller than WIN_DEFAULT_MIN_HEIGHT </td></tr>
-    <tr><td class="paramname">the_win_template-&gt;max_width_</td><td>cannot be smaller than WIN_DEFAULT_MIN_WIDTH </td></tr>
-    <tr><td class="paramname">the_win_template-&gt;max_height_</td><td>cannot be smaller than WIN_DEFAULT_MIN_HEIGHT </td></tr>
+    <tr><td class="paramname">the_win_template</td><td>a populated new window template whose data will be used to create the new window object </td></tr>
   </table>
   </dd>
 </dl>

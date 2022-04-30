@@ -73,6 +73,14 @@
 #define BITMAP_L0_VRAM_ADDR_L		0x41		//!> for all VICKYs, the (long) offset from the VICKY control register to the bitmap layer0 VRAM address pointer)		
 #define BITMAP_L1_CTRL_L			0x42		//!> for all VICKYs, the (long) offset from the VICKY control register to the bitmap layer1 control register (background layer)		
 #define BITMAP_L1_VRAM_ADDR_L		0x43		//!> for all VICKYs, the (long) offset from the VICKY control register to the bitmap layer1 VRAM address pointer)		
+#define CLUT0_OFFSET_L				0x800		//!> for all VICKYs, the (long) offset from the VICKY control register to the first CLUT RAM space
+#define CLUT1_OFFSET_L				0x900		//!> for all VICKYs, the (long) offset from the VICKY control register to the 2nd CLUT RAM space
+#define CLUT2_OFFSET_L				0xA00		//!> for all VICKYs, the (long) offset from the VICKY control register to the 3rd CLUT RAM space
+#define CLUT3_OFFSET_L				0xB00		//!> for all VICKYs, the (long) offset from the VICKY control register to the 4th CLUT RAM space
+#define CLUT4_OFFSET_L				0xC00		//!> for all VICKYs, the (long) offset from the VICKY control register to the 5th CLUT RAM space
+#define CLUT5_OFFSET_L				0xD00		//!> for all VICKYs, the (long) offset from the VICKY control register to the 6th CLUT RAM space
+#define CLUT6_OFFSET_L				0xE00		//!> for all VICKYs, the (long) offset from the VICKY control register to the 7th CLUT RAM space
+#define CLUT7_OFFSET_L				0xF00		//!> for all VICKYs, the (long) offset from the VICKY control register to the 8th CLUT RAM space
 
 #define GRAPHICS_MODE_MASK		0xFFFFFF00	//!> for all VICKYs, the mask for the system control register that holds the graphics/bitmap/text/sprite mode bits
 #define GRAPHICS_MODE_TEXT		0x01	// 0b00000001	Enable the Text Mode
@@ -100,6 +108,7 @@
 
 #define VICKY_II_RES_640X480_FLAGS		0x00	// 0b00000000
 #define VICKY_II_RES_800X600_FLAGS		0x01	// 0b00000001
+#define VICKY_II_PIX_DOUBLER_FLAGS		0x02	// 0b00000001
 #define VICKY_II_RES_640X400_FLAGS		0x03	// 0b00000011
 
 #define VICKY_IIIB_RES_640X480_FLAGS	0x00	// 0b00000000
@@ -155,6 +164,20 @@
 #define TEXT_RAM_A2560U				(char*)0xb60000			// text (A2560U only has one video channel)
 #define TEXT_ATTR_A2560U			(char*)0xb68000			// attr (A2560U only has one video channel)
 #define FONT_MEMORY_BANK_A2560U		(char*)0xb48000			// only 1 channel
+
+// ** C256 (VICKY II)
+#define VICKY_C256FMX				0xaf0000				// Vicky II offset/first register
+#define TEXTA_RAM_C256FMX			(char*)0xafa000			// CS_TEXT_MEM_PTR	Text Memory Block
+#define TEXTA_ATTR_C256FMX			(char*)0xafc000			// CS_COLOR_MEM_PTR	Color Text Memory Block
+#define FONT_MEMORY_BANK_C256FMX	(char*)0xaf8000			// FONT_MEMORY_BANK0	FONT Character Graphic Mem
+#define VICKY_II_CLUT0				0xaf2000				// each addition LUT is 400 offset from here
+#define VICKY_II_CLUT1				VICKY_II_CLUT0 + 0x400	// each addition LUT is 400 offset from here
+#define VICKY_II_CLUT2				VICKY_II_CLUT1 + 0x400	// each addition LUT is 400 offset from here
+#define VICKY_II_CLUT3				VICKY_II_CLUT2 + 0x400	// each addition LUT is 400 offset from here
+#define VICKY_II_CLUT4				VICKY_II_CLUT3 + 0x400	// each addition LUT is 400 offset from here
+#define VICKY_II_CLUT5				VICKY_II_CLUT4 + 0x400	// each addition LUT is 400 offset from here
+#define VICKY_II_CLUT6				VICKY_II_CLUT5 + 0x400	// each addition LUT is 400 offset from here
+#define VICKY_II_CLUT7				VICKY_II_CLUT6 + 0x400	// each addition LUT is 400 offset from here
 
 
 // subtract 0xfe000000 from the UM map for Vicky (to get the old/morfe addresses)

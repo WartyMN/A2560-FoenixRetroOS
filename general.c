@@ -1096,7 +1096,7 @@ void General_LogError(const char* format, ...)
 	*((long *)-4) = (long)&debug_buffer;
 #else
 	//fprintf(global_log_file, "%s %s\n", kDebugFlag[LogError], debug_buffer);
-	printf("%s %s\n", kDebugFlag[LogError], debug_buffer);
+	printf("%s %s\r", kDebugFlag[LogError], debug_buffer);
 #endif
 }
 
@@ -1113,7 +1113,7 @@ void General_LogWarning(const char* format, ...)
 	*((long *)-4) = (long)&debug_buffer;
 #else
 	//fprintf(global_log_file, "%s %s\n", kDebugFlag[LogWarning], debug_buffer);
-	printf("%s %s\n", kDebugFlag[LogWarning], debug_buffer);
+	printf("%s %s\r", kDebugFlag[LogWarning], debug_buffer);
 #endif
 }
 
@@ -1130,7 +1130,7 @@ void General_LogInfo(const char* format, ...)
 	*((long *)-4) = (long)&debug_buffer;
 #else
 	//fprintf(global_log_file, "%s %s\n", kDebugFlag[LogInfo], debug_buffer);
-	printf("%s %s\n", kDebugFlag[LogInfo], debug_buffer);
+	printf("%s %s\r", kDebugFlag[LogInfo], debug_buffer);
 #endif
 }
 
@@ -1147,7 +1147,7 @@ void General_DebugOut(const char* format, ...)
 	*((long *)-4) = (long)&debug_buffer;
 #else
 	//fprintf(global_log_file, "%s %s\n", kDebugFlag[LogDebug], debug_buffer);
-	printf("%s %s\n", kDebugFlag[LogDebug], debug_buffer);
+	printf("%s %s\r", kDebugFlag[LogDebug], debug_buffer);
 #endif
 }
 
@@ -1164,7 +1164,7 @@ void General_LogAlloc(const char* format, ...)
 	*((long *)-4) = (long)&debug_buffer;
 #else
 	//fprintf(global_log_file, "%s %s\n", kDebugFlag[LogAlloc], debug_buffer);
-	printf("%s %s\n", kDebugFlag[LogAlloc], debug_buffer);
+	printf("%s %s\r", kDebugFlag[LogAlloc], debug_buffer);
 #endif
 }
 

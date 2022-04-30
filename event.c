@@ -230,6 +230,8 @@ EventManager* EventManager_New(void)
 	the_event_manager->write_idx_ = 0;
 	the_event_manager->read_idx_ = 0;
 	
+	//DEBUG_OUT(("%s %d: EventManager (%p) created", __func__ , __LINE__, the_event_manager));
+	
 	int	i;
 	
 	for (i=0; i < EVENT_QUEUE_SIZE; i++)
@@ -239,6 +241,8 @@ EventManager* EventManager_New(void)
 			LOG_ERR(("%s %d: could not create event record #%i", __func__ , __LINE__, i));
 			goto error;
 		}
+		
+		//DEBUG_OUT(("%s %d: Event %i (%p)(%p) created", __func__ , __LINE__, i, the_event, the_event_manager->queue_[i]));
 	}
 	
 	return the_event_manager;
@@ -263,7 +267,10 @@ bool EventManager_Destroy(EventManager** the_event_manager)
 
 	for (i=0; i < EVENT_QUEUE_SIZE; i++)
 	{
-		Event_Destroy(&(*the_event_manager)->queue_[i]);
+		if ((*the_event_manager)->queue_[i] != NULL)
+		{
+			Event_Destroy(&(*the_event_manager)->queue_[i]);
+		}
 	}
 	
 	LOG_ALLOC(("%s %d:	__FREE__	*the_event_manager	%p	size	%i", __func__ , __LINE__, *the_event_manager, sizeof(EventManager)));

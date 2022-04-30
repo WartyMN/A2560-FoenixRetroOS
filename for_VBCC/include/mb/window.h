@@ -227,6 +227,13 @@ struct ClipRect
 
 // constructor
 //! Allocate a Window object
+//! the_win_template->width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH, cannot be greater than WIN_DEFAULT_MAX_WIDTH
+//! the_win_template->height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT, cannot be greater than WIN_DEFAULT_MAX_HEIGHT
+//! the_win_template->min_width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH
+//! the_win_template->min_height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT
+//! the_win_template->max_width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH
+//! the_win_template->max_height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT
+//! @param	the_win_template: a populated new window template whose data will be used to create the new window object
 Window* Window_New(NewWinTemplate* the_win_template);
 
 // destructor
@@ -440,17 +447,20 @@ bool Window_SetPixel(Window* the_window, uint8_t the_color);
 //! @param	y1: the starting vertical position within the content area of the window
 //! @param	x2: the ending horizontal position within the content area of the window
 //! @param	y2: the ending vertical position within the content area of the window
+//! @param	the_color: a 1-byte index to the current color LUT
 //! Based on http://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#C. Used in C128 Lich King. 
 bool Window_DrawLine(Window* the_window, int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t the_color);
 
 //! Draws a horizontal line from the current pen location, for n pixels, using the specified pixel value
 //! @param	the_window: reference to a valid Window object.
+//! @param	the_line_len: The total length of the line, in pixels
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return	returns false on any error/invalid input.
 bool Window_DrawHLine(Window* the_window, int16_t the_line_len, uint8_t the_color);
 
 //! Draws a vertical line from specified coords, for n pixels
 //! @param	the_window: reference to a valid Window object.
+//! @param	the_line_len: The total length of the line, in pixels
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return	returns false on any error/invalid input.
 bool Window_DrawVLine(Window* the_window, int16_t the_line_len, uint8_t the_color);
@@ -494,6 +504,8 @@ bool Window_DrawRoundBox(Window* the_window, int16_t width, int16_t height, int1
 //! Draw a circle centered on the current pen location
 //! Based on http://rosettacode.org/wiki/Bitmap/Midpoint_circle_algorithm#C
 //! @param	the_window: reference to a valid Window object.
+//! @param	radius: radius, in pixels, measured from the window's current pen location
+//! @param	the_color: a 1-byte index to the current color LUT
 bool Window_DrawCircle(Window* the_window, int16_t radius, uint8_t the_color);
 
 // Draw a string at the current "pen" location, using the current pen color of the Window
@@ -506,7 +518,7 @@ bool Window_DrawString(Window* the_window, char* the_string, int16_t max_chars);
 //! Draw a string in a rectangular block on the window, with wrap.
 //! The current font, pen location, and pen color of the window will be used
 //! If a word can't be wrapped, it will break the word and move on to the next line. So if you pass a rect with 1 char of width, it will draw a vertical line of chars down the screen.
-//! @param	the_bitmap: a valid Bitmap object, with a valid font_ property
+//! @param	the_window: reference to a valid Window object.
 //! @param	width: the horizontal size of the text wrap box, in pixels. The total of 'width' and the current X coord of the bitmap must not be greater than width of the window's content area.
 //! @param	height: the vertical size of the text wrap box, in pixels. The total of 'height' and the current Y coord of the bitmap must not be greater than height of the window's content area.
 //! @param	the_string: the null-terminated string to be displayed.

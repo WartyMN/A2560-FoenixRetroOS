@@ -169,324 +169,347 @@ $(document).ready(function(){initNavTree('a2560__platform_8h_source.html',''); i
 <div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="preprocessor">#define BITMAP_L0_VRAM_ADDR_L       0x41        </span></div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="preprocessor">#define BITMAP_L1_CTRL_L            0x42        </span></div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="preprocessor">#define BITMAP_L1_VRAM_ADDR_L       0x43        </span></div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="preprocessor">#define GRAPHICS_MODE_MASK      0xFFFFFF00  </span></div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="preprocessor">#define GRAPHICS_MODE_TEXT      0x01    </span><span class="comment">// 0b00000001   Enable the Text Mode</span></div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="preprocessor">#define GRAPHICS_MODE_TEXT_OVER 0x02    </span><span class="comment">// 0b00000010   Enable the Overlay of the text mode on top of Graphic Mode (the Background Color is ignored)</span></div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="preprocessor">#define GRAPHICS_MODE_GRAPHICS  0x04    </span><span class="comment">// 0b00000100   Enable the Graphic Mode</span></div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="preprocessor">#define GRAPHICS_MODE_EN_BITMAP 0x08    </span><span class="comment">// 0b00001000   Enable the Bitmap Module In Vicky</span></div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="preprocessor">#define GRAPHICS_MODE_EN_TILE   0x10    </span><span class="comment">// 0b00010000   Enable the Tile Module in Vicky</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="preprocessor">#define GRAPHICS_MODE_EN_SPRITE 0x20    </span><span class="comment">// 0b00100000   Enable the Sprite Module in Vicky</span></div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="preprocessor">#define GRAPHICS_MODE_EN_GAMMA  0x40    </span><span class="comment">// 0b01000000   Enable the GAMMA correction - The Analog and DVI have different color values, the GAMMA is great to correct the difference</span></div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="preprocessor">#define GRAPHICS_MODE_DIS_VIDEO 0x80    </span><span class="comment">// 0b10000000   This will disable the Scanning of the Video information in the 4Meg of VideoRAM hence giving 100% bandwidth to the CPU</span></div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment">// VICKY RESOLUTION FLAGS Per A2560K_UM_Rev0.0.1.pdf and A2560U_UM_Rev0.0.2.pdf</span></div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment">// VICKY II / VICKY III Chan B</span></div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment">// 640x480  @ 60FPS &gt; 0 0</span></div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment">// 800x600  @ 60FPS &gt; 0 1</span></div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment">// reserved         &gt; 1 0</span></div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment">// 640x400  @ 70FPS &gt; 1 1</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="preprocessor">#define CLUT0_OFFSET_L              0x800       </span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="preprocessor">#define CLUT1_OFFSET_L              0x900       </span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="preprocessor">#define CLUT2_OFFSET_L              0xA00       </span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="preprocessor">#define CLUT3_OFFSET_L              0xB00       </span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="preprocessor">#define CLUT4_OFFSET_L              0xC00       </span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="preprocessor">#define CLUT5_OFFSET_L              0xD00       </span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="preprocessor">#define CLUT6_OFFSET_L              0xE00       </span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="preprocessor">#define CLUT7_OFFSET_L              0xF00       </span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="preprocessor">#define GRAPHICS_MODE_MASK      0xFFFFFF00  </span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="preprocessor">#define GRAPHICS_MODE_TEXT      0x01    </span><span class="comment">// 0b00000001   Enable the Text Mode</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="preprocessor">#define GRAPHICS_MODE_TEXT_OVER 0x02    </span><span class="comment">// 0b00000010   Enable the Overlay of the text mode on top of Graphic Mode (the Background Color is ignored)</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="preprocessor">#define GRAPHICS_MODE_GRAPHICS  0x04    </span><span class="comment">// 0b00000100   Enable the Graphic Mode</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="preprocessor">#define GRAPHICS_MODE_EN_BITMAP 0x08    </span><span class="comment">// 0b00001000   Enable the Bitmap Module In Vicky</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="preprocessor">#define GRAPHICS_MODE_EN_TILE   0x10    </span><span class="comment">// 0b00010000   Enable the Tile Module in Vicky</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="preprocessor">#define GRAPHICS_MODE_EN_SPRITE 0x20    </span><span class="comment">// 0b00100000   Enable the Sprite Module in Vicky</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="preprocessor">#define GRAPHICS_MODE_EN_GAMMA  0x40    </span><span class="comment">// 0b01000000   Enable the GAMMA correction - The Analog and DVI have different color values, the GAMMA is great to correct the difference</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="preprocessor">#define GRAPHICS_MODE_DIS_VIDEO 0x80    </span><span class="comment">// 0b10000000   This will disable the Scanning of the Video information in the 4Meg of VideoRAM hence giving 100% bandwidth to the CPU</span></div>
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment">// VICKY III Chan A</span></div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment">// 800x600  @ 60FPS &gt; 0 0</span></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment">// 1024x768 @ 60FPS &gt; 0 1</span></div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment">// reserved         &gt; 1 0</span></div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment">// reserved         &gt; 1 1</span></div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="preprocessor">#define VICKY_II_RES_640X480_FLAGS      0x00    </span><span class="comment">// 0b00000000</span></div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="preprocessor">#define VICKY_II_RES_800X600_FLAGS      0x01    </span><span class="comment">// 0b00000001</span></div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="preprocessor">#define VICKY_II_RES_640X400_FLAGS      0x03    </span><span class="comment">// 0b00000011</span></div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="preprocessor">#define VICKY_IIIB_RES_640X480_FLAGS    0x00    </span><span class="comment">// 0b00000000</span></div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="preprocessor">#define VICKY_IIIB_RES_800X600_FLAGS    0x01    </span><span class="comment">// 0b00000001</span></div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="preprocessor">#define VICKY_IIIB_RES_640X400_FLAGS    0x03    </span><span class="comment">// 0b00000011</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment">// VICKY RESOLUTION FLAGS Per A2560K_UM_Rev0.0.1.pdf and A2560U_UM_Rev0.0.2.pdf</span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment">// VICKY II / VICKY III Chan B</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment">// 640x480  @ 60FPS &gt; 0 0</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment">// 800x600  @ 60FPS &gt; 0 1</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment">// reserved         &gt; 1 0</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment">// 640x400  @ 70FPS &gt; 1 1</span></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment">// VICKY III Chan A</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="comment">// 800x600  @ 60FPS &gt; 0 0</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="comment">// 1024x768 @ 60FPS &gt; 0 1</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment">// reserved         &gt; 1 0</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="comment">// reserved         &gt; 1 1</span></div>
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="preprocessor">#define VICKY_IIIA_RES_800X600_FLAGS    0x00    </span><span class="comment">// 0b00000000</span></div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="preprocessor">#define VICKY_IIIA_RES_1024X768_FLAGS   0x08    </span><span class="comment">// 0b00000100</span></div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment">// ** A2560K and A2560X</span></div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="preprocessor">#define VICKY_A2560K_A              0xfec40000              </span><span class="comment">// vicky III channel A control register</span></div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="preprocessor">#define VICKYA_CURSOR_CTRL_A2560K   VICKY_A2560K_A + 0x10   </span><span class="comment">// vicky III channel A cursor control register</span></div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="preprocessor">#define VICKYA_CURSOR_POS_A2560K    VICKY_A2560K_A + 0x14   </span><span class="comment">// vicky III channel A cursor position register (x pos is lower word, y pos is upper word)</span></div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="preprocessor">#define VICKY_A2560K_B              0xfec80000              </span><span class="comment">// vicky III channel B control register</span></div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="preprocessor">#define VICKYB_BORDER_CTRL_A2560K   VICKY_A2560K_B + 0x04   </span><span class="comment">// vicky III channel B border control register</span></div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="preprocessor">#define VICKYB_BORDER_COLOR_A2560K  0xfec80008              </span><span class="comment">// vicky III channel B border color register</span></div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="preprocessor">#define VICKYB_BACK_COLOR_A2560K    0xfec8000C              </span><span class="comment">// vicky III channel B background color register</span></div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="preprocessor">#define VICKYB_CURSOR_CTRL_A2560K   VICKY_A2560K_B + 0x10   </span><span class="comment">// vicky III channel B cursor control register</span></div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="preprocessor">#define VICKYB_CURSOR_POS_A2560K    VICKY_A2560K_B + 0x14   </span><span class="comment">// vicky III channel B cursor position register</span></div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="preprocessor">#define VICKYB_BITMAP_L0_CTRL       0xfec80100              </span><span class="comment">// vicky III channel B bitmap layer 0 control register (1=enable, +2=LUT0, +4=LUT1, +8=LUT2</span></div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="preprocessor">#define VICKYB_MOUSE_GRAPHIC_A2560K 0xfec80400              </span><span class="comment">// vicky III channel B mouse pointer graphic stored here (16x16)</span></div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="preprocessor">#define VICKYB_MOUSE_CTRL_A2560K    0xfec80c00              </span><span class="comment">// vicky III channel B mouse pointer control register. set to 1 to enable mouse. +2 to do whatever &quot;pointer choice&quot; does.</span></div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="preprocessor">#define VICKYB_MOUSE_PTR_POS_A2560K 0xfec80c04              </span><span class="comment">// vicky III channel B mouse pointer position (Y pos in upper 16 bits, x in lower)</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="preprocessor">#define TEXTA_RAM_A2560K            (char*)0xfec60000       </span><span class="comment">// channel A text</span></div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="preprocessor">#define TEXTA_ATTR_A2560K           (char*)0xfec68000       </span><span class="comment">// channel A attr</span></div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="preprocessor">#define TEXTB_RAM_A2560K            (char*)0xfeca0000       </span><span class="comment">// channel B text</span></div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="preprocessor">#define TEXTB_ATTR_A2560K           (char*)0xfeca8000       </span><span class="comment">// channel B attr</span></div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="preprocessor">#define FONT_MEMORY_BANKA_A2560K    (char*)0xfec48000       </span><span class="comment">// chan A</span></div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="preprocessor">#define FONT_MEMORY_BANKB_A2560K    (char*)0xfec88000       </span><span class="comment">// chan B</span></div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="preprocessor">#define VICKY_IIIB_CLUT0            0xfec82000              </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span><span class="preprocessor">#define VICKY_IIIB_CLUT1            VICKY_IIIB_CLUT0 + 0x400    </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span><span class="preprocessor">#define VICKY_IIIB_CLUT2            VICKY_IIIB_CLUT1 + 0x400    </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span><span class="preprocessor">#define VICKY_IIIB_CLUT3            VICKY_IIIB_CLUT2 + 0x400    </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span><span class="preprocessor">#define VICKY_IIIB_CLUT4            VICKY_IIIB_CLUT3 + 0x400    </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span><span class="preprocessor">#define VICKY_IIIB_CLUT5            VICKY_IIIB_CLUT4 + 0x400    </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span><span class="preprocessor">#define VICKY_IIIB_CLUT6            VICKY_IIIB_CLUT5 + 0x400    </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="preprocessor">#define VICKY_IIIB_CLUT7            VICKY_IIIB_CLUT6 + 0x400    </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span> </div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="preprocessor">#define default_start_a2560k_vram   0x00011000  </span><span class="comment">// offset against vicky I think though. add to VICKY_A2560K_B? based on doing peek32 in f68. </span></div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="preprocessor">#define VRAM_BUFFER_A               0x00800000</span></div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="preprocessor">#define VRAM_BUFFER_B               0x00C00000</span></div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="preprocessor">#define BITMAP_CTRL_REG_A2560_0     0xfec80100  </span></div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span><span class="preprocessor">#define BITMAP_VRAM_ADDR_A2560_0    0xfec80104  </span></div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="preprocessor">#define BITMAP_CTRL_REG_A2560_1     0xfec80108  </span></div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="preprocessor">#define BITMAP_VRAM_ADDR_A2560_1    0xfec8010C  </span></div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span> </div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="preprocessor">#define VICKY_II_RES_640X480_FLAGS      0x00    </span><span class="comment">// 0b00000000</span></div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="preprocessor">#define VICKY_II_RES_800X600_FLAGS      0x01    </span><span class="comment">// 0b00000001</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="preprocessor">#define VICKY_II_PIX_DOUBLER_FLAGS      0x02    </span><span class="comment">// 0b00000001</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="preprocessor">#define VICKY_II_RES_640X400_FLAGS      0x03    </span><span class="comment">// 0b00000011</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="preprocessor">#define VICKY_IIIB_RES_640X480_FLAGS    0x00    </span><span class="comment">// 0b00000000</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="preprocessor">#define VICKY_IIIB_RES_800X600_FLAGS    0x01    </span><span class="comment">// 0b00000001</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="preprocessor">#define VICKY_IIIB_RES_640X400_FLAGS    0x03    </span><span class="comment">// 0b00000011</span></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="preprocessor">#define VICKY_IIIA_RES_800X600_FLAGS    0x00    </span><span class="comment">// 0b00000000</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="preprocessor">#define VICKY_IIIA_RES_1024X768_FLAGS   0x08    </span><span class="comment">// 0b00000100</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment">// ** A2560K and A2560X</span></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="preprocessor">#define VICKY_A2560K_A              0xfec40000              </span><span class="comment">// vicky III channel A control register</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="preprocessor">#define VICKYA_CURSOR_CTRL_A2560K   VICKY_A2560K_A + 0x10   </span><span class="comment">// vicky III channel A cursor control register</span></div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="preprocessor">#define VICKYA_CURSOR_POS_A2560K    VICKY_A2560K_A + 0x14   </span><span class="comment">// vicky III channel A cursor position register (x pos is lower word, y pos is upper word)</span></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="preprocessor">#define VICKY_A2560K_B              0xfec80000              </span><span class="comment">// vicky III channel B control register</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="preprocessor">#define VICKYB_BORDER_CTRL_A2560K   VICKY_A2560K_B + 0x04   </span><span class="comment">// vicky III channel B border control register</span></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="preprocessor">#define VICKYB_BORDER_COLOR_A2560K  0xfec80008              </span><span class="comment">// vicky III channel B border color register</span></div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="preprocessor">#define VICKYB_BACK_COLOR_A2560K    0xfec8000C              </span><span class="comment">// vicky III channel B background color register</span></div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="preprocessor">#define VICKYB_CURSOR_CTRL_A2560K   VICKY_A2560K_B + 0x10   </span><span class="comment">// vicky III channel B cursor control register</span></div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="preprocessor">#define VICKYB_CURSOR_POS_A2560K    VICKY_A2560K_B + 0x14   </span><span class="comment">// vicky III channel B cursor position register</span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="preprocessor">#define VICKYB_BITMAP_L0_CTRL       0xfec80100              </span><span class="comment">// vicky III channel B bitmap layer 0 control register (1=enable, +2=LUT0, +4=LUT1, +8=LUT2</span></div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="preprocessor">#define VICKYB_MOUSE_GRAPHIC_A2560K 0xfec80400              </span><span class="comment">// vicky III channel B mouse pointer graphic stored here (16x16)</span></div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span><span class="preprocessor">#define VICKYB_MOUSE_CTRL_A2560K    0xfec80c00              </span><span class="comment">// vicky III channel B mouse pointer control register. set to 1 to enable mouse. +2 to do whatever &quot;pointer choice&quot; does.</span></div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span><span class="preprocessor">#define VICKYB_MOUSE_PTR_POS_A2560K 0xfec80c04              </span><span class="comment">// vicky III channel B mouse pointer position (Y pos in upper 16 bits, x in lower)</span></div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span><span class="preprocessor">#define TEXTA_RAM_A2560K            (char*)0xfec60000       </span><span class="comment">// channel A text</span></div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span><span class="preprocessor">#define TEXTA_ATTR_A2560K           (char*)0xfec68000       </span><span class="comment">// channel A attr</span></div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span><span class="preprocessor">#define TEXTB_RAM_A2560K            (char*)0xfeca0000       </span><span class="comment">// channel B text</span></div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span><span class="preprocessor">#define TEXTB_ATTR_A2560K           (char*)0xfeca8000       </span><span class="comment">// channel B attr</span></div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="preprocessor">#define FONT_MEMORY_BANKA_A2560K    (char*)0xfec48000       </span><span class="comment">// chan A</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="preprocessor">#define FONT_MEMORY_BANKB_A2560K    (char*)0xfec88000       </span><span class="comment">// chan B</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="preprocessor">#define VICKY_IIIB_CLUT0            0xfec82000              </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="preprocessor">#define VICKY_IIIB_CLUT1            VICKY_IIIB_CLUT0 + 0x400    </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="preprocessor">#define VICKY_IIIB_CLUT2            VICKY_IIIB_CLUT1 + 0x400    </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="preprocessor">#define VICKY_IIIB_CLUT3            VICKY_IIIB_CLUT2 + 0x400    </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span><span class="preprocessor">#define VICKY_IIIB_CLUT4            VICKY_IIIB_CLUT3 + 0x400    </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="preprocessor">#define VICKY_IIIB_CLUT5            VICKY_IIIB_CLUT4 + 0x400    </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="preprocessor">#define VICKY_IIIB_CLUT6            VICKY_IIIB_CLUT5 + 0x400    </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span><span class="preprocessor">#define VICKY_IIIB_CLUT7            VICKY_IIIB_CLUT6 + 0x400    </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
 <div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span><span class="comment">// ** A2560U and A2560U+</span></div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span><span class="preprocessor">#define VICKY_A2560U                0xb40000                </span><span class="comment">// Vicky II offset/first register</span></div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span><span class="preprocessor">#define VICKY_CURSOR_CTRL_A2560U    VICKY_A2560U + 0x10     </span><span class="comment">// vicky II channel A cursor control register</span></div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span><span class="preprocessor">#define VICKY_CURSOR_POS_A2560U     VICKY_A2560U + 0x14     </span><span class="comment">// vicky II channel A cursor position register (x pos is lower word, y pos is upper word)</span></div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span><span class="preprocessor">#define TEXT_RAM_A2560U             (char*)0xb60000         </span><span class="comment">// text (A2560U only has one video channel)</span></div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span><span class="preprocessor">#define TEXT_ATTR_A2560U            (char*)0xb68000         </span><span class="comment">// attr (A2560U only has one video channel)</span></div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span><span class="preprocessor">#define FONT_MEMORY_BANK_A2560U     (char*)0xb48000         </span><span class="comment">// only 1 channel</span></div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span><span class="preprocessor">#define default_start_a2560k_vram   0x00011000  </span><span class="comment">// offset against vicky I think though. add to VICKY_A2560K_B? based on doing peek32 in f68. </span></div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span><span class="preprocessor">#define VRAM_BUFFER_A               0x00800000</span></div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span><span class="preprocessor">#define VRAM_BUFFER_B               0x00C00000</span></div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span><span class="preprocessor">#define BITMAP_CTRL_REG_A2560_0     0xfec80100  </span></div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span><span class="preprocessor">#define BITMAP_VRAM_ADDR_A2560_0    0xfec80104  </span></div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span><span class="preprocessor">#define BITMAP_CTRL_REG_A2560_1     0xfec80108  </span></div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span><span class="preprocessor">#define BITMAP_VRAM_ADDR_A2560_1    0xfec8010C  </span></div>
 <div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span> </div>
 <div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span> </div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span><span class="comment">// subtract 0xfe000000 from the UM map for Vicky (to get the old/morfe addresses)</span></div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span><span class="comment">// size of some areas changed too:</span></div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span><span class="comment">//   channel-A text went 0xc6:0000 -&gt; 0xFEC6:0000, but channel-A color went 0xc6:8000 -&gt; 0xFEC6:4000</span></div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span><span class="comment">//   channel-B text went 0xca:0000-&gt; 0xFECA:0000, channel-B color went 0xca:8000 -&gt; 0xFECA:4000</span></div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span><span class="comment">// btw, one thing to keep in mind is device-mem access granularity -- while in morfe you can do 8-32bit accesses, on the actual hw you will need to adhere to the area access granularity</span></div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><span class="comment">//  see user manual, the &quot;SIZE&quot; columns</span></div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span> </div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span><span class="comment">// c256foenix on 2/27:</span></div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span><span class="comment">// I will have to look into that. Suffice to say that Channel A, has 2 Video Modes, 800x600 and 1024x768 with no doubling. Channel B has 6 modes, 640x480@60, 800x600@60 and 640x400@70 and with the equivalent Pixel Doubling, 320x240, 400x300 and 320x200. </span></div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span><span class="comment">// Now, in the K, for Channel A, to not be confusing (although I might have created what I was trying to avoid) and to not have competing Regiters bit with different function (from Channel B and A), I moved the Resolution selection bit to bit# (Something I have to check), but it is farther down the Control Register.</span></div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span><span class="comment">// the Video mode bit for Channel A (that I call Auxiliary) would be bit 11 of the Control Register</span></div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span><span class="comment">// assign Mstr_Ctrl_Video_Mode_PLL_Aux_o = VICKY_MASTER_REG1_RESYNC_AUX[2][11];</span></div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span><span class="comment">// So, that is the bit that selects either 800x600 or 1024x768 and bit[9:8] are ignored.</span></div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="comment">//    so: 1024x768 = 128x96</span></div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><span class="comment">//    800x600 = 100x75</span></div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><span class="comment">//    640x480 = 80x60</span></div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span><span class="comment">//    640x400 = 80x50</span></div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="comment">//    400x300 = 50x37.5</span></div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span><span class="comment">//    320x240 = 40x30</span></div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span><span class="comment">//    320x200 = 40x25</span></div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span><span class="comment">//    (these are all maximums, as borders can be configured, which reduces the number of usable rows/cols.)</span></div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span><span class="comment">//</span></div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><span class="comment">// c256 foenix on 2/27:</span></div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span><span class="comment">// To answer, in the traditional Text Mode (Channel B). When you are double pixel mode, everything is reajusted automatically. The Channel A doesn&#39;t have a text doubling mode (anymore). And the text matrix and FONT dimension are all manual (needs to be programmed). This is to allow the usage of different sizes of FONT.</span></div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> </div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span><span class="comment">// fonts</span></div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span><span class="comment">// gadget:</span></div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span><span class="comment">// If it&#39;s the same as on the C256 line, each character consists of 8 bytes.  Upper left hand corner is the high-bit of byte zero, upper right is the low bit of byte zero, lower left is the high bit of byte 7, lower right is the low bit of byte 7.  The bytes are placed in memory from character zero to character 255, 0..7, 0..7, 0..7, etc.</span></div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span><span class="comment">// ** A2560U and A2560U+</span></div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span><span class="preprocessor">#define VICKY_A2560U                0xb40000                </span><span class="comment">// Vicky II offset/first register</span></div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span><span class="preprocessor">#define VICKY_CURSOR_CTRL_A2560U    VICKY_A2560U + 0x10     </span><span class="comment">// vicky II channel A cursor control register</span></div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span><span class="preprocessor">#define VICKY_CURSOR_POS_A2560U     VICKY_A2560U + 0x14     </span><span class="comment">// vicky II channel A cursor position register (x pos is lower word, y pos is upper word)</span></div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span><span class="preprocessor">#define TEXT_RAM_A2560U             (char*)0xb60000         </span><span class="comment">// text (A2560U only has one video channel)</span></div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><span class="preprocessor">#define TEXT_ATTR_A2560U            (char*)0xb68000         </span><span class="comment">// attr (A2560U only has one video channel)</span></div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span><span class="preprocessor">#define FONT_MEMORY_BANK_A2560U     (char*)0xb48000         </span><span class="comment">// only 1 channel</span></div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span> </div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span><span class="comment">// ** C256 (VICKY II)</span></div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span><span class="preprocessor">#define VICKY_C256FMX               0xaf0000                </span><span class="comment">// Vicky II offset/first register</span></div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span><span class="preprocessor">#define TEXTA_RAM_C256FMX           (char*)0xafa000         </span><span class="comment">// CS_TEXT_MEM_PTR  Text Memory Block</span></div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span><span class="preprocessor">#define TEXTA_ATTR_C256FMX          (char*)0xafc000         </span><span class="comment">// CS_COLOR_MEM_PTR Color Text Memory Block</span></div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span><span class="preprocessor">#define FONT_MEMORY_BANK_C256FMX    (char*)0xaf8000         </span><span class="comment">// FONT_MEMORY_BANK0    FONT Character Graphic Mem</span></div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="preprocessor">#define VICKY_II_CLUT0              0xaf2000                </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="preprocessor">#define VICKY_II_CLUT1              VICKY_II_CLUT0 + 0x400  </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><span class="preprocessor">#define VICKY_II_CLUT2              VICKY_II_CLUT1 + 0x400  </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><span class="preprocessor">#define VICKY_II_CLUT3              VICKY_II_CLUT2 + 0x400  </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span><span class="preprocessor">#define VICKY_II_CLUT4              VICKY_II_CLUT3 + 0x400  </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="preprocessor">#define VICKY_II_CLUT5              VICKY_II_CLUT4 + 0x400  </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span><span class="preprocessor">#define VICKY_II_CLUT6              VICKY_II_CLUT5 + 0x400  </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span><span class="preprocessor">#define VICKY_II_CLUT7              VICKY_II_CLUT6 + 0x400  </span><span class="comment">// each addition LUT is 400 offset from here</span></div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span> </div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><span class="comment">// subtract 0xfe000000 from the UM map for Vicky (to get the old/morfe addresses)</span></div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span><span class="comment">// size of some areas changed too:</span></div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span><span class="comment">//   channel-A text went 0xc6:0000 -&gt; 0xFEC6:0000, but channel-A color went 0xc6:8000 -&gt; 0xFEC6:4000</span></div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span><span class="comment">//   channel-B text went 0xca:0000-&gt; 0xFECA:0000, channel-B color went 0xca:8000 -&gt; 0xFECA:4000</span></div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span><span class="comment">// btw, one thing to keep in mind is device-mem access granularity -- while in morfe you can do 8-32bit accesses, on the actual hw you will need to adhere to the area access granularity</span></div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span><span class="comment">//  see user manual, the &quot;SIZE&quot; columns</span></div>
 <div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span> </div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span><span class="comment">// pjw:</span></div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span><span class="comment">// Yeah, C256 and A2560U fonts are the same layout. The A2560K is a little different. The mostly-text-mode screen supports an 8x16 font layout, where the structure is essentially the same, but each character is 16 bytes rather than 8.</span></div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span> </div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span><span class="comment">// beethead:</span></div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span><span class="comment">// The 2nd font was removed when the U line came in since it was not being used.  Atleast on the C256&#39;s.</span></div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span> </div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span><span class="comment">// PJW — 2022/03/06 at 9:10 AM</span></div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span><span class="comment">// The A2560K has two DVI ports: one is channel A (which is a text only channel), and channel B is a text and graphics channel equivalent to the main screen on the A2560U. The boot up image on the K shows up on channel B. Currently, the MCP uses channel A as the main interaction channel, but I think I&#39;m going to change that soon, since some people may have just the one screen. The &quot;CTX Switch&quot; key on the A2560K was originally intended as a way to switch which screen you were using for text input, and I may finally implement that.</span></div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span> </div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span><span class="preprocessor">#define SYS_TICKS_PER_SEC       60  </span><span class="comment">// per syscalls.h in MCP, &quot;a jiffie is 1/60 of a second.&quot;</span></div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span> </div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span><span class="comment">// machine model numbers - for decoding s_sys_info.model</span></div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span><span class="preprocessor">#define MACHINE_C256_FMX        0   </span></div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span><span class="preprocessor">#define MACHINE_C256_U          1   </span></div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span><span class="preprocessor">#define MACHINE_C256_GENX       4   </span></div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span><span class="preprocessor">#define MACHINE_C256_UPLUS      5   </span></div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span><span class="preprocessor">#define MACHINE_A2560U_PLUS     6   </span></div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span><span class="preprocessor">#define MACHINE_A2560X          7   </span></div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span><span class="preprocessor">#define MACHINE_A2560U          9   </span></div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span><span class="preprocessor">#define MACHINE_A2560K          13  </span></div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span> </div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span> </div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span><span class="comment">// c256foenix on 2/27:</span></div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span><span class="comment">// I will have to look into that. Suffice to say that Channel A, has 2 Video Modes, 800x600 and 1024x768 with no doubling. Channel B has 6 modes, 640x480@60, 800x600@60 and 640x400@70 and with the equivalent Pixel Doubling, 320x240, 400x300 and 320x200. </span></div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span><span class="comment">// Now, in the K, for Channel A, to not be confusing (although I might have created what I was trying to avoid) and to not have competing Regiters bit with different function (from Channel B and A), I moved the Resolution selection bit to bit# (Something I have to check), but it is farther down the Control Register.</span></div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span><span class="comment">// the Video mode bit for Channel A (that I call Auxiliary) would be bit 11 of the Control Register</span></div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span><span class="comment">// assign Mstr_Ctrl_Video_Mode_PLL_Aux_o = VICKY_MASTER_REG1_RESYNC_AUX[2][11];</span></div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span><span class="comment">// So, that is the bit that selects either 800x600 or 1024x768 and bit[9:8] are ignored.</span></div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span> </div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span><span class="comment">//    so: 1024x768 = 128x96</span></div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span><span class="comment">//    800x600 = 100x75</span></div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span><span class="comment">//    640x480 = 80x60</span></div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span><span class="comment">//    640x400 = 80x50</span></div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span><span class="comment">//    400x300 = 50x37.5</span></div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span><span class="comment">//    320x240 = 40x30</span></div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span><span class="comment">//    320x200 = 40x25</span></div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span><span class="comment">//    (these are all maximums, as borders can be configured, which reduces the number of usable rows/cols.)</span></div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span><span class="comment">//</span></div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span><span class="comment">// c256 foenix on 2/27:</span></div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span><span class="comment">// To answer, in the traditional Text Mode (Channel B). When you are double pixel mode, everything is reajusted automatically. The Channel A doesn&#39;t have a text doubling mode (anymore). And the text matrix and FONT dimension are all manual (needs to be programmed). This is to allow the usage of different sizes of FONT.</span></div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span> </div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span><span class="comment">// fonts</span></div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span><span class="comment">// gadget:</span></div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span><span class="comment">// If it&#39;s the same as on the C256 line, each character consists of 8 bytes.  Upper left hand corner is the high-bit of byte zero, upper right is the low bit of byte zero, lower left is the high bit of byte 7, lower right is the low bit of byte 7.  The bytes are placed in memory from character zero to character 255, 0..7, 0..7, 0..7, etc.</span></div>
 <div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span> </div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span><span class="comment">// amiga rawkey codes</span></div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span><span class="preprocessor">#define KEYCODE_CURSOR_LEFT     79</span></div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span><span class="preprocessor">#define KEYCODE_CURSOR_RIGHT    78</span></div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span><span class="preprocessor">#define KEYCODE_CURSOR_UP       76</span></div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span><span class="preprocessor">#define KEYCODE_CURSOR_DOWN     77</span></div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span><span class="comment">// pjw:</span></div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span><span class="comment">// Yeah, C256 and A2560U fonts are the same layout. The A2560K is a little different. The mostly-text-mode screen supports an 8x16 font layout, where the structure is essentially the same, but each character is 16 bytes rather than 8.</span></div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span> </div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span><span class="comment">// beethead:</span></div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span><span class="comment">// The 2nd font was removed when the U line came in since it was not being used.  Atleast on the C256&#39;s.</span></div>
 <div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span> </div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span><span class="preprocessor">#define KEYCODE_RETURN          0x44                    </span><span class="comment">// rawkey code</span></div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span><span class="preprocessor">#define KEYCODE_RETURN_UP       KEY_RAW_RETURN &amp; 0x80</span></div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span><span class="preprocessor">#define KEY_RETURN          13  </span><span class="comment">// vanilla key</span></div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span><span class="preprocessor">#define KEY_ESC             27  </span><span class="comment">// vanilla key</span></div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span><span class="comment">// PJW — 2022/03/06 at 9:10 AM</span></div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span><span class="comment">// The A2560K has two DVI ports: one is channel A (which is a text only channel), and channel B is a text and graphics channel equivalent to the main screen on the A2560U. The boot up image on the K shows up on channel B. Currently, the MCP uses channel A as the main interaction channel, but I think I&#39;m going to change that soon, since some people may have just the one screen. The &quot;CTX Switch&quot; key on the A2560K was originally intended as a way to switch which screen you were using for text input, and I may finally implement that.</span></div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span> </div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span><span class="preprocessor">#define SYS_TICKS_PER_SEC       60  </span><span class="comment">// per syscalls.h in MCP, &quot;a jiffie is 1/60 of a second.&quot;</span></div>
 <div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span> </div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span><span class="preprocessor">#define CHAR_UMLAUT         0xA8    </span><span class="comment">// ¨ char -- will use in place of ellipsis when truncating strings</span></div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span><span class="preprocessor">#define CHAR_ELLIPSIS       CHAR_UMLAUT</span></div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span> </div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span><span class="preprocessor">#define KEY_BUFFER_SIZE     16  </span><span class="comment">// unlikely anyone would ever want to type 15 chars to select a file</span></div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span> </div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span><span class="preprocessor">#define ALERT_MAX_MESSAGE_LEN       256 </span><span class="comment">// 255 chars + terminator. seems long, but with formatting chars, not crazy.</span></div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span> </div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span><span class="preprocessor">#define ALERT_DIALOG_SHOW_AS_ERROR  true    </span><span class="comment">// parameter for General_ShowAlert()</span></div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span><span class="preprocessor">#define ALERT_DIALOG_SHOW_AS_INFO   false   </span><span class="comment">// parameter for General_ShowAlert()</span></div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span><span class="comment">// machine model numbers - for decoding s_sys_info.model</span></div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span><span class="preprocessor">#define MACHINE_C256_FMX        0   </span></div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span><span class="preprocessor">#define MACHINE_C256_U          1   </span></div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span><span class="preprocessor">#define MACHINE_C256_GENX       4   </span></div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span><span class="preprocessor">#define MACHINE_C256_UPLUS      5   </span></div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span><span class="preprocessor">#define MACHINE_A2560U_PLUS     6   </span></div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span><span class="preprocessor">#define MACHINE_A2560X          7   </span></div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span><span class="preprocessor">#define MACHINE_A2560U          9   </span></div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span><span class="preprocessor">#define MACHINE_A2560K          13  </span></div>
 <div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span> </div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span><span class="preprocessor">#define ALERT_DIALOG_INCLUDE_CANCEL true    </span><span class="comment">// parameter for General_ShowAlert()</span></div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span><span class="preprocessor">#define ALERT_DIALOG_NO_CANCEL_BTN  false   </span><span class="comment">// parameter for General_ShowAlert()</span></div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span> </div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span><span class="preprocessor">#define ALERT_DIALOG_1ST_BUTTON 0   </span><span class="comment">// return value for General_ShowAlert()</span></div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span><span class="preprocessor">#define ALERT_DIALOG_2ND_BUTTON 1   </span><span class="comment">// return value for General_ShowAlert()</span></div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span><span class="preprocessor">#define ALERT_DIALOG_3RD_BUTTON 2   </span><span class="comment">// return value for General_ShowAlert()</span></div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span><span class="comment">// NOTE: can&#39;t define &quot;OK&quot; as 1 or 0, because it depends on passing ok, then cancel (eg). Buttons appear to be numbered from RIGHT to LEFT!</span></div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span> </div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span> </div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span><span class="comment">// amiga rawkey codes</span></div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span><span class="preprocessor">#define KEYCODE_CURSOR_LEFT     79</span></div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span><span class="preprocessor">#define KEYCODE_CURSOR_RIGHT    78</span></div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span><span class="preprocessor">#define KEYCODE_CURSOR_UP       76</span></div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span><span class="preprocessor">#define KEYCODE_CURSOR_DOWN     77</span></div>
 <div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span> </div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span> </div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span><span class="comment">// System Default Colors - correspond to the CLUT loaded by sys lib</span></div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span> </div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span><span class="preprocessor">#define SYS_COLOR_WHITE     244                     </span><span class="comment">// = 0xF4</span></div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span><span class="preprocessor">#define SYS_COLOR_GRAY1     SYS_COLOR_WHITE + 1</span></div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span><span class="preprocessor">#define SYS_COLOR_GRAY2     SYS_COLOR_WHITE + 2</span></div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span><span class="preprocessor">#define SYS_COLOR_GRAY3     SYS_COLOR_WHITE + 3</span></div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span><span class="preprocessor">#define SYS_COLOR_GRAY4     SYS_COLOR_WHITE + 4</span></div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span><span class="preprocessor">#define SYS_COLOR_GRAY5     SYS_COLOR_WHITE + 5</span></div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span><span class="preprocessor">#define SYS_COLOR_GRAY6     SYS_COLOR_WHITE + 6</span></div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span><span class="preprocessor">#define SYS_COLOR_GRAY7     SYS_COLOR_WHITE + 7</span></div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span><span class="preprocessor">#define SYS_COLOR_GRAY8     SYS_COLOR_WHITE + 8</span></div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span><span class="preprocessor">#define SYS_COLOR_GRAY9     SYS_COLOR_WHITE + 9</span></div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span><span class="preprocessor">#define SYS_COLOR_GRAY10    SYS_COLOR_WHITE + 10</span></div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span><span class="preprocessor">#define SYS_COLOR_BLACK     255</span></div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span> </div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span><span class="preprocessor">#define SYS_COLOR_RED1      35 </span><span class="comment">// = 0x23</span></div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span><span class="preprocessor">#define SYS_COLOR_RED2      SYS_COLOR_RED1 + 36*5+1 </span><span class="comment">// 3rd lightest red</span></div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span><span class="preprocessor">#define SYS_COLOR_RED3      SYS_COLOR_RED2 + 3</span></div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span> </div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span><span class="preprocessor">#define SYS_COLOR_GREEN1    23*8+1</span></div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span><span class="preprocessor">#define SYS_COLOR_GREEN2    SYS_COLOR_GREEN1 + 2</span></div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span><span class="preprocessor">#define SYS_COLOR_GREEN3    SYS_COLOR_GREEN2 + 2</span></div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span><span class="preprocessor">#define KEYCODE_RETURN          0x44                    </span><span class="comment">// rawkey code</span></div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span><span class="preprocessor">#define KEYCODE_RETURN_UP       KEY_RAW_RETURN &amp; 0x80</span></div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span><span class="preprocessor">#define KEY_RETURN          13  </span><span class="comment">// vanilla key</span></div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span><span class="preprocessor">#define KEY_ESC             27  </span><span class="comment">// vanilla key</span></div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span> </div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span><span class="preprocessor">#define CHAR_UMLAUT         0xA8    </span><span class="comment">// ¨ char -- will use in place of ellipsis when truncating strings</span></div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span><span class="preprocessor">#define CHAR_ELLIPSIS       CHAR_UMLAUT</span></div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span> </div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span><span class="preprocessor">#define KEY_BUFFER_SIZE     16  </span><span class="comment">// unlikely anyone would ever want to type 15 chars to select a file</span></div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span> </div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span><span class="preprocessor">#define ALERT_MAX_MESSAGE_LEN       256 </span><span class="comment">// 255 chars + terminator. seems long, but with formatting chars, not crazy.</span></div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span> </div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span><span class="preprocessor">#define ALERT_DIALOG_SHOW_AS_ERROR  true    </span><span class="comment">// parameter for General_ShowAlert()</span></div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span><span class="preprocessor">#define ALERT_DIALOG_SHOW_AS_INFO   false   </span><span class="comment">// parameter for General_ShowAlert()</span></div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span> </div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span><span class="preprocessor">#define ALERT_DIALOG_INCLUDE_CANCEL true    </span><span class="comment">// parameter for General_ShowAlert()</span></div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span><span class="preprocessor">#define ALERT_DIALOG_NO_CANCEL_BTN  false   </span><span class="comment">// parameter for General_ShowAlert()</span></div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span> </div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span><span class="preprocessor">#define ALERT_DIALOG_1ST_BUTTON 0   </span><span class="comment">// return value for General_ShowAlert()</span></div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span><span class="preprocessor">#define ALERT_DIALOG_2ND_BUTTON 1   </span><span class="comment">// return value for General_ShowAlert()</span></div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span><span class="preprocessor">#define ALERT_DIALOG_3RD_BUTTON 2   </span><span class="comment">// return value for General_ShowAlert()</span></div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span><span class="comment">// NOTE: can&#39;t define &quot;OK&quot; as 1 or 0, because it depends on passing ok, then cancel (eg). Buttons appear to be numbered from RIGHT to LEFT!</span></div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span> </div>
 <div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span> </div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span><span class="preprocessor">#define SYS_COLOR_BLUE1     26*8+3  </span><span class="comment">// = 211 = 0xd3</span></div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span><span class="preprocessor">#define SYS_COLOR_BLUE2     SYS_COLOR_BLUE1 + 2</span></div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span><span class="preprocessor">#define SYS_COLOR_BLUE3     SYS_COLOR_BLUE2 + 2</span></div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span> </div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span><span class="preprocessor">#define SYS_COLOR_PURPLEBLUE        15*8+7  </span><span class="comment">// purplish blue = 127 = 0x7F</span></div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span><span class="preprocessor">#define SYS_COLOR_PURPLEBLUEINACT   SYS_COLOR_GRAY3 </span><span class="comment">// light gray inactive accent color for purplish blue = 85 = 0x55</span></div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span><span class="preprocessor">#define SYS_COLOR_PURPLEBLUEHL      6*7+1   </span><span class="comment">// light active accent color for purplish blue = 37 = 0x2B</span></div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span><span class="preprocessor">#define SYS_COLOR_TETRA_1           14 * 4 + 0 </span><span class="comment">// wine color (CC6699) that is tetradic for SYS_COLOR_PURPLEBLUE = 56 = 0x38</span></div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span><span class="preprocessor">#define SYS_COLOR_TETRA_2           11 * 4 + 1 </span><span class="comment">// yellowish (CCCC66) color that is tetradic for SYS_COLOR_PURPLEBLUE = 44 = 0x2C</span></div>
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span><span class="preprocessor">#define SYS_COLOR_TETRA_3           29 * 4 + 0 </span><span class="comment">// teal/greenish color (66CC99) that is tetradic for SYS_COLOR_PURPLEBLUE = 116 = 0x74</span></div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span> </div>
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span><span class="preprocessor">#define SYS_DEF_COLOR_WINFRAME          SYS_COLOR_BLACK</span></div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span><span class="preprocessor">#define SYS_DEF_COLOR_WINTITLE_BACK     SYS_COLOR_PURPLEBLUE</span></div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span><span class="preprocessor">#define SYS_DEF_COLOR_WINTITLE_TEXT     SYS_COLOR_WHITE</span></div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span><span class="preprocessor">#define SYS_DEF_COLOR_ICONBAR_BACK      SYS_COLOR_PURPLEBLUE</span></div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span><span class="preprocessor">#define SYS_DEF_COLOR_CONTENT_BACK      SYS_COLOR_WHITE</span></div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span><span class="preprocessor">#define SYS_DEF_COLOR_BUTTON_BACK       SYS_COLOR_GRAY7</span></div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span><span class="preprocessor">#define SYS_DEF_COLOR_BUTTON_PUSH       SYS_COLOR_PURPLEBLUE</span></div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span><span class="preprocessor">#define SYS_DEF_COLOR_BUTTON_TEXT       SYS_COLOR_WHITE</span></div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span><span class="preprocessor">#define SYS_DEF_COLOR_BUTTON_TEXT_DIS   SYS_COLOR_GRAY3</span></div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span><span class="preprocessor">#define SYS_DEF_COLOR_DESKTOP           SYS_COLOR_GRAY4</span></div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span> </div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span><span class="comment">// System Default Colors - correspond to the CLUT loaded by sys lib</span></div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span> </div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span><span class="preprocessor">#define SYS_COLOR_WHITE     244                     </span><span class="comment">// = 0xF4</span></div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span><span class="preprocessor">#define SYS_COLOR_GRAY1     SYS_COLOR_WHITE + 1</span></div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span><span class="preprocessor">#define SYS_COLOR_GRAY2     SYS_COLOR_WHITE + 2</span></div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span><span class="preprocessor">#define SYS_COLOR_GRAY3     SYS_COLOR_WHITE + 3</span></div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span><span class="preprocessor">#define SYS_COLOR_GRAY4     SYS_COLOR_WHITE + 4</span></div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span><span class="preprocessor">#define SYS_COLOR_GRAY5     SYS_COLOR_WHITE + 5</span></div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span><span class="preprocessor">#define SYS_COLOR_GRAY6     SYS_COLOR_WHITE + 6</span></div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span><span class="preprocessor">#define SYS_COLOR_GRAY7     SYS_COLOR_WHITE + 7</span></div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span><span class="preprocessor">#define SYS_COLOR_GRAY8     SYS_COLOR_WHITE + 8</span></div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span><span class="preprocessor">#define SYS_COLOR_GRAY9     SYS_COLOR_WHITE + 9</span></div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span><span class="preprocessor">#define SYS_COLOR_GRAY10    SYS_COLOR_WHITE + 10</span></div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span><span class="preprocessor">#define SYS_COLOR_BLACK     255</span></div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span> </div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span><span class="preprocessor">#define SYS_COLOR_RED1      35 </span><span class="comment">// = 0x23</span></div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span><span class="preprocessor">#define SYS_COLOR_RED2      SYS_COLOR_RED1 + 36*5+1 </span><span class="comment">// 3rd lightest red</span></div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span><span class="preprocessor">#define SYS_COLOR_RED3      SYS_COLOR_RED2 + 3</span></div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span> </div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span><span class="preprocessor">#define SYS_COLOR_GREEN1    23*8+1</span></div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span><span class="preprocessor">#define SYS_COLOR_GREEN2    SYS_COLOR_GREEN1 + 2</span></div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span><span class="preprocessor">#define SYS_COLOR_GREEN3    SYS_COLOR_GREEN2 + 2</span></div>
 <div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span> </div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span> </div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span><span class="keyword">typedef</span> uint8_t ColorIdx;</div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span> </div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span><span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span><span class="comment">/*                               Enumerations                                */</span></div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span><span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span> </div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span><span class="comment">// typedef enum</span></div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span><span class="comment">// {</span></div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span><span class="comment">//  false = 0,</span></div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span><span class="comment">//  true = 1</span></div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span><span class="comment">// } bool;</span></div>
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span> </div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span><span class="comment">// device-independent resolution flags</span></div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span><span class="keyword">typedef</span> <span class="keyword">enum</span></div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>{</div>
-<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>    RES_640X400 = 0,</div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>    RES_640X480,</div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>    RES_800X600,</div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>    RES_1024X768,</div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>} screen_resolution;</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span><span class="preprocessor">#define SYS_COLOR_BLUE1     26*8+3  </span><span class="comment">// = 211 = 0xd3</span></div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span><span class="preprocessor">#define SYS_COLOR_BLUE2     SYS_COLOR_BLUE1 + 2</span></div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span><span class="preprocessor">#define SYS_COLOR_BLUE3     SYS_COLOR_BLUE2 + 2</span></div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span> </div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span><span class="preprocessor">#define SYS_COLOR_PURPLEBLUE        15*8+7  </span><span class="comment">// purplish blue = 127 = 0x7F</span></div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span><span class="preprocessor">#define SYS_COLOR_PURPLEBLUEINACT   SYS_COLOR_GRAY3 </span><span class="comment">// light gray inactive accent color for purplish blue = 85 = 0x55</span></div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span><span class="preprocessor">#define SYS_COLOR_PURPLEBLUEHL      6*7+1   </span><span class="comment">// light active accent color for purplish blue = 37 = 0x2B</span></div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span><span class="preprocessor">#define SYS_COLOR_TETRA_1           14 * 4 + 0 </span><span class="comment">// wine color (CC6699) that is tetradic for SYS_COLOR_PURPLEBLUE = 56 = 0x38</span></div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span><span class="preprocessor">#define SYS_COLOR_TETRA_2           11 * 4 + 1 </span><span class="comment">// yellowish (CCCC66) color that is tetradic for SYS_COLOR_PURPLEBLUE = 44 = 0x2C</span></div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span><span class="preprocessor">#define SYS_COLOR_TETRA_3           29 * 4 + 0 </span><span class="comment">// teal/greenish color (66CC99) that is tetradic for SYS_COLOR_PURPLEBLUE = 116 = 0x74</span></div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span> </div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span><span class="preprocessor">#define SYS_DEF_COLOR_WINFRAME          SYS_COLOR_BLACK</span></div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span><span class="preprocessor">#define SYS_DEF_COLOR_WINTITLE_BACK     SYS_COLOR_PURPLEBLUE</span></div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span><span class="preprocessor">#define SYS_DEF_COLOR_WINTITLE_TEXT     SYS_COLOR_WHITE</span></div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span><span class="preprocessor">#define SYS_DEF_COLOR_ICONBAR_BACK      SYS_COLOR_PURPLEBLUE</span></div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span><span class="preprocessor">#define SYS_DEF_COLOR_CONTENT_BACK      SYS_COLOR_WHITE</span></div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span><span class="preprocessor">#define SYS_DEF_COLOR_BUTTON_BACK       SYS_COLOR_GRAY7</span></div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span><span class="preprocessor">#define SYS_DEF_COLOR_BUTTON_PUSH       SYS_COLOR_PURPLEBLUE</span></div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span><span class="preprocessor">#define SYS_DEF_COLOR_BUTTON_TEXT       SYS_COLOR_WHITE</span></div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span><span class="preprocessor">#define SYS_DEF_COLOR_BUTTON_TEXT_DIS   SYS_COLOR_GRAY3</span></div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span><span class="preprocessor">#define SYS_DEF_COLOR_DESKTOP           SYS_COLOR_GRAY4</span></div>
 <div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span> </div>
-<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span><span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span><span class="comment">/*                                 Structs                                   */</span></div>
-<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span><span class="comment">/*****************************************************************************/</span></div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span> </div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span> </div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span><span class="keyword">typedef</span> uint8_t ColorIdx;</div>
 <div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span> </div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span><span class="comment">// forward declarations</span></div>
-<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_font.html">Font</a> <a class="code hl_struct" href="struct_font.html">Font</a>;                       <span class="comment">// defined in font.h</span></div>
-<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_window.html">Window</a> <a class="code hl_struct" href="struct_window.html">Window</a>;                   <span class="comment">// defined in window.h</span></div>
-<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_clip_rect.html">ClipRect</a> <a class="code hl_struct" href="struct_clip_rect.html">ClipRect</a>;               <span class="comment">// defined in window.h</span></div>
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_new_win_template.html">NewWinTemplate</a> <a class="code hl_struct" href="struct_new_win_template.html">NewWinTemplate</a>;   <span class="comment">// defined in window.h</span></div>
-<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_theme.html">Theme</a> <a class="code hl_struct" href="struct_theme.html">Theme</a>;                     <span class="comment">// defined in theme.h</span></div>
-<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_control_backdrop.html">ControlBackdrop</a> <a class="code hl_struct" href="struct_control_backdrop.html">ControlBackdrop</a>; <span class="comment">// defined in theme.h</span></div>
-<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_control.html">Control</a> <a class="code hl_struct" href="struct_control.html">Control</a>;                 <span class="comment">// defined in control.h</span></div>
-<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_control_template.html">ControlTemplate</a> <a class="code hl_struct" href="struct_control_template.html">ControlTemplate</a>; <span class="comment">// defined in control.h</span></div>
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_system.html">System</a> <a class="code hl_struct" href="struct_system.html">System</a>;                   <span class="comment">// defined in lib_sys.h</span></div>
-<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_bitmap.html">Bitmap</a> <a class="code hl_struct" href="struct_bitmap.html">Bitmap</a>;                   <span class="comment">// defined in bitmap.h</span></div>
-<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_list.html">List</a> <a class="code hl_struct" href="struct_list.html">List</a>;                       <span class="comment">// defined in list.h</span></div>
-<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_event_record.html">EventRecord</a> <a class="code hl_struct" href="struct_event_record.html">EventRecord</a>;         <span class="comment">// defined in event.h</span></div>
-<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_event_manager.html">EventManager</a> <a class="code hl_struct" href="struct_event_manager.html">EventManager</a>;       <span class="comment">// defined in event.h</span></div>
-<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span> </div>
-<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span> </div>
-<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span> </div>
-<div class="line"><a id="l00332" name="l00332"></a><span class="lineno"><a class="line" href="struct_coordinate.html">  332</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_coordinate.html">Coordinate</a></div>
-<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>{</div>
-<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>    int16_t x;</div>
-<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>    int16_t y;</div>
-<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>} <a class="code hl_struct" href="struct_coordinate.html">Coordinate</a>;</div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span><span class="comment">/*****************************************************************************/</span></div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span><span class="comment">/*                               Enumerations                                */</span></div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span><span class="comment">/*****************************************************************************/</span></div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span> </div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span><span class="comment">// typedef enum</span></div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span><span class="comment">// {</span></div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span><span class="comment">//  false = 0,</span></div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span><span class="comment">//  true = 1</span></div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span><span class="comment">// } bool;</span></div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span> </div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span><span class="comment">// device-independent resolution flags</span></div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span><span class="keyword">typedef</span> <span class="keyword">enum</span></div>
+<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>{</div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>    RES_640X400 = 0,</div>
+<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>    RES_640X480,</div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>    RES_800X600,</div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>    RES_1024X768,</div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>} screen_resolution;</div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span> </div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span><span class="comment">/*****************************************************************************/</span></div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span><span class="comment">/*                                 Structs                                   */</span></div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span><span class="comment">/*****************************************************************************/</span></div>
 <div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span> </div>
-<div class="line"><a id="l00338" name="l00338"></a><span class="lineno"><a class="line" href="struct_rectangle.html">  338</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_rectangle.html">Rectangle</a></div>
-<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>{</div>
-<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>    int16_t     MinX, MinY;</div>
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>    int16_t     MaxX, MaxY;</div>
-<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>} <a class="code hl_struct" href="struct_rectangle.html">Rectangle</a>;</div>
-<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span> </div>
-<div class="line"><a id="l00344" name="l00344"></a><span class="lineno"><a class="line" href="struct_screen.html">  344</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_screen.html">Screen</a></div>
-<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>{</div>
-<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>    int16_t         id_;                <span class="comment">// 0 for channel A, 1 for channel B. not all foenix&#39;s have 2 channels.</span></div>
-<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>    <span class="keyword">volatile</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>* vicky_;             <span class="comment">// VICKY primary register RAM loc. See VICKY_A2560K_A, VICKY_A2560K_B, VICKY_A2560U, etc.</span></div>
-<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>    <a class="code hl_struct" href="struct_rectangle.html">Rectangle</a>       rect_;              <span class="comment">// the x1, y1, &gt; x2, y2 coordinates of the screen, taking into account any borders. </span></div>
-<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>    int16_t         width_;             <span class="comment">// for the current resolution, the max horizontal pixel count </span></div>
-<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>    int16_t         height_;            <span class="comment">// for the current resolution, the max vertical pixel count </span></div>
-<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>    int16_t         text_cols_vis_;     <span class="comment">// accounting for borders, the number of visible columns on screen</span></div>
-<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>    int16_t         text_rows_vis_;     <span class="comment">// accounting for borders, the number of visible rows on screen</span></div>
-<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>    int16_t         text_mem_cols_;     <span class="comment">// for the current resolution, the total number of columns per row in VRAM. Use for plotting x,y </span></div>
-<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>    int16_t         text_mem_rows_;     <span class="comment">// for the current resolution, the total number of rows per row in VRAM. Use for plotting x,y </span></div>
-<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>    <span class="keywordtype">char</span>*           text_ram_;</div>
-<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>    <span class="keywordtype">char</span>*           text_attr_ram_;</div>
-<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>    <span class="keywordtype">char</span>*           text_font_ram_;     <span class="comment">// 2K of memory holding font definitions.</span></div>
-<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>    int16_t         text_font_height_;  <span class="comment">// in text mode, the height in pixels for the fixed width font. Should be either 8 or 16, depending on which Foenix. used for calculating text fit.</span></div>
-<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>    int16_t         text_font_width_;   <span class="comment">// in text mode, the width in pixels for the fixed width font. Unlikely to be other than &#39;8&#39; with Foenix machines. used for calculating text fit.</span></div>
-<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    <span class="keywordtype">char</span>            text_temp_buffer_1_[TEXT_COL_COUNT_FOR_PLOTTING_A2560K * TEXT_ROW_COUNT_FOR_PLOTTING_A2560K + 1];   <span class="comment">// todo: replace with pointer, and allocate space on resolution switch. general use temp buffer - do NOT use for real storage - any utility function clobber it</span></div>
-<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>    <span class="keywordtype">char</span>            text_temp_buffer_2_[TEXT_COL_COUNT_FOR_PLOTTING_A2560K * TEXT_ROW_COUNT_FOR_PLOTTING_A2560K + 1];   <span class="comment">// todo: replace with pointer, and allocate space on resolution switch. general use temp buffer - do NOT use for real storage - any utility function clobber it</span></div>
-<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>    <a class="code hl_struct" href="struct_bitmap.html">Bitmap</a>*         bitmap_;            </div>
-<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>} <a class="code hl_struct" href="struct_screen.html">Screen</a>;</div>
-<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span> </div>
-<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span> </div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span><span class="comment">// forward declarations</span></div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_font.html">Font</a> <a class="code hl_struct" href="struct_font.html">Font</a>;                       <span class="comment">// defined in font.h</span></div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_window.html">Window</a> <a class="code hl_struct" href="struct_window.html">Window</a>;                   <span class="comment">// defined in window.h</span></div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_clip_rect.html">ClipRect</a> <a class="code hl_struct" href="struct_clip_rect.html">ClipRect</a>;               <span class="comment">// defined in window.h</span></div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_new_win_template.html">NewWinTemplate</a> <a class="code hl_struct" href="struct_new_win_template.html">NewWinTemplate</a>;   <span class="comment">// defined in window.h</span></div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_theme.html">Theme</a> <a class="code hl_struct" href="struct_theme.html">Theme</a>;                     <span class="comment">// defined in theme.h</span></div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_control_backdrop.html">ControlBackdrop</a> <a class="code hl_struct" href="struct_control_backdrop.html">ControlBackdrop</a>; <span class="comment">// defined in theme.h</span></div>
+<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_control.html">Control</a> <a class="code hl_struct" href="struct_control.html">Control</a>;                 <span class="comment">// defined in control.h</span></div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_control_template.html">ControlTemplate</a> <a class="code hl_struct" href="struct_control_template.html">ControlTemplate</a>; <span class="comment">// defined in control.h</span></div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_system.html">System</a> <a class="code hl_struct" href="struct_system.html">System</a>;                   <span class="comment">// defined in lib_sys.h</span></div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_bitmap.html">Bitmap</a> <a class="code hl_struct" href="struct_bitmap.html">Bitmap</a>;                   <span class="comment">// defined in bitmap.h</span></div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_list.html">List</a> <a class="code hl_struct" href="struct_list.html">List</a>;                       <span class="comment">// defined in list.h</span></div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_event_record.html">EventRecord</a> <a class="code hl_struct" href="struct_event_record.html">EventRecord</a>;         <span class="comment">// defined in event.h</span></div>
+<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_event_manager.html">EventManager</a> <a class="code hl_struct" href="struct_event_manager.html">EventManager</a>;       <span class="comment">// defined in event.h</span></div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span> </div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span> </div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span> </div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno"><a class="line" href="struct_coordinate.html">  355</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_coordinate.html">Coordinate</a></div>
+<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>{</div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>    int16_t x;</div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>    int16_t y;</div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>} <a class="code hl_struct" href="struct_coordinate.html">Coordinate</a>;</div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span> </div>
+<div class="line"><a id="l00361" name="l00361"></a><span class="lineno"><a class="line" href="struct_rectangle.html">  361</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_rectangle.html">Rectangle</a></div>
+<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>{</div>
+<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>    int16_t     MinX, MinY;</div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>    int16_t     MaxX, MaxY;</div>
+<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>} <a class="code hl_struct" href="struct_rectangle.html">Rectangle</a>;</div>
 <div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span> </div>
-<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span><span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span><span class="comment">/*                             Global Variables                              */</span></div>
-<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span><span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span> </div>
-<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span> </div>
-<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span><span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span><span class="comment">/*                       Public Function Prototypes                          */</span></div>
-<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span><span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span> </div>
-<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span> </div>
-<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span> </div>
-<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span> </div>
-<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span> </div>
-<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span><span class="preprocessor">#endif </span><span class="comment">/* A2560_PLATFORM_H_ */</span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00367" name="l00367"></a><span class="lineno"><a class="line" href="struct_screen.html">  367</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_screen.html">Screen</a></div>
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>{</div>
+<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>    int16_t         id_;                <span class="comment">// 0 for channel A, 1 for channel B. not all foenix&#39;s have 2 channels.</span></div>
+<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>    <span class="keyword">volatile</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>* vicky_;             <span class="comment">// VICKY primary register RAM loc. See VICKY_A2560K_A, VICKY_A2560K_B, VICKY_A2560U, etc.</span></div>
+<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>    <a class="code hl_struct" href="struct_rectangle.html">Rectangle</a>       rect_;              <span class="comment">// the x1, y1, &gt; x2, y2 coordinates of the screen, taking into account any borders. </span></div>
+<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>    int16_t         width_;             <span class="comment">// for the current resolution, the max horizontal pixel count </span></div>
+<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>    int16_t         height_;            <span class="comment">// for the current resolution, the max vertical pixel count </span></div>
+<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>    int16_t         text_cols_vis_;     <span class="comment">// accounting for borders, the number of visible columns on screen</span></div>
+<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>    int16_t         text_rows_vis_;     <span class="comment">// accounting for borders, the number of visible rows on screen</span></div>
+<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>    int16_t         text_mem_cols_;     <span class="comment">// for the current resolution, the total number of columns per row in VRAM. Use for plotting x,y </span></div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>    int16_t         text_mem_rows_;     <span class="comment">// for the current resolution, the total number of rows per row in VRAM. Use for plotting x,y </span></div>
+<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>    <span class="keywordtype">char</span>*           text_ram_;</div>
+<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>    <span class="keywordtype">char</span>*           text_attr_ram_;</div>
+<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>    <span class="keywordtype">char</span>*           text_font_ram_;     <span class="comment">// 2K of memory holding font definitions.</span></div>
+<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>    int16_t         text_font_height_;  <span class="comment">// in text mode, the height in pixels for the fixed width font. Should be either 8 or 16, depending on which Foenix. used for calculating text fit.</span></div>
+<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span>    int16_t         text_font_width_;   <span class="comment">// in text mode, the width in pixels for the fixed width font. Unlikely to be other than &#39;8&#39; with Foenix machines. used for calculating text fit.</span></div>
+<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>    <span class="keywordtype">char</span>            text_temp_buffer_1_[TEXT_COL_COUNT_FOR_PLOTTING_A2560K * TEXT_ROW_COUNT_FOR_PLOTTING_A2560K + 1];   <span class="comment">// todo: replace with pointer, and allocate space on resolution switch. general use temp buffer - do NOT use for real storage - any utility function clobber it</span></div>
+<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>    <span class="keywordtype">char</span>            text_temp_buffer_2_[TEXT_COL_COUNT_FOR_PLOTTING_A2560K * TEXT_ROW_COUNT_FOR_PLOTTING_A2560K + 1];   <span class="comment">// todo: replace with pointer, and allocate space on resolution switch. general use temp buffer - do NOT use for real storage - any utility function clobber it</span></div>
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>    <a class="code hl_struct" href="struct_bitmap.html">Bitmap</a>*         bitmap_;            </div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>} <a class="code hl_struct" href="struct_screen.html">Screen</a>;</div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span> </div>
+<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span> </div>
+<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span> </div>
+<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span><span class="comment">/*****************************************************************************/</span></div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span><span class="comment">/*                             Global Variables                              */</span></div>
+<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span><span class="comment">/*****************************************************************************/</span></div>
+<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span> </div>
+<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span> </div>
+<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span><span class="comment">/*****************************************************************************/</span></div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span><span class="comment">/*                       Public Function Prototypes                          */</span></div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span><span class="comment">/*****************************************************************************/</span></div>
+<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span> </div>
+<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span> </div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span> </div>
+<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span> </div>
+<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span> </div>
+<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span><span class="preprocessor">#endif </span><span class="comment">/* A2560_PLATFORM_H_ */</span><span class="preprocessor"></span></div>
 <div class="ttc" id="astruct_bitmap_html"><div class="ttname"><a href="struct_bitmap.html">Bitmap</a></div><div class="ttdef"><b>Definition:</b> bitmap.h:93</div></div>
 <div class="ttc" id="astruct_clip_rect_html"><div class="ttname"><a href="struct_clip_rect.html">ClipRect</a></div><div class="ttdef"><b>Definition:</b> window.h:208</div></div>
 <div class="ttc" id="astruct_control_backdrop_html"><div class="ttname"><a href="struct_control_backdrop.html">ControlBackdrop</a></div><div class="ttdef"><b>Definition:</b> theme.h:95</div></div>
 <div class="ttc" id="astruct_control_html"><div class="ttname"><a href="struct_control.html">Control</a></div><div class="ttdoc">This structure describes an instantiated control on a window.</div><div class="ttdef"><b>Definition:</b> control.h:132</div></div>
 <div class="ttc" id="astruct_control_template_html"><div class="ttname"><a href="struct_control_template.html">ControlTemplate</a></div><div class="ttdoc">A structure that can be used to instantiate a ControlTemplate object instance in a window The Control...</div><div class="ttdef"><b>Definition:</b> control_template.h:72</div></div>
-<div class="ttc" id="astruct_coordinate_html"><div class="ttname"><a href="struct_coordinate.html">Coordinate</a></div><div class="ttdef"><b>Definition:</b> a2560_platform.h:333</div></div>
+<div class="ttc" id="astruct_coordinate_html"><div class="ttname"><a href="struct_coordinate.html">Coordinate</a></div><div class="ttdef"><b>Definition:</b> a2560_platform.h:356</div></div>
 <div class="ttc" id="astruct_event_manager_html"><div class="ttname"><a href="struct_event_manager.html">EventManager</a></div><div class="ttdef"><b>Definition:</b> event.h:190</div></div>
 <div class="ttc" id="astruct_event_record_html"><div class="ttname"><a href="struct_event_record.html">EventRecord</a></div><div class="ttdef"><b>Definition:</b> event.h:178</div></div>
 <div class="ttc" id="astruct_font_html"><div class="ttname"><a href="struct_font.html">Font</a></div><div class="ttdoc">This Font object is essentially the Mac &quot;fontRecord&quot; struct, with added pointers for the data tables.</div><div class="ttdef"><b>Definition:</b> font.h:67</div></div>
 <div class="ttc" id="astruct_list_html"><div class="ttname"><a href="struct_list.html">List</a></div><div class="ttdef"><b>Definition:</b> list.h:67</div></div>
 <div class="ttc" id="astruct_new_win_template_html"><div class="ttname"><a href="struct_new_win_template.html">NewWinTemplate</a></div><div class="ttdef"><b>Definition:</b> window.h:187</div></div>
-<div class="ttc" id="astruct_rectangle_html"><div class="ttname"><a href="struct_rectangle.html">Rectangle</a></div><div class="ttdef"><b>Definition:</b> a2560_platform.h:339</div></div>
-<div class="ttc" id="astruct_screen_html"><div class="ttname"><a href="struct_screen.html">Screen</a></div><div class="ttdef"><b>Definition:</b> a2560_platform.h:345</div></div>
+<div class="ttc" id="astruct_rectangle_html"><div class="ttname"><a href="struct_rectangle.html">Rectangle</a></div><div class="ttdef"><b>Definition:</b> a2560_platform.h:362</div></div>
+<div class="ttc" id="astruct_screen_html"><div class="ttname"><a href="struct_screen.html">Screen</a></div><div class="ttdef"><b>Definition:</b> a2560_platform.h:368</div></div>
 <div class="ttc" id="astruct_system_html"><div class="ttname"><a href="struct_system.html">System</a></div><div class="ttdef"><b>Definition:</b> lib_sys.h:79</div></div>
 <div class="ttc" id="astruct_theme_html"><div class="ttname"><a href="struct_theme.html">Theme</a></div><div class="ttdef"><b>Definition:</b> theme.h:106</div></div>
 <div class="ttc" id="astruct_window_html"><div class="ttname"><a href="struct_window.html">Window</a></div><div class="ttdef"><b>Definition:</b> window.h:116</div></div>
