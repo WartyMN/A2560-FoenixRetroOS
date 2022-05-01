@@ -60,3 +60,6 @@ dkms.conf
 *.pgz
 # -- but do allow .s28 to be uploaded
 
+# directories
+build_calypsi/
+module/
