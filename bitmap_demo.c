@@ -94,7 +94,7 @@ void WaitForUser(void)
 	
 	getchar();
 	
-	Bitmap_FillMemory(global_system->screen_[ID_CHANNEL_B]->bitmap_, 0xbb);
+	Bitmap_FillMemory(Sys_GetScreenBitmap(global_system, back_layer), 0xbb);
 	Text_FillCharMem(global_system->screen_[ID_CHANNEL_B], ' ');
 	Text_FillAttrMem(global_system->screen_[ID_CHANNEL_B], 0);
 }
@@ -118,7 +118,7 @@ void ShowDescription(char* the_message)
 
 void Demo_Bitmap_FillMemory1(void)
 {
-	Bitmap_FillMemory(global_system->screen_[ID_CHANNEL_B]->bitmap_, 0x05);
+	Bitmap_FillMemory(Sys_GetScreenBitmap(global_system, back_layer), 0x05);
 	ShowDescription("Bitmap_FillMemory -> fill bitmap screen with value 0x05");	
 	WaitForUser();
 }
@@ -126,7 +126,7 @@ void Demo_Bitmap_FillMemory1(void)
 
 void Demo_Bitmap_FillMemory2(void)
 {
-	Bitmap_FillMemory(global_system->screen_[ID_CHANNEL_B]->bitmap_, 0xff);
+	Bitmap_FillMemory(Sys_GetScreenBitmap(global_system, back_layer), 0xff);
 	ShowDescription("Bitmap_FillMemory -> fill bitmap screen with value 0xff");	
 	WaitForUser();
 }
@@ -140,7 +140,7 @@ void Demo_Bitmap_FillBox1(void)
 	int16_t height = global_system->screen_[ID_CHANNEL_B]->height_ - y - 100;
 	
 	ShowDescription("Bitmap_FillBox -> fill a square on screen with 0xff");	
-	Bitmap_FillBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y, width, height, 0xff);
+	Bitmap_FillBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, width, height, 0xff);
 	WaitForUser();
 }
 
@@ -153,7 +153,7 @@ void Demo_Bitmap_FillBox2(void)
 	int16_t height = global_system->screen_[ID_CHANNEL_B]->height_ - y - 100;
 	
 	ShowDescription("Bitmap_FillBox -> fill a square on screen with 0x05");	
-	Bitmap_FillBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y, width, height, 0x05);
+	Bitmap_FillBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, width, height, 0x05);
 	WaitForUser();
 }
 
@@ -164,9 +164,9 @@ void Demo_Bitmap_FillBox3(void)
 	int	y = 8*6;
 	
 	ShowDescription("Bitmap_FillBox -> fill various squares with different color values");	
-	Bitmap_FillBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x + 30, y, 250, 100, 0x55);
-	Bitmap_FillBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y, 25, 25, 0xf5);
-	Bitmap_FillBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y + 50, 350, 200, 0x3f);
+	Bitmap_FillBox(Sys_GetScreenBitmap(global_system, back_layer), x + 30, y, 250, 100, 0x55);
+	Bitmap_FillBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, 25, 25, 0xf5);
+	Bitmap_FillBox(Sys_GetScreenBitmap(global_system, back_layer), x, y + 50, 350, 200, 0x3f);
 	WaitForUser();
 }
 
@@ -180,7 +180,7 @@ void Demo_Bitmap_SetPixelAtXY(void)
  	
  	for (i = 0; i < 254; i++)
  	{
-	 	Bitmap_SetPixelAtXY(global_system->screen_[ID_CHANNEL_B]->bitmap_, *(junk_value++) + i, *(junk_value++) + i, i);
+	 	Bitmap_SetPixelAtXY(Sys_GetScreenBitmap(global_system, back_layer), *(junk_value++) + i, *(junk_value++) + i, i);
  	}
 	WaitForUser();
 }
@@ -203,8 +203,8 @@ void Demo_Bitmap_GetPixelAtXY(void)
  	{
 		int16_t	detected_color;
 
-		Bitmap_FillBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y, width, height, color);
-	 	detected_color = Bitmap_GetPixelAtXY(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y);
+		Bitmap_FillBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, width, height, color);
+	 	detected_color = Bitmap_GetPixelAtXY(Sys_GetScreenBitmap(global_system, back_layer), x, y);
 	 	sprintf(temp_buff, "Set:%x", color);
 	 	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], (x+1)/8, text_y, (char*)temp_buff, FG_COLOR_YELLOW, BG_COLOR_BLACK);
 	 	sprintf(temp_buff, "Got:%x", detected_color);
@@ -227,11 +227,11 @@ void Demo_Bitmap_DrawHLine1(void)
 	x = 20;
 	y = 8*(10);
 	line_len = 200;
-	Bitmap_DrawHLine(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y, line_len, 0xff);
-	Bitmap_DrawHLine(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y + 20, line_len, 0xff);
-	Bitmap_DrawHLine(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y + 40, line_len, 0xff);
-	Bitmap_DrawVLine(global_system->screen_[ID_CHANNEL_B]->bitmap_, x + 100, y - 10, line_len, 0xff);
-	Bitmap_DrawVLine(global_system->screen_[ID_CHANNEL_B]->bitmap_, x + 150, y - 10, line_len + 50, 0xff);
+	Bitmap_DrawHLine(Sys_GetScreenBitmap(global_system, back_layer), x, y, line_len, 0xff);
+	Bitmap_DrawHLine(Sys_GetScreenBitmap(global_system, back_layer), x, y + 20, line_len, 0xff);
+	Bitmap_DrawHLine(Sys_GetScreenBitmap(global_system, back_layer), x, y + 40, line_len, 0xff);
+	Bitmap_DrawVLine(Sys_GetScreenBitmap(global_system, back_layer), x + 100, y - 10, line_len, 0xff);
+	Bitmap_DrawVLine(Sys_GetScreenBitmap(global_system, back_layer), x + 150, y - 10, line_len + 50, 0xff);
 
 	WaitForUser();
 }
@@ -249,16 +249,16 @@ void Demo_Bitmap_DrawLine(void)
 
 	for (i = 0; i < 256; i++)
 	{
-		Bitmap_DrawLine(global_system->screen_[ID_CHANNEL_B]->bitmap_, x1, y1, x2, y2, i);
+		Bitmap_DrawLine(Sys_GetScreenBitmap(global_system, back_layer), x1, y1, x2, y2, i);
 		
 		x1 += 2;
 		x2 -= 2;
 	}
 
-// 	Bitmap_DrawLine(global_system->screen_[ID_CHANNEL_B]->bitmap_, x1, y1, x2, y2, 0xee);
-// 	Bitmap_DrawLine(global_system->screen_[ID_CHANNEL_B]->bitmap_, x2, y1, x1, y2, 0xce);
-// 	Bitmap_DrawLine(global_system->screen_[ID_CHANNEL_B]->bitmap_, x2, y1+20, x1, y2-20, 0x88);
-// 	Bitmap_DrawLine(global_system->screen_[ID_CHANNEL_B]->bitmap_, x2, y1+40, x1, y2-40, 0x55);
+// 	Bitmap_DrawLine(Sys_GetScreenBitmap(global_system, back_layer), x1, y1, x2, y2, 0xee);
+// 	Bitmap_DrawLine(Sys_GetScreenBitmap(global_system, back_layer), x2, y1, x1, y2, 0xce);
+// 	Bitmap_DrawLine(Sys_GetScreenBitmap(global_system, back_layer), x2, y1+20, x1, y2-20, 0x88);
+// 	Bitmap_DrawLine(Sys_GetScreenBitmap(global_system, back_layer), x2, y1+40, x1, y2-40, 0x55);
 	
 	WaitForUser();
 }
@@ -273,17 +273,17 @@ void Demo_Bitmap_DrawBox(void)
 
 	ShowDescription("Bitmap_DrawBox -> Draw a filled or unfilled box. Supply start coordinates, width, height, color, and fill choice.");	
 
-	Bitmap_DrawBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y, width, height, 0xff, PARAM_DO_FILL);
-	Bitmap_DrawBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y, width, height, 0x55, PARAM_DO_NOT_FILL);
-	Bitmap_DrawBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x + 25, y + 25, width, height, 0x33, PARAM_DO_NOT_FILL);
-	Bitmap_DrawBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x + 50, y + 50, width, height, 0x77, PARAM_DO_NOT_FILL);
+	Bitmap_DrawBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, width, height, 0xff, PARAM_DO_FILL);
+	Bitmap_DrawBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, width, height, 0x55, PARAM_DO_NOT_FILL);
+	Bitmap_DrawBox(Sys_GetScreenBitmap(global_system, back_layer), x + 25, y + 25, width, height, 0x33, PARAM_DO_NOT_FILL);
+	Bitmap_DrawBox(Sys_GetScreenBitmap(global_system, back_layer), x + 50, y + 50, width, height, 0x77, PARAM_DO_NOT_FILL);
 
 	x = 0;
 	width = 10;
 	height = 10;
-	Bitmap_DrawBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y, width, height, 0xff, PARAM_DO_FILL);
-	Bitmap_DrawBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y, width, height, 0x55, PARAM_DO_NOT_FILL);
-	Bitmap_DrawBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x+11, y, width, height, 0xff, PARAM_DO_FILL);
+	Bitmap_DrawBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, width, height, 0xff, PARAM_DO_FILL);
+	Bitmap_DrawBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, width, height, 0x55, PARAM_DO_NOT_FILL);
+	Bitmap_DrawBox(Sys_GetScreenBitmap(global_system, back_layer), x+11, y, width, height, 0xff, PARAM_DO_FILL);
 	
 	WaitForUser();
 }
@@ -298,7 +298,7 @@ void Demo_Bitmap_DrawBoxCoords(void)
 
 	ShowDescription("Bitmap_DrawBoxCoords -> Draw a box using 4 coordinates.");	
 
-	Bitmap_DrawBoxCoords(global_system->screen_[ID_CHANNEL_B]->bitmap_, x1, y1, x2, y2, 0xff);
+	Bitmap_DrawBoxCoords(Sys_GetScreenBitmap(global_system, back_layer), x1, y1, x2, y2, 0xff);
 	WaitForUser();
 }
 
@@ -319,9 +319,9 @@ void Demo_Bitmap_DrawRoundBox(void)
 
 	for (i = 0; i <= 20; i++)
 	{
-		Bitmap_DrawRoundBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x + color, y + color, width + i*2, height + i*2, i, color, PARAM_DO_NOT_FILL);
-		Bitmap_DrawRoundBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, xleft - color, y + color, width*2 + i*2, height*2 + i*2, 20 - i, color, PARAM_DO_FILL);
-		Bitmap_DrawRoundBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, xleft - color, y + color, width*2 + i*2, height*2 + i*2, 20 - i, line_color, PARAM_DO_NOT_FILL);
+		Bitmap_DrawRoundBox(Sys_GetScreenBitmap(global_system, back_layer), x + color, y + color, width + i*2, height + i*2, i, color, PARAM_DO_NOT_FILL);
+		Bitmap_DrawRoundBox(Sys_GetScreenBitmap(global_system, back_layer), xleft - color, y + color, width*2 + i*2, height*2 + i*2, 20 - i, color, PARAM_DO_FILL);
+		Bitmap_DrawRoundBox(Sys_GetScreenBitmap(global_system, back_layer), xleft - color, y + color, width*2 + i*2, height*2 + i*2, 20 - i, line_color, PARAM_DO_NOT_FILL);
 		color += 7;
 	}
 
@@ -332,17 +332,17 @@ void Demo_Bitmap_DrawRoundBox(void)
 	height = 16;
 	radius = 5;
 	color = 0xFF;
-// 	Bitmap_DrawRoundBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y, width, height, radius, color);
-// 	Bitmap_FillBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x + radius, y + radius, width - radius*2, height-radius*2, color);
-// 	Bitmap_Fill(global_system->screen_[ID_CHANNEL_B]->bitmap_, x + radius, y + 1, color);
-// 	Bitmap_DrawRoundBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y, width, height, radius, 0x01);
+// 	Bitmap_DrawRoundBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, width, height, radius, color);
+// 	Bitmap_FillBox(Sys_GetScreenBitmap(global_system, back_layer), x + radius, y + radius, width - radius*2, height-radius*2, color);
+// 	Bitmap_Fill(Sys_GetScreenBitmap(global_system, back_layer), x + radius, y + 1, color);
+// 	Bitmap_DrawRoundBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, width, height, radius, 0x01);
 // 	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], (x)/8-2, y/8-1, (char*)"Cancel", FG_COLOR_BLACK, BG_COLOR_BLACK);
 // 	getchar();
 	
 	// faster fill by making rect fills and then just flood filling the corners
 	y = 250;
-	Bitmap_DrawRoundBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y, width, height, radius, color, PARAM_DO_FILL);
-	Bitmap_DrawRoundBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y, width, height, radius, 0x01, PARAM_DO_NOT_FILL);
+	Bitmap_DrawRoundBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, width, height, radius, color, PARAM_DO_FILL);
+	Bitmap_DrawRoundBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, width, height, radius, 0x01, PARAM_DO_NOT_FILL);
 	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], (x)/8-2, y/8-1, (char*)"Cancel", FG_COLOR_BLACK, BG_COLOR_BLACK);
 
 
@@ -362,13 +362,13 @@ void Demo_Bitmap_DrawCircle(void)
 
 	for (i = 0; i < 256 && radius < 238; i += 3)
 	{
-		Bitmap_DrawCircle(global_system->screen_[ID_CHANNEL_B]->bitmap_, x1, y1, radius, i);
+		Bitmap_DrawCircle(Sys_GetScreenBitmap(global_system, back_layer), x1, y1, radius, i);
 		
 		radius += 3;
 	}
 
-	Bitmap_DrawCircle(global_system->screen_[ID_CHANNEL_B]->bitmap_, 25, 25, 12, 0xff);
-	Bitmap_DrawCircle(global_system->screen_[ID_CHANNEL_B]->bitmap_, 25, 25, 15, 0xff);
+	Bitmap_DrawCircle(Sys_GetScreenBitmap(global_system, back_layer), 25, 25, 12, 0xff);
+	Bitmap_DrawCircle(Sys_GetScreenBitmap(global_system, back_layer), 25, 25, 15, 0xff);
 
 	WaitForUser();
 }
@@ -389,13 +389,13 @@ void Demo_Bitmap_Blit1(void)
 	
 	for (i = 0; i < 30; i++)
 	{
-		Bitmap_FillBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, 0, box_height * i, box_width, box_height, color);		
+		Bitmap_FillBox(Sys_GetScreenBitmap(global_system, back_layer), 0, box_height * i, box_width, box_height, color);		
 		color += 7;
 	}
 	
- 	Bitmap_DrawCircle(global_system->screen_[ID_CHANNEL_B]->bitmap_, 25, 25, 12, 0x88);
-	Bitmap_DrawCircle(global_system->screen_[ID_CHANNEL_B]->bitmap_, 25, 25, 15, 0xcc);
-	Bitmap_DrawCircle(global_system->screen_[ID_CHANNEL_B]->bitmap_, 25, 25, 20, 0xff);
+ 	Bitmap_DrawCircle(Sys_GetScreenBitmap(global_system, back_layer), 25, 25, 12, 0x88);
+	Bitmap_DrawCircle(Sys_GetScreenBitmap(global_system, back_layer), 25, 25, 15, 0xcc);
+	Bitmap_DrawCircle(Sys_GetScreenBitmap(global_system, back_layer), 25, 25, 20, 0xff);
 
 	// copy bits of this screen to other parts of the Screen
 	src_bm.addr_ = (unsigned char*)VRAM_BUFFER_A;
@@ -419,10 +419,10 @@ void Demo_Bitmap_Blit1(void)
 // 	Bitmap_Blit(&src_bm, x1 - 100, y1 - 100, &dst_bm, 400, 300, 100, 100);
 	
 	// do a 'dragon' effect
-	Bitmap_DrawBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, 550, 350, 20, 20, 0xff, PARAM_DO_FILL);
-	Bitmap_DrawBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, 550, 350, 30, 30, 0xcc, PARAM_DO_FILL);
-	Bitmap_DrawBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, 550, 350, 40, 40, 0xbb, PARAM_DO_FILL);
-	Bitmap_DrawBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, 550, 350, 50, 50, 0x99, PARAM_DO_FILL);
+	Bitmap_DrawBox(Sys_GetScreenBitmap(global_system, back_layer), 550, 350, 20, 20, 0xff, PARAM_DO_FILL);
+	Bitmap_DrawBox(Sys_GetScreenBitmap(global_system, back_layer), 550, 350, 30, 30, 0xcc, PARAM_DO_FILL);
+	Bitmap_DrawBox(Sys_GetScreenBitmap(global_system, back_layer), 550, 350, 40, 40, 0xbb, PARAM_DO_FILL);
+	Bitmap_DrawBox(Sys_GetScreenBitmap(global_system, back_layer), 550, 350, 50, 50, 0x99, PARAM_DO_FILL);
 	
 	for (i = 0; i < 25; i++)
 	{
@@ -449,17 +449,17 @@ void Demo_Bitmap_BlitRect(void)
 	
 	for (i = 0; i < 30; i++)
 	{
-		Bitmap_FillBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, 0, box_height * i, box_width * i, box_height, color);		
+		Bitmap_FillBox(Sys_GetScreenBitmap(global_system, back_layer), 0, box_height * i, box_width * i, box_height, color);		
 		color += 4;
 	}
 	
- 	Bitmap_DrawCircle(global_system->screen_[ID_CHANNEL_B]->bitmap_, 25, 25, 12, SYS_COLOR_RED1);
-	Bitmap_DrawCircle(global_system->screen_[ID_CHANNEL_B]->bitmap_, 25, 25, 15, SYS_COLOR_GREEN1);
-	Bitmap_DrawCircle(global_system->screen_[ID_CHANNEL_B]->bitmap_, 25, 25, 20, SYS_COLOR_BLUE1);
+ 	Bitmap_DrawCircle(Sys_GetScreenBitmap(global_system, back_layer), 25, 25, 12, SYS_COLOR_RED1);
+	Bitmap_DrawCircle(Sys_GetScreenBitmap(global_system, back_layer), 25, 25, 15, SYS_COLOR_GREEN1);
+	Bitmap_DrawCircle(Sys_GetScreenBitmap(global_system, back_layer), 25, 25, 20, SYS_COLOR_BLUE1);
 
 	// copy bits of this screen to other parts of the Screen
-	src_bm = Sys_GetScreenBitmap(global_system, ID_CHANNEL_B);
-	dst_bm = Sys_GetScreenBitmap(global_system, ID_CHANNEL_B);
+	src_bm = Sys_GetScreenBitmap(global_system, back_layer);
+	dst_bm = Sys_GetScreenBitmap(global_system, back_layer);
 	
 	src_rect.MinX = 0;
 

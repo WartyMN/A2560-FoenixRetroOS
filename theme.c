@@ -1818,7 +1818,7 @@ Bitmap* Theme_CreateDefaultDesktopPattern(Theme* the_theme)
 {
 	Bitmap*		the_bitmap;
 	
-	if ( (the_bitmap = Bitmap_New(the_theme->pattern_width_, the_theme->pattern_height_, NULL) ) == NULL)
+	if ( (the_bitmap = Bitmap_New(the_theme->pattern_width_, the_theme->pattern_height_, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 		return NULL;
@@ -1863,7 +1863,7 @@ ControlTemplate* Theme_CreateDefaultControlTemplateClose(void)
 		{
 			Bitmap*		the_bitmap;
 
-			if ( (the_bitmap = Bitmap_New(width, height, NULL) ) == NULL)
+			if ( (the_bitmap = Bitmap_New(width, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -1918,7 +1918,7 @@ ControlTemplate* Theme_CreateDefaultControlTemplateMinimize(void)
 		{
 			Bitmap*		the_bitmap;
 
-			if ( (the_bitmap = Bitmap_New(width, height, NULL) ) == NULL)
+			if ( (the_bitmap = Bitmap_New(width, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -1974,7 +1974,7 @@ ControlTemplate* Theme_CreateDefaultControlTemplateNormSize(void)
 		{
 			Bitmap*		the_bitmap;
 
-			if ( (the_bitmap = Bitmap_New(width, height, NULL) ) == NULL)
+			if ( (the_bitmap = Bitmap_New(width, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -2029,7 +2029,7 @@ ControlTemplate* Theme_CreateDefaultControlTemplateMaximize(void)
 		{
 			Bitmap*		the_bitmap;
 
-			if ( (the_bitmap = Bitmap_New(width, height, NULL) ) == NULL)
+			if ( (the_bitmap = Bitmap_New(width, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -2094,7 +2094,7 @@ ControlTemplate* Theme_CreateControlTemplateFlexWidth(Theme* the_theme, control_
 		{
 			Bitmap*		the_bitmap;
 
-			if ( (the_bitmap = Bitmap_New(width, height, NULL) ) == NULL)
+			if ( (the_bitmap = Bitmap_New(width, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -2151,7 +2151,7 @@ ControlTemplate* Theme_CreateControlTemplateFlexWidth(Theme* the_theme, control_
 // 		{
 // 			Bitmap*		the_bitmap;
 // 
-// 			if ( (the_bitmap = Bitmap_New(width, height, NULL) ) == NULL)
+// 			if ( (the_bitmap = Bitmap_New(width, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 // 			{
 // 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 // 				return NULL;
@@ -2404,7 +2404,7 @@ Theme* Theme_CreateDefaultTheme(void)
 			Bitmap*		bitmap3;
 
 		
-			if ( (bitmap1 = Bitmap_New(width_left, height, NULL) ) == NULL)
+			if ( (bitmap1 = Bitmap_New(width_left, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -2414,7 +2414,7 @@ Theme* Theme_CreateDefaultTheme(void)
 			the_theme->flex_width_backdrops_[TEXT_BUTTON].image_left_[is_active][is_pushed] = bitmap1;
 
 
-			if ( (bitmap2 = Bitmap_New(width_mid, height, NULL) ) == NULL)
+			if ( (bitmap2 = Bitmap_New(width_mid, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -2423,7 +2423,7 @@ Theme* Theme_CreateDefaultTheme(void)
 			memcpy(bitmap2->addr_, def_theme_textbutton_mid[is_active][is_pushed], width_mid * height);
 			the_theme->flex_width_backdrops_[TEXT_BUTTON].image_mid_[is_active][is_pushed] = bitmap2;
 
-			if ( (bitmap3 = Bitmap_New(width_right, height, NULL) ) == NULL)
+			if ( (bitmap3 = Bitmap_New(width_right, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -2451,7 +2451,7 @@ Theme* Theme_CreateDefaultTheme(void)
 			Bitmap*		bitmap5;
 			Bitmap*		bitmap6;
 
-			if ( (bitmap4 = Bitmap_New(width_left, height, NULL) ) == NULL)
+			if ( (bitmap4 = Bitmap_New(width_left, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -2460,7 +2460,7 @@ Theme* Theme_CreateDefaultTheme(void)
 			memcpy(bitmap4->addr_, def_theme_textbutton_left[is_active][is_pushed], width_left * height);
 			the_theme->flex_width_backdrops_[TEXT_FIELD].image_left_[is_active][is_pushed] = bitmap4;
 
-			if ( (bitmap5 = Bitmap_New(width_mid, height, NULL) ) == NULL)
+			if ( (bitmap5 = Bitmap_New(width_mid, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -2469,7 +2469,7 @@ Theme* Theme_CreateDefaultTheme(void)
 			memcpy(bitmap5->addr_, def_theme_textbutton_mid[is_active][is_pushed], width_mid * height);
 			the_theme->flex_width_backdrops_[TEXT_FIELD].image_mid_[is_active][is_pushed] = bitmap5;
 
-			if ( (bitmap6 = Bitmap_New(width_right, height, NULL) ) == NULL)
+			if ( (bitmap6 = Bitmap_New(width_right, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -2821,7 +2821,7 @@ Theme* Theme_CreateGreenTheme(void)
 			width = the_theme->flex_width_backdrops_[TEXT_BUTTON].left_width_;
 			height = the_theme->flex_width_backdrops_[TEXT_BUTTON].height_;
 			
-			if ( (bitmap1 = Bitmap_New(width, height, NULL) ) == NULL)
+			if ( (bitmap1 = Bitmap_New(width, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -2832,7 +2832,7 @@ Theme* Theme_CreateGreenTheme(void)
 
 			width = the_theme->flex_width_backdrops_[TEXT_BUTTON].mid_width_;
 
-			if ( (bitmap2 = Bitmap_New(width, height, NULL) ) == NULL)
+			if ( (bitmap2 = Bitmap_New(width, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -2843,7 +2843,7 @@ Theme* Theme_CreateGreenTheme(void)
 
 			width = the_theme->flex_width_backdrops_[TEXT_BUTTON].right_width_;
 
-			if ( (bitmap3 = Bitmap_New(width, height, NULL) ) == NULL)
+			if ( (bitmap3 = Bitmap_New(width, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -2856,7 +2856,7 @@ Theme* Theme_CreateGreenTheme(void)
 			width = the_theme->flex_width_backdrops_[TEXT_FIELD].left_width_;
 			height = the_theme->flex_width_backdrops_[TEXT_FIELD].height_;
 			
-			if ( (bitmap4 = Bitmap_New(width, height, NULL) ) == NULL)
+			if ( (bitmap4 = Bitmap_New(width, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -2867,7 +2867,7 @@ Theme* Theme_CreateGreenTheme(void)
 
 			width = the_theme->flex_width_backdrops_[TEXT_FIELD].mid_width_;
 
-			if ( (bitmap5 = Bitmap_New(width, height, NULL) ) == NULL)
+			if ( (bitmap5 = Bitmap_New(width, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -2878,7 +2878,7 @@ Theme* Theme_CreateGreenTheme(void)
 
 			width = the_theme->flex_width_backdrops_[TEXT_FIELD].right_width_;
 
-			if ( (bitmap6 = Bitmap_New(width, height, NULL) ) == NULL)
+			if ( (bitmap6 = Bitmap_New(width, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -2933,7 +2933,7 @@ Bitmap* Theme_CreateGreenDesktopPattern(Theme* the_theme)
 {
 	Bitmap*		the_bitmap;
 	
-	if ( (the_bitmap = Bitmap_New(the_theme->pattern_width_, the_theme->pattern_height_, NULL) ) == NULL)
+	if ( (the_bitmap = Bitmap_New(the_theme->pattern_width_, the_theme->pattern_height_, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 		return NULL;
@@ -2978,7 +2978,7 @@ ControlTemplate* Theme_CreateGreenControlTemplateClose(void)
 		{
 			Bitmap*		the_bitmap;
 
-			if ( (the_bitmap = Bitmap_New(width, height, NULL) ) == NULL)
+			if ( (the_bitmap = Bitmap_New(width, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -3033,7 +3033,7 @@ ControlTemplate* Theme_CreateGreenControlTemplateMinimize(void)
 		{
 			Bitmap*		the_bitmap;
 
-			if ( (the_bitmap = Bitmap_New(width, height, NULL) ) == NULL)
+			if ( (the_bitmap = Bitmap_New(width, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -3088,7 +3088,7 @@ ControlTemplate* Theme_CreateGreenControlTemplateNormSize(void)
 		{
 			Bitmap*		the_bitmap;
 
-			if ( (the_bitmap = Bitmap_New(width, height, NULL) ) == NULL)
+			if ( (the_bitmap = Bitmap_New(width, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;
@@ -3143,7 +3143,7 @@ ControlTemplate* Theme_CreateGreenControlTemplateMaximize(void)
 		{
 			Bitmap*		the_bitmap;
 
-			if ( (the_bitmap = Bitmap_New(width, height, NULL) ) == NULL)
+			if ( (the_bitmap = Bitmap_New(width, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 			{
 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 				return NULL;

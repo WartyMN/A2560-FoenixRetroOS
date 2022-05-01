@@ -179,6 +179,23 @@
 #define VICKY_II_CLUT6				VICKY_II_CLUT5 + 0x400	// each addition LUT is 400 offset from here
 #define VICKY_II_CLUT7				VICKY_II_CLUT6 + 0x400	// each addition LUT is 400 offset from here
 
+// ** VRAM locations per machine
+
+// NOTE: VRAM is currently only available in VRAM Buffer A on A2560K, Buffer B is not implemented (2022/03/21)
+
+#if defined __TARGET_C256_FMX__
+	#define VRAM_START				0x00B00000
+	#define VRAM_LEN				0x00200000
+#elseif defined __TARGET_A2560U__
+	#define VRAM_START				0x00C00000
+	#define VRAM_LEN				0x00200000
+#else
+	#define VRAM_START				0x00800000
+	#define VRAM_LEN				0x00400000
+#endif
+
+#define VRAM_OFFSET_TO_NEXT_SCREEN	480000		// 800x600 -- number of bytes needed to cover maximum screen resolution for one bitmap layer
+
 
 // subtract 0xfe000000 from the UM map for Vicky (to get the old/morfe addresses)
 // size of some areas changed too:
@@ -316,11 +333,11 @@ typedef uint8_t	ColorIdx;
 /*                               Enumerations                                */
 /*****************************************************************************/
 
-// typedef enum
-// {
-// 	false = 0,
-// 	true = 1
-// } bool;
+typedef enum
+{
+	back_layer = 0,
+	fore_layer = 1,
+} bitmap_layer;
 
 // device-independent resolution flags
 typedef enum
@@ -367,7 +384,7 @@ typedef struct Rectangle
 typedef struct Screen
 {
 	int16_t			id_;				// 0 for channel A, 1 for channel B. not all foenix's have 2 channels.
-	volatile unsigned long*	vicky_;				// VICKY primary register RAM loc. See VICKY_A2560K_A, VICKY_A2560K_B, VICKY_A2560U, etc.
+	volatile unsigned long*	vicky_;		// VICKY primary register RAM loc. See VICKY_A2560K_A, VICKY_A2560K_B, VICKY_A2560U, etc.
 	Rectangle		rect_;				// the x1, y1, > x2, y2 coordinates of the screen, taking into account any borders. 
 	int16_t			width_;				// for the current resolution, the max horizontal pixel count 
 	int16_t			height_;			// for the current resolution, the max vertical pixel count 
@@ -382,7 +399,7 @@ typedef struct Screen
 	int16_t			text_font_width_;	// in text mode, the width in pixels for the fixed width font. Unlikely to be other than '8' with Foenix machines. used for calculating text fit.
 	char			text_temp_buffer_1_[TEXT_COL_COUNT_FOR_PLOTTING_A2560K * TEXT_ROW_COUNT_FOR_PLOTTING_A2560K + 1];	// todo: replace with pointer, and allocate space on resolution switch. general use temp buffer - do NOT use for real storage - any utility function clobber it
 	char			text_temp_buffer_2_[TEXT_COL_COUNT_FOR_PLOTTING_A2560K * TEXT_ROW_COUNT_FOR_PLOTTING_A2560K + 1];	// todo: replace with pointer, and allocate space on resolution switch. general use temp buffer - do NOT use for real storage - any utility function clobber it
-	Bitmap*			bitmap_;			//! The bitmap associated with this screen, if any. (Text only screens do not have bitmaps available)
+	Bitmap*			bitmap_[2];			//! The foreground (layer0=0) and background (layer1=1) bitmaps associated with this screen, if any. (Text only screens do not have bitmaps available)
 } Screen;
 
 

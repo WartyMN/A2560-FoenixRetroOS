@@ -83,7 +83,7 @@ void WaitForUser(void)
 	
 	getchar();
 	
-// 	Bitmap_FillMemory(global_system->screen_[ID_CHANNEL_B]->bitmap_, 0xbb);
+// 	Bitmap_FillMemory(Sys_GetScreenBitmap(global_system, back_layer), 0xbb);
 // 	Text_FillCharMem(global_system->screen_[ID_CHANNEL_B], ' ');
 // 	Text_FillAttrMem(global_system->screen_[ID_CHANNEL_B], 0);
 }
@@ -997,8 +997,8 @@ void Demo_Font_DrawStringInBox1(Bitmap* the_bitmap)
 	Bitmap_SetColor(the_bitmap, SYS_COLOR_BLACK);
 	Bitmap_SetXY(the_bitmap, x, y);
 	
-	Bitmap_DrawBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x - margin, y - margin, width + margin, height + margin, SYS_COLOR_WHITE, PARAM_DO_FILL);
-	Bitmap_DrawBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x - margin, y - margin, width + margin, height + margin, SYS_COLOR_BLACK, PARAM_DO_NOT_FILL);
+	Bitmap_DrawBox(Sys_GetScreenBitmap(global_system, back_layer), x - margin, y - margin, width + margin, height + margin, SYS_COLOR_WHITE, PARAM_DO_FILL);
+	Bitmap_DrawBox(Sys_GetScreenBitmap(global_system, back_layer), x - margin, y - margin, width + margin, height + margin, SYS_COLOR_BLACK, PARAM_DO_NOT_FILL);
 	Font_DrawStringInBox(the_bitmap, width, height, the_message, num_chars, &the_wrap_buffer, NULL);
 
 	f_free(the_message, MEM_STANDARD);
@@ -1013,7 +1013,7 @@ void RunDemo(void)
 {
 	Font*	the_font;
 	Font*	the_other_font;
-	Bitmap*	the_bitmap = Sys_GetScreenBitmap(global_system, ID_CHANNEL_B);
+	Bitmap*	the_bitmap = Sys_GetScreenBitmap(global_system, back_layer);
 
 // 	ShowDescription("Welcome to the A2560 Font Library Demo!");	
 // 	WaitForUser();

@@ -79,6 +79,10 @@
 #define PARAM_DO_FILL		true	//!< for various graphic routines
 #define PARAM_DO_NOT_FILL	false	//!< for various graphic routines
 
+#define PARAM_IN_VRAM		true	//!< for Bitmap_New
+#define PARAM_NOT_IN_VRAM	false	//!< for Bitmap_New
+
+
 /*****************************************************************************/
 /*                               Enumerations                                */
 /*****************************************************************************/
@@ -99,6 +103,7 @@ struct Bitmap
 	uint8_t			reserved_;	//!< future use
 	Font*			font_;		//!< the currently selected font. All text drawing activities will use this font face.
 	unsigned char*	addr_;		//!< address of the start of the bitmap, within the machine's global address space. This is not the VICKY's local address for this bitmap. This address MUST be within the VRAM, however, it cannot be in non-VRAM memory space.
+	bool			in_vram_;	//!< a way to know if this bitmap is pointing to VRAM or standard RAM space.
 };
 
 
@@ -117,8 +122,12 @@ struct Bitmap
 // constructor
 
 //! Create a new bitmap object by allocating space for the bitmap struct in regular memory, and for the graphics, in VRAM
-//! @param	Font: optional font object to associate with the Bitmap. 
-Bitmap* Bitmap_New(int16_t width, int16_t height, Font* the_font);
+//! NOTE: when creating a bitmap to represent something actually in VRAM, pass true to in_vram, and manually assign a known VRAM location afterwards.
+//! @param	width: width, in pixels, of the bitmap to be created
+//! @param	height: height, in pixels, of the bitmap to be created
+//! @param	the_font: optional font object to associate with the Bitmap. 
+//! @param	in_vram: if true, no space will be allocated for the bitmap graphics. If false, width * height area of memory will be allocated in standard memory.
+Bitmap* Bitmap_New(int16_t width, int16_t height, Font* the_font, bool in_vram);
 
 // destructor
 // frees all allocated memory associated with the passed object, and the object itself

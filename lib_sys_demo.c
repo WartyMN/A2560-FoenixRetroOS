@@ -474,7 +474,7 @@ void Demo_Font_DrawString(Bitmap* the_bitmap, int16_t y)
 // 	int16_t		width = 64;
 // 	int16_t		height = 64;
 // 
-// 	if ( (the_bitmap = Bitmap_New(width, height, NULL) ) == NULL)
+// 	if ( (the_bitmap = Bitmap_New(width, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 // 	{
 // 		LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 // 		return NULL;
@@ -493,7 +493,7 @@ Bitmap* LoadFakeIcon(int16_t icon_num)
 	int16_t		width = 64;
 	int16_t		height = 64;
 
-	if ( (the_bitmap = Bitmap_New(width, height, NULL) ) == NULL)
+	if ( (the_bitmap = Bitmap_New(width, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 		return NULL;

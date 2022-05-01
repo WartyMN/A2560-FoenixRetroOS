@@ -368,10 +368,10 @@ void Sys_DestroyAllWindows(System* the_system)
 //! Starts up the memory manager, creates the global system object, runs autoconfigure to check the system hardware, loads system and application fonts, allocates a bitmap for the screen.
 bool Sys_InitSystem(void)
 {
-	Bitmap*		the_bitmap;
 	Font*		the_system_font;
 	Font*		the_icon_font;
 	Theme*		the_theme;
+	int16_t		i;
 	
 	
 	DEBUG_OUT(("%s %d: Initializing Memory Manager...", __func__, __LINE__));
@@ -436,14 +436,31 @@ bool Sys_InitSystem(void)
 
 	DEBUG_OUT(("%s %d: allocating screen bitmap...", __func__, __LINE__));
 	
-	// try to allocate a bitmap in VRAM for the screen
-	if ( (the_bitmap = Bitmap_New(global_system->screen_[ID_CHANNEL_B]->width_, global_system->screen_[ID_CHANNEL_B]->height_, Sys_GetSystemFont(global_system))) == NULL)
+	// allocate the foreground and background bitmaps, then assign them fixed locations in VRAM
+	
+	// LOGIC: 
+	//   The only bitmaps we want pointing to VRAM locations are the system's layer0 and layer1 bitmaps for the screen
+	//   Only 1 screen has bitmapped graphics
+	//   We assign them fixed spaces in VRAM, 800*600 apart, so that the addresses are good even on a screen resolution change. 
+	
+	for (i = 0; i < 2; i++)
 	{
-		LOG_ERR(("%s %d: Failed to create bitmap", __func__, __LINE__));
-		goto error;
+		Bitmap*		the_bitmap;
+
+		if ( (the_bitmap = Bitmap_New(global_system->screen_[ID_CHANNEL_B]->width_, global_system->screen_[ID_CHANNEL_B]->height_, Sys_GetSystemFont(global_system), PARAM_IN_VRAM)) == NULL)
+		{
+			LOG_ERR(("%s %d: Failed to create bitmap #%i", __func__, __LINE__, i));
+			goto error;
+		}
+	
+		the_bitmap->addr_ = (unsigned char*)((unsigned long)VRAM_START + ((unsigned long)i * (unsigned long)VRAM_OFFSET_TO_NEXT_SCREEN));
+		
+		Sys_SetScreenBitmap(global_system, the_bitmap, i);
+		
+		// clear the bitmap
+		Bitmap_FillMemory(the_bitmap, 0x00);
 	}
 	
-	Sys_SetScreenBitmap(global_system, ID_CHANNEL_B, the_bitmap);
 
 // 	// load the splash screen and progress bar
 // 	if (Startup_ShowSplash() == false)
@@ -660,8 +677,13 @@ bool Sys_SetModeGraphics(System* the_system)
 	//*the_screen->vicky_ = (*the_screen->vicky_ & GRAPHICS_MODE_MASK | (GRAPHICS_MODE_GRAPHICS) | GRAPHICS_MODE_EN_BITMAP);
 	R32(the_system->screen_[ID_CHANNEL_B]->vicky_) = (*the_system->screen_[ID_CHANNEL_B]->vicky_ & GRAPHICS_MODE_MASK | (GRAPHICS_MODE_GRAPHICS) | GRAPHICS_MODE_EN_BITMAP);
 
-	// enable bitmap layer0
+	// enable bitmap layers 0 and 1
 	R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_CTRL_L) = 0x01;
+	#ifndef _f68_	// f68 does not do compositing, so if bitmap layer1 is enabled, it blocks everything else
+	R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L1_CTRL_L) = 0x01;
+	#else
+	R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L1_CTRL_L) = 0x00;
+	#endif
 	
 	return true;
 }
@@ -699,8 +721,9 @@ bool Sys_SetModeText(System* the_system, bool as_overlay)
 	{
 		R32(the_system->screen_[ID_CHANNEL_B]->vicky_) = (*the_system->screen_[ID_CHANNEL_B]->vicky_ & GRAPHICS_MODE_MASK | GRAPHICS_MODE_TEXT);
 		
-		// disable bitmap layer0
+		// disable bitmap layers 0 and 1
 		R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_CTRL_L) = 0x00;
+		R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L1_CTRL_L) = 0x00;
 	}
 	
 	return true;
@@ -1452,8 +1475,9 @@ Screen* Sys_GetScreen(System* the_system, int16_t channel_id)
 }
 
 
+//! NOTE: Foenix systems only have 1 screen with bitmap graphics, even if the system has 2 screens overall. The bitmap returned will always be from the appropriate channel (A or B).
 //! @param	the_system: valid pointer to system object
-Bitmap* Sys_GetScreenBitmap(System* the_system, int16_t channel_id)
+Bitmap* Sys_GetScreenBitmap(System* the_system, bitmap_layer the_layer)
 {
 	if (the_system == NULL)
 	{
@@ -1461,13 +1485,13 @@ Bitmap* Sys_GetScreenBitmap(System* the_system, int16_t channel_id)
 		return NULL;
 	}
 	
-	if (channel_id != ID_CHANNEL_A && channel_id != ID_CHANNEL_B)
+	if (the_layer > fore_layer)
 	{
-		LOG_ERR(("%s %d: passed channel_id (%i) was invalid", __func__ , __LINE__, channel_id));
+		LOG_ERR(("%s %d: passed layer (%i) was invalid", __func__ , __LINE__, the_layer));
 		return NULL;
 	}
 	
-	return the_system->screen_[channel_id]->bitmap_;
+	return the_system->screen_[ID_CHANNEL_B]->bitmap_[the_layer];
 }
 
 
@@ -1534,8 +1558,9 @@ void Sys_SetScreen(System* the_system, int16_t channel_id, Screen* the_screen)
 }
 
 
+//! NOTE: Foenix systems only have 1 screen with bitmap graphics, even if the system has 2 screens overall. The bitmap returned will always be from the appropriate channel (A or B).
 //! @param	the_system: valid pointer to system object
-void Sys_SetScreenBitmap(System* the_system, int16_t channel_id, Bitmap* the_bitmap)
+void Sys_SetScreenBitmap(System* the_system, Bitmap* the_bitmap, bitmap_layer the_layer)
 {
 	if (the_system == NULL)
 	{
@@ -1549,15 +1574,17 @@ void Sys_SetScreenBitmap(System* the_system, int16_t channel_id, Bitmap* the_bit
 		return;
 	}
 	
-	if (channel_id != ID_CHANNEL_A && channel_id != ID_CHANNEL_B)
+	if (the_layer > fore_layer)
 	{
-		LOG_ERR(("%s %d: passed channel_id (%i) was invalid", __func__ , __LINE__, channel_id));
+		LOG_ERR(("%s %d: passed layer (%i) was invalid", __func__ , __LINE__, the_layer));
 		return;
 	}
 	
-	the_system->screen_[channel_id]->bitmap_ = the_bitmap;
+	the_system->screen_[ID_CHANNEL_B]->bitmap_[the_layer] = the_bitmap;
 	
-	Sys_SetVRAMAddr(the_system, 0, the_bitmap->addr_);
+	Sys_SetVRAMAddr(the_system, the_layer, the_bitmap->addr_);
+	
+	DEBUG_OUT(("%s %d: layer=%i, bitmap_[the_layer]=%p", __func__, __LINE__, the_layer, the_bitmap->addr_));
 }
 
 

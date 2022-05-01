@@ -241,8 +241,12 @@ void Bitmap_Print(Bitmap* the_bitmap)
 // constructor
 
 //! Create a new bitmap object by allocating space for the bitmap struct in regular memory, and for the graphics, in VRAM
-//! @param	Font: optional font object to associate with the Bitmap. 
-Bitmap* Bitmap_New(int16_t width, int16_t height, Font* the_font)
+//! NOTE: when creating a bitmap to represent something actually in VRAM, pass true to in_vram, and manually assign a known VRAM location afterwards.
+//! @param	width: width, in pixels, of the bitmap to be created
+//! @param	height: height, in pixels, of the bitmap to be created
+//! @param	the_font: optional font object to associate with the Bitmap. 
+//! @param	in_vram: if true, no space will be allocated for the bitmap graphics. If false, width * height area of memory will be allocated in standard memory.
+Bitmap* Bitmap_New(int16_t width, int16_t height, Font* the_font, bool in_vram)
 {
 	Bitmap*		the_bitmap;
 
@@ -265,22 +269,30 @@ Bitmap* Bitmap_New(int16_t width, int16_t height, Font* the_font)
 	
 	// NOTE: MEM_STANDARD allocations are failing for some reason. until figure it out, allocate everything in VRAM.
 	//if ((the_bitmap = f_calloc(1, sizeof(Bitmap), MEM_STANDARD)) == NULL)
-	if ((the_bitmap = f_calloc(1, sizeof(Bitmap), MEM_VRAM)) == NULL)
+	if ((the_bitmap = calloc(1, sizeof(Bitmap))) == NULL)
 	{
 		LOG_ERR(("%s %d: Couldn't allocate space for bitmap struc", __func__, __LINE__));
 		goto error;
 	}
 
-	//DEBUG_OUT(("%s %d: Allocating a screen-sized bitmap in VRAM...", __func__, __LINE__));
-
-	if ((the_bitmap->addr_ = f_calloc(sizeof(uint8_t), width * height, MEM_VRAM)) == NULL)
+	if (in_vram == false)
 	{
-		LOG_ERR(("%s %d: Couldn't instantiate a bitmap", __func__, __LINE__));
-		goto error;
+		//DEBUG_OUT(("%s %d: Allocating a screen-sized bitmap in standard RAM...", __func__, __LINE__));
+
+		if ((the_bitmap->addr_ = calloc(sizeof(uint8_t), width * height)) == NULL)
+		{
+			LOG_ERR(("%s %d: Couldn't instantiate a bitmap", __func__, __LINE__));
+			goto error;
+		}
+	}
+	else
+	{
+		the_bitmap->addr_ = NULL;
 	}
 
 	the_bitmap->width_ = width;
 	the_bitmap->height_ = height;
+	the_bitmap->in_vram_ = in_vram;
 	
 	//DEBUG_OUT(("%s %d: Bitmap allocated! p=%p, addr=%p", __func__, __LINE__, the_bitmap, the_bitmap->addr_));
 
@@ -323,11 +335,14 @@ bool Bitmap_Destroy(Bitmap** the_bitmap)
 
 	if ((*the_bitmap)->addr_)
 	{
-		f_free((*the_bitmap)->addr_, MEM_VRAM);
+		if ((*the_bitmap)->in_vram_)
+		{
+			free((*the_bitmap)->addr_);
+		}
 	}
 
 	LOG_ALLOC(("%s %d:	__FREE__	*the_bitmap	%p	size	%i", __func__ , __LINE__, *the_bitmap, sizeof(Bitmap)));
-	f_free(*the_bitmap, MEM_STANDARD);
+	free(*the_bitmap);
 	*the_bitmap = NULL;
 	
 	return true;
@@ -356,6 +371,9 @@ bool Bitmap_BlitRect(Bitmap* src_bm, Rectangle src_rect, Bitmap* dst_bm, int16_t
 	
 	width = src_rect.MaxX - src_rect.MinX + 1;
 	height = src_rect.MaxY - src_rect.MinY + 1;
+
+	//DEBUG_OUT(("%s %d: final parameters: src_x=%i, src_y=%i, dst_x=%i, dst_y=%i, width=%i, height=%i.", __func__, __LINE__, src_rect.MinX, src_rect.MinY, dst_x, dst_y, width, height));
+	//DEBUG_OUT(("%s %d: src_bm=%p, dst_bm=%p", __func__, __LINE__, src_bm->addr_, dst_bm->addr_));
 	
 	return Bitmap_Blit(src_bm, src_rect.MinX, src_rect.MinY, dst_bm, dst_x, dst_y, width, height);
 }

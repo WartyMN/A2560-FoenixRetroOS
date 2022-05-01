@@ -762,7 +762,7 @@ Window* Window_New(NewWinTemplate* the_win_template, void (* event_handler)(Even
 	{
 		if ( the_win_template->is_backdrop_)
 		{
-			if ( (the_window->bitmap_ = Sys_GetScreenBitmap(global_system, ID_CHANNEL_B)) == NULL)
+			if ( (the_window->bitmap_ = Sys_GetScreenBitmap(global_system, back_layer)) == NULL)
 			{
 				LOG_ERR(("%s %d: Failed to acquire global screen bitmap for use with backdrop", __func__, __LINE__));
 				goto error;
@@ -770,7 +770,7 @@ Window* Window_New(NewWinTemplate* the_win_template, void (* event_handler)(Even
 		}
 		else
 		{
-			if ( (the_window->bitmap_ = Bitmap_New(the_win_template->width_, the_win_template->height_, Sys_GetAppFont(global_system))) == NULL)
+			if ( (the_window->bitmap_ = Bitmap_New(the_win_template->width_, the_win_template->height_, Sys_GetAppFont(global_system), PARAM_NOT_IN_VRAM)) == NULL)
 			{
 				LOG_ERR(("%s %d: Failed to create bitmap", __func__, __LINE__));
 				goto error;
@@ -1064,12 +1064,12 @@ bool Window_BlitClipRects(Window* the_window)
 	{
 		DEBUG_OUT(("%s %d: blitting cliprect %p (%i, %i -- %i, %i)", __func__, __LINE__, the_clip, the_clip->x_, the_clip->y_, the_clip->width_, the_clip->height_));
 	
-		//Bitmap_BlitRect(the_window->bitmap_, the_clip->rect_, global_system->screen_[ID_CHANNEL_B]->bitmap_, the_window->x_, the_window->y_);
-		//Bitmap_BlitRect(the_window->bitmap_, the_window->overall_rect_, global_system->screen_[ID_CHANNEL_B]->bitmap_, the_window->x_, the_window->y_);
+		//Bitmap_BlitRect(the_window->bitmap_, the_clip->rect_, Sys_GetScreenBitmap(global_system, back_layer), the_window->x_, the_window->y_);
+		//Bitmap_BlitRect(the_window->bitmap_, the_window->overall_rect_, Sys_GetScreenBitmap(global_system, back_layer), the_window->x_, the_window->y_);
 		Bitmap_Blit(the_window->bitmap_, 
 					the_clip->x_, 
 					the_clip->y_, 
-					global_system->screen_[ID_CHANNEL_B]->bitmap_, 
+					Sys_GetScreenBitmap(global_system, back_layer), 
 					the_clip->x_ + the_window->x_, 
 					the_clip->y_ + the_window->y_, 
 					the_clip->width_, 
@@ -1087,7 +1087,6 @@ bool Window_BlitClipRects(Window* the_window)
 	
 	return true;
 }
-
 
 
 
@@ -1448,7 +1447,7 @@ void Window_Render(Window* the_window)
 	}
 
 	// blit to screen
-	//Bitmap_BlitRect(the_window->bitmap_, the_window->overall_rect_, global_system->screen_[ID_CHANNEL_B]->bitmap_, the_window->x_, the_window->y_);
+	//Bitmap_BlitRect(the_window->bitmap_, the_window->overall_rect_, Sys_GetScreenBitmap(global_system, back_layer), the_window->x_, the_window->y_);
 	//Window_AddClipRect(the_window, &the_window->overall_rect_);
 	
 	// if the entire window has had to be redrawn, then don't bother with individual cliprects, just do one for entire window
@@ -1456,7 +1455,7 @@ void Window_Render(Window* the_window)
 	{
 		Window_ClearClipRects(the_window);
 		//Window_AddClipRect(the_window, &the_window->overall_rect_);
-		Bitmap_BlitRect(the_window->bitmap_, the_window->overall_rect_, global_system->screen_[ID_CHANNEL_B]->bitmap_, the_window->x_, the_window->y_);
+		Bitmap_BlitRect(the_window->bitmap_, the_window->overall_rect_, Sys_GetScreenBitmap(global_system, back_layer), the_window->x_, the_window->y_);
 		the_window->invalidated_ = false;
 	}
 	else

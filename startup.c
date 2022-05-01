@@ -6994,7 +6994,7 @@ Bitmap* Startup_LoadSplashBitmap(void)
 {
 	Bitmap*		the_bitmap;
 	
-	if ( (the_bitmap = Bitmap_New(SPLASH_WIDTH, SPLASH_HEIGHT, NULL) ) == NULL)
+	if ( (the_bitmap = Bitmap_New(SPLASH_WIDTH, SPLASH_HEIGHT, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
 		return NULL;
@@ -7035,7 +7035,7 @@ static void Splash_DrawStartupMessage(char* the_message)
 
 	the_theme = Sys_GetTheme(global_system);
 	the_font = Sys_GetSystemFont(global_system);
-	the_bitmap = global_system->screen_[ID_CHANNEL_B]->bitmap_;
+	the_bitmap = Sys_GetScreenBitmap(global_system, back_layer);
 
 	available_width = the_bitmap->width_;	
 	chars_that_fit = Font_MeasureStringWidth(the_font, the_message, GEN_NO_STRLEN_CAP, available_width, 0, &pixels_used);
@@ -7071,6 +7071,7 @@ static void Splash_DrawStartupMessage(char* the_message)
 bool Startup_ShowSplash(void)
 {
 	Bitmap*			the_bitmap;
+	Bitmap*			screen_bitmap;
 
 	srand(sys_time_jiffies());
 
@@ -7085,16 +7086,18 @@ bool Startup_ShowSplash(void)
 	R32(VICKYB_BACK_COLOR_A2560K) = 0x01;
 	Sys_SetModeGraphics(global_system);
 	
+	screen_bitmap = Sys_GetScreenBitmap(global_system, back_layer);
+	
 	// blank screen to black
-	Bitmap_FillMemory(global_system->screen_[ID_CHANNEL_B]->bitmap_, 0x01);
+	Bitmap_FillMemory(screen_bitmap, 0x01);
 
 	// load splash screen bitmap
 	the_bitmap = Startup_LoadSplashBitmap();
 	
 	Bitmap_Blit(the_bitmap, 0, 0, 
-		global_system->screen_[ID_CHANNEL_B]->bitmap_, 
-		(global_system->screen_[ID_CHANNEL_B]->bitmap_->width_ - SPLASH_WIDTH) / 2, 
-		(global_system->screen_[ID_CHANNEL_B]->bitmap_->height_ - SPLASH_HEIGHT) / 2,  
+		screen_bitmap, 
+		(screen_bitmap->width_ - SPLASH_WIDTH) / 2, 
+		(screen_bitmap->height_ - SPLASH_HEIGHT) / 2,  
 		SPLASH_WIDTH, 
 		SPLASH_HEIGHT
 		);
@@ -7109,8 +7112,8 @@ bool Startup_ShowSplash(void)
 	int16_t bar_height = 10;
 	int16_t step_width = 10;
 	int16_t num_steps = 10;
-	int16_t x = (global_system->screen_[ID_CHANNEL_B]->bitmap_->width_ - (num_steps * step_width)) / 2; // 10 progress blocks of 10 pixels each
-	int16_t y = global_system->screen_[ID_CHANNEL_B]->bitmap_->height_ - 40;
+	int16_t x = (screen_bitmap->width_ - (num_steps * step_width)) / 2; // 10 progress blocks of 10 pixels each
+	int16_t y = screen_bitmap->height_ - 40;
 	
 	for (i = 0; i < num_steps; i++)
 	{	
@@ -7118,7 +7121,7 @@ bool Startup_ShowSplash(void)
 		
 		message_num = (rand() * MESSAGE_COUNT) / RAND_MAX;
 		Splash_DrawStartupMessage(startup_messages[message_num]);
-		Bitmap_DrawBox(global_system->screen_[ID_CHANNEL_B]->bitmap_, x, y, step_width * i, bar_height, 0xCC, true);
+		Bitmap_DrawBox(screen_bitmap, x, y, step_width * i, bar_height, 0xCC, true);
 		
 // 		DEBUG_OUT(("x=%i, step_width*i=%i", x, step_width*i));
 // 		R32(VICKYB_BITMAP_L0_CTRL) = clut_selector++;
@@ -7134,7 +7137,7 @@ bool Startup_ShowSplash(void)
 	General_DelaySeconds(1);
 	
 	// blank screen to black
-	Bitmap_FillMemory(global_system->screen_[ID_CHANNEL_B]->bitmap_, 0x01);
+	Bitmap_FillMemory(screen_bitmap, 0x01);
 	
 	return true;
 }

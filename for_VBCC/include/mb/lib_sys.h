@@ -229,8 +229,9 @@ Screen* Sys_GetScreen(System* the_system, int16_t channel_id);
 //! @param	the_system: valid pointer to system object
 Theme* Sys_GetTheme(System* the_system);
 
+//! NOTE: Foenix systems only have 1 screen with bitmap graphics, even if the system has 2 screens overall. The bitmap returned will always be from the appropriate channel (A or B).
 //! @param	the_system: valid pointer to system object
-Bitmap* Sys_GetScreenBitmap(System* the_system, int16_t channel_id);
+Bitmap* Sys_GetScreenBitmap(System* the_system, bitmap_layer the_layer);
 
 //! @param	the_system: valid pointer to system object
 EventManager* Sys_GetEventManager(System* the_system);
@@ -248,8 +249,9 @@ void Sys_SetAppFont(System* the_system, Font* the_font);
 //! @param	the_system: valid pointer to system object
 void Sys_SetScreen(System* the_system, int16_t channel_id, Screen* the_screen);
 
+//! NOTE: Foenix systems only have 1 screen with bitmap graphics, even if the system has 2 screens overall. The bitmap returned will always be from the appropriate channel (A or B).
 //! @param	the_system: valid pointer to system object
-void Sys_SetScreenBitmap(System* the_system, int16_t channel_id, Bitmap* the_bitmap);
+void Sys_SetScreenBitmap(System* the_system, Bitmap* the_bitmap, bitmap_layer the_layer);
 
 //! Set the passed theme as the System's current theme
 //! Note: this will dispose of the current theme after setting the new one
