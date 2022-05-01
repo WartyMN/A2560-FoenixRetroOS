@@ -67,7 +67,11 @@ void RunDemo(void);
 void SwitchThemes(Window* the_window);
 void ToggleButtonStates(Window* the_window);
 void AddControls(Window* the_window);
-	
+
+// handler for the hello world window
+void HelloWindowEventHandler(EventRecord* the_event);
+
+
 
 /*****************************************************************************/
 /*                       Private Function Definitions                        */
@@ -327,7 +331,7 @@ void RunDemo(void)
 	
 	DEBUG_OUT(("%s %d: x=%i, y=%i, width=%i, title='%s'", __func__, __LINE__, the_win_template->x_, the_win_template->y_, the_win_template->width_, the_win_template->title_));
 	
-	if ( (the_window = Window_New(the_win_template)) == NULL)
+	if ( (the_window = Window_New(the_win_template, &HelloWindowEventHandler)) == NULL)
 	{
 		DEBUG_OUT(("%s %d: Couldn't instantiate a window", __func__, __LINE__));
 		return;
@@ -407,7 +411,13 @@ void RunDemo(void)
 /*                        Public Function Definitions                        */
 /*****************************************************************************/
 
-
+// handler for the hello world window
+void HelloWindowEventHandler(EventRecord* the_event)
+{
+	DEBUG_OUT(("%s %d: event received!", __func__, __LINE__));
+	
+	return;
+}
 
 
 int main(int argc, char* argv[])

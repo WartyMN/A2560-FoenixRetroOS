@@ -76,6 +76,11 @@ void Sys_UpdateWindowTheme(System* the_system);
 
 void Sys_RenumberWindows(System* the_system);
 
+
+//! Event handler for the backdrop window
+void Window_BackdropWinEventHandler(EventRecord* the_event);
+
+
 // **** Debug functions *****
 
 void Sys_Print(System* the_system);
@@ -149,6 +154,12 @@ void Sys_RenumberWindows(System* the_system)
 	return;
 }
 
+
+//! Event handler for the backdrop window
+void Window_BackdropWinEventHandler(EventRecord* the_event)
+{
+	return;
+}
 
 
 // // interrupt 1 is PS2 keyboard, interrupt 2 is A2560K keyboard
@@ -1038,7 +1049,7 @@ bool Sys_CreateBackdropWindow(System* the_system)
 	the_win_template->is_backdrop_ = true;
 	the_win_template->can_resize_ = false;
 	
-	if ( (the_window = Window_New(the_win_template)) == NULL)
+	if ( (the_window = Window_New(the_win_template, &Window_BackdropWinEventHandler)) == NULL)
 	{
 		DEBUG_OUT(("%s %d: Couldn't instantiate the backdrop window", __func__, __LINE__));
 		goto error;

@@ -415,8 +415,8 @@ void EventManager_AddEvent(event_kind the_what, uint32_t the_code, int16_t x, in
 }
 
 
-//! Wait for an event to happen, do system-processing of it, then give the event to the call function
-EventRecord* EventManager_WaitForEvent(event_mask the_mask)
+//! Wait for an event to happen, do system-processing of it, then if appropriate, give the window responsible for the event a chance to do something with it
+void EventManager_WaitForEvent(event_mask the_mask)
 {
 	EventManager*	the_event_manager;
 	EventRecord*	the_event;
@@ -486,14 +486,12 @@ EventRecord* EventManager_WaitForEvent(event_mask the_mask)
 				}
 				DEBUG_OUT(("%s %d: active window = '%s', clicked window = '%s'", __func__, __LINE__, the_active_window->title_, the_window->title_));
 				
-				if (the_window == NULL)
-				{
-					LOG_ERR(("%s %d: no window found at %i, %i!", __func__, __LINE__, the_event->x_, the_event->y_));
-					Sys_Destroy(&global_system);
-				}
-				
 				if (the_window != the_active_window)
 				{
+					// LOGIC:
+					//   Any mouse click on a window other than the active window causes change in active window. 
+					//   The mouse click is consumed by the system in this case: the target window does not get an event (but it will get one later for activate)
+					
 					Sys_SetActiveWindow(global_system, the_window);
 					DEBUG_OUT(("%s %d: **** changed active window to = '%s'; redrawing all windows", __func__, __LINE__, the_window->title_));
 
@@ -506,6 +504,11 @@ EventRecord* EventManager_WaitForEvent(event_mask the_mask)
 // 				}
 // 				else
 // 				{
+					// LOGIC:
+					//   A mouse click on the active window could be start of a drag action (if in appropriate place), 
+					//     or it could be the start of a click on a Control
+					//     if the start of a drag action, no event will be sent to the window until mouse up (end of drag)
+
 					the_event->window_ = the_window;
 					
 					// check for a control that needs activating
@@ -523,6 +526,8 @@ EventRecord* EventManager_WaitForEvent(event_mask the_mask)
 						DEBUG_OUT(("%s %d: ** control '%s' (id=%i) moused down!", __func__, __LINE__, the_event->control_->caption_, the_event->control_->id_));
 						Window_SetSelectedControl(the_event->window_, the_event->control_);
 						//Control_SetPressed(the_event->control_, true);
+						// give window an event
+						(*the_window->event_handler_)(the_event);
 					}
 				}
 				
@@ -534,7 +539,8 @@ EventRecord* EventManager_WaitForEvent(event_mask the_mask)
 				//* Check if over a control. 
 				//   * If yes, check if that control has state set to pressed
 				//     * if yes, set the control's visual state to normal. add an event for control_clicked???
-				//       * should we eat the mouse up event?
+				//       * should we eat the mouse up event? YES
+				//   * if no, give the window an event (why not?)
 			
 				the_active_window = Sys_GetActiveWindow(global_system);
 				the_window = Sys_GetWindowAtXY(global_system, the_event->x_, the_event->y_);
@@ -565,6 +571,11 @@ EventRecord* EventManager_WaitForEvent(event_mask the_mask)
 						skip_this_event = true;					
 					}
 				}
+				else
+				{
+					// give window an event
+					(*the_window->event_handler_)(the_event);				
+				}
 				
 				// either way, there should be no more selected control
 				Window_SetSelectedControl(the_event->window_, NULL);
@@ -573,16 +584,30 @@ EventRecord* EventManager_WaitForEvent(event_mask the_mask)
 			
 			case keyDown:
 				DEBUG_OUT(("%s %d: key down event: %c", __func__, __LINE__, the_event->code_));
-				//return App_HandleKeyDown(the_event);
+
+				// give active window an event
+				the_active_window = Sys_GetActiveWindow(global_system);
+
+				(*the_active_window->event_handler_)(the_event);				
+
 				break;
 			
 			case keyUp:
 				DEBUG_OUT(("%s %d: key up event: %c", __func__, __LINE__, the_event->code_));
-				//return App_HandleKeyUp(the_event);
+
+				// give active window an event
+				the_active_window = Sys_GetActiveWindow(global_system);
+
+				(*the_active_window->event_handler_)(the_event);				
+
 				break;
 
 			case updateEvt:
 				DEBUG_OUT(("%s %d: updateEvt event", __func__, __LINE__));
+
+				// give window an event
+				(*the_event->window_->event_handler_)(the_event);				
+
 // 				// Get a RSS surface pointer from the message
 // 				//  LOGIC: the_window will be 0 in some cases
 // 				//    for activateEvt and updateEvt, message will be WindowPtr
@@ -610,6 +635,10 @@ EventRecord* EventManager_WaitForEvent(event_mask the_mask)
 			
 			case activateEvt:
 				DEBUG_OUT(("%s %d: activateEvt event", __func__, __LINE__));
+
+				// give window an event
+				(*the_event->window_->event_handler_)(the_event);				
+
 				
 				// tell window to make its active_ state
 				//Window_SetActive(the_event->window_, true); // now this is done as part of Sys_SetActiveWindow
@@ -636,6 +665,10 @@ EventRecord* EventManager_WaitForEvent(event_mask the_mask)
 				// tell window to make its active_ state
 				Window_SetActive(the_event->window_, false); // now this is done as part of Sys_SetActiveWindow
 				//Sys_Render(global_system);
+
+				// give window an event
+				(*the_event->window_->event_handler_)(the_event);				
+
 				
 				// need to make system move the window to the front
 				// but also need to give app a chance to get this activate event before system does that. 
@@ -667,7 +700,7 @@ EventRecord* EventManager_WaitForEvent(event_mask the_mask)
 		}		
 	}
 	
-	return the_event;
+	return;
 }
 
 

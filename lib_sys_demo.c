@@ -352,6 +352,11 @@ void AddControls(Window* the_window);
 // open 2 windows covering most of the screen, side-by-side
 void Open2Windows(void);
 
+// handler for the what-do-you-want-to-do window
+void WhatYouWantWindowEventHandler(EventRecord* the_event);
+
+// handler for both of the dueling events windows
+void SharedEventHandler(EventRecord* the_event);
 
 /*****************************************************************************/
 /*                       Private Function Definitions                        */
@@ -530,7 +535,7 @@ void ShowWhatYouWantMessage(void)
 	the_win_template->width_ = width;
 	the_win_template->height_ = height;
 
-	if ( (the_window = Window_New(the_win_template)) == NULL)
+	if ( (the_window = Window_New(the_win_template, &WhatYouWantWindowEventHandler)) == NULL)
 	{
 		DEBUG_OUT(("%s %d: Couldn't instantiate a window", __func__, __LINE__));
 		return;
@@ -646,7 +651,7 @@ void OpenMultipleWindows(void)
 		the_win_template->width_ = (rand() * (max_width)) / RAND_MAX;
 		the_win_template->height_ = (rand() * (max_height)) / RAND_MAX;
 
-		if ( (the_window[win_num] = Window_New(the_win_template)) == NULL)
+		if ( (the_window[win_num] = Window_New(the_win_template, &SharedEventHandler)) == NULL)
 		{
 			DEBUG_OUT(("%s %d: Couldn't instantiate a window", __func__, __LINE__));
 			return;
@@ -663,7 +668,7 @@ void OpenMultipleWindows(void)
 	the_win_template->height_ = 1;
 	the_win_template->title_ = (char*)"Tiny Window";
 
-	if ( (the_window[4] = Window_New(the_win_template)) == NULL)
+	if ( (the_window[4] = Window_New(the_win_template, &SharedEventHandler)) == NULL)
 	{
 		DEBUG_OUT(("%s %d: Couldn't instantiate a window", __func__, __LINE__));
 		return;
@@ -707,7 +712,7 @@ void Open2Windows(void)
 		the_win_template->width_ = max_width;
 		the_win_template->height_ = max_height;
 
-		if ( (the_window[win_num] = Window_New(the_win_template)) == NULL)
+		if ( (the_window[win_num] = Window_New(the_win_template, &SharedEventHandler)) == NULL)
 		{
 			DEBUG_OUT(("%s %d: Couldn't instantiate a window", __func__, __LINE__));
 			return;
@@ -723,14 +728,14 @@ void Open2Windows(void)
 }
 
 
-void SimulateEvents(void)
+void SharedEventHandler(EventRecord* the_event)
 {
 	// LOGIC: 
 	//   simulate having interrupts working, and doing an event loop
 	//   because no interrupts (of mine) are working, will fake that. 
 	
 	bool				exit_app = false;
-	EventRecord*		the_event;
+	
 	Window*				the_window;
 	Control*			the_control;
 	static Rectangle	the_rect;
@@ -741,7 +746,7 @@ void SimulateEvents(void)
 // 	List_Print(global_system->list_windows_, (void*)&Window_PrintBrief);	
 	
 	// now process the queue as if it were happening in real time
-	while ((the_event = EventManager_WaitForEvent((mouseDown|mouseUp|keyDown|keyUp|activateEvt|inactivateEvt|controlClicked))) != NULL && exit_app == false)
+	//while ((the_event = EventManager_WaitForEvent((mouseDown|mouseUp|keyDown|keyUp|activateEvt|inactivateEvt|controlClicked))) != NULL && exit_app == false)
 	{
 		switch (the_event->what_)
 		{
@@ -856,7 +861,10 @@ void RunDemo(void)
 	Sys_Render(global_system);
 
 	// test out event handling
-	SimulateEvents();
+	while(true)
+	{
+		EventManager_WaitForEvent((mouseDown|mouseUp|keyDown|keyUp|activateEvt|inactivateEvt|controlClicked));
+	}
 
 // 	// delay a bit before switching
 // 	General_DelaySeconds(3);
@@ -897,6 +905,13 @@ void RunDemo(void)
 /*                        Public Function Definitions                        */
 /*****************************************************************************/
 
+// handler for the hello world window
+void WhatYouWantWindowEventHandler(EventRecord* the_event)
+{
+	DEBUG_OUT(("%s %d: event received!", __func__, __LINE__));
+	
+	return;
+}
 
 
 

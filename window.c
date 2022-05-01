@@ -704,7 +704,8 @@ void Window_PrintBrief(void* the_payload)
 //! the_win_template->max_width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH
 //! the_win_template->max_height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT
 //! @param	the_win_template: a populated new window template whose data will be used to create the new window object
-Window* Window_New(NewWinTemplate* the_win_template)
+//! @param	event_handler: pointer to the function that will handle all events for the window. This function will be called when the system detects an event associated with the window.
+Window* Window_New(NewWinTemplate* the_win_template, void (* event_handler)(EventRecord*))
 {
 	Window*		the_window;
 	Theme*		the_theme;
@@ -795,6 +796,7 @@ Window* Window_New(NewWinTemplate* the_win_template)
 	the_window->is_backdrop_ = the_win_template->is_backdrop_;
 	the_window->can_resize_ = the_win_template->can_resize_;
 	the_window->clip_rect_ = NULL;
+	the_window->event_handler_ = event_handler;
 
 	if (the_window->can_resize_)
 	{

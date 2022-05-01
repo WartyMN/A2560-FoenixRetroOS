@@ -170,6 +170,7 @@ struct Window
 	Control*				root_control_;					// first control in the window
 	Control*				selected_control_;				// the currently selected control for the window. Only 1 can be selected per window. No guarantee that any are selected.
 	ClipRect*				clip_rect_;						// one or more clipping rects; determines which parts of window need to be blitted to the main screen
+	void					(*event_handler_)(EventRecord*);	// function that will be called by the system when an event related to the window is encountered.
 
 // 	MouseTracker*			mouse_tracker_;					// tracks mouse up/down points within this window
 // 	Window*					zoom_to_window_;				// the window that contains the zoom_to_file, so we can get offset to global screen coords
@@ -234,7 +235,8 @@ struct ClipRect
 //! the_win_template->max_width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH
 //! the_win_template->max_height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT
 //! @param	the_win_template: a populated new window template whose data will be used to create the new window object
-Window* Window_New(NewWinTemplate* the_win_template);
+//! @param	event_handler: pointer to the function that will handle all events for the window. This function will be called when the system detects an event associated with the window.
+Window* Window_New(NewWinTemplate* the_win_template, void (* event_handler)(EventRecord*));
 
 // destructor
 // frees all allocated memory associated with the passed object, and the object itself
