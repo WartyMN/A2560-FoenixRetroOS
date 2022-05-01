@@ -11,6 +11,7 @@
 *.ilk
 *.map
 *.exp
+*.lst
 
 # Precompiled Headers
 *.gch
@@ -51,7 +52,11 @@ dkms.conf
 
 # OS X junk
 .DS_Store
-stub_user.srec
 .DS_Store
 .DS_Store
-*.lst
+
+# built files
+*.srec
+*.pgz
+# -- but do allow .s28 to be uploaded
+
