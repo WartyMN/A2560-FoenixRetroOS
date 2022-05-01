@@ -229,6 +229,7 @@ EventManager* EventManager_New(void)
 
 	the_event_manager->write_idx_ = 0;
 	the_event_manager->read_idx_ = 0;
+	the_event_manager->mouse_mode_ = mouseFree;
 	
 	//DEBUG_OUT(("%s %d: EventManager (%p) created", __func__ , __LINE__, the_event_manager));
 	
@@ -466,6 +467,34 @@ void EventManager_WaitForEvent(event_mask the_mask)
 				DEBUG_OUT(("%s %d: null event", __func__, __LINE__));
 				break;
 		
+			case mouseMoved:
+				
+				DEBUG_OUT(("%s %d: mouse move event (%i, %i)", __func__, __LINE__, the_event->x_, the_event->y_));
+				
+				// LOGIC: 
+				//   what happens here depends on what the current event manager mouse mode is
+				//   if mouseFree: no real action.
+				//   if mouseDownOnControl: no real action
+				//   if mouseResizeXXX: draw window bounding box based on mouse x/y
+				//   if mouseDragTitle: draw window bounding box based on mouse x/y
+				//   if mouseLassoInProgress: draw lasso box
+				//   if other, then no action
+				
+				break;
+// 	mouseFree				= 0,
+// 	mouseSelect				= 1,	// user has clicked on icon(s), but not moved mouse enough to start drag
+// 	mouseDoubleclick		= 2,	
+// 	mouseDrag				= 3,	// user clicked on icon(s) and moved mouse enough to start drag mode
+// 	mouseLasso				= 4,	// nothing under cursor, button down, ready to start drawing a lasso
+// 	mouseLassoInProgress	= 5,	// user has moved mouse from origin point with mouse down, lasso is actively being drawn
+// 	mouseResizeUp			= 6,
+// 	mouseResizeRight		= 7,
+// 	mouseResizeDown			= 8,
+// 	mouseResizeLeft			= 9,
+// 	mouseResizeDownRight	= 10,
+// 	mouseDragTitle			= 11,
+// 	mouseDownOnControl		= 12,	// mouse was clicked within bounds of a control. Mouse button is not released.
+				
 			case mouseDown:
 				
 				DEBUG_OUT(("%s %d: mouse down event (%i, %i)", __func__, __LINE__, the_event->x_, the_event->y_));
@@ -486,6 +515,11 @@ void EventManager_WaitForEvent(event_mask the_mask)
 				}
 				DEBUG_OUT(("%s %d: active window = '%s', clicked window = '%s'", __func__, __LINE__, the_active_window->title_, the_window->title_));
 				
+				// get local coords so we can check for drag and lasso
+				local_x = the_event->x_;
+				local_y = the_event->y_;
+				Window_GlobalToLocal(the_window, &local_x, &local_y);
+				
 				if (the_window != the_active_window)
 				{
 					// LOGIC:
@@ -501,9 +535,9 @@ void EventManager_WaitForEvent(event_mask the_mask)
 					//Sys_Render(global_system);
 					//EventManager_AddEvent(mouseDown, -1, the_event->x_, the_event->y_, 0L, the_window, NULL); // add the mouse down event back in, AFTER the 2 window events.
 					//skip_this_event = true;
-// 				}
-// 				else
-// 				{
+				}
+				else
+				{
 					// LOGIC:
 					//   A mouse click on the active window could be start of a drag action (if in appropriate place), 
 					//     or it could be the start of a click on a Control
@@ -512,10 +546,6 @@ void EventManager_WaitForEvent(event_mask the_mask)
 					the_event->window_ = the_window;
 					
 					// check for a control that needs activating
-					local_x = the_event->x_;
-					local_y = the_event->y_;
-					Window_GlobalToLocal(the_event->window_, &local_x, &local_y);
-				
 					the_event->control_ = Window_GetControlAtXY(the_event->window_, local_x, local_y);
 					
 					// have control change it's visual state to pressed. that is system's responsibility, not app's. 
@@ -528,7 +558,27 @@ void EventManager_WaitForEvent(event_mask the_mask)
 						//Control_SetPressed(the_event->control_, true);
 						// give window an event
 						(*the_window->event_handler_)(the_event);
+						
+						the_event_manager->mouse_mode_ = mouseDownOnControl;
 					}
+				}
+				
+				// LOGIC:
+				//   regardless of what window was clicked, we have to update mouse mode
+				//   if mouse is in title bar, it could be start of a drag action to move the window.
+				//   same for window resize widgets
+				//   we do not want to activate controls yet though. (TODO: revisit this decision if it seems weird from HF perspective)
+				//   first task is to determine if the point the mouse clicked on is in a draggable region.
+				//   if this is active window, if not draggable region, it could be a lassoable region.
+				
+				// check for click in a draggable region
+				mouse_mode	possible_drag_mode;
+				
+				possible_drag_mode = Window_CheckForDragZone(the_event->window_, local_x, local_y);
+				
+				if (possible_drag_mode != mouseFree)
+				{
+					the_event_manager->mouse_mode_ = possible_drag_mode;
 				}
 				
 				break;
@@ -579,6 +629,8 @@ void EventManager_WaitForEvent(event_mask the_mask)
 				
 				// either way, there should be no more selected control
 				Window_SetSelectedControl(the_event->window_, NULL);
+				
+				the_event_manager->mouse_mode_ = mouseFree;
 				
 				break;
 			

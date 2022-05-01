@@ -122,6 +122,8 @@ Functions</h2></td></tr>
 <a class="el" href="struct_system.html">System</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_New</b> (void)</td></tr>
 <tr class="memdesc:a08443288542cd1c5c531b6ec028d2980"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a <a class="el" href="struct_system.html">System</a> object. <br /></td></tr>
 <tr class="separator:a08443288542cd1c5c531b6ec028d2980"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b554373341e17075715bafd0b522319"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a4b554373341e17075715bafd0b522319">Sys_Destroy</a> (<a class="el" href="struct_system.html">System</a> **the_system)</td></tr>
+<tr class="separator:a4b554373341e17075715bafd0b522319"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3d6d271b2a789e26896de04852c77c0"><td class="memItemLeft" align="right" valign="top"><a id="ac3d6d271b2a789e26896de04852c77c0" name="ac3d6d271b2a789e26896de04852c77c0"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_InitSystem</b> (void)</td></tr>
 <tr class="memdesc:ac3d6d271b2a789e26896de04852c77c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the system (primary entry point for all system initialization activity) Starts up the memory manager, creates the global system object, runs autoconfigure to check the system hardware, loads system and application fonts, allocates a bitmap for the screen. <br /></td></tr>
@@ -138,9 +140,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_InitSystem</b> (v
 <tr class="memitem:a3b11a4c19b359bffb12dc6c86cdac684"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a3b11a4c19b359bffb12dc6c86cdac684">Sys_SetVideoMode</a> (<a class="el" href="struct_screen.html">Screen</a> *the_screen, screen_resolution new_mode)</td></tr>
 <tr class="memdesc:a3b11a4c19b359bffb12dc6c86cdac684"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change video mode to the one passed.  <a href="lib__sys_8h.html#a3b11a4c19b359bffb12dc6c86cdac684">More...</a><br /></td></tr>
 <tr class="separator:a3b11a4c19b359bffb12dc6c86cdac684"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a4b865a6eab764d18a3defa01844810"><td class="memItemLeft" align="right" valign="top"><a id="a4a4b865a6eab764d18a3defa01844810" name="a4a4b865a6eab764d18a3defa01844810"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_SetModeGraphics</b> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
-<tr class="memdesc:a4a4b865a6eab764d18a3defa01844810"><td class="mdescLeft">&#160;</td><td class="mdescRight">Switch machine into graphics mode. <br /></td></tr>
+<tr class="memitem:a4a4b865a6eab764d18a3defa01844810"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a4a4b865a6eab764d18a3defa01844810">Sys_SetModeGraphics</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
+<tr class="memdesc:a4a4b865a6eab764d18a3defa01844810"><td class="mdescLeft">&#160;</td><td class="mdescRight">Switch machine into graphics mode.  <a href="lib__sys_8h.html#a4a4b865a6eab764d18a3defa01844810">More...</a><br /></td></tr>
 <tr class="separator:a4a4b865a6eab764d18a3defa01844810"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab18b67b61dd745e75aa64c5ba73358d0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#ab18b67b61dd745e75aa64c5ba73358d0">Sys_SetModeText</a> (<a class="el" href="struct_system.html">System</a> *the_system, bool as_overlay)</td></tr>
 <tr class="memdesc:ab18b67b61dd745e75aa64c5ba73358d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Switch machine into text mode.  <a href="lib__sys_8h.html#ab18b67b61dd745e75aa64c5ba73358d0">More...</a><br /></td></tr>
@@ -151,15 +152,49 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_SetModeGraphics</
 <tr class="memitem:a31b4b6b8f93b4daabde4662d62ed66d9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a31b4b6b8f93b4daabde4662d62ed66d9">Sys_AddToWindowList</a> (<a class="el" href="struct_system.html">System</a> *the_system, <a class="el" href="struct_window.html">Window</a> *the_new_window)</td></tr>
 <tr class="memdesc:a31b4b6b8f93b4daabde4662d62ed66d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add this window to the list of windows and make it the currently active window.  <a href="lib__sys_8h.html#a31b4b6b8f93b4daabde4662d62ed66d9">More...</a><br /></td></tr>
 <tr class="separator:a31b4b6b8f93b4daabde4662d62ed66d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a921ca3413bb38373e6a14bd88c1eb6da"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a921ca3413bb38373e6a14bd88c1eb6da">Sys_CreateBackdropWindow</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
+<tr class="separator:a921ca3413bb38373e6a14bd88c1eb6da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae616a613bf0d182c82c53807f90787e3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_window.html">Window</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#ae616a613bf0d182c82c53807f90787e3">Sys_GetActiveWindow</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
+<tr class="separator:ae616a613bf0d182c82c53807f90787e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa013ab93ca4a376667fdd9bf216c0121"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_window.html">Window</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#aa013ab93ca4a376667fdd9bf216c0121">Sys_GetBackdropWindow</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
+<tr class="separator:aa013ab93ca4a376667fdd9bf216c0121"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6739e8ef26b70432c009d8fe80bd435a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_window.html">Window</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a6739e8ef26b70432c009d8fe80bd435a">Sys_GetNextWindow</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
+<tr class="separator:a6739e8ef26b70432c009d8fe80bd435a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7140689d5ca0964b3840c96ccde1807"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_window.html">Window</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#aa7140689d5ca0964b3840c96ccde1807">Sys_GetPreviousWindow</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
+<tr class="separator:aa7140689d5ca0964b3840c96ccde1807"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a844d7975b42b311fdfe7d6a9afede689"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_window.html">Window</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a844d7975b42b311fdfe7d6a9afede689">Sys_GetWindowAtXY</a> (<a class="el" href="struct_system.html">System</a> *the_system, int16_t x, int16_t y)</td></tr>
+<tr class="separator:a844d7975b42b311fdfe7d6a9afede689"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aadad43b6c5eaa6981951eac2536ce10b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#aadad43b6c5eaa6981951eac2536ce10b">Sys_SetActiveWindow</a> (<a class="el" href="struct_system.html">System</a> *the_system, <a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
-<tr class="memdesc:aadad43b6c5eaa6981951eac2536ce10b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the passed window to the active window NOTE: This will resort the list of windows to move the (new) active one to the front.  <a href="lib__sys_8h.html#aadad43b6c5eaa6981951eac2536ce10b">More...</a><br /></td></tr>
+<tr class="memdesc:aadad43b6c5eaa6981951eac2536ce10b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the passed window to the active window, and marks the previously active window as inactive NOTE: This will resort the list of windows to move the (new) active one to the front NOTE: The exception to this is that the backdrop window is never moved in front of other windows.  <a href="lib__sys_8h.html#aadad43b6c5eaa6981951eac2536ce10b">More...</a><br /></td></tr>
 <tr class="separator:aadad43b6c5eaa6981951eac2536ce10b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad932137a967df1c9ca838bae43362045"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_font.html">Font</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#ad932137a967df1c9ca838bae43362045">Sys_GetSystemFont</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
+<tr class="separator:ad932137a967df1c9ca838bae43362045"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a677c804fa2b6068e4ec0dbcd63bb9c4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_font.html">Font</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a677c804fa2b6068e4ec0dbcd63bb9c4f">Sys_GetAppFont</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
+<tr class="separator:a677c804fa2b6068e4ec0dbcd63bb9c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f17fdc9762295321c42c166d5022c20"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a8f17fdc9762295321c42c166d5022c20">Sys_GetScreen</a> (<a class="el" href="struct_system.html">System</a> *the_system, int16_t channel_id)</td></tr>
+<tr class="separator:a8f17fdc9762295321c42c166d5022c20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd5862c5cf34c09cba051d4c896322e5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_theme.html">Theme</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#abd5862c5cf34c09cba051d4c896322e5">Sys_GetTheme</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
+<tr class="separator:abd5862c5cf34c09cba051d4c896322e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63aedad641566d0d1dc865d5d0a35159"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a63aedad641566d0d1dc865d5d0a35159">Sys_GetScreenBitmap</a> (<a class="el" href="struct_system.html">System</a> *the_system, int16_t channel_id)</td></tr>
+<tr class="separator:a63aedad641566d0d1dc865d5d0a35159"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15c8506e06311bbe6c815d64eb685bda"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_event_manager.html">EventManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a15c8506e06311bbe6c815d64eb685bda">Sys_GetEventManager</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
+<tr class="separator:a15c8506e06311bbe6c815d64eb685bda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a064e8b27c30d58b3a65a8ec7e709bfdb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a064e8b27c30d58b3a65a8ec7e709bfdb">Sys_SetSystemFont</a> (<a class="el" href="struct_system.html">System</a> *the_system, <a class="el" href="struct_font.html">Font</a> *the_font)</td></tr>
+<tr class="separator:a064e8b27c30d58b3a65a8ec7e709bfdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a424d04e97f5b784500098ea5c1ff263a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a424d04e97f5b784500098ea5c1ff263a">Sys_SetAppFont</a> (<a class="el" href="struct_system.html">System</a> *the_system, <a class="el" href="struct_font.html">Font</a> *the_font)</td></tr>
+<tr class="separator:a424d04e97f5b784500098ea5c1ff263a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa08811e1f1c5e90dacebb1c5502afc71"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#aa08811e1f1c5e90dacebb1c5502afc71">Sys_SetScreen</a> (<a class="el" href="struct_system.html">System</a> *the_system, int16_t channel_id, <a class="el" href="struct_screen.html">Screen</a> *the_screen)</td></tr>
+<tr class="separator:aa08811e1f1c5e90dacebb1c5502afc71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a430bc3ebc69806ead9035112ec0f24"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a6a430bc3ebc69806ead9035112ec0f24">Sys_SetScreenBitmap</a> (<a class="el" href="struct_system.html">System</a> *the_system, int16_t channel_id, <a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap)</td></tr>
+<tr class="separator:a6a430bc3ebc69806ead9035112ec0f24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39f1fbbd7a6b0a38ff0c9884e188d4d4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a39f1fbbd7a6b0a38ff0c9884e188d4d4">Sys_SetTheme</a> (<a class="el" href="struct_system.html">System</a> *the_system, <a class="el" href="struct_theme.html">Theme</a> *the_theme)</td></tr>
 <tr class="memdesc:a39f1fbbd7a6b0a38ff0c9884e188d4d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the passed theme as the <a class="el" href="struct_system.html">System</a>'s current theme Note: this will dispose of the current theme after setting the new one.  <a href="lib__sys_8h.html#a39f1fbbd7a6b0a38ff0c9884e188d4d4">More...</a><br /></td></tr>
 <tr class="separator:a39f1fbbd7a6b0a38ff0c9884e188d4d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a894dcd75f3b86c56cb65687773a9f42b"><td class="memItemLeft" align="right" valign="top"><a id="a894dcd75f3b86c56cb65687773a9f42b" name="a894dcd75f3b86c56cb65687773a9f42b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_Render</b> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
-<tr class="memdesc:a894dcd75f3b86c56cb65687773a9f42b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render all visible windows NOTE: this will move to a private Sys function later, once event handling is available. <br /></td></tr>
+<tr class="memitem:a28db6577238669059b73ad77d7fa9752"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a28db6577238669059b73ad77d7fa9752">Sys_SetVRAMAddr</a> (<a class="el" href="struct_system.html">System</a> *the_system, uint8_t the_bitmap_layer, unsigned char *the_address)</td></tr>
+<tr class="memdesc:a28db6577238669059b73ad77d7fa9752"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tell the VICKY to use a different address for the specified bitmap layer.  <a href="lib__sys_8h.html#a28db6577238669059b73ad77d7fa9752">More...</a><br /></td></tr>
+<tr class="separator:a28db6577238669059b73ad77d7fa9752"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a894dcd75f3b86c56cb65687773a9f42b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a894dcd75f3b86c56cb65687773a9f42b">Sys_Render</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
+<tr class="memdesc:a894dcd75f3b86c56cb65687773a9f42b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render all visible windows NOTE: this will move to a private Sys function later, once event handling is available.  <a href="lib__sys_8h.html#a894dcd75f3b86c56cb65687773a9f42b">More...</a><br /></td></tr>
 <tr class="separator:a894dcd75f3b86c56cb65687773a9f42b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
@@ -190,6 +225,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_Render</b> (<a cl
 </div><div class="memdoc">
 
 <p>Add this window to the list of windows and make it the currently active window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns false if adding this window would exceed the system's hard cap on the number of available windows </dd></dl>
 
 </div>
@@ -211,7 +252,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_Render</b> (<a cl
 </div><div class="memdoc">
 
 <p>Find out what kind of machine the software is running on, and configure the passed screen accordingly Configures screen settings, RAM addresses, etc. </p>
-<p >based on known info about machine types Configures screen width, height, total text rows and cols, and visible text rows and cols by checking hardware </p><dl class="section return"><dt>Returns</dt><dd>Returns false if the machine is known to be incompatible with this software. <br  />
+<p >based on known info about machine types Configures screen width, height, total text rows and cols, and visible text rows and cols by checking hardware </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns false if the machine is known to be incompatible with this software. <br  />
  </dd></dl>
 
 </div>
@@ -233,8 +280,62 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_Render</b> (<a cl
 </div><div class="memdoc">
 
 <p>Find out what kind of machine the software is running on, and determine # of screens available. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns false if the machine is known to be incompatible with this software. <br  />
  </dd></dl>
+
+</div>
+</div>
+<a id="a921ca3413bb38373e6a14bd88c1eb6da" name="a921ca3413bb38373e6a14bd88c1eb6da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a921ca3413bb38373e6a14bd88c1eb6da">&#9670;&nbsp;</a></span>Sys_CreateBackdropWindow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Sys_CreateBackdropWindow </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4b554373341e17075715bafd0b522319" name="a4b554373341e17075715bafd0b522319"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b554373341e17075715bafd0b522319">&#9670;&nbsp;</a></span>Sys_Destroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Sys_Destroy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> **&#160;</td>
+          <td class="paramname"><em>the_system</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -300,8 +401,337 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_Render</b> (<a cl
 <p>Enable or disable the hardware cursor in text mode, for the specified screen. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
     <tr><td class="paramname">the_screen</td><td>valid pointer to the target screen to operate on </td></tr>
     <tr><td class="paramname">enable_it</td><td>If true, turns the hardware blinking cursor on. If false, hides the hardware cursor; </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae616a613bf0d182c82c53807f90787e3" name="ae616a613bf0d182c82c53807f90787e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae616a613bf0d182c82c53807f90787e3">&#9670;&nbsp;</a></span>Sys_GetActiveWindow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_window.html">Window</a> * Sys_GetActiveWindow </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a677c804fa2b6068e4ec0dbcd63bb9c4f" name="a677c804fa2b6068e4ec0dbcd63bb9c4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a677c804fa2b6068e4ec0dbcd63bb9c4f">&#9670;&nbsp;</a></span>Sys_GetAppFont()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_font.html">Font</a> * Sys_GetAppFont </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa013ab93ca4a376667fdd9bf216c0121" name="aa013ab93ca4a376667fdd9bf216c0121"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa013ab93ca4a376667fdd9bf216c0121">&#9670;&nbsp;</a></span>Sys_GetBackdropWindow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_window.html">Window</a> * Sys_GetBackdropWindow </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a15c8506e06311bbe6c815d64eb685bda" name="a15c8506e06311bbe6c815d64eb685bda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15c8506e06311bbe6c815d64eb685bda">&#9670;&nbsp;</a></span>Sys_GetEventManager()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_event_manager.html">EventManager</a> * Sys_GetEventManager </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6739e8ef26b70432c009d8fe80bd435a" name="a6739e8ef26b70432c009d8fe80bd435a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6739e8ef26b70432c009d8fe80bd435a">&#9670;&nbsp;</a></span>Sys_GetNextWindow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_window.html">Window</a> * Sys_GetNextWindow </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa7140689d5ca0964b3840c96ccde1807" name="aa7140689d5ca0964b3840c96ccde1807"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7140689d5ca0964b3840c96ccde1807">&#9670;&nbsp;</a></span>Sys_GetPreviousWindow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_window.html">Window</a> * Sys_GetPreviousWindow </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8f17fdc9762295321c42c166d5022c20" name="a8f17fdc9762295321c42c166d5022c20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f17fdc9762295321c42c166d5022c20">&#9670;&nbsp;</a></span>Sys_GetScreen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_screen.html">Screen</a> * Sys_GetScreen </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>channel_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a63aedad641566d0d1dc865d5d0a35159" name="a63aedad641566d0d1dc865d5d0a35159"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63aedad641566d0d1dc865d5d0a35159">&#9670;&nbsp;</a></span>Sys_GetScreenBitmap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_bitmap.html">Bitmap</a> * Sys_GetScreenBitmap </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>channel_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad932137a967df1c9ca838bae43362045" name="ad932137a967df1c9ca838bae43362045"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad932137a967df1c9ca838bae43362045">&#9670;&nbsp;</a></span>Sys_GetSystemFont()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_font.html">Font</a> * Sys_GetSystemFont </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abd5862c5cf34c09cba051d4c896322e5" name="abd5862c5cf34c09cba051d4c896322e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd5862c5cf34c09cba051d4c896322e5">&#9670;&nbsp;</a></span>Sys_GetTheme()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_theme.html">Theme</a> * Sys_GetTheme </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a844d7975b42b311fdfe7d6a9afede689" name="a844d7975b42b311fdfe7d6a9afede689"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a844d7975b42b311fdfe7d6a9afede689">&#9670;&nbsp;</a></span>Sys_GetWindowAtXY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_window.html">Window</a> * Sys_GetWindowAtXY </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+    <tr><td class="paramname">x</td><td>global horizontal coordinate </td></tr>
+    <tr><td class="paramname">y</td><td>global vertical coordinate </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a894dcd75f3b86c56cb65687773a9f42b" name="a894dcd75f3b86c56cb65687773a9f42b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a894dcd75f3b86c56cb65687773a9f42b">&#9670;&nbsp;</a></span>Sys_Render()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Sys_Render </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Render all visible windows NOTE: this will move to a private Sys function later, once event handling is available. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
   </table>
   </dd>
 </dl>
@@ -334,8 +764,73 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_Render</b> (<a cl
       </table>
 </div><div class="memdoc">
 
-<p>Set the passed window to the active window NOTE: This will resort the list of windows to move the (new) active one to the front. </p>
-<p >Set the passed window to the active window NOTE: This will resort the list of windows to move the (new) active one to the front. </p>
+<p>Set the passed window to the active window, and marks the previously active window as inactive NOTE: This will resort the list of windows to move the (new) active one to the front NOTE: The exception to this is that the backdrop window is never moved in front of other windows. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a424d04e97f5b784500098ea5c1ff263a" name="a424d04e97f5b784500098ea5c1ff263a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a424d04e97f5b784500098ea5c1ff263a">&#9670;&nbsp;</a></span>Sys_SetAppFont()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Sys_SetAppFont </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_font.html">Font</a> *&#160;</td>
+          <td class="paramname"><em>the_font</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4a4b865a6eab764d18a3defa01844810" name="a4a4b865a6eab764d18a3defa01844810"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a4b865a6eab764d18a3defa01844810">&#9670;&nbsp;</a></span>Sys_SetModeGraphics()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Sys_SetModeGraphics </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Switch machine into graphics mode. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -368,7 +863,122 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_Render</b> (<a cl
 <p>Switch machine into text mode. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
     <tr><td class="paramname">as_overlay</td><td>If true, sets text overlay mode (text over graphics). If false, sets full text mode (no graphics); </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa08811e1f1c5e90dacebb1c5502afc71" name="aa08811e1f1c5e90dacebb1c5502afc71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa08811e1f1c5e90dacebb1c5502afc71">&#9670;&nbsp;</a></span>Sys_SetScreen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Sys_SetScreen </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>channel_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td>
+          <td class="paramname"><em>the_screen</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6a430bc3ebc69806ead9035112ec0f24" name="a6a430bc3ebc69806ead9035112ec0f24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a430bc3ebc69806ead9035112ec0f24">&#9670;&nbsp;</a></span>Sys_SetScreenBitmap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Sys_SetScreenBitmap </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>channel_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
+          <td class="paramname"><em>the_bitmap</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a064e8b27c30d58b3a65a8ec7e709bfdb" name="a064e8b27c30d58b3a65a8ec7e709bfdb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a064e8b27c30d58b3a65a8ec7e709bfdb">&#9670;&nbsp;</a></span>Sys_SetSystemFont()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Sys_SetSystemFont </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_font.html">Font</a> *&#160;</td>
+          <td class="paramname"><em>the_font</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
   </table>
   </dd>
 </dl>
@@ -402,6 +1012,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_Render</b> (<a cl
 </div><div class="memdoc">
 
 <p>Set the passed theme as the <a class="el" href="struct_system.html">System</a>'s current theme Note: this will dispose of the current theme after setting the new one. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns false on any error condition </dd></dl>
 
 </div>
@@ -440,14 +1056,51 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_Render</b> (<a cl
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input. </dd></dl>
+
+</div>
+</div>
+<a id="a28db6577238669059b73ad77d7fa9752" name="a28db6577238669059b73ad77d7fa9752"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28db6577238669059b73ad77d7fa9752">&#9670;&nbsp;</a></span>Sys_SetVRAMAddr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Sys_SetVRAMAddr </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>the_bitmap_layer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>the_address</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tell the VICKY to use a different address for the specified bitmap layer. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">new_mode</td><td>One of the enumerated screen_resolution values. Must correspond to a valid VICKY video mode for the host machine. See VICKY_IIIA_RES_800X600_FLAGS, etc. defined in <a class="el" href="a2560__platform_8h_source.html">a2560_platform.h</a> </td></tr>
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+    <tr><td class="paramname">the_bitmap_layer</td><td>0 or 1, the bitmap layer to get a new address </td></tr>
+    <tr><td class="paramname">the_address</td><td>The address within the VRAM zone that the bitmap layer should be repointed to </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input. </dd></dl>
 
 </div>
 </div>

@@ -132,10 +132,10 @@ Functions</h2></td></tr>
 <tr class="memitem:ae5744033a61b1efd7fff24e7b151587b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="event_8h.html#ae5744033a61b1efd7fff24e7b151587b">EventManager_AddEvent</a> (event_kind the_what, uint32_t the_code, int16_t x, int16_t y, event_modifiers the_modifiers, <a class="el" href="struct_window.html">Window</a> *the_window, <a class="el" href="struct_control.html">Control</a> *the_control)</td></tr>
 <tr class="memdesc:ae5744033a61b1efd7fff24e7b151587b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new event to the event queue NOTE: this does not actually insert a new record, as the event queue is a circular buffer It overwrites whatever slot is next in line.  <a href="event_8h.html#ae5744033a61b1efd7fff24e7b151587b">More...</a><br /></td></tr>
 <tr class="separator:ae5744033a61b1efd7fff24e7b151587b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac41fbeef16c4d4d712cbd19dce7d6518"><td class="memItemLeft" align="right" valign="top"><a id="ac41fbeef16c4d4d712cbd19dce7d6518" name="ac41fbeef16c4d4d712cbd19dce7d6518"></a>
-<a class="el" href="struct_event_record.html">EventRecord</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>EventManager_WaitForEvent</b> (event_mask the_mask)</td></tr>
-<tr class="memdesc:ac41fbeef16c4d4d712cbd19dce7d6518"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait for an event to happen, do system-processing of it, then give the event to the call function. <br /></td></tr>
-<tr class="separator:ac41fbeef16c4d4d712cbd19dce7d6518"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2267e55733d0ac91a751ff4984a41692"><td class="memItemLeft" align="right" valign="top"><a id="a2267e55733d0ac91a751ff4984a41692" name="a2267e55733d0ac91a751ff4984a41692"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>EventManager_WaitForEvent</b> (event_mask the_mask)</td></tr>
+<tr class="memdesc:a2267e55733d0ac91a751ff4984a41692"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait for an event to happen, do system-processing of it, then if appropriate, give the window responsible for the event a chance to do something with it. <br /></td></tr>
+<tr class="separator:a2267e55733d0ac91a751ff4984a41692"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ae5744033a61b1efd7fff24e7b151587b" name="ae5744033a61b1efd7fff24e7b151587b"></a>

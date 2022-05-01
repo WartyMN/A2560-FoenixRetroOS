@@ -108,6 +108,26 @@ typedef enum window_base_control_id
 	MAX_BUILT_IN_WIDGET	= 4,
 } window_base_control_id;
 
+// covers what action mode the mouse is in after a mouse down event: either dragging one or more icons, or selecting via lasso, or neither
+typedef enum mouse_mode
+{
+	mouseFree				= 0,
+	mouseSelect				= 1,	// user has clicked on icon(s), but not moved mouse enough to start drag
+	mouseDoubleclick		= 2,	
+	mouseDrag				= 3,	// user clicked on icon(s) and moved mouse enough to start drag mode
+	mouseLasso				= 4,	// nothing under cursor, button down, ready to start drawing a lasso
+	mouseLassoInProgress	= 5,	// user has moved mouse from origin point with mouse down, lasso is actively being drawn
+	mouseResizeUp			= 6,
+	mouseResizeRight		= 7,
+	mouseResizeDown			= 8,
+	mouseResizeLeft			= 9,
+	mouseResizeDownRight	= 10,
+	mouseDragTitle			= 11,
+	mouseDownOnControl		= 12,	// mouse was clicked within bounds of a control. Mouse button is not released.
+} mouse_mode;
+
+
+
 /*****************************************************************************/
 /*                                 Structs                                   */
 /*****************************************************************************/
@@ -138,6 +158,7 @@ struct Window
 	Rectangle				grow_right_rect_;				// the local rect defining the area in which a click/drag will resize window
 	Rectangle				grow_top_rect_;					// the local rect defining the area in which a click/drag will resize window
 	Rectangle				grow_bottom_rect_;				// the local rect defining the area in which a click/drag will resize window
+	Rectangle				grow_bottom_right_rect_;		// the local rect defining the area in which a click/drag will resize window
 	bool					show_iconbar_;					// true if the iconbar area should be rendered
 	bool					is_backdrop_;					// true if this is the backdrop (desktop) window
 	bool					visible_;						// is the window visible?
@@ -264,6 +285,18 @@ bool Window_MergeClipRects(Window* the_window);
 //! Blit each clip rect to the screen, and clear all clip rects when done
 //! This is the actual mechanics of rendering the window to the screen
 bool Window_BlitClipRects(Window* the_window);
+
+
+
+// **** BUILT-IN PSEUDO CONTROL MANAGEMENT functions *****
+
+//! Checks if the passed coordinate is within one of the draggable event zones
+//! Draggable event zones include the title bar, 4 single-direction resize zones on the window edges, and the lower-right traditional resize zone
+//! @param	the_window: reference to a valid Window object.
+//! @param	x: window-local horizontal coordinate
+//! @param	y: window-local vertical coordinate
+//@ return	Returns mouseFree if the coordinates are in anything but a draggable region. Otherwise returns mouseResizeUp, etc., as appropriate.
+mouse_mode Window_CheckForDragZone(Window* the_window, int16_t x, int16_t y);
 
 
 

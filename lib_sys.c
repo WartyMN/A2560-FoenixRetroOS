@@ -270,6 +270,7 @@ error:
 
 // destructor
 // frees all allocated memory associated with the passed object, and the object itself
+//! @param	the_system: valid pointer to system object
 bool Sys_Destroy(System** the_system)
 {
 	int16_t	i;
@@ -319,7 +320,8 @@ bool Sys_Destroy(System** the_system)
 }
 
 
-// Instruct all windows to close / clean themselves up
+//! Instruct all windows to close / clean themselves up
+//! @param	the_system: valid pointer to system object
 void Sys_DestroyAllWindows(System* the_system)
 {
 	int16_t		num_nodes = 0;
@@ -518,6 +520,7 @@ error:
 
 
 //! Find out what kind of machine the software is running on, and determine # of screens available
+//! @param	the_system: valid pointer to system object
 //! @return	Returns false if the machine is known to be incompatible with this software. 
 bool Sys_AutoDetectMachine(System* the_system)
 {
@@ -558,6 +561,7 @@ bool Sys_AutoDetectMachine(System* the_system)
 //! Find out what kind of machine the software is running on, and configure the passed screen accordingly
 //! Configures screen settings, RAM addresses, etc. based on known info about machine types
 //! Configures screen width, height, total text rows and cols, and visible text rows and cols by checking hardware
+//! @param	the_system: valid pointer to system object
 //! @return	Returns false if the machine is known to be incompatible with this software. 
 bool Sys_AutoConfigure(System* the_system)
 {
@@ -640,6 +644,7 @@ bool Sys_AutoConfigure(System* the_system)
 
 
 //! Switch machine into graphics mode
+//! @param	the_system: valid pointer to system object
 bool Sys_SetModeGraphics(System* the_system)
 {	
 	if (the_system == NULL)
@@ -663,6 +668,7 @@ bool Sys_SetModeGraphics(System* the_system)
 
 
 //! Switch machine into text mode
+//! @param	the_system: valid pointer to system object
 //! @param as_overlay: If true, sets text overlay mode (text over graphics). If false, sets full text mode (no graphics);
 bool Sys_SetModeText(System* the_system, bool as_overlay)
 {	
@@ -852,6 +858,7 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 
 
 //! Change video mode to the one passed.
+//! @param	the_screen: valid pointer to the target screen to operate on
 //! @param	new_mode: One of the enumerated screen_resolution values. Must correspond to a valid VICKY video mode for the host machine. See VICKY_IIIA_RES_800X600_FLAGS, etc. defined in a2560_platform.h
 //! @return	returns false on any error/invalid input.
 bool Sys_SetVideoMode(Screen* the_screen, screen_resolution new_mode)
@@ -952,6 +959,7 @@ bool Sys_SetVideoMode(Screen* the_screen, screen_resolution new_mode)
 
 
 //! Enable or disable the hardware cursor in text mode, for the specified screen
+//! @param	the_system: valid pointer to system object
 //! @param	the_screen: valid pointer to the target screen to operate on
 //! @param enable_it: If true, turns the hardware blinking cursor on. If false, hides the hardware cursor;
 bool Sys_EnableTextModeCursor(System* the_system, Screen* the_screen, bool enable_it)
@@ -981,6 +989,7 @@ bool Sys_EnableTextModeCursor(System* the_system, Screen* the_screen, bool enabl
 
 
 //! Add this window to the list of windows and make it the currently active window
+//! @param	the_system: valid pointer to system object
 //! @return	Returns false if adding this window would exceed the system's hard cap on the number of available windows
 bool Sys_AddToWindowList(System* the_system, Window* the_new_window)
 {
@@ -1015,6 +1024,7 @@ bool Sys_AddToWindowList(System* the_system, Window* the_new_window)
 
 
 // create the backdrop window for the system
+//! @param	the_system: valid pointer to system object
 bool Sys_CreateBackdropWindow(System* the_system)
 {
 	Screen*				the_screen;
@@ -1066,6 +1076,7 @@ error:
 
 
 // return the active window
+//! @param	the_system: valid pointer to system object
 Window* Sys_GetActiveWindow(System* the_system)
 {
  	if (the_system == NULL)
@@ -1079,6 +1090,7 @@ Window* Sys_GetActiveWindow(System* the_system)
 
 
 // return the backdrop window
+//! @param	the_system: valid pointer to system object
 Window* Sys_GetBackdropWindow(System* the_system)
 {
  	List*	the_item;
@@ -1108,6 +1120,7 @@ Window* Sys_GetBackdropWindow(System* the_system)
 
 
 // return a reference to the next window in the system's list, excluding backdrop windows
+//! @param	the_system: valid pointer to system object
 Window* Sys_GetNextWindow(System* the_system)
 {
 	Window*		current_window;
@@ -1193,6 +1206,7 @@ Window* Sys_GetNextWindow(System* the_system)
 
 
 // return a reference to the previous window in the system's list, excluding backdrop windows
+//! @param	the_system: valid pointer to system object
 Window* Sys_GetPreviousWindow(System* the_system)
 {
 	Window*		current_window;
@@ -1263,6 +1277,9 @@ Window* Sys_GetPreviousWindow(System* the_system)
 
 
 // Find the Window under the mouse -- accounts for z depth (topmost window will be found)
+//! @param	the_system: valid pointer to system object
+//! @param	x: global horizontal coordinate
+//! @param	y: global vertical coordinate
 Window* Sys_GetWindowAtXY(System* the_system, int16_t x, int16_t y)
 {
  	List*	the_item;
@@ -1313,6 +1330,7 @@ Window* Sys_GetWindowAtXY(System* the_system, int16_t x, int16_t y)
 //! Set the passed window to the active window, and marks the previously active window as inactive
 //! NOTE: This will resort the list of windows to move the (new) active one to the front
 //! NOTE: The exception to this is that the backdrop window is never moved in front of other windows
+//! @param	the_system: valid pointer to system object
 bool Sys_SetActiveWindow(System* the_system, Window* the_window)
 {
 	if (the_system == NULL)
@@ -1377,6 +1395,7 @@ bool Window_CompareDisplayOrder(void* first_payload, void* second_payload)
 // **** Other GET functions *****
 
 
+//! @param	the_system: valid pointer to system object
 Theme* Sys_GetTheme(System* the_system)
 {
 	if (the_system == NULL)
@@ -1388,6 +1407,7 @@ Theme* Sys_GetTheme(System* the_system)
 	return the_system->theme_;
 }
 
+//! @param	the_system: valid pointer to system object
 Font* Sys_GetSystemFont(System* the_system)
 {
 	if (the_system == NULL)
@@ -1400,6 +1420,7 @@ Font* Sys_GetSystemFont(System* the_system)
 }
 
 
+//! @param	the_system: valid pointer to system object
 Font* Sys_GetAppFont(System* the_system)
 {
 	if (the_system == NULL)
@@ -1412,6 +1433,7 @@ Font* Sys_GetAppFont(System* the_system)
 }
 
 
+//! @param	the_system: valid pointer to system object
 Screen* Sys_GetScreen(System* the_system, int16_t channel_id)
 {
 	if (the_system == NULL)
@@ -1430,6 +1452,7 @@ Screen* Sys_GetScreen(System* the_system, int16_t channel_id)
 }
 
 
+//! @param	the_system: valid pointer to system object
 Bitmap* Sys_GetScreenBitmap(System* the_system, int16_t channel_id)
 {
 	if (the_system == NULL)
@@ -1448,6 +1471,7 @@ Bitmap* Sys_GetScreenBitmap(System* the_system, int16_t channel_id)
 }
 
 
+//! @param	the_system: valid pointer to system object
 EventManager* Sys_GetEventManager(System* the_system)
 {
 	if (the_system == NULL)
@@ -1465,6 +1489,7 @@ EventManager* Sys_GetEventManager(System* the_system)
 
 // **** Other SET functions *****
 
+//! @param	the_system: valid pointer to system object
 void Sys_SetSystemFont(System* the_system, Font* the_font)
 {
 	if (the_system == NULL)
@@ -1477,6 +1502,7 @@ void Sys_SetSystemFont(System* the_system, Font* the_font)
 }
 
 
+//! @param	the_system: valid pointer to system object
 void Sys_SetAppFont(System* the_system, Font* the_font)
 {
 	if (the_system == NULL)
@@ -1489,6 +1515,7 @@ void Sys_SetAppFont(System* the_system, Font* the_font)
 }
 
 
+//! @param	the_system: valid pointer to system object
 void Sys_SetScreen(System* the_system, int16_t channel_id, Screen* the_screen)
 {
 	if (the_system == NULL)
@@ -1507,6 +1534,7 @@ void Sys_SetScreen(System* the_system, int16_t channel_id, Screen* the_screen)
 }
 
 
+//! @param	the_system: valid pointer to system object
 void Sys_SetScreenBitmap(System* the_system, int16_t channel_id, Bitmap* the_bitmap)
 {
 	if (the_system == NULL)
@@ -1535,6 +1563,7 @@ void Sys_SetScreenBitmap(System* the_system, int16_t channel_id, Bitmap* the_bit
 
 //! Set the passed theme as the System's current theme
 //! Note: this will dispose of the current theme after setting the new one
+//! @param	the_system: valid pointer to system object
 //! @return	Returns false on any error condition
 bool Sys_SetTheme(System* the_system, Theme* the_theme)
 {
@@ -1576,19 +1605,42 @@ bool Sys_SetTheme(System* the_system, Theme* the_theme)
 // **** xxx functions *****
 
 
+//! Tell the VICKY to use a different address for the specified bitmap layer
+//! @param	the_system: valid pointer to system object
+//! @param	the_bitmap_layer: 0 or 1, the bitmap layer to get a new address
+//! @param	the_address: The address within the VRAM zone that the bitmap layer should be repointed to
 bool Sys_SetVRAMAddr(System* the_system, uint8_t the_bitmap_layer, unsigned char* the_address)
 {
-	uint32_t			new_vicky_bitmap0_vram_value;
+	uint32_t			new_vicky_bitmap_vram_value;
+	
+	if (the_system == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return false;
+	}
+	
+	if (the_bitmap_layer > 1)
+	{
+		LOG_ERR(("%s %d: passed bitmap layer number (%u) was invalid", __func__ , __LINE__, the_bitmap_layer));
+		return false;
+	}
 	
 	//DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0: want to point to bitmap at %p", __func__, __LINE__, the_address));
 
 	//DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0 before change: 0x%x (with offset=0x%x)", __func__, __LINE__, R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L), (uint32_t)VRAM_BUFFER_A + R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L)));
 	
-	new_vicky_bitmap0_vram_value = (uint32_t)the_address - (uint32_t)VRAM_BUFFER_A;		
+	new_vicky_bitmap_vram_value = (uint32_t)the_address - (uint32_t)VRAM_BUFFER_A;		
 
-// 	DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0 about to change to: 0x%x (with offset=0x%x)", __func__, __LINE__, new_vicky_bitmap0_vram_value, (uint32_t)the_address));
+// 	DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0 about to change to: 0x%x (with offset=0x%x)", __func__, __LINE__, new_vicky_bitmap_vram_value, (uint32_t)the_address));
 
-	R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L) = new_vicky_bitmap0_vram_value;
+	if (the_bitmap_layer == 0)
+	{
+		R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L) = new_vicky_bitmap_vram_value;
+	}
+	else
+	{
+		R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L1_VRAM_ADDR_L) = new_vicky_bitmap_vram_value;
+	}
 	
 	//DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0 now set to 0x%x (with offset=0x%x)", __func__, __LINE__, R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L), (uint32_t)VRAM_BUFFER_A + R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L)));
 
@@ -2259,6 +2311,7 @@ Font* Sys_LoadAppFont(void)
 
 //! Render all visible windows
 //! NOTE: this will move to a private Sys function later, once event handling is available
+//! @param	the_system: valid pointer to system object
 void Sys_Render(System* the_system)
 {
 	int16_t		num_nodes = 0;

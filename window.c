@@ -117,7 +117,7 @@ void Window_ConfigureDragRects(Window* the_window)
 	the_window->grow_right_rect_.MinX = the_window->width_ - WIN_DEFAULT_DRAG_ZONE_SIZE - 1;
 	the_window->grow_right_rect_.MinY = 0;
 	the_window->grow_right_rect_.MaxX = the_window->width_ - 1;
-	the_window->grow_right_rect_.MaxY = the_window->height_ - 1;
+	the_window->grow_right_rect_.MaxY = the_window->height_ - 10;	// cutout at bottom for the traditional lower/right corner drag zone
 
 	the_window->grow_top_rect_.MinX = 0;
 	the_window->grow_top_rect_.MinY = 0;
@@ -126,8 +126,13 @@ void Window_ConfigureDragRects(Window* the_window)
 
 	the_window->grow_bottom_rect_.MinX = 0;
 	the_window->grow_bottom_rect_.MinY = the_window->height_ - WIN_DEFAULT_DRAG_ZONE_SIZE - 1;
-	the_window->grow_bottom_rect_.MaxX = the_window->width_ - 1;
+	the_window->grow_bottom_rect_.MaxX = the_window->width_ - 10;	// cutout at right for the traditional lower/right corner drag zone
 	the_window->grow_bottom_rect_.MaxY = the_window->height_ - 1;
+	
+	the_window->grow_bottom_right_rect_.MinX = the_window->grow_bottom_rect_.MaxX + 1;
+	the_window->grow_bottom_right_rect_.MinY = the_window->grow_right_rect_.MaxY + 1;
+	the_window->grow_bottom_right_rect_.MaxX = the_window->width_ - 1;
+	the_window->grow_bottom_right_rect_.MaxY = the_window->height_ - 1;	
 }
 
 
@@ -1083,6 +1088,54 @@ bool Window_BlitClipRects(Window* the_window)
 	return true;
 }
 
+
+
+
+
+
+// **** BUILT-IN PSEUDO CONTROL MANAGEMENT functions *****
+
+//! Checks if the passed coordinate is within one of the draggable event zones
+//! Draggable event zones include the title bar, 4 single-direction resize zones on the window edges, and the lower-right traditional resize zone
+//! @param	the_window: reference to a valid Window object.
+//! @param	x: window-local horizontal coordinate
+//! @param	y: window-local vertical coordinate
+//@ return	Returns mouseFree if the coordinates are in anything but a draggable region. Otherwise returns mouseResizeUp, etc., as appropriate.
+mouse_mode Window_CheckForDragZone(Window* the_window, int16_t x, int16_t y)
+{
+	if ( the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return mouseFree;
+	}
+	
+	if (General_PointInRect(x, y, the_window->titlebar_rect_) == true)
+	{
+		return mouseDragTitle;
+	}
+	else if (General_PointInRect(x, y, the_window->grow_bottom_right_rect_) == true)
+	{
+		return mouseResizeDownRight;
+	}
+	else if (General_PointInRect(x, y, the_window->grow_right_rect_) == true)
+	{
+		return mouseResizeRight;
+	}
+	else if (General_PointInRect(x, y, the_window->grow_bottom_rect_) == true)
+	{
+		return mouseResizeDown;
+	}
+	else if (General_PointInRect(x, y, the_window->grow_left_rect_) == true)
+	{
+		return mouseResizeLeft;
+	}
+	else if (General_PointInRect(x, y, the_window->grow_top_rect_) == true)
+	{
+		return mouseResizeUp;
+	}
+	
+	return mouseFree;
+}
 
 
 

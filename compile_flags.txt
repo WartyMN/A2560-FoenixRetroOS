@@ -1,4 +1,2 @@
 -I
-/opt/vbcc/targets/a2560-elf/include
--I
 /opt/vbcc/targets/a2560-micah/include

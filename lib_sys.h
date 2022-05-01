@@ -111,6 +111,7 @@ System* Sys_New(void);
 
 // destructor
 // frees all allocated memory associated with the passed object, and the object itself
+//! @param	the_system: valid pointer to system object
 bool Sys_Destroy(System** the_system);
 
 
@@ -132,12 +133,14 @@ bool Sys_InitSystem(void);
 // **** Screen mode/resolution/size functions *****
 
 //! Find out what kind of machine the software is running on, and determine # of screens available
+//! @param	the_system: valid pointer to system object
 //! @return	Returns false if the machine is known to be incompatible with this software. 
 bool Sys_AutoDetectMachine(System* the_system);
 
 //! Find out what kind of machine the software is running on, and configure the passed screen accordingly
 //! Configures screen settings, RAM addresses, etc. based on known info about machine types
 //! Configures screen width, height, total text rows and cols, and visible text rows and cols by checking hardware
+//! @param	the_system: valid pointer to system object
 //! @return	Returns false if the machine is known to be incompatible with this software. 
 bool Sys_AutoConfigure(System* the_system);
 
@@ -153,13 +156,16 @@ bool Sys_DetectScreenSize(Screen* the_screen);
 bool Sys_SetVideoMode(Screen* the_screen, screen_resolution new_mode);
 
 //! Switch machine into graphics mode
+//! @param	the_system: valid pointer to system object
 bool Sys_SetModeGraphics(System* the_system);
 
 //! Switch machine into text mode
+//! @param	the_system: valid pointer to system object
 //! @param as_overlay: If true, sets text overlay mode (text over graphics). If false, sets full text mode (no graphics);
 bool Sys_SetModeText(System* the_system, bool as_overlay);
 
 //! Enable or disable the hardware cursor in text mode, for the specified screen
+//! @param	the_system: valid pointer to system object
 //! @param	the_screen: valid pointer to the target screen to operate on
 //! @param enable_it: If true, turns the hardware blinking cursor on. If false, hides the hardware cursor;
 bool Sys_EnableTextModeCursor(System* the_system, Screen* the_screen, bool enable_it);
@@ -169,29 +175,40 @@ bool Sys_EnableTextModeCursor(System* the_system, Screen* the_screen, bool enabl
 // **** Window management functions *****
 
 //! Add this window to the list of windows and make it the currently active window
+//! @param	the_system: valid pointer to system object
 //! @return	Returns false if adding this window would exceed the system's hard cap on the number of available windows
 bool Sys_AddToWindowList(System* the_system, Window* the_new_window);
 
 // create the backdrop window for the system
+//! @param	the_system: valid pointer to system object
 bool Sys_CreateBackdropWindow(System* the_system);
 
 // return the active window
+//! @param	the_system: valid pointer to system object
 Window* Sys_GetActiveWindow(System* the_system);
 
 // return the backdrop window
+//! @param	the_system: valid pointer to system object
 Window* Sys_GetBackdropWindow(System* the_system);
 
 // return a reference to the next window in the system's list, excluding backdrop windows
+//! @param	the_system: valid pointer to system object
 Window* Sys_GetNextWindow(System* the_system);
 
 // return a reference to the previous window in the system's list, excluding backdrop windows
+//! @param	the_system: valid pointer to system object
 Window* Sys_GetPreviousWindow(System* the_system);
 
 // Find the Window under the mouse -- accounts for z depth (topmost window will be found)
+//! @param	the_system: valid pointer to system object
+//! @param	x: global horizontal coordinate
+//! @param	y: global vertical coordinate
 Window* Sys_GetWindowAtXY(System* the_system, int16_t x, int16_t y);
 
-//! Set the passed window to the active window
+//! Set the passed window to the active window, and marks the previously active window as inactive
 //! NOTE: This will resort the list of windows to move the (new) active one to the front
+//! NOTE: The exception to this is that the backdrop window is never moved in front of other windows
+//! @param	the_system: valid pointer to system object
 bool Sys_SetActiveWindow(System* the_system, Window* the_window);
 
 // List-sort compatible function for sorting windows by their display order property
@@ -200,32 +217,43 @@ bool Window_CompareDisplayOrder(void* first_payload, void* second_payload);
 
 // **** Other GET functions *****
 
+//! @param	the_system: valid pointer to system object
 Font* Sys_GetSystemFont(System* the_system);
 
+//! @param	the_system: valid pointer to system object
 Font* Sys_GetAppFont(System* the_system);
 
+//! @param	the_system: valid pointer to system object
 Screen* Sys_GetScreen(System* the_system, int16_t channel_id);
 
+//! @param	the_system: valid pointer to system object
 Theme* Sys_GetTheme(System* the_system);
 
+//! @param	the_system: valid pointer to system object
 Bitmap* Sys_GetScreenBitmap(System* the_system, int16_t channel_id);
 
+//! @param	the_system: valid pointer to system object
 EventManager* Sys_GetEventManager(System* the_system);
 
 
 
 // **** Other SET functions *****
 
+//! @param	the_system: valid pointer to system object
 void Sys_SetSystemFont(System* the_system, Font* the_font);
 
+//! @param	the_system: valid pointer to system object
 void Sys_SetAppFont(System* the_system, Font* the_font);
 
+//! @param	the_system: valid pointer to system object
 void Sys_SetScreen(System* the_system, int16_t channel_id, Screen* the_screen);
 
+//! @param	the_system: valid pointer to system object
 void Sys_SetScreenBitmap(System* the_system, int16_t channel_id, Bitmap* the_bitmap);
 
 //! Set the passed theme as the System's current theme
 //! Note: this will dispose of the current theme after setting the new one
+//! @param	the_system: valid pointer to system object
 //! @return	Returns false on any error condition
 bool Sys_SetTheme(System* the_system, Theme* the_theme);
 
@@ -233,6 +261,10 @@ bool Sys_SetTheme(System* the_system, Theme* the_theme);
 
 // **** xxx functions *****
 
+//! Tell the VICKY to use a different address for the specified bitmap layer
+//! @param	the_system: valid pointer to system object
+//! @param	the_bitmap_layer: 0 or 1, the bitmap layer to get a new address
+//! @param	the_address: The address within the VRAM zone that the bitmap layer should be repointed to
 bool Sys_SetVRAMAddr(System* the_system, uint8_t the_bitmap_layer, unsigned char* the_address);
 
 
@@ -300,6 +332,7 @@ Font* Sys_LoadAppFont(void);
 
 //! Render all visible windows
 //! NOTE: this will move to a private Sys function later, once event handling is available
+//! @param	the_system: valid pointer to system object
 void Sys_Render(System* the_system);
 
 

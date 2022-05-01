@@ -118,9 +118,9 @@ Data Structures</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a5eb073f2aa6c0878484c4cf33b597630"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_window.html">Window</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a5eb073f2aa6c0878484c4cf33b597630">Window_New</a> (<a class="el" href="struct_new_win_template.html">NewWinTemplate</a> *the_win_template)</td></tr>
-<tr class="memdesc:a5eb073f2aa6c0878484c4cf33b597630"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a <a class="el" href="struct_window.html">Window</a> object the_win_template-&gt;width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH, cannot be greater than WIN_DEFAULT_MAX_WIDTH the_win_template-&gt;height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT, cannot be greater than WIN_DEFAULT_MAX_HEIGHT the_win_template-&gt;min_width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH the_win_template-&gt;min_height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT the_win_template-&gt;max_width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH the_win_template-&gt;max_height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT.  <a href="window_8h.html#a5eb073f2aa6c0878484c4cf33b597630">More...</a><br /></td></tr>
-<tr class="separator:a5eb073f2aa6c0878484c4cf33b597630"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc36763466439d38b9156b57a1ba18df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_window.html">Window</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#afc36763466439d38b9156b57a1ba18df">Window_New</a> (<a class="el" href="struct_new_win_template.html">NewWinTemplate</a> *the_win_template, void(*event_handler)(<a class="el" href="struct_event_record.html">EventRecord</a> *))</td></tr>
+<tr class="memdesc:afc36763466439d38b9156b57a1ba18df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a <a class="el" href="struct_window.html">Window</a> object the_win_template-&gt;width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH, cannot be greater than WIN_DEFAULT_MAX_WIDTH the_win_template-&gt;height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT, cannot be greater than WIN_DEFAULT_MAX_HEIGHT the_win_template-&gt;min_width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH the_win_template-&gt;min_height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT the_win_template-&gt;max_width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH the_win_template-&gt;max_height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT.  <a href="window_8h.html#afc36763466439d38b9156b57a1ba18df">More...</a><br /></td></tr>
+<tr class="separator:afc36763466439d38b9156b57a1ba18df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a87dc477da203456e5a58d26d0512e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_new_win_template.html">NewWinTemplate</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a1a87dc477da203456e5a58d26d0512e4">Window_GetNewWinTemplate</a> (char *the_win_title)</td></tr>
 <tr class="memdesc:a1a87dc477da203456e5a58d26d0512e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate and populate a new window template object Ensures that all fields have appropriate default values Calling method must free this after creating a window with it.  <a href="window_8h.html#a1a87dc477da203456e5a58d26d0512e4">More...</a><br /></td></tr>
 <tr class="separator:a1a87dc477da203456e5a58d26d0512e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -139,6 +139,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Window_MergeClipRects
 <tr class="memitem:a6ba6fab2abe3c84eb0f231ea8183828c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a6ba6fab2abe3c84eb0f231ea8183828c">Window_BlitClipRects</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
 <tr class="memdesc:a6ba6fab2abe3c84eb0f231ea8183828c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blit each clip rect to the screen, and clear all clip rects when done This is the actual mechanics of rendering the window to the screen.  <a href="window_8h.html#a6ba6fab2abe3c84eb0f231ea8183828c">More...</a><br /></td></tr>
 <tr class="separator:a6ba6fab2abe3c84eb0f231ea8183828c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa46b88f5600872b937c26f2a8e632ef0"><td class="memItemLeft" align="right" valign="top">mouse_mode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#aa46b88f5600872b937c26f2a8e632ef0">Window_CheckForDragZone</a> (<a class="el" href="struct_window.html">Window</a> *the_window, int16_t x, int16_t y)</td></tr>
+<tr class="memdesc:aa46b88f5600872b937c26f2a8e632ef0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the passed coordinate is within one of the draggable event zones Draggable event zones include the title bar, 4 single-direction resize zones on the window edges, and the lower-right traditional resize zone.  <a href="window_8h.html#aa46b88f5600872b937c26f2a8e632ef0">More...</a><br /></td></tr>
+<tr class="separator:aa46b88f5600872b937c26f2a8e632ef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad21a1d6f6ced3cbb01af21ce558985d4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#ad21a1d6f6ced3cbb01af21ce558985d4">Window_SetSelectedControl</a> (<a class="el" href="struct_window.html">Window</a> *the_window, <a class="el" href="struct_control.html">Control</a> *the_control)</td></tr>
 <tr class="memdesc:ad21a1d6f6ced3cbb01af21ce558985d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the passed control as the currently selected control and unselect any previously selected control.  <a href="window_8h.html#ad21a1d6f6ced3cbb01af21ce558985d4">More...</a><br /></td></tr>
 <tr class="separator:ad21a1d6f6ced3cbb01af21ce558985d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -479,6 +482,50 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
 <p>Blit each clip rect to the screen, and clear all clip rects when done This is the actual mechanics of rendering the window to the screen. </p>
 <p >Blit each clip rect to the screen, and clear all clip rects when done This is the actual mechanics of rendering the window to the screen.</p>
 <p >Blit each clip rect to the screen, and clear all clip rects when done This is the actual mechanics of rendering the window to the screen </p>
+
+</div>
+</div>
+<a id="aa46b88f5600872b937c26f2a8e632ef0" name="aa46b88f5600872b937c26f2a8e632ef0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa46b88f5600872b937c26f2a8e632ef0">&#9670;&nbsp;</a></span>Window_CheckForDragZone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mouse_mode Window_CheckForDragZone </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if the passed coordinate is within one of the draggable event zones Draggable event zones include the title bar, 4 single-direction resize zones on the window edges, and the lower-right traditional resize zone. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">x</td><td>window-local horizontal coordinate </td></tr>
+    <tr><td class="paramname">y</td><td>window-local vertical coordinate </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1131,8 +1178,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
 
 </div>
 </div>
-<a id="a5eb073f2aa6c0878484c4cf33b597630" name="a5eb073f2aa6c0878484c4cf33b597630"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5eb073f2aa6c0878484c4cf33b597630">&#9670;&nbsp;</a></span>Window_New()</h2>
+<a id="afc36763466439d38b9156b57a1ba18df" name="afc36763466439d38b9156b57a1ba18df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc36763466439d38b9156b57a1ba18df">&#9670;&nbsp;</a></span>Window_New()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1141,8 +1188,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
           <td class="memname"><a class="el" href="struct_window.html">Window</a> * Window_New </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_new_win_template.html">NewWinTemplate</a> *&#160;</td>
-          <td class="paramname"><em>the_win_template</em></td><td>)</td>
+          <td class="paramname"><em>the_win_template</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">void(*)(<a class="el" href="struct_event_record.html">EventRecord</a> *)&#160;</td>
+          <td class="paramname"><em>event_handler</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1151,6 +1208,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">the_win_template</td><td>a populated new window template whose data will be used to create the new window object </td></tr>
+    <tr><td class="paramname">event_handler</td><td>pointer to the function that will handle all events for the window. This function will be called when the system detects an event associated with the window. </td></tr>
   </table>
   </dd>
 </dl>

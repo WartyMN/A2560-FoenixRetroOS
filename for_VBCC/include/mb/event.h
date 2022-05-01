@@ -68,13 +68,6 @@
 /*                               Enumerations                                */
 /*****************************************************************************/
 
-
-
-/*****************************************************************************/
-/*                                 Structs                                   */
-/*****************************************************************************/
-
-
 typedef enum event_kind 
 {
 	nullEvent				= 0,
@@ -93,6 +86,7 @@ typedef enum event_kind
 	menuSelected			= 13,
 	menuCanceled			= 14,
 	controlClicked			= 15,
+	mouseMoved				= 16,
 } event_kind;
 
 
@@ -174,6 +168,13 @@ enum
 	kNonBreakingSpaceCharCode     = 202
 };
 
+
+
+/*****************************************************************************/
+/*                                 Structs                                   */
+/*****************************************************************************/
+
+
 struct EventRecord
 {
 	event_kind			what_;
@@ -191,6 +192,7 @@ struct EventManager
 	EventRecord*		queue_[EVENT_QUEUE_SIZE];	//! circular buffer for the event queue
 	uint16_t			write_idx_;					//! index to queue_: where the next event record will be slotted
 	uint16_t			read_idx_;					//! index to queue_: where the next event record will be read from
+	mouse_mode			mouse_mode_;				//! tracks whether mouse is in drag mode, etc.
 };
 
 
