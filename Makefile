@@ -1,8 +1,7 @@
 VPATH = /
 
-VBCC = /opt/vbcc
 DEVA2560 = ~/dev/bbedit-workspace-a2560
-FOENIX = $(DEVA2560)/calypsi-try3/Calypsi-m68k-hello-world/module/Calypsi-m68k-Foenix
+FOENIX = module/Calypsi-m68k-Foenix
 TARGET = $(DEVA2560)/_target_foenix
 
 # Common source files
@@ -10,13 +9,15 @@ LIB_SRCS = lib_sys.c theme.c control_template.c font.c window.c control.c genera
 TEST_SRCS = bitmap_test.c font_test.c lib_sys_test.c text_test.c window_test.c general_test.c 
 DEMO_SRCS = bitmap_demo.c font_demo.c lib_sys_demo.c text_demo.c window_demo.c
 TUTORIAL_SRCS = blackjack.c
+TEXT_DEMO_SRCS = lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c event.c text_demo.c
 
 MODEL = --code-model=large --data-model=small
 LIB_MODEL = lc-sd
 
-FOENIX_LIB = $(FOENIX)/foenix-$(LIB_MODEL).a
+FOENIX_LIB = $(FOENIX)/Foenix-$(LIB_MODEL).a
 A2560U_RULES = $(FOENIX)/linker-files/a2560u-simplified.scm
-A2560K_RULES = $(FOENIX)/linker-files/a2560k-osf.scm
+A2560K_RULES = $(FOENIX)/linker-files/a2560k-simplified.scm
+#A2560K_RULES = a2560k-osf.scm
 
 # Object files
 OBJS = $(C_SRCS:%.c=build_calypsi/obj/%.o)
@@ -25,6 +26,7 @@ LIB_OBJS = $(LIB_SRCS:%.c=build_calypsi/obj/%.o)
 TEST_OBJS = $(TEST_SRCS:%.c=build_calypsi/obj/%.o)
 DEMO_OBJS = $(DEMO_SRCS:%.c=build_calypsi/obj/%.o)
 TUTORIAL_OBJS = $(TUTORIAL_SRCS:%.c=build_calypsi/obj/%.o)
+TEXT_DEMO_OBJS = $(TEXT_DEMO_SRCS:%.c=build_calypsi/obj/%.o)
 
 build_calypsi/obj/%.o: %.c
 	cc68k --core=68000 $(MODEL) --debug -I$(TARGET)/include/ --list-file=$(@:%.o=%.lst) -o $@ $<
@@ -82,6 +84,10 @@ tutorials:	$(TUTORIAL_OBJS) $(FOENIX_LIB)
 
 	#ln68k -o  build_calypsi/$@ $^ $(A2560K_RULES) clib-68000-$(LIB_MODEL)-Foenix.a build_calypsi/a2560_sys.a --output-format=pgz -l --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
 	
+textdemo: $(TEXT_DEMO_OBJS) $(FOENIX_LIB)
+	@echo "Building text demo..."
+#	echo $@
+	ln68k -o build_calypsi/text.pgz $(TEXT_DEMO_OBJS) $(A2560K_RULES) clib-68000-$(LIB_MODEL)-Foenix.a $(FOENIX)/Foenix-lc-sd.a --output-format=pgz --list-file=build_calypsi/textdemo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
 	
 #hello.elf: $(OBJS_DEBUG)
 #	ln68k --debug -o $@ $^ $(A2560U_RULES) clib-68000-$(LIB_MODEL).a --list-file=hello-debug.lst --cross-reference --rtattr printf=reduced --semi-hosted --target=Foenix --stack-size=2000 --sstack-size=800
@@ -96,6 +102,7 @@ $(FOENIX_LIB):
 	(cd $(FOENIX) ; make all)
 
 clean:
+	-rm $(TEXT_DEMO_OBJS) obj/*.lst text.pgz
 	-rm $(OBJS) $(OBJS:%.o=%.lst) $(OBJS_DEBUG) $(OBJS_DEBUG:%.o=%.lst) $(FOENIX_LIB)
 	-rm build_calypsi/*
 	-rm build_calypsi/obj/*
