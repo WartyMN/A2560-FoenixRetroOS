@@ -181,7 +181,7 @@ MU_TEST(general_test_strlcpy_with_alloc)
 		else
 		{
 			mu_assert_string_eq( result, expected_result[i] );
-			f_free(result, MEM_STANDARD);
+			free(result);
 		}
 	}
 }

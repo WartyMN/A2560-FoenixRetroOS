@@ -279,7 +279,7 @@ Control* Control_New(ControlTemplate* the_template, Window* the_window, Rectangl
 	//   to personalize the control for a given window, the parent window is needed
 	//   the final location of the control is calculated based on the offset info in the template + the size of the parent window
 	
-	if ( (the_control = (Control*)f_calloc(1, sizeof(Control), MEM_STANDARD) ) == NULL)
+	if ( (the_control = (Control*)calloc(1, sizeof(Control)) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new font record", __func__ , __LINE__));
 		goto error;
@@ -355,12 +355,12 @@ bool Control_Destroy(Control** the_control)
 	if ((*the_control)->caption_ != NULL)
 	{
 		LOG_ALLOC(("%s %d:	__FREE__	(*the_control)->caption_	%p	size	%i		'%s'", __func__ , __LINE__, (*the_control)->caption_, General_Strnlen((*the_control)->caption_, CONTROL_MAX_CAPTION_SIZE) + 1, (*the_control)->caption_));
-		f_free((*the_control)->caption_, MEM_STANDARD);
+		free((*the_control)->caption_);
 		(*the_control)->caption_ = NULL;
 	}
 	
 	LOG_ALLOC(("%s %d:	__FREE__	*the_control	%p	size	%i", __func__ , __LINE__, *the_control, sizeof(Control)));
-	f_free(*the_control, MEM_STANDARD);
+	free(*the_control);
 	*the_control = NULL;
 	
 	return true;

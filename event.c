@@ -31,7 +31,6 @@
 #include <mb/text.h>
 #include <mb/font.h>
 #include <mb/window.h>
-#include <mb/memory_manager.h>
 
 
 /*****************************************************************************/
@@ -179,7 +178,7 @@ EventRecord* Event_New(void)
 {
 	EventRecord*	the_event;
 	
-	if ( (the_event = (EventRecord*)f_calloc(1, sizeof(EventRecord), MEM_STANDARD) ) == NULL)
+	if ( (the_event = (EventRecord*)calloc(1, sizeof(EventRecord)) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new EventRecord", __func__ , __LINE__));
 		goto error;
@@ -207,7 +206,7 @@ bool Event_Destroy(EventRecord** the_event)
 	}
 
 	LOG_ALLOC(("%s %d:	__FREE__	*the_event	%p	size	%i", __func__ , __LINE__, *the_event, sizeof(EventRecord)));
-	f_free(*the_event, MEM_STANDARD);
+	free(*the_event);
 	*the_event = NULL;
 	
 	return true;
@@ -220,7 +219,7 @@ EventManager* EventManager_New(void)
 {
 	EventManager*	the_event_manager;
 	
-	if ( (the_event_manager = (EventManager*)f_calloc(1, sizeof(EventManager), MEM_STANDARD) ) == NULL)
+	if ( (the_event_manager = (EventManager*)calloc(1, sizeof(EventManager)) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new EventManager", __func__ , __LINE__));
 		goto error;
@@ -275,7 +274,7 @@ bool EventManager_Destroy(EventManager** the_event_manager)
 	}
 	
 	LOG_ALLOC(("%s %d:	__FREE__	*the_event_manager	%p	size	%i", __func__ , __LINE__, *the_event_manager, sizeof(EventManager)));
-	f_free(*the_event_manager, MEM_STANDARD);
+	free(*the_event_manager);
 	*the_event_manager = NULL;
 	
 	return true;

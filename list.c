@@ -191,7 +191,7 @@ List* List_NewItem(void* the_payload)
 {
 	List* the_item;
 
-	if ( (the_item = (List*)f_calloc(1, sizeof(List), MEM_STANDARD) ) == NULL)
+	if ( (the_item = (List*)calloc(1, sizeof(List)) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new list item", __func__ , __LINE__));
 		return NULL;
@@ -219,7 +219,7 @@ void List_Destroy(List** list_head)
 
 		//List_DeleteItem(the_item);
 		LOG_ALLOC(("%s %d:	__FREE__	the_item	%p	size	%i", __func__ , __LINE__, the_item, sizeof(List)));
-		f_free(the_item, MEM_STANDARD);
+		free(the_item);
 		the_item = NULL;
 	}
 }

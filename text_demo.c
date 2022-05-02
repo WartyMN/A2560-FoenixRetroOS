@@ -500,7 +500,7 @@ void Demo_Text_DrawStringInBox1(void)
 	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, FG_COLOR_LT_GRAY, BG_COLOR_BLACK);
 	Text_DrawStringInBox(global_system->screen_[ID_CHANNEL_B], x1+1, y1+1, x2-1, y2-1, the_message, BG_COLOR_CYAN, BG_COLOR_BLACK, NULL);
 
-	f_free(the_message, MEM_STANDARD);
+	free(the_message);
 
 	WaitForUser();
 }
@@ -528,7 +528,7 @@ void Demo_Text_DrawStringInBox2(void)
 	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, FG_COLOR_BLACK, BG_COLOR_WHITE);
 	Text_DrawStringInBox(global_system->screen_[ID_CHANNEL_B], x1+1, y1+1, x2-1, y2-1, the_message, FG_COLOR_BLACK, BG_COLOR_WHITE, &Test_MyGetUserResponseFunc);
 
-	f_free(the_message, MEM_STANDARD);
+	free(the_message);
 
 	WaitForUser();
 }

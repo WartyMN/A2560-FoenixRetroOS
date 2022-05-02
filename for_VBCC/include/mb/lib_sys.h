@@ -14,12 +14,8 @@
 /* about this library: System
  *
  * This provides overall system level functionality
- * 
- * See also: memory_manager.h
  *
  *** things this library needs to be able to do
- * Manage memory allocation for VRAM for the system and for 3rd party programs that are launched from the system. 
- * Manage memory allocation for standard RAM for 3rd party programs that are launched from the system. 
  * Manage global system resources such as fonts, screens, mouse pointer, etc. 
  * Provide event handling
  *
@@ -38,7 +34,6 @@
 
 // project includes
 #include "list.h"
-#include "memory_manager.h"
 #include "theme.h"
 #include "control_template.h"
 

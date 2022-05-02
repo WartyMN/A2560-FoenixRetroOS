@@ -740,7 +740,7 @@ Window* Window_New(NewWinTemplate* the_win_template, void (* event_handler)(Even
 	
 	DEBUG_OUT(("%s %d: x=%i, y=%i, width=%i", __func__, __LINE__, the_win_template->x_, the_win_template->y_, the_win_template->width_));
 	
-	if ( (the_window = (Window*)f_calloc(1, sizeof(Window), MEM_STANDARD) ) == NULL)
+	if ( (the_window = (Window*)calloc(1, sizeof(Window)) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new Window", __func__ , __LINE__));
 		goto error;
@@ -896,12 +896,12 @@ bool Window_Destroy(Window** the_window)
 	if ((*the_window)->title_)
 	{
 		LOG_ALLOC(("%s %d:	__FREE__	(*the_window)->title_	%p	size	%i		'%s'", __func__ , __LINE__, (*the_window)->title_, General_Strnlen((*the_window)->title_, WINDOW_MAX_WINTITLE_SIZE) + 1, (*the_window)->title_));
-		f_free((*the_window)->title_, MEM_STANDARD);
+		free((*the_window)->title_);
 		(*the_window)->title_ = NULL;
 	}
 	
 	LOG_ALLOC(("%s %d:	__FREE__	*the_window	%p	size	%i", __func__ , __LINE__, *the_window, sizeof(Window)));
-	f_free(*the_window, MEM_STANDARD);
+	free(*the_window);
 	*the_window = NULL;
 	
 	return true;
@@ -915,7 +915,7 @@ NewWinTemplate* Window_GetNewWinTemplate(char* the_win_title)
 {
 	NewWinTemplate*		the_win_template;
 	
-	if ( (the_win_template = (NewWinTemplate*)f_calloc(1, sizeof(NewWinTemplate), MEM_STANDARD) ) == NULL)
+	if ( (the_win_template = (NewWinTemplate*)calloc(1, sizeof(NewWinTemplate)) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new window template", __func__ , __LINE__));
 		return NULL;
@@ -971,7 +971,7 @@ void Window_ClearClipRects(Window* the_window)
 		
 		DEBUG_OUT(("%s %d: clearing cliprect %p (%i, %i -- %i, %i)", __func__, __LINE__, the_clip, the_clip->x_, the_clip->y_, the_clip->width_, the_clip->height_));
 		
-		f_free(the_clip, MEM_STANDARD);
+		free(the_clip);
 		
 		the_clip = next_clip;
 	}
@@ -1000,7 +1000,7 @@ bool Window_AddClipRect(Window* the_window, Rectangle* new_rect)
 		return false;
 	}
 	
-	if ( (the_clip = (ClipRect*)f_calloc(1, sizeof(ClipRect), MEM_STANDARD) ) == NULL)
+	if ( (the_clip = (ClipRect*)calloc(1, sizeof(ClipRect)) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new ClipRect", __func__ , __LINE__));
 		return false;

@@ -538,7 +538,6 @@ char General_ToLower(char the_char)
 
 //! Allocates memory for a new string and copies up to max_len - 1 characters from the NUL-terminated string src to the new string, NUL-terminating the result
 //! This is meant to be a one stop shop for getting a copy of a string
-//! In this implementation, f_calloc with MEM_STANDARD is used. When freeing the returned string, use f_free with MEM_STANDARD.
 //! @param	src: The string to copy
 //! @param	max_len: The maximum number of bytes to use in the destination string, including the terminator. If this is shorter than the length of the source string + 1, the resulting copy string will be capped at max_len - 1.
 //! @return	a copy of the source string to max_len, or NULL on any error condition
@@ -554,7 +553,7 @@ char* General_StrlcpyWithAlloc(const char* src, signed long max_len)
 	
 	alloc_len = General_Strnlen(src, max_len) + 1;
 	
-	if ( (dst = (char*)f_calloc(alloc_len, sizeof(char), MEM_STANDARD) ) == NULL)
+	if ( (dst = (char*)calloc(alloc_len, sizeof(char)) ) == NULL)
 	{
 		return NULL;
 	}

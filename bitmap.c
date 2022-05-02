@@ -265,10 +265,8 @@ Bitmap* Bitmap_New(int16_t width, int16_t height, Font* the_font, bool in_vram)
 	// LOGIC:
 	//   we have 2 kinds of memory: VRAM and standard RAM
 	//   A bitmap object needs a struct which can and should be allocated in normal memory
-	//   It also needs the actual bytes for the bitmap, which must be allocated in VRAM
+	//   If the bitmap actually represents something on the screen, it needs to point to VRAM, not normal memory
 	
-	// NOTE: MEM_STANDARD allocations are failing for some reason. until figure it out, allocate everything in VRAM.
-	//if ((the_bitmap = f_calloc(1, sizeof(Bitmap), MEM_STANDARD)) == NULL)
 	if ((the_bitmap = calloc(1, sizeof(Bitmap))) == NULL)
 	{
 		LOG_ERR(("%s %d: Couldn't allocate space for bitmap struc", __func__, __LINE__));

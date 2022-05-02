@@ -207,7 +207,7 @@ System* Sys_New(void)
 	
 	// LOGIC:
 	
-	if ( (the_system = (System*)f_calloc(1, sizeof(System), MEM_STANDARD) ) == NULL)
+	if ( (the_system = (System*)calloc(1, sizeof(System)) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new system", __func__ , __LINE__));
 		goto error;
@@ -236,7 +236,7 @@ System* Sys_New(void)
 	// screens
 	for (i = 0; i < the_system->num_screens_; i++)
 	{
-		if ( (the_system->screen_[i] = (Screen*)f_calloc(1, sizeof(Screen), MEM_STANDARD) ) == NULL)
+		if ( (the_system->screen_[i] = (Screen*)calloc(1, sizeof(Screen)) ) == NULL)
 		{
 			LOG_ERR(("%s %d: could not allocate memory to create screen object", __func__ , __LINE__));
 			goto error;
@@ -286,7 +286,7 @@ bool Sys_Destroy(System** the_system)
 		if ((*the_system)->screen_[i])
 		{
 			LOG_ALLOC(("%s %d:	__FREE__	(*the_system)->screen_[i]	%p	size	%i", __func__ , __LINE__, (*the_system)->screen_[i], sizeof(Screen)));
-			f_free((*the_system)->screen_[i], MEM_STANDARD);
+			free((*the_system)->screen_[i]);
 			(*the_system)->screen_[i] = NULL;
 		}
 	}
@@ -313,7 +313,7 @@ bool Sys_Destroy(System** the_system)
 
 
 	LOG_ALLOC(("%s %d:	__FREE__	*the_system	%p	size	%i", __func__ , __LINE__, *the_system, sizeof(System)));
-	f_free(*the_system, MEM_STANDARD);
+	free(*the_system);
 	*the_system = NULL;
 	
 	return true;
@@ -374,15 +374,6 @@ bool Sys_InitSystem(void)
 	int16_t		i;
 	
 	
-	DEBUG_OUT(("%s %d: Initializing Memory Manager...", __func__, __LINE__));
-	
-	// set up memory pools for standard RAM and video RAM
-	if (Memory_Initialize() == false)
-	{
-		LOG_ERR(("%s %d: Failed to initialize memory manager", __func__, __LINE__));
-		goto error;
-	}
-
 	DEBUG_OUT(("%s %d: Initializing System...", __func__, __LINE__));
 	
 	// initialize the system object
@@ -395,7 +386,7 @@ bool Sys_InitSystem(void)
 	DEBUG_OUT(("%s %d: System object created ok. Initiating list of windows...", __func__, __LINE__));
 	
 	// initiate the list of windows
-	if ( (global_system->list_windows_ = (List**)f_calloc(1, sizeof(List*), MEM_STANDARD) ) == NULL)
+	if ( (global_system->list_windows_ = (List**)calloc(1, sizeof(List*)) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new list of windows", __func__ , __LINE__));
 		goto error;

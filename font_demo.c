@@ -1001,7 +1001,7 @@ void Demo_Font_DrawStringInBox1(Bitmap* the_bitmap)
 	Bitmap_DrawBox(Sys_GetScreenBitmap(global_system, back_layer), x - margin, y - margin, width + margin, height + margin, SYS_COLOR_BLACK, PARAM_DO_NOT_FILL);
 	Font_DrawStringInBox(the_bitmap, width, height, the_message, num_chars, &the_wrap_buffer, NULL);
 
-	f_free(the_message, MEM_STANDARD);
+	free(the_message);
 
 	WaitForUser();
 }

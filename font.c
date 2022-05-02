@@ -29,7 +29,6 @@
 #include <mb/general.h>
 #include <mb/bitmap.h>
 #include <mb/text.h>
-#include <mb/memory_manager.h>
 
 
 /*****************************************************************************/
@@ -164,7 +163,7 @@ Font* Font_New(unsigned char* the_data)
 	//   process is allocate space for font rec, copy over its 20 bytes
 	//   use the data now in the font rec to allocate space for the other 3 tables and copy them over. 
 	
-	if ( (the_font = (Font*)f_calloc(1, sizeof(Font), MEM_STANDARD) ) == NULL)
+	if ( (the_font = (Font*)calloc(1, sizeof(Font)) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new font record", __func__ , __LINE__));
 		goto error;
@@ -190,7 +189,7 @@ Font* Font_New(unsigned char* the_data)
 
 	image_table_count = the_font->rowWords * the_font->fRectHeight;
 	
-	if ( (the_font->image_table_ = (uint16_t*)f_calloc(image_table_count, sizeof(uint16_t), MEM_STANDARD) ) == NULL)
+	if ( (the_font->image_table_ = (uint16_t*)calloc(image_table_count, sizeof(uint16_t)) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new font image data", __func__ , __LINE__));
 		goto error;
@@ -205,7 +204,7 @@ Font* Font_New(unsigned char* the_data)
 
 	loc_table_count = the_font->lastChar - the_font->firstChar + 3;
 
-	if ( (the_font->loc_table_ = (uint16_t*)f_calloc(loc_table_count, sizeof(uint16_t), MEM_STANDARD) ) == NULL)
+	if ( (the_font->loc_table_ = (uint16_t*)calloc(loc_table_count, sizeof(uint16_t)) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new font location data", __func__ , __LINE__));
 		goto error;
@@ -222,7 +221,7 @@ Font* Font_New(unsigned char* the_data)
 
 	width_table_count = the_font->lastChar - the_font->firstChar + 3;
 	
-	if ( (the_font->width_table_ = (uint16_t*)f_calloc(width_table_count, sizeof(uint16_t), MEM_STANDARD) ) == NULL)
+	if ( (the_font->width_table_ = (uint16_t*)calloc(width_table_count, sizeof(uint16_t)) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new font width data", __func__ , __LINE__));
 		goto error;
@@ -246,7 +245,7 @@ Font* Font_New(unsigned char* the_data)
 		
 		height_table_count = the_font->lastChar - the_font->firstChar + 3;
 		
-		if ( (the_font->height_table_ = (uint16_t*)f_calloc(height_table_count, sizeof(uint16_t), MEM_STANDARD) ) == NULL)
+		if ( (the_font->height_table_ = (uint16_t*)calloc(height_table_count, sizeof(uint16_t)) ) == NULL)
 		{
 			LOG_ERR(("%s %d: could not allocate memory to create new font height data", __func__ , __LINE__));
 			goto error;
@@ -292,29 +291,29 @@ bool Font_Destroy(Font** the_font)
 	if ((*the_font)->image_table_)
 	{
 		LOG_ALLOC(("%s %d:	__FREE__	(*the_font)->image_table_	%p	size	?", __func__ , __LINE__, (*the_font)->image_table_));
-		f_free((*the_font)->image_table_, MEM_STANDARD);
+		free((*the_font)->image_table_);
 	}
 	
 	if ((*the_font)->loc_table_)
 	{
 		LOG_ALLOC(("%s %d:	__FREE__	(*the_font)->loc_table_	%p	size	?", __func__ , __LINE__, (*the_font)->loc_table_));
-		f_free((*the_font)->loc_table_, MEM_STANDARD);
+		free((*the_font)->loc_table_);
 	}
 	
 	if ((*the_font)->width_table_)
 	{
 		LOG_ALLOC(("%s %d:	__FREE__	(*the_font)->width_table_	%p	size	?", __func__ , __LINE__, (*the_font)->width_table_));
-		f_free((*the_font)->width_table_, MEM_STANDARD);
+		free((*the_font)->width_table_);
 	}
 	
 	if ((*the_font)->height_table_)
 	{
 		LOG_ALLOC(("%s %d:	__FREE__	(*the_font)->height_table_	%p	size	?", __func__ , __LINE__, (*the_font)->height_table_));
-		f_free((*the_font)->height_table_, MEM_STANDARD);
+		free((*the_font)->height_table_);
 	}
 
 	LOG_ALLOC(("%s %d:	__FREE__	*the_font	%p	size	%i", __func__ , __LINE__, *the_font, sizeof(Font)));
-	f_free(*the_font, MEM_STANDARD);
+	free(*the_font);
 	*the_font = NULL;
 	
 	return true;

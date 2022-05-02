@@ -6,7 +6,7 @@ FOENIX = $(DEVA2560)/calypsi-try3/Calypsi-m68k-hello-world/module/Calypsi-m68k-F
 TARGET = $(DEVA2560)/_target_foenix
 
 # Common source files
-LIB_SRCS = lib_sys.c memory_manager.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c event.c
+LIB_SRCS = lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c event.c
 TEST_SRCS = bitmap_test.c font_test.c lib_sys_test.c text_test.c window_test.c general_test.c 
 DEMO_SRCS = bitmap_demo.c font_demo.c lib_sys_demo.c text_demo.c window_demo.c
 TUTORIAL_SRCS = blackjack.c
@@ -34,7 +34,7 @@ build_calypsi/obj/%-debug.o: %.c
 	cc68k --core=68000 $(MODEL) --debug -I$(TARGET)/include/ --list-file=$(@:%.o=%.lst) -o $@ $<
 
 # make SYS as static lib
-#vc +/opt/vbcc/config/a2560-4lib-micah -o a2560_sys.lib lib_sys.c memory_manager.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c -lm
+#vc +/opt/vbcc/config/a2560-4lib-micah -o a2560_sys.lib lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c -lm
 
 all: headers lib tests demos
 
@@ -49,7 +49,6 @@ headers:
 	cp general.h $(TARGET)/include/mb/
 	cp lib_sys.h $(TARGET)/include/mb/
 	cp list.h $(TARGET)/include/mb/
-	cp memory_manager.h $(TARGET)/include/mb/
 	cp text.h $(TARGET)/include/mb/
 	cp theme.h $(TARGET)/include/mb/
 	cp window.h $(TARGET)/include/mb/

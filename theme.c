@@ -2239,7 +2239,7 @@ Theme* Theme_New(void)
 	//   For now, this will only create a default theme
 	//   In future, probably want to pass a file path char* to this, and have it try to load from there, with fallback to sys default.
 	
-	if ( (the_theme = (Theme*)f_calloc(1, sizeof(Theme), MEM_STANDARD) ) == NULL)
+	if ( (the_theme = (Theme*)calloc(1, sizeof(Theme)) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new Theme", __func__ , __LINE__));
 		goto error;
@@ -2295,7 +2295,7 @@ bool Theme_Destroy(Theme** the_theme)
 	}
 	
 	LOG_ALLOC(("%s %d:	__FREE__	*the_theme	%p	size	%i", __func__ , __LINE__, *the_theme, sizeof(Theme)));
-	f_free(*the_theme, MEM_STANDARD);
+	free(*the_theme);
 	*the_theme = NULL;
 	
 	return true;
@@ -2493,7 +2493,7 @@ Theme* Theme_CreateDefaultTheme(void)
 	return the_theme;
 	
 error:
-	if (the_theme)		f_free(the_theme, MEM_STANDARD);
+	if (the_theme)		free(the_theme);
 	return NULL;
 }
 
@@ -2902,7 +2902,7 @@ Theme* Theme_CreateGreenTheme(void)
 	return the_theme;
 	
 error:
-	if (the_theme)		f_free(the_theme, MEM_STANDARD);
+	if (the_theme)		free(the_theme);
 	return NULL;
 }
 
