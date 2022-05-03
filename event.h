@@ -49,12 +49,12 @@
 
 // A2560 includes
 #include <mcp/syscalls.h>
-#include <mb/a2560_platform.h>
-#include <mb/general.h>
-#include <mb/text.h>
-#include <mb/bitmap.h>
-#include <mb/window.h>
-#include <mb/lib_sys.h>
+#include "a2560_platform.h"
+#include "general.h"
+#include "text.h"
+#include "bitmap.h"
+#include "window.h"
+#include "lib_sys.h"
 
 
 /*****************************************************************************/
@@ -87,6 +87,7 @@ typedef enum event_kind
 	menuCanceled			= 14,
 	controlClicked			= 15,
 	mouseMoved				= 16,
+	windowChanged			= 17,
 } event_kind;
 
 
@@ -107,6 +108,8 @@ typedef enum event_mask
 	menuSelectedMask		= 1 << menuSelected,	// item from the contextual menu selected
 	menuCanceledMask		= 1 << menuCanceled,	// contextual menu closed without an item being selected
 	controlClickedMask		= 1 << controlClicked,	// a clickable (2 state) control has been clicked
+	mouseMovedMask			= 1 << mouseMoved,		// mouse has been moved
+	windowChangedMask		= 1 << windowChanged,	// a window has changed size and/or position
 	everyEvent				= 0xFFFF				// all of the above
 } event_mask;
 
@@ -178,12 +181,12 @@ enum
 struct EventRecord
 {
 	event_kind			what_;
-	uint32_t			code_;		//! set for keydown, keyup: the key code
+	uint32_t			code_;		//! For keydown, keyup: the key code. For windowChanged, the width in the high word, height in the low word.
 	uint32_t			when_;		//! ticks
 	Window*				window_;	//! not set for a diskEvt
 	Control*			control_;	//! not set for every event type. if not set on mouseDown/Up, pointer was not over a control
-	int16_t				x_;			//! global X coordinate. Only set for mouse events.
-	int16_t				y_;			//! global Y coordinate. Only set for mouse events.
+	int16_t				x_;			//! for mouse events: the global x position of mouse. for windowChanged, the new global x posiiton of the window.
+	int16_t				y_;			//! for mouse events: the global y position of mouse. for windowChanged, the new global y posiiton of the window.
 	event_modifiers		modifiers_;	//! set for keyboard and mouse events
 };
 
@@ -192,7 +195,7 @@ struct EventManager
 	EventRecord*		queue_[EVENT_QUEUE_SIZE];	//! circular buffer for the event queue
 	uint16_t			write_idx_;					//! index to queue_: where the next event record will be slotted
 	uint16_t			read_idx_;					//! index to queue_: where the next event record will be read from
-	mouse_mode			mouse_mode_;				//! tracks whether mouse is in drag mode, etc.
+	MouseTracker*		mouse_tracker_;				//! tracks whether mouse is in drag mode, etc.
 };
 
 
@@ -247,7 +250,7 @@ EventRecord* EventManager_NextEvent(void);
 void EventManager_AddEvent(event_kind the_what, uint32_t the_code, int16_t x, int16_t y, event_modifiers the_modifiers, Window* the_window, Control* the_control);
 
 //! Wait for an event to happen, do system-processing of it, then if appropriate, give the window responsible for the event a chance to do something with it
-void EventManager_WaitForEvent(event_mask the_mask);
+void EventManager_WaitForEvent(void);
 
 
 

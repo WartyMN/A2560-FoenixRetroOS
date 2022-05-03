@@ -43,8 +43,8 @@
 #include <stdbool.h>
 
 // A2560 includes
-#include <mb/a2560_platform.h>
-#include <mb/general.h>
+#include "a2560_platform.h"
+#include "general.h"
 
 
 /*****************************************************************************/

@@ -724,6 +724,63 @@ void Open2Windows(void)
 		// declare the window to be visible
 		Window_SetVisible(the_window[win_num], true);
 	}
+
+	// temporary until event handler is written: tell system to render the screen and all windows
+	Sys_Render(global_system);
+
+	// test out event handling
+	EventRecord	the_record;
+
+// 	mouseDown				= 1,
+// 	mouseUp					= 2,
+
+// 	event_kind			what_;
+// 	uint32_t			code_;		//! For keydown, keyup: the key code. For windowChanged, the width in the high word, height in the low word.
+// 	uint32_t			when_;		//! ticks
+// 	Window*				window_;	//! not set for a diskEvt
+// 	Control*			control_;	//! not set for every event type. if not set on mouseDown/Up, pointer was not over a control
+// 	int16_t				x_;			//! for mouse events: the global x position of mouse. for windowChanged, the new global x posiiton of the window.
+// 	int16_t				y_;			//! for mouse events: the global y position of mouse. for windowChanged, the new global y posiiton of the window.
+// 	event_modifiers		modifiers_;	//! set for keyboard and mouse events
+	
+	the_record.what_ = mouseDown;
+	the_record.code_ = 0L;
+	the_record.when_ = 0L;
+	the_record.window_ = the_window[0];
+	the_record.control_ = NULL;
+	the_record.x_ = 10 + 25; // put click into title bar
+	the_record.y_ = 10 + 5;
+	the_record.modifiers_ = 0L;
+	
+	// click on window 0 to activate it.
+	EventManager_AddEvent(mouseDown, 0L, 10 + 25, 10 + 5, 0L, the_window[0], NULL);
+	EventManager_AddEvent(mouseUp, 0L, 10 + 26, 10 + 4, 0L, the_window[0], NULL);
+	DEBUG_OUT(("%s %d: about to wait for events 1", __func__, __LINE__));
+	EventManager_WaitForEvent();
+	
+	// click and hold on window 0's title bar, move it a little, let go.
+	EventManager_AddEvent(mouseDown, 0L, 10 + 24, 10 + 3, 0L, the_window[0], NULL);
+	EventManager_AddEvent(mouseMoved, 0L, 10 + 50, 10 + 0, 0L, the_window[0], NULL);
+	EventManager_AddEvent(mouseMoved, 0L, 10 + 70, 10 + 10, 0L, the_window[0], NULL);
+	EventManager_AddEvent(mouseUp, 0L, 10 + 71, 10 + 11, 0L, the_window[0], NULL);
+	// drag left side of window to resize leftwards
+	EventManager_AddEvent(mouseDown, 0L, 10 + 71 + 4, 10 + 24, 0L, the_window[0], NULL);
+	EventManager_AddEvent(mouseMoved, 0L, 10 - 5, 10 + 34, 0L, the_window[0], NULL);
+	EventManager_AddEvent(mouseUp, 0L, 10 - 7, 10 + 34, 0L, the_window[0], NULL);
+	DEBUG_OUT(("%s %d: about to wait for events 2", __func__, __LINE__));
+	EventManager_WaitForEvent();
+	EventManager_AddEvent(mouseDown, 0L, 10 + 72, 10 + 12, 0L, the_window[0], NULL);
+	EventManager_AddEvent(mouseUp, 0L, 10 + 73, 10 + 9, 0L, the_window[0], NULL);
+	DEBUG_OUT(("%s %d: about to wait for events 3", __func__, __LINE__));
+	EventManager_WaitForEvent();
+	DEBUG_OUT(("%s %d: about to wait for events 4", __func__, __LINE__));
+	EventManager_WaitForEvent();
+	
+	while(true)
+	{
+		DEBUG_OUT(("%s %d: about to wait for events 5", __func__, __LINE__));
+		EventManager_WaitForEvent();
+	}
 	
 }
 
@@ -830,6 +887,33 @@ void SharedEventHandler(EventRecord* the_event)
 				
 				break;
 				
+			case windowChanged:
+				DEBUG_OUT(("%s %d: windowChanged event: %x", __func__, __LINE__, the_event->code_));
+				
+				// window size and/or position has changed
+				// code will contain new proposed size. width in upper word, height in lower word
+				// x/y will contain proposed new location
+				// programmer can determine if they want to accept the change or not. 
+				// if they do, they call Window_ChangeWindow()
+
+				{
+					int16_t	new_x;
+					int16_t	new_y;
+					int16_t	new_width;
+					int16_t	new_height;
+					int32_t	the_code;
+					
+					new_x = the_event->x_;
+					new_y = the_event->y_;
+					new_width = (the_event->code_ >> 16) & 0xffff;
+					new_height = the_event->code_ & 0xffff;
+					
+					Window_ChangeWindow(the_window, new_x, new_y, new_width, new_height);
+					Window_Render(the_window);
+				}
+				
+				break;
+				
 			default:
 				
 				break;
@@ -857,14 +941,6 @@ void RunDemo(void)
 	
 	Open2Windows();
 	
-	// temporary until event handler is written: tell system to render the screen and all windows
-	Sys_Render(global_system);
-
-	// test out event handling
-	while(true)
-	{
-		EventManager_WaitForEvent((mouseDown|mouseUp|keyDown|keyUp|activateEvt|inactivateEvt|controlClicked));
-	}
 
 // 	// delay a bit before switching
 // 	General_DelaySeconds(3);

@@ -37,7 +37,7 @@
 
 // A2560 includes
 #include <mcp/syscalls.h>
-#include <mb/a2560_platform.h>
+#include "a2560_platform.h"
 
 
 /*****************************************************************************/
@@ -89,9 +89,12 @@
 
 // control if target is for real machine or f68
 // matters: f68 has a special log feature at 0xffffffff-4 that will not work on real machine
-#define _f68_	1	// undefine "_f68_" when building for real hardware
+#define _f68_	1	// undefine "_f68_" when building for real hardware. Having _f68_ defined means debug printing will go to FFFB. if undefined, debug will just printf() to screen. 
 
-#define __TARGET_C256_FMX__X	1	// undefine "__TARGET_C256_FMX__" when building for m68K
+// ONE of the following must be defined:
+#define __TARGET_C256_FMX__X	1	// define "__TARGET_C256_FMX__" when building for C256
+#define __TARGET_A2560U__X		1	// define "__TARGET_A2560U__" when building for A2560U
+#define __TARGET_A2560K__		1	// define "__TARGET_A2560K__" when building for A2560K
 
 #if defined __TARGET_C256_FMX__
 	#define sys_time_jiffies()	1	// no MCP in C256 right now

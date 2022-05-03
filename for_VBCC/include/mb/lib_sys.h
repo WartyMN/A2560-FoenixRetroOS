@@ -44,11 +44,11 @@
 
 // A2560 includes
 #include <mcp/syscalls.h>
-#include <mb/a2560_platform.h>
-#include <mb/general.h>
-#include <mb/text.h>
-#include <mb/bitmap.h>
-#include <mb/window.h>
+#include "a2560_platform.h"
+#include "general.h"
+#include "text.h"
+#include "bitmap.h"
+#include "window.h"
 
 
 /*****************************************************************************/

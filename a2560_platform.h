@@ -366,7 +366,7 @@ typedef struct Bitmap Bitmap;					// defined in bitmap.h
 typedef struct List List;						// defined in list.h
 typedef struct EventRecord EventRecord;			// defined in event.h
 typedef struct EventManager EventManager;		// defined in event.h
-
+typedef struct MouseTracker MouseTracker;		// defined in mouse.h
 
 
 typedef struct Coordinate

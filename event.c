@@ -25,12 +25,12 @@
 
 // A2560 includes
 #include <mcp/syscalls.h>
-#include <mb/a2560_platform.h>
-#include <mb/general.h>
-#include <mb/bitmap.h>
-#include <mb/text.h>
-#include <mb/font.h>
-#include <mb/window.h>
+#include "a2560_platform.h"
+#include "general.h"
+#include "bitmap.h"
+#include "text.h"
+#include "font.h"
+#include "window.h"
 
 
 /*****************************************************************************/
@@ -228,8 +228,16 @@ EventManager* EventManager_New(void)
 
 	the_event_manager->write_idx_ = 0;
 	the_event_manager->read_idx_ = 0;
-	the_event_manager->mouse_mode_ = mouseFree;
-	
+	the_event_manager->mouse_tracker_->mode_ = mouseFree;
+
+	// get a mouse tracker
+	if ( (the_event_manager->mouse_tracker_ = Mouse_New()) == NULL)
+	{
+		LOG_ERR(("%s %d: Out of memory when creating mouse tracker", __func__ , __LINE__));
+		goto error;
+	}
+	//LOG_ALLOC(("%s %d:	__ALLOC__	the_event_manager->mouse_tracker_	%p	", __func__ , __LINE__, the_event_manager->mouse_tracker_));
+
 	//DEBUG_OUT(("%s %d: EventManager (%p) created", __func__ , __LINE__, the_event_manager));
 	
 	int	i;
@@ -300,23 +308,26 @@ EventRecord* EventManager_NextEvent(void)
 	
 	if (the_event_manager->read_idx_ == the_event_manager->write_idx_)
 	{
+		DEBUG_OUT(("%s %d: read_idx_=%i SAME AS write_idx_=%i", __func__, __LINE__, the_event_manager->read_idx_, the_event_manager->write_idx_));
 		return NULL;
 	}
 	
 	the_event = the_event_manager->queue_[the_event_manager->read_idx_];
 
-	//DEBUG_OUT(("%s %d: the_event_type=%i", __func__, __LINE__, the_event->what_));
+	DEBUG_OUT(("%s %d: Next Event: type=%i", __func__, __LINE__, the_event->what_));
 	//EventManager_Print(the_event_manager);
 	Event_Print(the_event);
 	
-// 	if (the_event->what_ == nullEvent)
-// 	{
-// 		return NULL;
-// 	}
-// 	
 	the_event_manager->read_idx_++;
 	the_event_manager->read_idx_ %= EVENT_QUEUE_SIZE;
+	
+	if (the_event->what_ == nullEvent)
+	{
+		DEBUG_OUT(("%s %d: event was null. read_idx_=%i, write_idx_=%i", __func__, __LINE__, the_event_manager->read_idx_, the_event_manager->write_idx_));
+		return NULL;
+	}
 
+	DEBUG_OUT(("%s %d: read_idx_=%i, read_idx_ mod EVENT_QUEUE_SIZE=%i", __func__, __LINE__, the_event_manager->read_idx_, the_event_manager->read_idx_ % EVENT_QUEUE_SIZE));
 	DEBUG_OUT(("%s %d: exiting; event what=%i (%p), read_idx_=%i, write_idx_=%i", __func__, __LINE__, the_event->what_, the_event, the_event_manager->read_idx_, the_event_manager->write_idx_));
 	
 	return the_event;
@@ -375,37 +386,6 @@ void EventManager_AddEvent(event_kind the_what, uint32_t the_code, int16_t x, in
 		if (the_event->window_ == NULL)
 		{
 			the_event->window_ = Sys_GetWindowAtXY(global_system, x, y);
-// 		
-// 			if (the_event->window_ != NULL)
-// 			{
-// 				Window*		the_active_window;
-		
-				// tried adding the below here, but it doesn't work. have instead in some system-level event handler, before it passed control to app
-			
-	// 			//* Check if mouse is down in the active window, or in another window
-	// 			//   * If not in active window, add 2 WindowActive events to the queue.
-	// 			//     * Tell old front window it is now not active
-	// 			//     * Make window the front most window
-	// 			//    Cancel this add queue for hte mouse down, and add another AFTER the 2 activate/inactivate events.
-	// 			
-	// 			the_active_window = Sys_GetActiveWindow(global_system);
-	// 			
-	// 			if (the_event->window_ != the_active_window)
-	// 			{
-	// 				the_event->what_ = nullEvent; // cancels out this event, in effect
-	// 				EventManager_AddEvent(inactivateEvt, -1, -1, -1, 0L, the_active_window);
-	// 				EventManager_AddEvent(activateEvt, -1, -1, -1, 0L, the_event->window_);
-	// 				EventManager_AddEvent(the_what, -1, x, y, 0L, NULL);
-	// 				return;
-	// 			}
-			
-				// skipp this in interrupt call, will do in WaitForEvent() instead.
-	// 			the_event->control_ = Window_GetControlAtXY(the_event->window_, x, y);
-// 			}
-// 			else
-// 			{
-// 				the_event->control_ = NULL;
-// 			}
 		}
 	}
 	else if (the_event->window_ == NULL)
@@ -416,23 +396,22 @@ void EventManager_AddEvent(event_kind the_what, uint32_t the_code, int16_t x, in
 
 
 //! Wait for an event to happen, do system-processing of it, then if appropriate, give the window responsible for the event a chance to do something with it
-void EventManager_WaitForEvent(event_mask the_mask)
+void EventManager_WaitForEvent(void)
 {
 	EventManager*	the_event_manager;
 	EventRecord*	the_event;
-	uint16_t		meets_mask = 0;
 	
 	the_event_manager = Sys_GetEventManager(global_system);
 	
-	DEBUG_OUT(("%s %d: write_idx_=%i, read_idx_=%i, the_mask=%x", __func__, __LINE__, the_event_manager->write_idx_, the_event_manager->read_idx_, the_mask));
+	//DEBUG_OUT(("%s %d: write_idx_=%i, read_idx_=%i, the_mask=%x", __func__, __LINE__, the_event_manager->write_idx_, the_event_manager->read_idx_, the_mask));
 
 	// TESTING: if no events in queue, add one to prime pump
-	if (the_event_manager->write_idx_ == the_event_manager->read_idx_)
-	{
-		EventManager_AddEvent(keyDown, 65, -1, -1, 0L, NULL, NULL);
-		EventManager_AddEvent(keyUp, 65, -1, -1, 0L, NULL, NULL);
-		EventManager_GenerateRandomEvent();
-	}
+// 	if (the_event_manager->write_idx_ == the_event_manager->read_idx_)
+// 	{
+// 		EventManager_AddEvent(keyDown, 65, -1, -1, 0L, NULL, NULL);
+// 		EventManager_AddEvent(keyUp, 65, -1, -1, 0L, NULL, NULL);
+// 		EventManager_GenerateRandomEvent();
+// 	}
 	
 	// now process the queue as if it were happening in real time
 // 	
@@ -440,18 +419,22 @@ void EventManager_WaitForEvent(event_mask the_mask)
 // 	DEBUG_OUT(("%s %d: first event: %i", __func__, __LINE__, the_event->what_));
 // 	
 
-	while ((the_event = EventManager_NextEvent()) != NULL && meets_mask == 0)
+	while ( (the_event = EventManager_NextEvent()) != NULL)
 	{
-		int16_t		local_x;
-		int16_t		local_y;
-		bool		skip_this_event = false;
-		
-		meets_mask = 0;
-		
-		Event_Print(the_event);
-		
+		int16_t			local_x;
+		int16_t			local_y;
+		MouseMode		starting_mode;
 		Window*			the_window;
 		Window*			the_active_window;
+		int16_t			x_delta;
+		int16_t			y_delta;
+		int16_t			prev_mouse_x;
+		int16_t			prev_mouse_y;
+		
+		DEBUG_OUT(("%s %d: Received Event Event: type=%i", __func__, __LINE__, the_event->what_));
+		Event_Print(the_event);
+		
+		starting_mode = Mouse_GetMode(the_event_manager->mouse_tracker_);
 		
 		// LOGIC:
 		//   event could be for:
@@ -469,7 +452,7 @@ void EventManager_WaitForEvent(event_mask the_mask)
 			case mouseMoved:
 				
 				DEBUG_OUT(("%s %d: mouse move event (%i, %i)", __func__, __LINE__, the_event->x_, the_event->y_));
-				
+	
 				// LOGIC: 
 				//   what happens here depends on what the current event manager mouse mode is
 				//   if mouseFree: no real action.
@@ -478,21 +461,125 @@ void EventManager_WaitForEvent(event_mask the_mask)
 				//   if mouseDragTitle: draw window bounding box based on mouse x/y
 				//   if mouseLassoInProgress: draw lasso box
 				//   if other, then no action
+
+				the_window = the_event->window_;
 				
+				// update the mouse so it knows it's X/Y, but first capture what it was last time, so we can see what movement was made since last move (not since last click)
+				prev_mouse_x = Mouse_GetX(the_event_manager->mouse_tracker_);
+				prev_mouse_y = Mouse_GetY(the_event_manager->mouse_tracker_);
+				Mouse_SetXY(the_event_manager->mouse_tracker_, the_event->x_, the_event->y_);
+	
+				// get the delta between current and last clicked position
+				x_delta = Mouse_GetXDelta(the_event_manager->mouse_tracker_);
+				y_delta = Mouse_GetYDelta(the_event_manager->mouse_tracker_);
+			
+				DEBUG_OUT(("%s %d: mouse clicked (%i, %i)", __func__, __LINE__, Mouse_GetClickedX(the_event_manager->mouse_tracker_), Mouse_GetClickedY(the_event_manager->mouse_tracker_)));
+				DEBUG_OUT(("%s %d: mouse now (%i, %i)", __func__, __LINE__, Mouse_GetX(the_event_manager->mouse_tracker_), Mouse_GetY(the_event_manager->mouse_tracker_)));
+				DEBUG_OUT(("%s %d: mouse delta (%i, %i)", __func__, __LINE__, Mouse_GetXDelta(the_event_manager->mouse_tracker_), Mouse_GetYDelta(the_event_manager->mouse_tracker_)));
+			
+				if (starting_mode == mouseDragTitle)
+				{
+					// for a drag rect, we want to draw an outline same shape as the Window, in the foreground bitmap
+					// as mouse moves, we want to undraw the previous rect, and draw the new one.
+					// we need to know what the previous mouse X/Y was for that to work. (unless we just clear the whole foreground bitmap, but that seems dumb expensive)
+					// we will store every mouse-move X/Y as proposed X/Y in the window, and use that to draw/refresh rect as needed
+					// will also need proposed width/height, for size drags.
+					
+					if (the_event->window_ != NULL)
+					{
+						if (x_delta != 0 && y_delta != 0)
+						{
+							int16_t	new_x;
+							int16_t	new_y;
+							int16_t	new_width;
+							int16_t	new_height;
+							bool	change_made = false;
+							
+							DEBUG_OUT(("%s %d: window x/y (%i, %i)", __func__, __LINE__,  Window_GetX(the_window), Window_GetY(the_window)));
+							
+							new_x = Window_GetX(the_window) + x_delta;
+							new_y = Window_GetY(the_window) + y_delta;
+							new_width = Window_GetWidth(the_window);
+							new_height = Window_GetHeight(the_window);
+
+							//if (change_made)
+							{
+								Bitmap*		the_bitmap = Sys_GetScreenBitmap(global_system, back_layer);
+						
+								// undraw the old box, draw the new one. temporary problem: A2560 emulators are not currently doing composition, so we can't draw to foreground layer. 
+								//Bitmap_DrawBox(the_bitmap, prev_x, prev_y, prev_width, prev_height, 0, PARAM_DO_NOT_FILL)
+								Bitmap_DrawBox(the_bitmap, new_x, new_y, new_width, new_height, SYS_COLOR_RED1, PARAM_DO_NOT_FILL);						
+							}
+						}
+					}					
+				}
+				else if (starting_mode >= mouseResizeUp) // this gets all the resize items
+				{
+					int16_t	new_x;
+					int16_t	new_y;
+					int16_t	new_width;
+					int16_t	new_height;
+					bool	change_made = false;
+					
+					new_x = Window_GetX(the_window);
+					new_y = Window_GetY(the_window);
+					new_width = Window_GetWidth(the_window);
+					new_height = Window_GetHeight(the_window);
+
+					if (starting_mode == mouseResizeLeft || starting_mode == mouseResizeRight)
+					{
+						if (x_delta != 0)
+						{
+							new_width += x_delta;
+							
+							if (starting_mode == mouseResizeLeft)
+							{
+								new_x += x_delta;
+							}
+
+							change_made = true;						
+						}
+					}
+					else if (starting_mode == mouseResizeUp || starting_mode == mouseResizeDown)
+					{
+						if (y_delta != 0)
+						{
+							new_height += y_delta;
+							
+							if (starting_mode == mouseResizeUp)
+							{
+								new_y += y_delta;
+							}
+
+							change_made = true;
+						}
+					}
+					else if (starting_mode == mouseResizeDownRight)
+					{
+						if (y_delta != 0)
+						{
+							new_width += x_delta;
+							new_height += y_delta;
+							change_made = true;
+						}
+					}
+
+					if (change_made)
+					{
+						Bitmap*		the_bitmap = Sys_GetScreenBitmap(global_system, back_layer);
+						
+						// undraw the old box, draw the new one. temporary problem: A2560 emulators are not currently doing composition, so we can't draw to foreground layer. 
+						//Bitmap_DrawBox(the_bitmap, prev_x, prev_y, prev_width, prev_height, 0, PARAM_DO_NOT_FILL)
+						Bitmap_DrawBox(the_bitmap, new_x, new_y, new_width, new_height, SYS_COLOR_RED1, PARAM_DO_NOT_FILL);						
+					}
+				}
+				else
+				{
+					// give window an event
+					(*the_window->event_handler_)(the_event);				
+				}
+								
 				break;
-// 	mouseFree				= 0,
-// 	mouseSelect				= 1,	// user has clicked on icon(s), but not moved mouse enough to start drag
-// 	mouseDoubleclick		= 2,	
-// 	mouseDrag				= 3,	// user clicked on icon(s) and moved mouse enough to start drag mode
-// 	mouseLasso				= 4,	// nothing under cursor, button down, ready to start drawing a lasso
-// 	mouseLassoInProgress	= 5,	// user has moved mouse from origin point with mouse down, lasso is actively being drawn
-// 	mouseResizeUp			= 6,
-// 	mouseResizeRight		= 7,
-// 	mouseResizeDown			= 8,
-// 	mouseResizeLeft			= 9,
-// 	mouseResizeDownRight	= 10,
-// 	mouseDragTitle			= 11,
-// 	mouseDownOnControl		= 12,	// mouse was clicked within bounds of a control. Mouse button is not released.
 				
 			case mouseDown:
 				
@@ -513,7 +600,14 @@ void EventManager_WaitForEvent(event_mask the_mask)
 					Sys_Destroy(&global_system);
 				}
 				DEBUG_OUT(("%s %d: active window = '%s', clicked window = '%s'", __func__, __LINE__, the_active_window->title_, the_window->title_));
+
+				// get the delta between current and last clicked position
+				x_delta = Mouse_GetXDelta(the_event_manager->mouse_tracker_);
+				y_delta = Mouse_GetYDelta(the_event_manager->mouse_tracker_);
 				
+				// update the mouse tracker so that if we end up dragging, we'll know where the original click was. (or if a future double click, what time the click was, etc.)
+				Mouse_AcceptUpdate(the_event_manager->mouse_tracker_, the_event->x_, the_event->y_, true);
+
 				// get local coords so we can check for drag and lasso
 				local_x = the_event->x_;
 				local_y = the_event->y_;
@@ -533,7 +627,6 @@ void EventManager_WaitForEvent(event_mask the_mask)
 
 					//Sys_Render(global_system);
 					//EventManager_AddEvent(mouseDown, -1, the_event->x_, the_event->y_, 0L, the_window, NULL); // add the mouse down event back in, AFTER the 2 window events.
-					//skip_this_event = true;
 				}
 				else
 				{
@@ -558,7 +651,7 @@ void EventManager_WaitForEvent(event_mask the_mask)
 						// give window an event
 						(*the_window->event_handler_)(the_event);
 						
-						the_event_manager->mouse_mode_ = mouseDownOnControl;
+						Mouse_SetMode(the_event_manager->mouse_tracker_, mouseDownOnControl);
 					}
 				}
 				
@@ -571,13 +664,13 @@ void EventManager_WaitForEvent(event_mask the_mask)
 				//   if this is active window, if not draggable region, it could be a lassoable region.
 				
 				// check for click in a draggable region
-				mouse_mode	possible_drag_mode;
+				MouseMode	possible_drag_mode;
 				
 				possible_drag_mode = Window_CheckForDragZone(the_event->window_, local_x, local_y);
 				
 				if (possible_drag_mode != mouseFree)
 				{
-					the_event_manager->mouse_mode_ = possible_drag_mode;
+					Mouse_SetMode(the_event_manager->mouse_tracker_, possible_drag_mode);
 				}
 				
 				break;
@@ -603,33 +696,136 @@ void EventManager_WaitForEvent(event_mask the_mask)
 				
 				the_event->window_ = the_window;
 				
-				// check for a control that was pressed, and is now released = it got clicked
-				local_x = the_event->x_;
-				local_y = the_event->y_;
-				Window_GlobalToLocal(the_event->window_, &local_x, &local_y);
+				// no matter what, reset the mouse history position flags
+				Mouse_AcceptUpdate(the_event_manager->mouse_tracker_, the_event->x_, the_event->y_, false);
+
+				// get the delta between current and last clicked position
+				x_delta = Mouse_GetXDelta(the_event_manager->mouse_tracker_);
+				y_delta = Mouse_GetYDelta(the_event_manager->mouse_tracker_);
+				DEBUG_OUT(("%s %d: mouse delta at mouse up was %i, %i!", __func__, __LINE__, x_delta, y_delta));
 				
-				the_event->control_ = Window_GetControlAtXY(the_event->window_, local_x, local_y);
+				// LOGIC:
+				//   Based on what the mode had been before mouse button up, we take different actions
+				//   If mouseDragTitle > tell window to move to new coordinates
+				//   if mouseResizeXXX > tell window to accept new size
+				//   if mouseDownOnControl > create a control clicked event and send to user Window
+				//   (fill in the rest)
 				
-				if (the_event->control_)
-				{
-					if (Control_GetPressed(the_event->control_))
+				// If this is mouseDragTitle mode, tell window to move to new coordinates
+				if (starting_mode == mouseDragTitle)
+				{					
+					DEBUG_OUT(("%s %d: mouse up from mouseDragTitle: move window '%s'!", __func__, __LINE__, the_window->title_));
+					
+					if (x_delta != 0 && y_delta != 0)
 					{
-						DEBUG_OUT(("%s %d: ** control '%s' (id=%i) was down, now up!", __func__, __LINE__, the_event->control_->caption_, the_event->control_->id_));
-						//Control_SetPressed(the_event->control_, false);
-						EventManager_AddEvent(controlClicked, -1, the_event->x_, the_event->y_, 0L, the_event->window_, the_event->control_);
-						skip_this_event = true;					
+						int16_t	new_x;
+						int16_t	new_y;
+						int16_t	new_width;
+						int16_t	new_height;
+						int32_t	the_code;
+						
+						new_x = Window_GetX(the_window) + x_delta;
+						new_y = Window_GetY(the_window) + y_delta;
+						new_width = Window_GetWidth(the_window);
+						new_height = Window_GetHeight(the_window);
+						the_code = (new_width << 16) + new_height;
+						
+						DEBUG_OUT(("%s %d: adding movewindow evt with %i, %i", __func__, __LINE__, new_x, new_y));
+						
+						EventManager_AddEvent(windowChanged, the_code, new_x, new_y, 0L, the_window, NULL);
 					}
 				}
-				else
+				else if (starting_mode >= mouseResizeUp) // this gets all the resize items
 				{
-					// give window an event
-					(*the_window->event_handler_)(the_event);				
+					int16_t	new_x;
+					int16_t	new_y;
+					int16_t	new_width;
+					int16_t	new_height;
+					int32_t	the_code;
+					bool	change_made = false;
+					
+					new_x = Window_GetX(the_window);
+					new_y = Window_GetY(the_window);
+					new_width = Window_GetWidth(the_window);
+					new_height = Window_GetHeight(the_window);
+
+					DEBUG_OUT(("%s %d: mouse up from mouseResizeXXX: resize window '%s'!", __func__, __LINE__, the_window->title_));
+					
+					if (starting_mode == mouseResizeLeft || starting_mode == mouseResizeRight)
+					{
+						if (x_delta != 0)
+						{
+							new_width += x_delta;
+							
+							if (starting_mode == mouseResizeLeft)
+							{
+								new_x += x_delta;
+							}
+
+							change_made = true;						
+						}
+					}
+					else if (starting_mode == mouseResizeUp || starting_mode == mouseResizeDown)
+					{
+						if (y_delta != 0)
+						{
+							new_height += y_delta;
+							
+							if (starting_mode == mouseResizeUp)
+							{
+								new_y += y_delta;
+							}
+
+							change_made = true;
+						}
+					}
+					else if (starting_mode == mouseResizeDownRight)
+					{
+						if (y_delta != 0)
+						{
+							new_width += x_delta;
+							new_height += y_delta;
+							change_made = true;
+						}
+					}
+
+					if (change_made)
+					{
+						the_code = (new_width << 16) + new_height;
+						EventManager_AddEvent(windowChanged, the_code, new_x, new_y, 0L, the_window, NULL);
+					}
+				}
+				else if (starting_mode == mouseDownOnControl)
+				{
+					// check for a control that was pressed, and is now released = it got clicked
+					local_x = the_event->x_;
+					local_y = the_event->y_;
+					Window_GlobalToLocal(the_event->window_, &local_x, &local_y);
+				
+					DEBUG_OUT(("%s %d: mouse up from mouseDownOnControl: fire off a control click in window '%s'!", __func__, __LINE__, the_window->title_));
+					
+					the_event->control_ = Window_GetControlAtXY(the_event->window_, local_x, local_y);
+				
+					if (the_event->control_)
+					{
+						if (Control_GetPressed(the_event->control_))
+						{
+							DEBUG_OUT(("%s %d: ** control '%s' (id=%i) was down, now up!", __func__, __LINE__, the_event->control_->caption_, the_event->control_->id_));
+							//Control_SetPressed(the_event->control_, false);
+							EventManager_AddEvent(controlClicked, -1, the_event->x_, the_event->y_, 0L, the_event->window_, the_event->control_);
+						}
+					}
+					else
+					{
+						// give window an event
+						(*the_window->event_handler_)(the_event);				
+					}
+				
+					// either way, there should be no more selected control
+					Window_SetSelectedControl(the_event->window_, NULL);
 				}
 				
-				// either way, there should be no more selected control
-				Window_SetSelectedControl(the_event->window_, NULL);
-				
-				the_event_manager->mouse_mode_ = mouseFree;
+				Mouse_SetMode(the_event_manager->mouse_tracker_, mouseFree);
 				
 				break;
 			
@@ -726,6 +922,14 @@ void EventManager_WaitForEvent(event_mask the_mask)
 				//Window_Inactivate(the_event->window_);
 				
 				break;
+
+			case windowChanged:
+				DEBUG_OUT(("%s %d: windowChanged event", __func__, __LINE__));
+
+				// give window an event
+				(*the_event->window_->event_handler_)(the_event);				
+
+				break;
 			
 			default:
 				DEBUG_OUT(("%s %d: other event: %i", __func__, __LINE__, the_event->what_));
@@ -733,22 +937,9 @@ void EventManager_WaitForEvent(event_mask the_mask)
 				break;
 		}
 		
-		DEBUG_OUT(("%s %d: r idx=%i, w idx=%i, meets_mask will be=%x", __func__, __LINE__, the_event_manager->write_idx_, the_event_manager->read_idx_, the_event->what_ & the_mask));
+		//DEBUG_OUT(("%s %d: r idx=%i, w idx=%i, meets_mask will be=%x", __func__, __LINE__, the_event_manager->write_idx_, the_event_manager->read_idx_, the_event->what_ & the_mask));
 		
-		if (skip_this_event == false)
-		{
-			meets_mask = the_event->what_ & the_mask;
-			
-		}
-		DEBUG_OUT(("%s %d: the_mask=%x; skip=%i, meets_mask=%i", __func__, __LINE__, the_mask, skip_this_event, meets_mask));
-		
-		if (meets_mask > 0)
-		{
-			// TEST: generate another random event for next loop
-			EventManager_GenerateRandomEvent();
-			EventManager_GenerateRandomEvent();
-			// TEST ****************
-		}		
+		getchar();		
 	}
 	
 	return;

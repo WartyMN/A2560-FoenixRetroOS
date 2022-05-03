@@ -48,10 +48,11 @@
 
 // A2560 includes
 #include <mcp/syscalls.h>
-#include <mb/a2560_platform.h>
-#include <mb/general.h>
-#include <mb/text.h>
-#include <mb/bitmap.h>
+#include "a2560_platform.h"
+#include "general.h"
+#include "text.h"
+#include "bitmap.h"
+#include "mouse.h"
 
 
 /*****************************************************************************/
@@ -108,23 +109,6 @@ typedef enum window_base_control_id
 	MAX_BUILT_IN_WIDGET	= 4,
 } window_base_control_id;
 
-// covers what action mode the mouse is in after a mouse down event: either dragging one or more icons, or selecting via lasso, or neither
-typedef enum mouse_mode
-{
-	mouseFree				= 0,
-	mouseSelect				= 1,	// user has clicked on icon(s), but not moved mouse enough to start drag
-	mouseDoubleclick		= 2,	
-	mouseDrag				= 3,	// user clicked on icon(s) and moved mouse enough to start drag mode
-	mouseLasso				= 4,	// nothing under cursor, button down, ready to start drawing a lasso
-	mouseLassoInProgress	= 5,	// user has moved mouse from origin point with mouse down, lasso is actively being drawn
-	mouseResizeUp			= 6,
-	mouseResizeRight		= 7,
-	mouseResizeDown			= 8,
-	mouseResizeLeft			= 9,
-	mouseResizeDownRight	= 10,
-	mouseDragTitle			= 11,
-	mouseDownOnControl		= 12,	// mouse was clicked within bounds of a control. Mouse button is not released.
-} mouse_mode;
 
 
 
@@ -169,6 +153,8 @@ struct Window
 	bool					titlebar_invalidated_;			// if true, the titlebar needs to be redrawn and reblitted on the next render pass
 	int16_t					x_;								// global horizontal coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
 	int16_t					y_;								// global vertical coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
+	int16_t					proposed_x_;					// during a window drag or resize event, the potential future global horizontal coordinate
+	int16_t					proposed_y_;					// during a window drag or resize event, the potential future global vertical coordinate
 	Rectangle				global_rect_;					// the global rect describing the total area of the window
 	int16_t					width_;							// width of window when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
 	int16_t					height_;						// height of window when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
@@ -296,7 +282,7 @@ bool Window_BlitClipRects(Window* the_window);
 //! @param	x: window-local horizontal coordinate
 //! @param	y: window-local vertical coordinate
 //@ return	Returns mouseFree if the coordinates are in anything but a draggable region. Otherwise returns mouseResizeUp, etc., as appropriate.
-mouse_mode Window_CheckForDragZone(Window* the_window, int16_t x, int16_t y);
+MouseMode Window_CheckForDragZone(Window* the_window, int16_t x, int16_t y);
 
 
 
@@ -358,6 +344,8 @@ void Window_SetDisplayOrder(Window* the_window, int8_t the_display_order);
 //! Set the passed window's active flag.
 void Window_SetActive(Window* the_window, bool is_active);
 
+//! Change position and/or size of window
+void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width, int16_t height);
 
 
 // **** Get functions *****

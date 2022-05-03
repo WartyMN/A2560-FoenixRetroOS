@@ -27,12 +27,12 @@
 
 // A2560 includes
 #include <mcp/syscalls.h>
-#include <mb/a2560_platform.h>
-#include <mb/general.h>
-#include <mb/bitmap.h>
-#include <mb/text.h>
-#include <mb/font.h>
-#include <mb/lib_sys.h>
+#include "a2560_platform.h"
+#include "general.h"
+#include "bitmap.h"
+#include "text.h"
+#include "font.h"
+#include "lib_sys.h"
 
 
 /*****************************************************************************/
@@ -1100,7 +1100,7 @@ bool Window_BlitClipRects(Window* the_window)
 //! @param	x: window-local horizontal coordinate
 //! @param	y: window-local vertical coordinate
 //@ return	Returns mouseFree if the coordinates are in anything but a draggable region. Otherwise returns mouseResizeUp, etc., as appropriate.
-mouse_mode Window_CheckForDragZone(Window* the_window, int16_t x, int16_t y)
+MouseMode Window_CheckForDragZone(Window* the_window, int16_t x, int16_t y)
 {
 	if ( the_window == NULL)
 	{
@@ -1110,6 +1110,7 @@ mouse_mode Window_CheckForDragZone(Window* the_window, int16_t x, int16_t y)
 	
 	if (General_PointInRect(x, y, the_window->titlebar_rect_) == true)
 	{
+		DEBUG_OUT(("%s %d: **** DRAG in TITLE detected", __func__ , __LINE__));
 		return mouseDragTitle;
 	}
 	else if (General_PointInRect(x, y, the_window->grow_bottom_right_rect_) == true)
@@ -1118,6 +1119,7 @@ mouse_mode Window_CheckForDragZone(Window* the_window, int16_t x, int16_t y)
 	}
 	else if (General_PointInRect(x, y, the_window->grow_right_rect_) == true)
 	{
+		DEBUG_OUT(("%s %d: **** RESIZE RIGHT detected", __func__ , __LINE__));
 		return mouseResizeRight;
 	}
 	else if (General_PointInRect(x, y, the_window->grow_bottom_rect_) == true)
@@ -1549,6 +1551,54 @@ void Window_SetActive(Window* the_window, bool is_active)
 	the_window->active_ = is_active;
 	the_window->titlebar_invalidated_ = true;
 }
+
+
+//! Change position and/or size of window
+void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width, int16_t height)
+{
+	bool	width_changed = false;
+	
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return;
+	}
+	
+	// check if anything actually changed
+	if (the_window->x_ != x || the_window->y_ != y || the_window->width_ != width || the_window->height_ != height)
+	{
+		if (the_window->width_ != width)
+		{
+			width_changed = true;
+		}
+		
+		the_window->x_ = x;
+		the_window->y_ = y;
+		the_window->width_ = width;
+		the_window->height_ = height;
+		the_window->global_rect_.MinX = the_window->x_;
+		the_window->global_rect_.MaxX = the_window->x_ + the_window->width_;
+		the_window->global_rect_.MinY = the_window->y_;
+		the_window->global_rect_.MaxY = the_window->y_ + the_window->height_;
+
+		// set up the rects for titlebar, content, etc. 
+		Window_ConfigureStructureRects(the_window);
+	
+		// invalidate the window and titlebar so they redraw
+		the_window->invalidated_ = true;
+		the_window->titlebar_invalidated_ = true;
+
+		// only recalculate title space if width changed (slow)
+		if ( the_window->is_backdrop_ == false && width_changed)
+		{
+			// calculate available title width
+			Window_CalculateTitleSpace(the_window);
+		}	
+	}
+	
+}
+
+
 
 
 
