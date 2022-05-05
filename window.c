@@ -1471,6 +1471,12 @@ void Window_Render(Window* the_window)
 //! Updates the current window controls, etc., to match the current system theme 
 void Window_UpdateTheme(Window* the_window)
 {
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		Sys_Destroy(&global_system); // crash early, crash often
+	}
+
 	// adjust the rects for titlebar, content, etc., as each theme can change the position, height, etc. 
 	Window_ConfigureStructureRects(the_window);
 

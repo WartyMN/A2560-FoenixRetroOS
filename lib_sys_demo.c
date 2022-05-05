@@ -694,7 +694,7 @@ void Open2Windows(void)
 	
 	srand(sys_time_jiffies());
 	//srand(time(NULL));   // Initialization, should only be called once.
-		
+
 	if ( (the_win_template = Window_GetNewWinTemplate(the_win_title)) == NULL)
 	{
 		LOG_ERR(("%s %d: Could not get a new window template", __func__ , __LINE__));
@@ -888,6 +888,7 @@ void SharedEventHandler(EventRecord* the_event)
 				break;
 				
 			case windowChanged:
+				the_window = the_event->window_;
 				DEBUG_OUT(("%s %d: windowChanged event: %x", __func__, __LINE__, the_event->code_));
 				
 				// window size and/or position has changed

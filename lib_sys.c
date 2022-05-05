@@ -131,11 +131,20 @@ void Sys_RenumberWindows(System* the_system)
 		return;
  	}
 	
+// 	DEBUG_OUT(("%s %d: win count=%i", __func__ , __LINE__, the_system->window_count_));
+// 	List_Print(the_system->list_windows_, (void*)&Window_PrintBrief);
+	
 	the_item = *(the_system->list_windows_);
 
 	while (the_item != NULL)
 	{
 		Window*		this_window = (Window*)(the_item->payload_);
+		
+		if (this_window == NULL)
+		{
+			LOG_ERR(("%s %d: this_window was null, the_item=%p, win_num=%i, win count=%i", __func__ , __LINE__, the_item, win_num, the_system->window_count_));
+			Sys_Destroy(&the_system);
+		}
 		
 		if (this_window->is_backdrop_)
 		{
@@ -385,14 +394,6 @@ bool Sys_InitSystem(void)
 
 	DEBUG_OUT(("%s %d: System object created ok. Initiating list of windows...", __func__, __LINE__));
 	
-	// initiate the list of windows
-	if ( (global_system->list_windows_ = (List**)calloc(1, sizeof(List*)) ) == NULL)
-	{
-		LOG_ERR(("%s %d: could not allocate memory to create new list of windows", __func__ , __LINE__));
-		goto error;
-	}
-	LOG_ALLOC(("%s %d:	__ALLOC__	global_system->list_windows_	%p	size	%i", __func__ , __LINE__, global_system->list_windows_, sizeof(List*)));
-	
 // 	// set the global variable that other classes/libraries need access to.
 // 	global_system = the_system;
 
@@ -468,7 +469,13 @@ bool Sys_InitSystem(void)
 		goto error;
 	}
 	
+	DEBUG_OUT(("%s %d: height=%i, the...XT_BUTTON]=%p", __func__, __LINE__, the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, the_theme->flex_width_backdrops_[TEXT_BUTTON]));
+	DEBUG_OUT(("%s %d: the_theme=%p", __func__, __LINE__, the_theme));
+
 	Theme_Activate(the_theme);
+	
+	DEBUG_OUT(("%s %d: height=%i, the...XT_BUTTON]=%p", __func__, __LINE__, the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, the_theme->flex_width_backdrops_[TEXT_BUTTON]));
+	DEBUG_OUT(("%s %d: the_theme=%p", __func__, __LINE__, the_theme));
 
 	// create the backdrop window and add it to the list of the windows the system tracks
 	
@@ -1010,21 +1017,44 @@ bool Sys_AddToWindowList(System* the_system, Window* the_new_window)
 	List*	the_new_item;
 	int8_t	new_display_order;
 	
- 	if (the_system == NULL)
+	if (the_system == NULL)
  	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
 		Sys_Destroy(&the_system); // crash early, crash often
  	}
 	
+ 	if (the_new_window == NULL)
+ 	{
+		LOG_ERR(("%s %d: passed window object was null", __func__ , __LINE__));
+		Sys_Destroy(&the_system); // crash early, crash often
+ 	}
+
 	// are there too many windows already? 
 	if (the_system->window_count_ >= SYS_MAX_WINDOWS)
 	{
 		LOG_ERR(("%s %d: No more windows can be opened!", __func__ , __LINE__));
 		return false;
 	}
-	
+
 	the_new_item = List_NewItem((void*)the_new_window);
-	List_AddItem(the_system->list_windows_, the_new_item);
+	
+	// have any windows been created yet? If not, need to allocate the pointer to the list
+	if (the_system->window_count_ < 1)
+	{
+		// initiate the list of windows
+		if ( (the_system->list_windows_ = (List**)calloc(1, sizeof(List*)) ) == NULL)
+		{
+			LOG_ERR(("%s %d: could not allocate memory to create new list of windows", __func__ , __LINE__));
+			return false;
+		}
+		LOG_ALLOC(("%s %d:	__ALLOC__	the_system->list_windows_	%p	size	%i", __func__ , __LINE__, the_system->list_windows_, sizeof(List*)));
+		
+		*the_system->list_windows_ = the_new_item;
+	}
+	else
+	{
+		List_AddItem(the_system->list_windows_, the_new_item);
+	}
 	
 	new_display_order = SYS_MAX_WINDOWS;
 	Window_SetDisplayOrder(the_new_window, new_display_order);
@@ -1032,6 +1062,9 @@ bool Sys_AddToWindowList(System* the_system, Window* the_new_window)
 	++the_system->window_count_;
 	
 	Sys_SetActiveWindow(the_system, the_new_window);
+
+//  	DEBUG_OUT(("%s %d: window count after=%i", __func__, __LINE__, the_system->window_count_));
+// 	List_Print(the_system->list_windows_, (void*)&Window_PrintBrief);
 	
 	return true;
 }
@@ -1604,14 +1637,17 @@ bool Sys_SetTheme(System* the_system, Theme* the_theme)
 	
 	the_system->theme_ = the_theme;
 	
-	Sys_SetSystemFont(global_system, the_theme->control_font_);
-	Sys_SetAppFont(global_system, the_theme->icon_font_);
+	Sys_SetSystemFont(the_system, the_theme->control_font_);
+	Sys_SetAppFont(the_system, the_theme->icon_font_);
 
 	// have all windows update their controls / etc with info from new theme
-	Sys_UpdateWindowTheme(global_system);
+	if (the_system->window_count_ > 0)
+	{
+		Sys_UpdateWindowTheme(the_system);
 	
-	// force re-render
-	Sys_Render(global_system);
+		// force re-render
+		Sys_Render(the_system);
+	}	
 	
 	return true;
 }

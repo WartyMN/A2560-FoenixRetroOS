@@ -183,13 +183,13 @@
 
 // NOTE: VRAM is currently only available in VRAM Buffer A on A2560K, Buffer B is not implemented (2022/03/21)
 
-#if defined __TARGET_C256_FMX__
+#if defined _C256_FMX_
 	#define VRAM_START				0x00B00000
 	#define VRAM_LEN				0x00200000
-#elseif defined __TARGET_A2560U__
+#elif defined _A2560U_
 	#define VRAM_START				0x00C00000
 	#define VRAM_LEN				0x00200000
-#else
+#elif defined _A2560K_
 	#define VRAM_START				0x00800000
 	#define VRAM_LEN				0x00400000
 #endif

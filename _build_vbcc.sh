@@ -37,7 +37,7 @@ cp event.h for_vbcc/include/mb/
 cp mouse.h for_vbcc/include/mb/
 
 # make SYS as static lib
-vc +/opt/vbcc/config/a2560-4lib-micah -o a2560_sys.lib lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c startup.c event.c mouse.c -lm
+vc +/opt/vbcc/config/a2560-4lib-micah -o a2560_sys.lib lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c startup.c event.c mouse.c -lm -D_A2560K_ -D_f68_
 cp a2560_sys.lib for_vbcc/lib/
 mv a2560_sys.lib $VBCC/targets/a2560-micah/lib/
 
@@ -48,50 +48,50 @@ mv a2560_sys.lib $VBCC/targets/a2560-micah/lib/
 # perl is used to adjust the built .s28 file
 
 # build demo code - SYS from library
-# vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/sys_demo.s28 lib_sys_demo.c -lm
+vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/sys_demo.s28 lib_sys_demo.c -lm -D_A2560K_ -D_f68_
 
 # make demo code - SYS but not from library
-vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/sys_demo.s28 lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c startup.c event.c lib_sys_demo.c mouse.c -lm
+# vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/sys_demo.s28 lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c startup.c event.c lib_sys_demo.c mouse.c -lm -D_A2560K_
 perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/sys_demo.s28"
 
 # build test code - SYS
-vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/sys_test.s28 lib_sys_test.c -lm
+vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/sys_test.s28 lib_sys_test.c -lm -D_A2560K_ -D_f68_
 perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/sys_test.s28"
 
 # build demo code -- FONT
-vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/font_demo.s28 font_demo.c -lm
+vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/font_demo.s28 font_demo.c -lm -D_A2560K_ -D_f68_
 perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/font_demo.s28"
 
 # build test code -- FONT
-vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/font_test.s28 font_test.c -lm
+vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/font_test.s28 font_test.c -lm -D_A2560K_ -D_f68_
 perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/font_test.s28"
 
 # build test code - GENERAL
-vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/general_test.s28 general_test.c -lm
+vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/general_test.s28 general_test.c -lm -D_A2560K_ -D_f68_
 perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/general_test.s28"
 
 # build demo code - BITMAP
-vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/bitmap_demo.s28 bitmap_demo.c -lm
+vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/bitmap_demo.s28 bitmap_demo.c -lm -D_A2560K_ -D_f68_
 perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/bitmap_demo.s28"
 
 # build test code - BITMAP
-vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/bitmap_test.s28 bitmap_test.c -lm
+vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/bitmap_test.s28 bitmap_test.c -lm -D_A2560K_ -D_f68_
 perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/bitmap_test.s28"
 
 # build demo code - TEXT
-vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/text_demo.s28 text_demo.c -lm
+vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/text_demo.s28 text_demo.c -lm -D_A2560K_ -D_f68_
 perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/text_demo.s28"
 
 # build test code - TEXT
-vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/text_test.s28 text_test.c -lm
+vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/text_test.s28 text_test.c -lm -D_A2560K_ -D_f68_
 perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/text_test.s28"
 
 # build demo code -- WINDOW
-vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/window_demo.s28 window_demo.c -lm
+vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/window_demo.s28 window_demo.c -lm -D_A2560K_ -D_f68_
 perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/window_demo.s28"
 
 # build test code -- WINDOW
-vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/window_test.s28 window_test.c -lm
+vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/window_test.s28 window_test.c -lm -D_A2560K_ -D_f68_
 perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/window_test.s28"
 
 

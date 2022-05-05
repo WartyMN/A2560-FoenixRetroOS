@@ -2307,8 +2307,8 @@ bool Theme_Destroy(Theme** the_theme)
 Theme* Theme_CreateDefaultTheme(void)
 {
 	Theme*		the_theme;
-	int8_t		is_active;
-	int8_t		is_pushed;
+	int16_t		is_active;
+	int16_t		is_pushed;
 	int16_t		width_left;
 	int16_t		width_mid;
 	int16_t		width_right;
@@ -2391,57 +2391,269 @@ Theme* Theme_CreateDefaultTheme(void)
 	width_mid = the_theme->flex_width_backdrops_[TEXT_BUTTON].mid_width_;
 	width_right = the_theme->flex_width_backdrops_[TEXT_BUTTON].right_width_;
 	height = the_theme->flex_width_backdrops_[TEXT_BUTTON].height_;
-	DEBUG_OUT(("%s %d: button l width=%i", __func__, __LINE__, width_left));
-	DEBUG_OUT(("%s %d: button m width=%i", __func__, __LINE__, width_mid));
-	DEBUG_OUT(("%s %d: button r width=%i", __func__, __LINE__, width_right));
-		
-	for (is_active = 0; is_active < 2; is_active++)
+// 	DEBUG_OUT(("%s %d: button l width=%i", __func__, __LINE__, width_left));
+// 	DEBUG_OUT(("%s %d: button m width=%i", __func__, __LINE__, width_mid));
+// 	DEBUG_OUT(("%s %d: button r width=%i", __func__, __LINE__, width_right));
+// 	DEBUG_OUT(("%s %d: button height=%i", __func__, __LINE__, height));
+// 	DEBUG_OUT(("%s %d: button height=%p, theme=%p", __func__, __LINE__, the_theme, &the_theme->flex_width_backdrops_[TEXT_BUTTON].height_));
+
+// code below works on VBCC, causes memory issue on Calypsi. unrolling to better see it in calypsi.		
+// 	for (is_active = 0; is_active < 2; is_active++)
+// 	{
+// 		for (is_pushed = 0; is_pushed < 2; is_pushed++)
+// 		{
+// 			Bitmap*		bitmap1;
+// 			Bitmap*		bitmap2;
+// 			Bitmap*		bitmap3;
+// 		
+// 			if ( (bitmap1 = Bitmap_New(width_left, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+// 			{
+// 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+// 				return NULL;
+// 			}
+// 			
+// 			memcpy(bitmap1->addr_, def_theme_textbutton_left[is_active][is_pushed], width_left * height);
+// 			the_theme->flex_width_backdrops_[TEXT_BUTTON].image_left_[is_active][is_pushed] = bitmap1;
+// 			
+// 			DEBUG_OUT(("%s %d: image_left_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_left_[is_active][is_pushed], bitmap1));
+// 
+// 
+// 			if ( (bitmap2 = Bitmap_New(width_mid, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+// 			{
+// 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+// 				return NULL;
+// 			}
+// 			
+// 			memcpy(bitmap2->addr_, def_theme_textbutton_mid[is_active][is_pushed], width_mid * height);
+// 			the_theme->flex_width_backdrops_[TEXT_BUTTON].image_mid_[is_active][is_pushed] = bitmap2;
+// 
+// 			DEBUG_OUT(("%s %d: image_mid_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_mid_[is_active][is_pushed], bitmap2));
+// 
+// 			if ( (bitmap3 = Bitmap_New(width_right, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+// 			{
+// 				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+// 				return NULL;
+// 			}
+// 			
+// 			memcpy(bitmap3->addr_, def_theme_textbutton_right[is_active][is_pushed], width_right * height);
+// 
+// 	DEBUG_OUT(("%s %d: button height=%i, themeheight=%i, width_right=%i", __func__, __LINE__, height, the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, width_right));
+// 			
+// 			// this next line will cause the value of the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, to go from 18 to -20668.
+// 			the_theme->flex_width_backdrops_[TEXT_BUTTON].image_right_[is_active][is_pushed] = bitmap3;
+// 
+// 			DEBUG_OUT(("%s %d: image_right_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_right_[is_active][is_pushed], bitmap3));
+// 
+// 	DEBUG_OUT(("%s %d: button height=%i, themeheight=%i, width_right=%i", __func__, __LINE__, height, the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, width_right));
+// 			
+// 		}
+// 	}
+
+// un-looped version
 	{
-		for (is_pushed = 0; is_pushed < 2; is_pushed++)
-		{
-			Bitmap*		bitmap1;
-			Bitmap*		bitmap2;
-			Bitmap*		bitmap3;
-
+		is_active = 0;
+		is_pushed = 0;
 		
-			if ( (bitmap1 = Bitmap_New(width_left, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
-			{
-				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
-				return NULL;
-			}
-			
-			memcpy(bitmap1->addr_, def_theme_textbutton_left[is_active][is_pushed], width_left * height);
-			the_theme->flex_width_backdrops_[TEXT_BUTTON].image_left_[is_active][is_pushed] = bitmap1;
-
-
-			if ( (bitmap2 = Bitmap_New(width_mid, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
-			{
-				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
-				return NULL;
-			}
-			
-			memcpy(bitmap2->addr_, def_theme_textbutton_mid[is_active][is_pushed], width_mid * height);
-			the_theme->flex_width_backdrops_[TEXT_BUTTON].image_mid_[is_active][is_pushed] = bitmap2;
-
-			if ( (bitmap3 = Bitmap_New(width_right, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
-			{
-				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
-				return NULL;
-			}
-			
-			memcpy(bitmap3->addr_, def_theme_textbutton_right[is_active][is_pushed], width_right * height);
-			the_theme->flex_width_backdrops_[TEXT_BUTTON].image_right_[is_active][is_pushed] = bitmap3;
-			
+		Bitmap*		bitmap1;
+		Bitmap*		bitmap2;
+		Bitmap*		bitmap3;
+	
+		if ( (bitmap1 = Bitmap_New(width_left, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+		{
+			LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+			return NULL;
 		}
+		
+		memcpy(bitmap1->addr_, def_theme_textbutton_left[is_active][is_pushed], width_left * height);
+		the_theme->flex_width_backdrops_[TEXT_BUTTON].image_left_[is_active][is_pushed] = bitmap1;
+		
+		DEBUG_OUT(("%s %d: image_left_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_left_[is_active][is_pushed], bitmap1));
+
+
+		if ( (bitmap2 = Bitmap_New(width_mid, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+		{
+			LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+			return NULL;
+		}
+		
+		memcpy(bitmap2->addr_, def_theme_textbutton_mid[is_active][is_pushed], width_mid * height);
+		the_theme->flex_width_backdrops_[TEXT_BUTTON].image_mid_[is_active][is_pushed] = bitmap2;
+
+		DEBUG_OUT(("%s %d: image_mid_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_mid_[is_active][is_pushed], bitmap2));
+
+		if ( (bitmap3 = Bitmap_New(width_right, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+		{
+			LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+			return NULL;
+		}
+		
+		memcpy(bitmap3->addr_, def_theme_textbutton_right[is_active][is_pushed], width_right * height);
+
+DEBUG_OUT(("%s %d: button height=%i, themeheight=%i, width_right=%i", __func__, __LINE__, height, the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, width_right));
+		
+		// this next line will cause the value of the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, to go from 18 to -20668.
+		the_theme->flex_width_backdrops_[TEXT_BUTTON].image_right_[is_active][is_pushed] = bitmap3;
+
+		DEBUG_OUT(("%s %d: image_right_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_right_[is_active][is_pushed], bitmap3));
+
+DEBUG_OUT(("%s %d: button height=%i, themeheight=%i, width_right=%i", __func__, __LINE__, height, the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, width_right));
+	}
+
+	{
+		is_active = 0;
+		is_pushed = 1;
+		
+		Bitmap*		bitmap1;
+		Bitmap*		bitmap2;
+		Bitmap*		bitmap3;
+	
+		if ( (bitmap1 = Bitmap_New(width_left, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+		{
+			LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+			return NULL;
+		}
+		
+		memcpy(bitmap1->addr_, def_theme_textbutton_left[is_active][is_pushed], width_left * height);
+		the_theme->flex_width_backdrops_[TEXT_BUTTON].image_left_[is_active][is_pushed] = bitmap1;
+		
+		DEBUG_OUT(("%s %d: image_left_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_left_[is_active][is_pushed], bitmap1));
+
+
+		if ( (bitmap2 = Bitmap_New(width_mid, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+		{
+			LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+			return NULL;
+		}
+		
+		memcpy(bitmap2->addr_, def_theme_textbutton_mid[is_active][is_pushed], width_mid * height);
+		the_theme->flex_width_backdrops_[TEXT_BUTTON].image_mid_[is_active][is_pushed] = bitmap2;
+
+		DEBUG_OUT(("%s %d: image_mid_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_mid_[is_active][is_pushed], bitmap2));
+
+		if ( (bitmap3 = Bitmap_New(width_right, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+		{
+			LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+			return NULL;
+		}
+		
+		memcpy(bitmap3->addr_, def_theme_textbutton_right[is_active][is_pushed], width_right * height);
+
+DEBUG_OUT(("%s %d: button height=%i, themeheight=%i, width_right=%i", __func__, __LINE__, height, the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, width_right));
+		
+		// this next line will cause the value of the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, to go from 18 to -20668.
+		the_theme->flex_width_backdrops_[TEXT_BUTTON].image_right_[is_active][is_pushed] = bitmap3;
+
+		DEBUG_OUT(("%s %d: image_right_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_right_[is_active][is_pushed], bitmap3));
+
+DEBUG_OUT(("%s %d: button height=%i, themeheight=%i, width_right=%i", __func__, __LINE__, height, the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, width_right));
+	}
+
+	{
+		is_active = 1;
+		is_pushed = 0;
+		
+		Bitmap*		bitmap1;
+		Bitmap*		bitmap2;
+		Bitmap*		bitmap3;
+	
+		if ( (bitmap1 = Bitmap_New(width_left, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+		{
+			LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+			return NULL;
+		}
+		
+		memcpy(bitmap1->addr_, def_theme_textbutton_left[is_active][is_pushed], width_left * height);
+		the_theme->flex_width_backdrops_[TEXT_BUTTON].image_left_[is_active][is_pushed] = bitmap1;
+		
+		DEBUG_OUT(("%s %d: image_left_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_left_[is_active][is_pushed], bitmap1));
+
+
+		if ( (bitmap2 = Bitmap_New(width_mid, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+		{
+			LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+			return NULL;
+		}
+		
+		memcpy(bitmap2->addr_, def_theme_textbutton_mid[is_active][is_pushed], width_mid * height);
+		the_theme->flex_width_backdrops_[TEXT_BUTTON].image_mid_[is_active][is_pushed] = bitmap2;
+
+		DEBUG_OUT(("%s %d: image_mid_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_mid_[is_active][is_pushed], bitmap2));
+
+		if ( (bitmap3 = Bitmap_New(width_right, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+		{
+			LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+			return NULL;
+		}
+		
+		memcpy(bitmap3->addr_, def_theme_textbutton_right[is_active][is_pushed], width_right * height);
+
+DEBUG_OUT(("%s %d: button height=%i, themeheight=%i, width_right=%i", __func__, __LINE__, height, the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, width_right));
+		
+		// this next line will cause the value of the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, to go from 18 to -20668.
+		the_theme->flex_width_backdrops_[TEXT_BUTTON].image_right_[is_active][is_pushed] = bitmap3;
+
+		DEBUG_OUT(("%s %d: image_right_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_right_[is_active][is_pushed], bitmap3));
+
+DEBUG_OUT(("%s %d: button height=%i, themeheight=%i, width_right=%i", __func__, __LINE__, height, the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, width_right));
+	}
+
+	{
+		is_active = 1;
+		is_pushed = 1;
+		
+		Bitmap*		bitmap1;
+		Bitmap*		bitmap2;
+		Bitmap*		bitmap3;
+	
+		if ( (bitmap1 = Bitmap_New(width_left, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+		{
+			LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+			return NULL;
+		}
+		
+		memcpy(bitmap1->addr_, def_theme_textbutton_left[is_active][is_pushed], width_left * height);
+		the_theme->flex_width_backdrops_[TEXT_BUTTON].image_left_[is_active][is_pushed] = bitmap1;
+		
+		DEBUG_OUT(("%s %d: image_left_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_left_[is_active][is_pushed], bitmap1));
+
+
+		if ( (bitmap2 = Bitmap_New(width_mid, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+		{
+			LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+			return NULL;
+		}
+		
+		memcpy(bitmap2->addr_, def_theme_textbutton_mid[is_active][is_pushed], width_mid * height);
+		the_theme->flex_width_backdrops_[TEXT_BUTTON].image_mid_[is_active][is_pushed] = bitmap2;
+
+		DEBUG_OUT(("%s %d: image_mid_[%i][%i] = %p, bitmap2=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_mid_[is_active][is_pushed], bitmap2));
+
+		if ( (bitmap3 = Bitmap_New(width_right, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+		{
+			LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+			return NULL;
+		}
+		
+		memcpy(bitmap3->addr_, def_theme_textbutton_right[is_active][is_pushed], width_right * height);
+
+DEBUG_OUT(("%s %d: button height=%i, themeheight=%i, width_right=%i", __func__, __LINE__, height, the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, width_right));
+		
+		// this next line will cause the value of the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, to go from 18 to -20668.
+		the_theme->flex_width_backdrops_[TEXT_BUTTON].image_right_[is_active][is_pushed] = bitmap3;
+
+		DEBUG_OUT(("%s %d: image_right_[%i][%i] = %p, bitmap3=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_right_[is_active][is_pushed], bitmap3));
+
+DEBUG_OUT(("%s %d: button height=%i, themeheight=%i, width_right=%i", __func__, __LINE__, height, the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, width_right));
 	}
 
 	width_left = the_theme->flex_width_backdrops_[TEXT_FIELD].left_width_;
 	width_mid = the_theme->flex_width_backdrops_[TEXT_FIELD].mid_width_;
 	width_right = the_theme->flex_width_backdrops_[TEXT_FIELD].right_width_;
 	height = the_theme->flex_width_backdrops_[TEXT_FIELD].height_;
-	DEBUG_OUT(("%s %d: field l width=%i", __func__, __LINE__, width_left));
-	DEBUG_OUT(("%s %d: field m width=%i", __func__, __LINE__, width_mid));
-	DEBUG_OUT(("%s %d: field r width=%i", __func__, __LINE__, width_right));
+// 	DEBUG_OUT(("%s %d: field l width=%i", __func__, __LINE__, width_left));
+// 	DEBUG_OUT(("%s %d: field m width=%i", __func__, __LINE__, width_mid));
+// 	DEBUG_OUT(("%s %d: field r width=%i", __func__, __LINE__, width_right));
+// 	DEBUG_OUT(("%s %d: field height=%i", __func__, __LINE__, height));
 		
 	for (is_active = 0; is_active < 2; is_active++)
 	{

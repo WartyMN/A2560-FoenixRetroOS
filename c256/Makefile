@@ -15,10 +15,10 @@ FOENIX_LINKER_RULES = osf_Foenix-FMX.scm
 TEXT_DEMO_OBJS = $(TEXT_DEMO_SRCS:%.c=obj/%.o)
 
 obj/%.o: %.c
-	cc65816 --core=65816 $(MODEL) --target=Foenix --debug -I$(TARGET)/include/ --list-file=$(@:%.o=%.lst) -o $@ $<
+	cc65816 -D_C256_FMX_ --core=65816 $(MODEL) --target=Foenix --debug -I$(TARGET)/include/ --list-file=$(@:%.o=%.lst) -o $@ $<
 
 #lib_sys.c:
-#	cc65816 --core=65816 $(MODEL) --target=Foenix --debug --list-file=lib_sys.lst -o obj/lib_sys.o ../lib_sys.c
+#	cc65816 -D_C256_FMX_ --core=65816 $(MODEL) --target=Foenix --debug --list-file=lib_sys.lst -o obj/lib_sys.o ../lib_sys.c
 
 all: headers textdemo
 
