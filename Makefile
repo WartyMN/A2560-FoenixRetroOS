@@ -66,47 +66,46 @@ lib:	$(LIB_OBJS) $(FOENIX_LIB)
 tests:	$(TEST_OBJS) $(FOENIX_LIB)
 	@echo "Building tests..."
 	#ln68k -o build_calypsi/$@ $^ $(A2560K_RULES) clib-68000-$(LIB_MODEL)-Foenix.a build_calypsi/a2560_sys.a --output-format=pgz -l --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
-	ln68k -o build_calypsi/bitmap_test.pgz build_calypsi/obj/bitmap_test.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/bitmap_test.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
-	ln68k -o build_calypsi/font_test.pgz   build_calypsi/obj/font_test.o   $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/font_test.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
-	ln68k -o build_calypsi/general_test.pgz build_calypsi/obj/general_test.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/general_test.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
-	ln68k -o build_calypsi/lib_sys_test.pgz build_calypsi/obj/lib_sys_test.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/lib_sys_test.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
-	ln68k -o build_calypsi/text_test.pgz build_calypsi/obj/text_test.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/text_test.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
-	ln68k -o build_calypsi/window_test.pgz build_calypsi/obj/window_test.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/window_test.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
+	ln68k -o build_calypsi/bitmap_test.pgz build_calypsi/obj/bitmap_test.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/obj/bitmap_test.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
+	ln68k -o build_calypsi/font_test.pgz   build_calypsi/obj/font_test.o   $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/obj/font_test.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
+	ln68k -o build_calypsi/general_test.pgz build_calypsi/obj/general_test.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/obj/general_test.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
+	ln68k -o build_calypsi/lib_sys_test.pgz build_calypsi/obj/lib_sys_test.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/obj/lib_sys_test.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
+	ln68k -o build_calypsi/text_test.pgz build_calypsi/obj/text_test.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/obj/text_test.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
+	ln68k -o build_calypsi/window_test.pgz build_calypsi/obj/window_test.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/obj/window_test.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
 	
 demos:	$(DEMO_OBJS) $(FOENIX_LIB)
 	@echo "Building demos..."
-	ln68k -o build_calypsi/bitmap_demo.pgz build_calypsi/obj/bitmap_demo.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/bitmap_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
-	ln68k -o build_calypsi/font_demo.pgz build_calypsi/obj/font_demo.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/font_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
-	ln68k -o build_calypsi/lib_sys_demo.pgz build_calypsi/obj/lib_sys_demo.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --hosted --output-format=pgz --list-file=build_calypsi/lib_sys_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
-	ln68k -o build_calypsi/text_demo.pgz build_calypsi/obj/text_demo.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/text_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
-	ln68k -o build_calypsi/window_demo.pgz build_calypsi/obj/window_demo.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/window_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
+	ln68k -o build_calypsi/bitmap_demo.pgz build_calypsi/obj/bitmap_demo.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/obj/bitmap_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
+	ln68k -o build_calypsi/font_demo.pgz build_calypsi/obj/font_demo.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/obj/font_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
+	ln68k -o build_calypsi/lib_sys_demo.pgz build_calypsi/obj/lib_sys_demo.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --hosted --output-format=pgz --list-file=build_calypsi/obj/lib_sys_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
+	ln68k -o build_calypsi/text_demo.pgz build_calypsi/obj/text_demo.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/obj/text_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
+	ln68k -o build_calypsi/window_demo.pgz build_calypsi/obj/window_demo.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/obj/window_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
 
 tutorials:	$(TUTORIAL_OBJS) $(FOENIX_LIB)
 	@echo "Building tutorials..."
-	ln68k -o build_calypsi/blackjack.pgz build_calypsi/obj/blackjack.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/blackjack.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
+	ln68k -o build_calypsi/blackjack.pgz build_calypsi/obj/blackjack.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/obj/blackjack.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
 
 	#ln68k -o  build_calypsi/$@ $^ $(A2560K_RULES) clib-68000-$(LIB_MODEL)-Foenix.a build_calypsi/a2560_sys.a --output-format=pgz -l --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
 	
 textdemo: headers $(TEXT_DEMO_OBJS) $(FOENIX_LIB)
 	@echo "Building text demo..."
 #	echo $@
-	ln68k -o build_calypsi/text.pgz $(TEXT_DEMO_OBJS) $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a --output-format=pgz --list-file=build_calypsi/textdemo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
+	ln68k -o build_calypsi/text.pgz $(TEXT_DEMO_OBJS) $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a --output-format=pgz --list-file=build_calypsi/obj/textdemo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
 
 sysdemo: headers $(SYS_DEMO_OBJS) $(FOENIX_LIB)
 	@echo "Building sys demo..."
 #	echo $@
-#	ln68k -o build_calypsi/sysdemo.elf $(SYS_DEMO_OBJS) $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a --list-file=build_calypsi/sysdemo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user --debug
-	ln68k -o build_calypsi/sysdemo.pgz $(SYS_DEMO_OBJS) $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a --output-format=pgz --list-file=build_calypsi/sysdemo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
+#	ln68k -o build_calypsi/sysdemo.elf $(SYS_DEMO_OBJS) $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a --list-file=build_calypsi/obj/sysdemo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user --debug
+	ln68k -o build_calypsi/sysdemo.pgz $(SYS_DEMO_OBJS) $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/Foenix-lc-ld.a --output-format=pgz --list-file=build_calypsi/obj/sysdemo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user
 	
 
 $(FOENIX_LIB):
 	(cd $(FOENIX) ; make all)
 
 clean:
-	-rm $(SYS_DEMO_OBJS) obj/*.lst sysdemo.pgz sysdemo.elf
-	-rm $(TEXT_DEMO_OBJS) obj/*.lst text.pgz text.elf
+	-rm $(SYS_DEMO_OBJS) build_calypsi/obj/*.lst build_calypsi/obj/*.o
+	-rm $(TEXT_DEMO_OBJS) build_calypsi/obj/*.lst build_calypsi/obj/*.o
 	-rm $(OBJS) $(OBJS:%.o=%.lst) $(OBJS_DEBUG) $(OBJS_DEBUG:%.o=%.lst) $(FOENIX_LIB)
-	-rm build_calypsi/*
-	-rm -rf build_calypsi/obj
-	-mkdir build_calypsi/obj
+	-rm build_calypsi/*.pgz
+	-rm build_calypsi/*.elf
 	-(cd $(FOENIX) ; make clean)

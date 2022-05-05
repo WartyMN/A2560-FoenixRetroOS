@@ -41,13 +41,13 @@ headers:
 textdemo: $(TEXT_DEMO_OBJS) $(FOENIX_LIB)
 	@echo "Building text demo..."
 #	echo $@
-	ln65816 -o text.pgz $(TEXT_DEMO_OBJS) $(FOENIX_LINKER_RULES) clib-$(LIB_MODEL)-Foenix.a $(FOENIX)/Foenix-lc-md.a --output-format=pgz --list-file=textdemo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix
+	ln65816 -o text.pgz $(TEXT_DEMO_OBJS) $(FOENIX_LINKER_RULES) clib-$(LIB_MODEL)-Foenix.a $(FOENIX)/Foenix-lc-md.a --output-format=pgz --list-file=obj/textdemo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix
 
 $(FOENIX_LIB):
 	(cd $(FOENIX) ; make all)
 
 clean:
 	-rm $(TEXT_DEMO_OBJS) obj/*.lst text.pgz
-	-rm -rf obj
-	-mkdir obj
+	-rm *.pgz
+	-rm *.elf
 	
