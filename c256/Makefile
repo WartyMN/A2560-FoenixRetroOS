@@ -48,4 +48,6 @@ $(FOENIX_LIB):
 
 clean:
 	-rm $(TEXT_DEMO_OBJS) obj/*.lst text.pgz
+	-rm -rf obj
+	-mkdir obj
 	

@@ -66,7 +66,7 @@
 #define WIN_DEFAULT_MAX_WIDTH		800
 #define WIN_DEFAULT_MAX_HEIGHT		600
 
-#define WIN_DEFAULT_DRAG_ZONE_SIZE		8		//! The width of left/right drag zones, starting from edge of window, or the height of top/bottom drag zones
+#define WIN_DEFAULT_DRAG_ZONE_SIZE		4		//! The width of left/right drag zones, starting from edge of window, or the height of top/bottom drag zones
 
 #define WIN_DEFAULT_X	50
 #define WIN_DEFAULT_Y	25
@@ -77,6 +77,9 @@
 
 #define WIN_OPEN_AS_BACKDROP			true	// Window_New() parameter
 #define WIN_DO_NOT_OPEN_AS_BACKDROP		false	// Window_New() parameter
+
+#define WIN_PARAM_FORCE_CONTROL_REDRAW			true	// Window_DrawControls() parameter
+#define WIN_PARAM_ONLY_REDRAW_INVAL_CONTROLS	false	// Window_DrawControls() parameter
 
 
 /*****************************************************************************/

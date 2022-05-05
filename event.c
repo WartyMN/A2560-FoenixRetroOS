@@ -564,13 +564,15 @@ void EventManager_WaitForEvent(void)
 						}
 					}
 
+					DEBUG_OUT(("%s %d: mouse move in RESIZE evt; change_made=%i, new width/height=%i, %i", __func__, __LINE__, change_made, new_width, new_height));
+					
 					if (change_made)
 					{
 						Bitmap*		the_bitmap = Sys_GetScreenBitmap(global_system, back_layer);
 						
 						// undraw the old box, draw the new one. temporary problem: A2560 emulators are not currently doing composition, so we can't draw to foreground layer. 
 						//Bitmap_DrawBox(the_bitmap, prev_x, prev_y, prev_width, prev_height, 0, PARAM_DO_NOT_FILL)
-						Bitmap_DrawBox(the_bitmap, new_x, new_y, new_width, new_height, SYS_COLOR_RED1, PARAM_DO_NOT_FILL);						
+						Bitmap_DrawBox(the_bitmap, new_x, new_y, new_width, new_height, SYS_COLOR_GREEN1, PARAM_DO_NOT_FILL);						
 					}
 				}
 				else

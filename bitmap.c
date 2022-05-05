@@ -311,6 +311,7 @@ error:
 	return NULL;
 }
 
+
 // destructor
 // frees all allocated memory associated with the passed object, and the object itself
 bool Bitmap_Destroy(Bitmap** the_bitmap)
@@ -347,6 +348,50 @@ bool Bitmap_Destroy(Bitmap** the_bitmap)
 }
 
 
+//! Resize and existing bitmap by setting new width/height and allocating bigger storage if necessary
+//! NOTE: if the bitmap is held in VRAM, storage will not be reallocated
+//! NOTE: if the new size for the bitmap is smaller than the previous size, storage will not be reallocated - extra bytes will simply not be used
+//! @param	width: the new width, in pixels, to resize the bitmap to
+//! @param	height: the new height, in pixels, to resize the bitmap to
+//! @return	Returns false in any error condition
+bool Bitmap_Resize(Bitmap* the_bitmap, int16_t width, int16_t height)
+{
+	size_t	old_size;
+	size_t	new_size;
+	
+	if (the_bitmap == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return false;
+	}
+
+	DEBUG_OUT(("%s %d: start bitmap resizing; old = %i x %i; new=%i x %i", __func__, __LINE__, the_bitmap->width_, the_bitmap->height_, width, height));
+
+	old_size = the_bitmap->width_ * the_bitmap->height_;
+	new_size = width * height;
+	
+	the_bitmap->width_ = width;
+	the_bitmap->height_ = height;
+	
+	// Reallocate bitmap only if both are true:
+	//   window is not in VRAM. we only store backdrop in VRAM, and it shares same bitmap as the screen.
+	//   window got LARGER. if it got smaller, we can just keep reusing same bitmap and not worry about the extra space.
+	if (the_bitmap->in_vram_ == false && new_size > old_size)
+	{
+		if (the_bitmap->addr_)
+		{
+			free(the_bitmap->addr_);
+		}
+		
+		if ((the_bitmap->addr_ = calloc(sizeof(uint8_t), width * height)) == NULL)
+		{
+			LOG_ERR(("%s %d: Couldn't instantiate a bitmap", __func__, __LINE__));
+			return false;
+		}
+	}
+	
+	return true;
+}
 
 
 

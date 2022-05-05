@@ -88,7 +88,8 @@ static void Window_DrawStructure(Window* the_window);
 static void Window_DrawAll(Window* the_window);
 
 // draws or redraws the window controls
-static void Window_DrawControls(Window* the_window);
+// if force_redraw is false, only controls that have been invalidated will re-draw.
+static void Window_DrawControls(Window* the_window, bool force_redraw);
 
 // draws or redraws the titlebar area
 static void Window_DrawTitlebar(Window* the_window);
@@ -483,6 +484,7 @@ static void Window_DrawStructure(Window* the_window)
 
 
 // draws or redraws the entire window, including clearing the content area
+// forces redraw of all controls, by marking them invalidated
 static void Window_DrawAll(Window* the_window)
 {
 	if (the_window == NULL)
@@ -493,12 +495,13 @@ static void Window_DrawAll(Window* the_window)
 
 	Window_DrawStructure(the_window);
 	Window_ClearContent(the_window);
-	Window_DrawControls(the_window);
+	Window_DrawControls(the_window, WIN_PARAM_FORCE_CONTROL_REDRAW);
 }
 
 
 // draws or redraws the window controls
-static void Window_DrawControls(Window* the_window)
+// if force_redraw is false, only controls that have been invalidated will re-draw.
+static void Window_DrawControls(Window* the_window, bool force_redraw)
 {
 	Control*	this_control;
 
@@ -515,6 +518,11 @@ static void Window_DrawControls(Window* the_window)
 		this_control->enabled_ = true;
 		this_control->visible_ = true;
 	
+		if (force_redraw)
+		{
+			this_control->invalidated_ = true;
+		}
+		
 		if (this_control->invalidated_)
 		{
 			Control_Render(this_control);
@@ -1108,12 +1116,7 @@ MouseMode Window_CheckForDragZone(Window* the_window, int16_t x, int16_t y)
 		return mouseFree;
 	}
 	
-	if (General_PointInRect(x, y, the_window->titlebar_rect_) == true)
-	{
-		DEBUG_OUT(("%s %d: **** DRAG in TITLE detected", __func__ , __LINE__));
-		return mouseDragTitle;
-	}
-	else if (General_PointInRect(x, y, the_window->grow_bottom_right_rect_) == true)
+	if (General_PointInRect(x, y, the_window->grow_bottom_right_rect_) == true)
 	{
 		return mouseResizeDownRight;
 	}
@@ -1134,7 +1137,13 @@ MouseMode Window_CheckForDragZone(Window* the_window, int16_t x, int16_t y)
 	{
 		return mouseResizeUp;
 	}
-	
+	else if (General_PointInRect(x, y, the_window->titlebar_rect_) == true)
+	{
+		// NOTE: check for title drag last, because title rect includes a bit of the resize rects
+		DEBUG_OUT(("%s %d: **** DRAG in TITLE detected", __func__ , __LINE__));
+		return mouseDragTitle;
+	}
+
 	return mouseFree;
 }
 
@@ -1437,15 +1446,23 @@ void Window_Render(Window* the_window)
 	{
 		// non-backdrop window: render borders, titlebars, controls, etc, as appropriate
 
-		// Re-draw titlebar if invalidated and queue for render
-		// also covers the overall outline of the window if window itself is invalidated
-		if (the_window->invalidated_ == true || the_window->titlebar_invalidated_ == true)
+		// if entire window has been invalidated (resize, etc.), then redraw everything, including all controls
+		// if only title bar has been invalidated, redraw structures (will also re-render any invalidated controls)
+		// if just rendering otherwise, give controls a chance to render themselves if necessary
+		
+		if (the_window->invalidated_ == true)
+		{
+			Window_DrawAll(the_window);
+		}
+		else if (the_window->titlebar_invalidated_ == true)
 		{
 			Window_DrawStructure(the_window);
 		}
-
-		// Re-draw any controls that were invalidated and queue them for render
-		Window_DrawControls(the_window);
+		else
+		{
+			// Re-draw any controls that were invalidated and queue them for render
+			Window_DrawControls(the_window, WIN_PARAM_ONLY_REDRAW_INVAL_CONTROLS);
+		}
 	}
 
 	// blit to screen
@@ -1594,14 +1611,21 @@ void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width
 		the_window->invalidated_ = true;
 		the_window->titlebar_invalidated_ = true;
 
+		// get bigger storage if necessary
+		if (Bitmap_Resize(the_window->bitmap_, width, height) == false)
+		{
+			LOG_ERR(("%s %d: could not resize window storage!", __func__ , __LINE__));
+			Sys_Destroy(&global_system); // crash early, crash often
+			return;
+		}		
+
 		// only recalculate title space if width changed (slow)
 		if ( the_window->is_backdrop_ == false && width_changed)
 		{
 			// calculate available title width
 			Window_CalculateTitleSpace(the_window);
 		}	
-	}
-	
+	}	
 }
 
 

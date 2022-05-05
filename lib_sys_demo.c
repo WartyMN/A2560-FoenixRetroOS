@@ -759,7 +759,7 @@ void Open2Windows(void)
 	EventManager_WaitForEvent();
 	
 	// click and hold on window 0's title bar, move it a little, let go.
-	EventManager_AddEvent(mouseDown, 0L, 10 + 24, 10 + 3, 0L, the_window[0], NULL);
+	EventManager_AddEvent(mouseDown, 0L, 10 + 24, 10 + 6, 0L, the_window[0], NULL);
 	EventManager_AddEvent(mouseMoved, 0L, 10 + 50, 10 + 0, 0L, the_window[0], NULL);
 	EventManager_AddEvent(mouseMoved, 0L, 10 + 70, 10 + 10, 0L, the_window[0], NULL);
 	EventManager_AddEvent(mouseUp, 0L, 10 + 71, 10 + 11, 0L, the_window[0], NULL);
@@ -908,6 +908,8 @@ void SharedEventHandler(EventRecord* the_event)
 					new_y = the_event->y_;
 					new_width = (the_event->code_ >> 16) & 0xffff;
 					new_height = the_event->code_ & 0xffff;
+					
+					DEBUG_OUT(("%s %d: ** new x,y=%i,%i; new w/h=%i,%i", __func__, __LINE__, new_x, new_y, new_width, new_height));
 					
 					Window_ChangeWindow(the_window, new_x, new_y, new_width, new_height);
 					Window_Render(the_window);

@@ -133,6 +133,15 @@ Bitmap* Bitmap_New(int16_t width, int16_t height, Font* the_font, bool in_vram);
 // frees all allocated memory associated with the passed object, and the object itself
 bool Bitmap_Destroy(Bitmap** the_bitmap);
 
+//! Resize and existing bitmap by setting new width/height and allocating bigger storage if necessary
+//! NOTE: if the bitmap is held in VRAM, storage will not be reallocated
+//! NOTE: if the new size for the bitmap is smaller than the previous size, storage will not be reallocated - extra bytes will simply not be used
+//! @param	width: the new width, in pixels, to resize the bitmap to
+//! @param	height: the new height, in pixels, to resize the bitmap to
+//! @return	Returns false in any error condition
+bool Bitmap_Resize(Bitmap* the_bitmap, int16_t width, int16_t height);
+
+
 
 
 // **** Block copy functions ****
