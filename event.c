@@ -292,6 +292,52 @@ bool EventManager_Destroy(EventManager** the_event_manager)
 
 // **** Queue Management functions *****
 
+//! Nulls out any events associated with the window pointer passed
+//! Call this when a window has been closed, to ensure that there are not future events that will try to recall the window after it is destroyed
+void EventManager_RemoveEventsForWindow(Window* the_window)
+{
+	EventManager*	the_event_manager;
+	EventRecord*	the_event;
+	uint16_t		start;
+	uint16_t		stop;
+	uint16_t		i;
+	
+	// LOGIC:
+	//   the event buffer is circular. nullEvents are allowed and present.
+	//   so the way to know if there is a waiting event is to compare the read and write indices
+	//   if read=write, then there are no pending events
+	
+	the_event_manager = Sys_GetEventManager(global_system);
+	
+// 	if (the_event_manager->read_idx_ == the_event_manager->write_idx_)
+// 	{
+// 		DEBUG_OUT(("%s %d: read_idx_=%i SAME AS write_idx_=%i", __func__, __LINE__, the_event_manager->read_idx_, the_event_manager->write_idx_));
+// 		return;
+// 	}
+	
+	start = the_event_manager->read_idx_;
+	stop = the_event_manager->write_idx_;
+	DEBUG_OUT(("%s %d: read_idx_=%i, write_idx_=%i, window=%p", __func__, __LINE__, the_event_manager->read_idx_, the_event_manager->write_idx_, the_window));
+	
+	for (i = start; i <= stop; i++)
+	{
+		the_event = the_event_manager->queue_[i];
+
+		DEBUG_OUT(("%s %d: this event: window=%p, readidx=%i", __func__, __LINE__, the_event->window_, i));
+
+		if (the_event->window_ != NULL)
+		{
+			if (the_event->window_ == the_window)
+			{
+				Event_SetNull(the_event);
+			}
+		}
+	}
+	
+	return;
+}
+
+
 //! Checks to see if there is an event in the queue
 //! returns NULL if no event (not the same as returning an event of type nullEvent)
 EventRecord* EventManager_NextEvent(void)
@@ -636,6 +682,8 @@ void EventManager_WaitForEvent(void)
 					//   A mouse click on the active window could be start of a drag action (if in appropriate place), 
 					//     or it could be the start of a click on a Control
 					//     if the start of a drag action, no event will be sent to the window until mouse up (end of drag)
+					//     if the click is on a control, no event will be sent to the window until mouse up (and mouse is still on control). 
+					//       the control itself, however, will get a <selected> call.
 
 					the_event->window_ = the_window;
 					
@@ -651,7 +699,7 @@ void EventManager_WaitForEvent(void)
 						Window_SetSelectedControl(the_event->window_, the_event->control_);
 						//Control_SetPressed(the_event->control_, true);
 						// give window an event
-						(*the_window->event_handler_)(the_event);
+						//(*the_window->event_handler_)(the_event);
 						
 						Mouse_SetMode(the_event_manager->mouse_tracker_, mouseDownOnControl);
 					}
@@ -816,21 +864,39 @@ void EventManager_WaitForEvent(void)
 							//Control_SetPressed(the_event->control_, false);
 							EventManager_AddEvent(controlClicked, -1, the_event->x_, the_event->y_, 0L, the_event->window_, the_event->control_);
 						}
+						else
+						{
+							// a control was clicked on, button not let up until mouse left that control, and was placed over another
+							// first control needs to be unselected.
+							// second control does NOT need any action. should stay unselected/unpushed.
+							
+							// clear any selected control without setting another to selected.
+							Window_SetSelectedControl(the_event->window_, NULL);
+						}
 					}
 					else
 					{
+						// situation is SOME control was down. user let up mouse, but had moved mouse off of a control. 
+						// should the window get a mouse up event in that case? What would it do with that? 
 						// give window an event
-						(*the_window->event_handler_)(the_event);				
+						//(*the_window->event_handler_)(the_event);
+						
+						// either way, need to unselect whatever control had been clicked on mouse-down
+						Window_SetSelectedControl(the_event->window_, NULL);
 					}
-				
-					// either way, there should be no more selected control
-					Window_SetSelectedControl(the_event->window_, NULL);
 				}
 				
 				Mouse_SetMode(the_event_manager->mouse_tracker_, mouseFree);
 				
 				break;
-			
+
+			case controlClicked:
+				DEBUG_OUT(("%s %d: control clicked event: %c", __func__, __LINE__, the_event->code_));
+				// give window an event
+				(*the_window->event_handler_)(the_event);				
+		
+				break;
+				
 			case keyDown:
 				DEBUG_OUT(("%s %d: key down event: %c", __func__, __LINE__, the_event->code_));
 

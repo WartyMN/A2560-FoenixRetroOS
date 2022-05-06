@@ -1190,11 +1190,15 @@ Window* Sys_GetNextWindow(System* the_system)
 	
 	current_window = Sys_GetActiveWindow(the_system);
 
+	DEBUG_OUT(("%s %d: window list:", __func__, __LINE__));
+	List_Print(the_system->list_windows_, (void*)&Window_PrintBrief);
+
 	// if no active window (possible on a window close), then use the first window as starting point
 	// otherwise, use active window as starting point
 	if (current_window == NULL)
 	{
 		current_window_item = List_GetFirst(the_system->list_windows_);
+		LOG_ERR(("%s %d: no active window, first item=%p", __func__ , __LINE__, current_window_item));
 		looped = true;
 	}
 	else
@@ -1436,6 +1440,80 @@ bool Window_CompareDisplayOrder(void* first_payload, void* second_payload)
 		return false;
 	}
 }
+
+
+// remove one window from system's list of windows, and close it
+void Sys_CloseOneWindow(System* the_system, Window* the_window)
+{
+	Window*		the_next_window;
+	bool		need_different_active_window = false;
+	List*		this_window_item;
+
+ 	if (the_system == NULL)
+ 	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return;
+ 	}
+	
+	// check that we have a window
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed a null window -- no window to close", __func__ , __LINE__));
+		return;
+	}
+
+	this_window_item = List_FindThisObject(the_system->list_windows_, (void*)the_window);
+
+	if (this_window_item == NULL)
+	{
+		LOG_ERR(("%s %d: couldn't find current window in the list of windows", __func__ , __LINE__));
+		Sys_Destroy(&the_system); // crash early, crash often
+		return; // shut up warnings
+	}
+	
+	// if this was active window, we'll need to pick a new one after we delete it
+	need_different_active_window = (the_system->active_window_ == the_window);
+	DEBUG_OUT(("%s %d: closing active window=%i", __func__ , __LINE__, need_different_active_window));
+	
+	if (need_different_active_window)
+	{
+		the_system->active_window_ = NULL;
+	}
+	
+	// nullify any upcoming events that reference this Window
+	EventManager_RemoveEventsForWindow(the_window);
+	
+	// destroy the window, making sure to set a new active window
+	Window_Destroy(&the_window);
+	DEBUG_OUT(("%s %d: window destroyed", __func__ , __LINE__));
+	--the_system->window_count_;
+	List_RemoveItem(the_system->list_windows_, this_window_item);
+	LOG_ALLOC(("%s %d:	__FREE__	the_item	%p	size	%i", __func__ , __LINE__, this_window_item, sizeof(List)));
+	free(this_window_item);
+	this_window_item = NULL;
+	
+	if (need_different_active_window)
+	{
+		DEBUG_OUT(("%s %d: trying to get next window...", __func__ , __LINE__));
+		the_next_window = Sys_GetNextWindow(the_system);
+
+		if (the_next_window != NULL)
+		{
+			Sys_SetActiveWindow(the_system, the_next_window); // this also calls system render
+		}
+
+		DEBUG_OUT(("%s %d: new active window='%s'", __func__ , __LINE__, the_system->active_window_->title_));		
+	}
+	else
+	{
+		// don't need a new active window, but do need to re-render all windows
+		Sys_Render(global_system);		
+	}
+	
+	return;
+}
+
+
 
 
 

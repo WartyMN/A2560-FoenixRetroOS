@@ -110,24 +110,47 @@ static void Window_DrawTitle(Window* the_window);
 //! Call this after every window resize event
 void Window_ConfigureDragRects(Window* the_window)
 {
-	the_window->grow_left_rect_.MinX = 0;
-	the_window->grow_left_rect_.MinY = 0;
-	the_window->grow_left_rect_.MaxX = WIN_DEFAULT_DRAG_ZONE_SIZE - 1;
-	the_window->grow_left_rect_.MaxY = the_window->height_ - 1;
-
-	the_window->grow_right_rect_.MinX = the_window->width_ - WIN_DEFAULT_DRAG_ZONE_SIZE - 1;
-	the_window->grow_right_rect_.MinY = 0;
-	the_window->grow_right_rect_.MaxX = the_window->width_ - 1;
-	the_window->grow_right_rect_.MaxY = the_window->height_ - 10;	// cutout at bottom for the traditional lower/right corner drag zone
+	int16_t		upper_start;
+	int16_t		lower_end;
+	
+	// LOGIC:
+	//   windows have 6 possible drag zones: titlebar, left side, right side, top, bottom, lower-right corner.
+	//   the title_drag_rect_ is for dragging the window, the others are for resizing the window
+	//     the position of the title drag rect is not set here: it is set in Window_CalculateTitleSpace()
+	//     as the position needs to change not only on window resize, but on theme change (controls may move)
+	//   in order to not have mouse clicks aimed at closing/minimizing/etc the window, we have to 
+	//     take the position of the title bar into account, and limit left/right drag zones to avoid it
+	//     comparing the top of the title rect to top of window overall rect is informative about top vs bottom positioning
+	
+	if (the_window->titlebar_rect_.MinY == the_window->overall_rect_.MinY)
+	{
+		upper_start = the_window->titlebar_rect_.MaxY;
+		lower_end = the_window->overall_rect_.MaxY - 2; // a pixel or two above bottom of window is good
+	}
+	else
+	{
+		upper_start = the_window->overall_rect_.MinY + 2; // a pixel or two below top of window is good
+		lower_end = the_window->titlebar_rect_.MinY;
+	}
 
 	the_window->grow_top_rect_.MinX = 0;
 	the_window->grow_top_rect_.MinY = 0;
 	the_window->grow_top_rect_.MaxX = the_window->width_ - 1;
 	the_window->grow_top_rect_.MaxY = WIN_DEFAULT_DRAG_ZONE_SIZE - 1;
+	
+	the_window->grow_left_rect_.MinX = 0;
+	the_window->grow_left_rect_.MinY = upper_start;
+	the_window->grow_left_rect_.MaxX = WIN_DEFAULT_DRAG_ZONE_SIZE - 1;
+	the_window->grow_left_rect_.MaxY = lower_end;
+
+	the_window->grow_right_rect_.MinX = the_window->width_ - WIN_DEFAULT_DRAG_ZONE_SIZE - 1;
+	the_window->grow_right_rect_.MinY = upper_start;
+	the_window->grow_right_rect_.MaxX = the_window->width_ - 1;
+	the_window->grow_right_rect_.MaxY = lower_end - 15;	// cutout at bottom for the traditional lower/right corner drag zone
 
 	the_window->grow_bottom_rect_.MinX = 0;
 	the_window->grow_bottom_rect_.MinY = the_window->height_ - WIN_DEFAULT_DRAG_ZONE_SIZE - 1;
-	the_window->grow_bottom_rect_.MaxX = the_window->width_ - 10;	// cutout at right for the traditional lower/right corner drag zone
+	the_window->grow_bottom_rect_.MaxX = the_window->width_ - 15;	// cutout at right for the traditional lower/right corner drag zone
 	the_window->grow_bottom_rect_.MaxY = the_window->height_ - 1;
 	
 	the_window->grow_bottom_right_rect_.MinX = the_window->grow_bottom_rect_.MaxX + 1;
@@ -384,6 +407,7 @@ void Window_UpdateControlTheme(Window* the_window)
 
 //! Determine available pixel width for the title, based on theme's title x offset and left-most control
 //! Run after every re-size, or after a theme change
+//! Also sets the size of the title bar drag rect
 //! Note: this returns the result space and sets the window's avail_title_width_ property. It does not force any re-rendering.
 //! @return	Returns -1 in event of error, or the calculated width
 static int16_t Window_CalculateTitleSpace(Window* the_window)
@@ -448,7 +472,13 @@ static int16_t Window_CalculateTitleSpace(Window* the_window)
 	// were all controls to the one side or the other? 
 	the_window->avail_title_width_ = lowest_left - the_theme->title_x_offset_;
 //	DEBUG_OUT(("after: the_window->avail_title_width_=%i", the_window->avail_title_width_));
-	
+		
+	// set the title_drag_rect_ to match the available space
+	the_window->title_drag_rect_.MinX = the_theme->title_x_offset_ - 5;
+	the_window->title_drag_rect_.MinY = the_window->titlebar_rect_.MinY;
+	the_window->title_drag_rect_.MaxX = lowest_left - 5;
+	the_window->title_drag_rect_.MaxY = the_window->titlebar_rect_.MaxY;
+
 	return the_window->avail_title_width_;
 }
 
@@ -810,6 +840,7 @@ Window* Window_New(NewWinTemplate* the_win_template, void (* event_handler)(Even
 	the_window->can_resize_ = the_win_template->can_resize_;
 	the_window->clip_rect_ = NULL;
 	the_window->event_handler_ = event_handler;
+	the_window->selected_control_ = NULL;
 
 	if (the_window->can_resize_)
 	{
@@ -1116,8 +1147,15 @@ MouseMode Window_CheckForDragZone(Window* the_window, int16_t x, int16_t y)
 		return mouseFree;
 	}
 	
-	if (General_PointInRect(x, y, the_window->grow_bottom_right_rect_) == true)
+	if (General_PointInRect(x, y, the_window->title_drag_rect_) == true)
 	{
+		// NOTE: check for title drag last, because title rect includes a bit of the resize rects
+		DEBUG_OUT(("%s %d: **** DRAG in TITLE detected", __func__ , __LINE__));
+		return mouseDragTitle;
+	}
+	else if (General_PointInRect(x, y, the_window->grow_bottom_right_rect_) == true)
+	{
+		DEBUG_OUT(("%s %d: **** RESIZE down-RIGHT detected", __func__ , __LINE__));
 		return mouseResizeDownRight;
 	}
 	else if (General_PointInRect(x, y, the_window->grow_right_rect_) == true)
@@ -1127,21 +1165,18 @@ MouseMode Window_CheckForDragZone(Window* the_window, int16_t x, int16_t y)
 	}
 	else if (General_PointInRect(x, y, the_window->grow_bottom_rect_) == true)
 	{
+		DEBUG_OUT(("%s %d: **** RESIZE DOWN detected", __func__ , __LINE__));
 		return mouseResizeDown;
 	}
 	else if (General_PointInRect(x, y, the_window->grow_left_rect_) == true)
 	{
+		DEBUG_OUT(("%s %d: **** RESIZE LEFT detected", __func__ , __LINE__));
 		return mouseResizeLeft;
 	}
 	else if (General_PointInRect(x, y, the_window->grow_top_rect_) == true)
 	{
+		DEBUG_OUT(("%s %d: **** RESIZE UP detected", __func__ , __LINE__));
 		return mouseResizeUp;
-	}
-	else if (General_PointInRect(x, y, the_window->titlebar_rect_) == true)
-	{
-		// NOTE: check for title drag last, because title rect includes a bit of the resize rects
-		DEBUG_OUT(("%s %d: **** DRAG in TITLE detected", __func__ , __LINE__));
-		return mouseDragTitle;
 	}
 
 	return mouseFree;
@@ -1624,7 +1659,7 @@ void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width
 		{
 			// calculate available title width
 			Window_CalculateTitleSpace(the_window);
-		}	
+		}
 	}	
 }
 

@@ -209,6 +209,11 @@ bool Sys_SetActiveWindow(System* the_system, Window* the_window);
 // List-sort compatible function for sorting windows by their display order property
 bool Window_CompareDisplayOrder(void* first_payload, void* second_payload);
 
+// remove one window from system's list of windows, and close it
+void Sys_CloseOneWindow(System* the_system, Window* the_window);
+
+
+
 
 // **** Other GET functions *****
 

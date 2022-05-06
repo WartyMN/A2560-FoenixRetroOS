@@ -729,48 +729,32 @@ void Open2Windows(void)
 	Sys_Render(global_system);
 
 	// test out event handling
-	EventRecord	the_record;
-
-// 	mouseDown				= 1,
-// 	mouseUp					= 2,
-
-// 	event_kind			what_;
-// 	uint32_t			code_;		//! For keydown, keyup: the key code. For windowChanged, the width in the high word, height in the low word.
-// 	uint32_t			when_;		//! ticks
-// 	Window*				window_;	//! not set for a diskEvt
-// 	Control*			control_;	//! not set for every event type. if not set on mouseDown/Up, pointer was not over a control
-// 	int16_t				x_;			//! for mouse events: the global x position of mouse. for windowChanged, the new global x posiiton of the window.
-// 	int16_t				y_;			//! for mouse events: the global y position of mouse. for windowChanged, the new global y posiiton of the window.
-// 	event_modifiers		modifiers_;	//! set for keyboard and mouse events
-	
-	the_record.what_ = mouseDown;
-	the_record.code_ = 0L;
-	the_record.when_ = 0L;
-	the_record.window_ = the_window[0];
-	the_record.control_ = NULL;
-	the_record.x_ = 10 + 25; // put click into title bar
-	the_record.y_ = 10 + 5;
-	the_record.modifiers_ = 0L;
 	
 	// click on window 0 to activate it.
-	EventManager_AddEvent(mouseDown, 0L, 10 + 25, 10 + 5, 0L, the_window[0], NULL);
-	EventManager_AddEvent(mouseUp, 0L, 10 + 26, 10 + 4, 0L, the_window[0], NULL);
+	EventManager_AddEvent(mouseDown, 0L, 10 + 25, 10 + 5, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseUp, 0L, 10 + 25, 10 + 5, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for events 1", __func__, __LINE__));
 	EventManager_WaitForEvent();
 	
-	// click and hold on window 0's title bar, move it a little, let go.
-	EventManager_AddEvent(mouseDown, 0L, 10 + 24, 10 + 6, 0L, the_window[0], NULL);
-	EventManager_AddEvent(mouseMoved, 0L, 10 + 50, 10 + 0, 0L, the_window[0], NULL);
-	EventManager_AddEvent(mouseMoved, 0L, 10 + 70, 10 + 10, 0L, the_window[0], NULL);
-	EventManager_AddEvent(mouseUp, 0L, 10 + 71, 10 + 11, 0L, the_window[0], NULL);
-	// drag left side of window to resize leftwards
-	EventManager_AddEvent(mouseDown, 0L, 10 + 71 + 4, 10 + 24, 0L, the_window[0], NULL);
-	EventManager_AddEvent(mouseMoved, 0L, 10 - 5, 10 + 34, 0L, the_window[0], NULL);
-	EventManager_AddEvent(mouseUp, 0L, 10 - 7, 10 + 34, 0L, the_window[0], NULL);
+	// click and release button on Window 0's close control
+	EventManager_AddEvent(mouseDown, 0L, 10 + 12, 10 + 12, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseUp, 0L, 10 + 12, 10 + 12, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for events 2", __func__, __LINE__));
 	EventManager_WaitForEvent();
-	EventManager_AddEvent(mouseDown, 0L, 10 + 72, 10 + 12, 0L, the_window[0], NULL);
-	EventManager_AddEvent(mouseUp, 0L, 10 + 73, 10 + 9, 0L, the_window[0], NULL);
+
+	// click and hold on window 0's title bar, move it a little, let go.
+	EventManager_AddEvent(mouseDown, 0L, 10 + 24, 10 + 6, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseMoved, 0L, 10 + 50, 10 + 0, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseMoved, 0L, 10 + 70, 10 + 10, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseUp, 0L, 10 + 71, 10 + 11, 0L, NULL, NULL);
+	// drag left side of window to resize leftwards
+	EventManager_AddEvent(mouseDown, 0L, 10 + 71 + 4, 10 + 24, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseMoved, 0L, 10 - 5, 10 + 34, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseUp, 0L, 10 - 7, 10 + 34, 0L, NULL, NULL);
+	DEBUG_OUT(("%s %d: about to wait for events 2", __func__, __LINE__));
+	EventManager_WaitForEvent();
+	EventManager_AddEvent(mouseDown, 0L, 10 + 72, 10 + 12, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseUp, 0L, 10 + 73, 10 + 9, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for events 3", __func__, __LINE__));
 	EventManager_WaitForEvent();
 	DEBUG_OUT(("%s %d: about to wait for events 4", __func__, __LINE__));
@@ -795,6 +779,7 @@ void SharedEventHandler(EventRecord* the_event)
 	
 	Window*				the_window;
 	Control*			the_control;
+	uint16_t			the_control_id;
 	static Rectangle	the_rect;
 	
 // 	DEBUG_OUT(("%s %d: reached", __func__, __LINE__));
@@ -885,6 +870,35 @@ void SharedEventHandler(EventRecord* the_event)
 			case controlClicked:
 				DEBUG_OUT(("%s %d: controlClicked event: %c", __func__, __LINE__, the_event->code_));
 				
+				the_control = the_event->control_;
+				the_control_id = Control_GetID(the_event->control_);
+				
+				Control_SetPressed(the_control, true);
+				Window_Render(the_window);
+				
+				if (the_control_id == CLOSE_WIDGET_ID)
+				{
+					DEBUG_OUT(("%s %d: close control clicked!", __func__, __LINE__));
+					Sys_CloseOneWindow(global_system, the_window);
+				}
+				else if (the_control_id == MINIMIZE_WIDGET_ID)
+				{
+					DEBUG_OUT(("%s %d: minimize control clicked!", __func__, __LINE__));
+				}
+				else if (the_control_id == NORM_SIZE_WIDGET_ID)
+				{
+					DEBUG_OUT(("%s %d: standard size control clicked!", __func__, __LINE__));
+				}
+				else if (the_control_id == MAXIMIZE_WIDGET_ID)
+				{
+					DEBUG_OUT(("%s %d: maximize control clicked!", __func__, __LINE__));
+				}
+				else
+				{
+					DEBUG_OUT(("%s %d: some control other than the standard 4 clicked: %i", __func__, __LINE__, the_control_id));
+				}
+				
+				getchar();
 				break;
 				
 			case windowChanged:

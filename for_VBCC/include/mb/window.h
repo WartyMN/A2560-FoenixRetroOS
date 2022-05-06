@@ -66,7 +66,7 @@
 #define WIN_DEFAULT_MAX_WIDTH		800
 #define WIN_DEFAULT_MAX_HEIGHT		600
 
-#define WIN_DEFAULT_DRAG_ZONE_SIZE		4		//! The width of left/right drag zones, starting from edge of window, or the height of top/bottom drag zones
+#define WIN_DEFAULT_DRAG_ZONE_SIZE		3		//! The width of left/right drag zones, starting from edge of window, or the height of top/bottom drag zones
 
 #define WIN_DEFAULT_X	50
 #define WIN_DEFAULT_Y	25
@@ -139,6 +139,7 @@ struct Window
 	Font*					pen_font_;						// Font to be used by the "pen", for drawing functions
 	Rectangle				overall_rect_;					// the local rect describing the total area of the window
 	Rectangle				titlebar_rect_;					// the local rect describing the titlebar area
+	Rectangle				title_drag_rect_;				// the local rect describing the drag zone for the titlebar (excludes the close/etc controls)
 	Rectangle				iconbar_rect_;					// the local rect describing the optional iconbar area
 	Rectangle				content_rect_;					// the local rect describing the content area of the window
 	Rectangle				grow_left_rect_;				// the local rect defining the area in which a click/drag will resize window

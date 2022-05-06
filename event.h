@@ -239,6 +239,11 @@ bool EventManager_Destroy(EventManager** the_event_manager);
 
 // **** Queue Management functions *****
 
+
+//! Nulls out any events associated with the window pointer passed
+//! Call this when a window has been closed, to ensure that there are not future events that will try to recall the window after it is destroyed
+void EventManager_RemoveEventsForWindow(Window* the_window);
+
 //! Checks to see if there is an event in the queue
 //! returns NULL if no event (not the same as returning an event of type nullEvent)
 EventRecord* EventManager_NextEvent(void);
