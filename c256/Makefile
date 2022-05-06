@@ -9,7 +9,7 @@ TEXT_DEMO_SRCS = lib_sys.c theme.c control_template.c font.c window.c control.c 
 MODEL = --code-model=large --data-model=medium
 LIB_MODEL = lc-md
 
-FOENIX_LIB = $(FOENIX)/Foenix-$(LIB_MODEL).a
+FOENIX_LIB = $(FOENIX)/foenix-$(LIB_MODEL).a
 FOENIX_LINKER_RULES = osf_Foenix-FMX.scm
 
 TEXT_DEMO_OBJS = $(TEXT_DEMO_SRCS:%.c=obj/%.o)
@@ -41,7 +41,7 @@ headers:
 textdemo: $(TEXT_DEMO_OBJS) $(FOENIX_LIB)
 	@echo "Building text demo..."
 #	echo $@
-	ln65816 -o text.pgz $(TEXT_DEMO_OBJS) $(FOENIX_LINKER_RULES) clib-$(LIB_MODEL)-Foenix.a $(FOENIX)/Foenix-lc-md.a --output-format=pgz --list-file=obj/textdemo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix
+	ln65816 -o text.pgz $(TEXT_DEMO_OBJS) $(FOENIX_LINKER_RULES) clib-$(LIB_MODEL)-foenix.a $(FOENIX)/foenix-lc-md.a --output-format=pgz --list-file=obj/textdemo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix
 
 $(FOENIX_LIB):
 	(cd $(FOENIX) ; make all)
