@@ -57,10 +57,6 @@ extern System*			global_system;
 /*                       Private Function Prototypes                         */
 /*****************************************************************************/
 
-//! Align the control to its parent window
-//! No checking done on inputs
-void Control_AlignToWindow(Control* the_control);
-
 //! Draws the control's caption text into the control's available space using the parent window's bitmaps' current font
 //! If the caption cannot fit in its entirety, it will be truncated
 //! This is a private function; it is the calling function's responsibility to ensure the window's bitmap is set to the desired font before calling.
@@ -75,60 +71,6 @@ void Control_Print(Control* the_control);
 /*****************************************************************************/
 /*                       Private Function Definitions                        */
 /*****************************************************************************/
-
-//! Align the control to its parent window
-//! No checking done on inputs
-void Control_AlignToWindow(Control* the_control)
-{
-	// LOGIC:
-	//   Controls have an h align and v align choice, and x and y offsets.
-	//   Based on those choices, and the parent window's dimensions, 
-	//     the control needs its' rect_ property adjusted to match where it should render
-	//   rect_ values are relative to the control's parent window, but calculated relative to the parent rect
-	//     for close/max/min/norm, this will be the window's titlebar rect
-	//       (not to the window itself -- this allows them to render at bottom of window if that's where titlebar is)
-	//     for iconbar controls, that will be the iconbar_rect_
-	//     for any other control, that will be the contentarea_rect_
-	
-	if (the_control->h_align_ == H_ALIGN_LEFT)
-	{
-		the_control->rect_.MinX = the_control->parent_rect_->MinX + the_control->x_offset_;
-	}
-	else if (the_control->h_align_ == H_ALIGN_RIGHT)
-	{
-		the_control->rect_.MinX = the_control->parent_rect_->MaxX - the_control->x_offset_;
-	}
-	else
-	{
-		// center
-		the_control->rect_.MinX = the_control->parent_rect_->MinX + ((the_control->parent_rect_->MaxX - the_control->parent_rect_->MinX - the_control->width_) / 2);		
-	}
-	
-	the_control->rect_.MaxX = the_control->rect_.MinX + the_control->width_;
-	
-	if (the_control->v_align_ == V_ALIGN_TOP)
-	{
-		the_control->rect_.MinY = the_control->parent_rect_->MinY + the_control->y_offset_;
-	}
-	else if (the_control->v_align_ == V_ALIGN_BOTTOM)
-	{
-		the_control->rect_.MinY = the_control->parent_rect_->MaxY - the_control->y_offset_;
-	}
-	else
-	{
-		// center
-		the_control->rect_.MinY = the_control->parent_rect_->MinY + ((the_control->parent_rect_->MaxY - the_control->parent_rect_->MinY - the_control->height_) / 2);		
-	}
-	
-	the_control->rect_.MaxY = the_control->rect_.MinY + the_control->height_;
-	
-	// ensure it will get rendered in next pass
-	the_control->invalidated_ = true;
-	
-	//DEBUG_OUT(("%s %d: Control after AlignToWindow...", __func__, __LINE__));
-	//Control_Print(the_control);
-}
-
 
 //! Draws the control's caption text into the control's available space using the parent window's bitmaps' current font
 //! If the caption cannot fit in its entirety, it will be truncated
@@ -332,7 +274,7 @@ Control* Control_New(ControlTemplate* the_template, Window* the_window, Rectangl
 	the_control->id_ = the_id;
 	the_control->parent_win_ = the_window;
 	the_control->parent_rect_ = the_parent_rect;
-	Control_AlignToWindow(the_control);
+	Control_AlignToParentRect(the_control);
 	
 	//Control_Print(the_control);
 	
@@ -412,7 +354,7 @@ bool Control_UpdateFromTemplate(Control* the_control, ControlTemplate* the_templ
 	the_control->image_[CONTROL_ACTIVE][CONTROL_DOWN] = the_template->image_[CONTROL_ACTIVE][CONTROL_DOWN];
 		
 	// localize to the parent window
-	Control_AlignToWindow(the_control);
+	Control_AlignToParentRect(the_control);
 
 	// ensure it will get rendered in next pass
 	the_control->invalidated_ = true;
@@ -479,11 +421,88 @@ void Control_MarkInvalidated(Control* the_control, bool invalidated)
 	if (the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		Sys_Destroy(&global_system);
 		return;
 	}
 	
 	the_control->invalidated_ = invalidated;
 }
+
+
+//! Set or uppdate the control's position and/or size as appropriate to the control's parent rect
+//! Call when parent window size has changed, when control is first created, etc.
+void Control_AlignToParentRect(Control* the_control)
+{
+	// LOGIC:
+	//   Controls have an h align and v align choice, and x and y offsets.
+	//   Based on those choices, and the parent window's dimensions, 
+	//     the control needs its' rect_ property adjusted to match where it should render
+	//   rect_ values are relative to the control's parent window, but calculated relative to the parent rect
+	//     for close/max/min/norm, this will be the window's titlebar rect
+	//       (not to the window itself -- this allows them to render at bottom of window if that's where titlebar is)
+	//     for iconbar controls, that will be the iconbar_rect_
+	//     for any other control, that will be the contentarea_rect_
+	
+	if (the_control == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		Sys_Destroy(&global_system);
+		return;
+	}
+	
+	if (the_control->parent_rect_ == NULL)
+	{
+		LOG_ERR(("%s %d: parent rect was null", __func__ , __LINE__));
+		Sys_Destroy(&global_system);
+		return;
+	}
+
+	if (the_control->h_align_ == H_ALIGN_LEFT)
+	{
+		the_control->rect_.MinX = the_control->parent_rect_->MinX + the_control->x_offset_;
+	}
+	else if (the_control->h_align_ == H_ALIGN_RIGHT)
+	{
+		the_control->rect_.MinX = the_control->parent_rect_->MaxX - the_control->x_offset_;
+	}
+	else
+	{
+		// center
+		the_control->rect_.MinX = the_control->parent_rect_->MinX + ((the_control->parent_rect_->MaxX - the_control->parent_rect_->MinX - the_control->width_) / 2);		
+	}
+	
+	the_control->rect_.MaxX = the_control->rect_.MinX + the_control->width_;
+	
+	if (the_control->v_align_ == V_ALIGN_TOP)
+	{
+		the_control->rect_.MinY = the_control->parent_rect_->MinY + the_control->y_offset_;
+	}
+	else if (the_control->v_align_ == V_ALIGN_BOTTOM)
+	{
+		the_control->rect_.MinY = the_control->parent_rect_->MaxY - the_control->y_offset_;
+	}
+	else
+	{
+		// center
+		the_control->rect_.MinY = the_control->parent_rect_->MinY + ((the_control->parent_rect_->MaxY - the_control->parent_rect_->MinY - the_control->height_) / 2);		
+	}
+	
+	the_control->rect_.MaxY = the_control->rect_.MinY + the_control->height_;
+	
+	// ensure it will get rendered in next pass
+	the_control->invalidated_ = true;
+	
+	//DEBUG_OUT(("%s %d: Control after AlignToWindow...", __func__, __LINE__));
+	//Control_Print(the_control);
+}
+
+
+
+
+
+
+
+
 
 
 // **** Get functions *****
@@ -496,6 +515,7 @@ uint16_t Control_GetID(Control* the_control)
 	if (the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		Sys_Destroy(&global_system);
 		return -1;
 	}
 	

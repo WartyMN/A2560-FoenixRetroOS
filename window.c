@@ -133,6 +133,8 @@ void Window_ConfigureDragRects(Window* the_window)
 		lower_end = the_window->titlebar_rect_.MinY;
 	}
 
+	DEBUG_OUT(("%s %d: upper_start=%i, lower_end=%i", __func__ , __LINE__, upper_start, lower_end));
+
 	the_window->grow_top_rect_.MinX = 0;
 	the_window->grow_top_rect_.MinY = 0;
 	the_window->grow_top_rect_.MaxX = the_window->width_ - 1;
@@ -824,6 +826,10 @@ Window* Window_New(NewWinTemplate* the_win_template, void (* event_handler)(Even
 	the_window->y_ = the_win_template->y_;
 	the_window->width_ = the_win_template->width_;
 	the_window->height_ = the_win_template->height_;
+	the_window->norm_x_ = the_win_template->x_;
+	the_window->norm_y_ = the_win_template->y_;
+	the_window->norm_width_ = the_win_template->width_;
+	the_window->norm_height_ = the_win_template->height_;
 	the_window->global_rect_.MinX = the_window->x_;
 	the_window->global_rect_.MaxX = the_window->x_ + the_window->width_;
 	the_window->global_rect_.MinY = the_window->y_;
@@ -841,15 +847,15 @@ Window* Window_New(NewWinTemplate* the_win_template, void (* event_handler)(Even
 	the_window->clip_rect_ = NULL;
 	the_window->event_handler_ = event_handler;
 	the_window->selected_control_ = NULL;
+	
+	// set up the rects for titlebar, content, etc. 
+	Window_ConfigureStructureRects(the_window);
 
 	if (the_window->can_resize_)
 	{
 		// window can be resized, so needs drag zones to be established
 		Window_ConfigureDragRects(the_window);
 	}
-	
-	// set up the rects for titlebar, content, etc. 
-	Window_ConfigureStructureRects(the_window);
 	
 	// all windows start off non-visible
 	the_window->visible_ = false;
@@ -1151,31 +1157,37 @@ MouseMode Window_CheckForDragZone(Window* the_window, int16_t x, int16_t y)
 	{
 		// NOTE: check for title drag last, because title rect includes a bit of the resize rects
 		DEBUG_OUT(("%s %d: **** DRAG in TITLE detected", __func__ , __LINE__));
+		DEBUG_OUT(("%s %d: x, y=%i, %i; drag rect=%i, %i x %i, %i", __func__ , __LINE__, x, y, the_window->title_drag_rect_.MinX, the_window->title_drag_rect_.MinY, the_window->title_drag_rect_.MaxX, the_window->title_drag_rect_.MaxY));
 		return mouseDragTitle;
 	}
 	else if (General_PointInRect(x, y, the_window->grow_bottom_right_rect_) == true)
 	{
 		DEBUG_OUT(("%s %d: **** RESIZE down-RIGHT detected", __func__ , __LINE__));
+		DEBUG_OUT(("%s %d: x, y=%i, %i; drag rect=%i, %i x %i, %i", __func__ , __LINE__, x, y, the_window->grow_bottom_right_rect_.MinX, the_window->grow_bottom_right_rect_.MinY, the_window->grow_bottom_right_rect_.MaxX, the_window->grow_bottom_right_rect_.MaxY));
 		return mouseResizeDownRight;
 	}
 	else if (General_PointInRect(x, y, the_window->grow_right_rect_) == true)
 	{
 		DEBUG_OUT(("%s %d: **** RESIZE RIGHT detected", __func__ , __LINE__));
+		DEBUG_OUT(("%s %d: x, y=%i, %i; drag rect=%i, %i x %i, %i", __func__ , __LINE__, x, y, the_window->grow_right_rect_.MinX, the_window->grow_right_rect_.MinY, the_window->grow_right_rect_.MaxX, the_window->grow_right_rect_.MaxY));
 		return mouseResizeRight;
 	}
 	else if (General_PointInRect(x, y, the_window->grow_bottom_rect_) == true)
 	{
 		DEBUG_OUT(("%s %d: **** RESIZE DOWN detected", __func__ , __LINE__));
+		DEBUG_OUT(("%s %d: x, y=%i, %i; drag rect=%i, %i x %i, %i", __func__ , __LINE__, x, y, the_window->grow_bottom_rect_.MinX, the_window->grow_bottom_rect_.MinY, the_window->grow_bottom_rect_.MaxX, the_window->grow_bottom_rect_.MaxY));
 		return mouseResizeDown;
 	}
 	else if (General_PointInRect(x, y, the_window->grow_left_rect_) == true)
 	{
 		DEBUG_OUT(("%s %d: **** RESIZE LEFT detected", __func__ , __LINE__));
+		DEBUG_OUT(("%s %d: x, y=%i, %i; drag rect=%i, %i x %i, %i", __func__ , __LINE__, x, y, the_window->grow_left_rect_.MinX, the_window->grow_left_rect_.MinY, the_window->grow_left_rect_.MaxX, the_window->grow_left_rect_.MaxY));
 		return mouseResizeLeft;
 	}
 	else if (General_PointInRect(x, y, the_window->grow_top_rect_) == true)
 	{
 		DEBUG_OUT(("%s %d: **** RESIZE UP detected", __func__ , __LINE__));
+		DEBUG_OUT(("%s %d: x, y=%i, %i; drag rect=%i, %i x %i, %i", __func__ , __LINE__, x, y, the_window->grow_top_rect_.MinX, the_window->grow_top_rect_.MinY, the_window->grow_top_rect_.MaxX, the_window->grow_top_rect_.MaxY));
 		return mouseResizeUp;
 	}
 
@@ -1614,8 +1626,26 @@ void Window_SetActive(Window* the_window, bool is_active)
 }
 
 
-//! Change position and/or size of window
-void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width, int16_t height)
+//! Set the window's state (maximized, minimized, etc.)
+void Window_SetState(Window* the_window, window_state the_state)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return;
+	}
+	
+	the_window->state_ = the_state;
+	
+	// need to do anything else? 
+	// TODO: analyze if setting state function needs to do anything besides simply set the property value
+}
+
+
+//! Change position and/or size of window when not in Maximize mode
+//! Will also adjust the position of the built-in maximize/minimize/normsize controls
+//! @param	update_norm: if true, the window's normal x/y/width/height properties will be updated to match the passed values. Pass false if setting maximize size, etc.
+void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width, int16_t height, bool update_norm)
 {
 	bool	width_changed = false;
 	
@@ -1631,6 +1661,14 @@ void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width
 		if (the_window->width_ != width)
 		{
 			width_changed = true;
+		}
+		
+		if (update_norm)
+		{
+			the_window->norm_x_ = x;
+			the_window->norm_y_ = y;
+			the_window->norm_width_ = width;
+			the_window->norm_height_ = height;
 		}
 		
 		the_window->x_ = x;
@@ -1657,14 +1695,106 @@ void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width
 			return;
 		}		
 
-		// only recalculate title space if width changed (slow)
+		// only recalculate title space and move titlebar widgets if width changed (slow)
 		if ( the_window->is_backdrop_ == false && width_changed)
 		{
+			Control*	the_control;
+			int16_t		i;
+			
 			// calculate available title width
 			Window_CalculateTitleSpace(the_window);
+			
+			// have controls in titlebar realign themselves to new width
+			for (i = 0; i < MAX_BUILT_IN_WIDGET; i++)
+			{
+				the_control = Window_GetControl(the_window, i);
+				Control_AlignToParentRect(the_control);
+			}
 		}
 	}	
 }
+
+
+//! Set the window to full-screen size (maximize mode)
+//! Sets window's x, y, width, height parameters to match those of the screen
+void Window_Maximize(Window* the_window)
+{
+	Screen*		the_screen;
+	
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return;
+	}
+	//   when a window is set to maximize size, we take the screen's width/height 
+	//   values and set window width/height to them (x/y to 0,0)
+	//   also need to set the state to WIN_MAXIMIZED
+	//   actual resizing can be accomplished by calling Window_ChangeWindow, passing the screen size values
+	//   TODO: figure out what is responsible for setting window visible=true when coming out of minimized mode.
+	//   TODO: figure out what future actions need to take place when a window is set to maximized size
+
+	the_screen = Sys_GetScreen(global_system, ID_CHANNEL_B);
+
+	Window_SetState(the_window, WIN_MAXIMIZED);
+	Window_ChangeWindow(the_window, 0, 0, the_screen->width_, the_screen->height_, WIN_PARAM_DO_NOT_UPDATE_NORM_SIZE);
+	Window_Render(the_window);
+}
+
+
+//! Set the window to normal size (window-size mode)
+//! Sets window's x, y, width, height parameters to those stored in norm_x, etc.
+void Window_NormSize(Window* the_window)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return;
+	}
+	
+	// LOGIC:
+	//   when a window is set to normal/window size, we take the norm_x/norm_y etc 
+	//   values and set x/y/width/height to them
+	//   also need to set the state to WIN_NORMAL
+	//   actual resizing can be accomplished by calling Window_ChangeWindow, passing the norm values
+	//   TODO: figure out what is responsible for setting window visible=true when coming out of minimized mode.
+	//   TODO: figure out what future actions need to take place when a window is set to normal size
+
+	Window_SetState(the_window, WIN_NORMAL);
+	Window_ChangeWindow(the_window, the_window->norm_x_, the_window->norm_y_, the_window->norm_width_, the_window->norm_height_, WIN_PARAM_DO_NOT_UPDATE_NORM_SIZE);
+	Window_Render(the_window);
+}
+
+
+//! Hides the window (minimize mode)
+//! Does not change the window's x, y, width, height parameters, it just makes it invisible
+void Window_Minimize(Window* the_window)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return;
+	}
+	
+	// LOGIC:
+	//   when a window is minimized, it is not visible at all (no icon on desktop, nothing)
+	//   to access it, the contextual menu or a keyboard shortcut needs to be used
+	//   so we need to set state to minimized, and also make it invisible.
+	//   TODO: figure out what future actions need to take place when a window is minimized
+	
+	Window_SetState(the_window, WIN_MINIMIZED);
+	Window_SetVisible(the_window, false);
+	Window_Render(the_window);
+}
+
+
+// typedef enum window_state
+// {
+// 	WIN_HIDDEN			= 0,
+// 	WIN_MINIMIZED 		= 1,
+// 	WIN_NORMAL			= 2,
+// 	WIN_MAXIMIZED		= 3,
+// 	WIN_UNKNOWN_STATE,
+// } window_state;
 
 
 

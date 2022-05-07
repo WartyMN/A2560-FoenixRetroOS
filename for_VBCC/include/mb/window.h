@@ -81,6 +81,9 @@
 #define WIN_PARAM_FORCE_CONTROL_REDRAW			true	// Window_DrawControls() parameter
 #define WIN_PARAM_ONLY_REDRAW_INVAL_CONTROLS	false	// Window_DrawControls() parameter
 
+#define WIN_PARAM_UPDATE_NORM_SIZE_TO_MATCH		true	// Window_ChangeWindow() parameter
+#define WIN_PARAM_DO_NOT_UPDATE_NORM_SIZE		false	// Window_ChangeWindow() parameter
+
 
 /*****************************************************************************/
 /*                               Enumerations                                */
@@ -155,13 +158,17 @@ struct Window
 	bool					can_resize_;					// if true, window can be stretched or shrunk. If false, the width_ and height_ will be locked.
 	bool					invalidated_;					// if true, the window needs to be completely re-rendered on the next render pass
 	bool					titlebar_invalidated_;			// if true, the titlebar needs to be redrawn and reblitted on the next render pass
-	int16_t					x_;								// global horizontal coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
-	int16_t					y_;								// global vertical coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
+	int16_t					x_;								// current global horizontal coordinate
+	int16_t					y_;								// current global vertical coordinate
 	int16_t					proposed_x_;					// during a window drag or resize event, the potential future global horizontal coordinate
 	int16_t					proposed_y_;					// during a window drag or resize event, the potential future global vertical coordinate
 	Rectangle				global_rect_;					// the global rect describing the total area of the window
-	int16_t					width_;							// width of window when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
-	int16_t					height_;						// height of window when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
+	int16_t					width_;							// current width of window
+	int16_t					height_;						// current height of window
+	int16_t					norm_x_;						// global horizontal coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
+	int16_t					norm_y_;						// global vertical coordinate when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
+	int16_t					norm_width_;					// width of window when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
+	int16_t					norm_height_;					// height of window when in window-sized (normal) mode. Not adjusted when window is minimized or maximized.
 	int16_t					min_width_;						// minimum width of window when in window-sized (normal) mode.
 	int16_t					min_height_;					// minimum height of window when in window-sized (normal) mode. 
 	int16_t					max_width_;						// maximum width of window when in window-sized (normal) mode. If > 0, the window will not maximize. Default 0.
@@ -348,8 +355,23 @@ void Window_SetDisplayOrder(Window* the_window, int8_t the_display_order);
 //! Set the passed window's active flag.
 void Window_SetActive(Window* the_window, bool is_active);
 
+//! Set the window's state (maximized, minimized, etc.)
+void Window_SetState(Window* the_window, window_state the_state);
+
 //! Change position and/or size of window
-void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width, int16_t height);
+void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width, int16_t height, bool update_norm);
+
+//! Set the window to full-screen size (maximize mode)
+//! Sets window's x, y, width, height parameters to match those of the screen
+void Window_Maximize(Window* the_window);
+
+//! Set the window to normal size (window-size mode)
+//! Sets window's x, y, width, height parameters to those stored in norm_x, etc.
+void Window_NormSize(Window* the_window);
+
+//! Hides the window (minimize mode)
+//! Does not change the window's x, y, width, height parameters, it just makes it invisible
+void Window_Minimize(Window* the_window);
 
 
 // **** Get functions *****

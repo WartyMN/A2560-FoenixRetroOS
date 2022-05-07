@@ -267,6 +267,11 @@ bool Control_SetImageDown(Control* the_control, Bitmap* the_image);
 bool Control_SetImageInactive(Control* the_control, Bitmap* the_image);
 bool Control_SetCaption(Control* the_control, char* the_text);
 
+//! Set or uppdate the control's position and/or size as appropriate to the control's parent rect
+//! Call when parent window size has changed, when control is first created, etc.
+void Control_AlignToParentRect(Control* the_control);
+
+
 
 //! Compare the control's right-edge coordinate to the passed value
 //! If the control is more to the right than the passed value, the passed value is updated with the control's right edge
