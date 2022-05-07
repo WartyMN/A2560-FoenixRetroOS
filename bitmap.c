@@ -292,7 +292,7 @@ Bitmap* Bitmap_New(int16_t width, int16_t height, Font* the_font, bool in_vram)
 	the_bitmap->height_ = height;
 	the_bitmap->in_vram_ = in_vram;
 	
-	DEBUG_OUT(("%s %d: Bitmap allocated! p=%p, addr=%p", __func__, __LINE__, the_bitmap, the_bitmap->addr_));
+	//DEBUG_OUT(("%s %d: Bitmap allocated! p=%p, addr=%p", __func__, __LINE__, the_bitmap, the_bitmap->addr_));
 
 	if (the_font)
 	{
@@ -1341,7 +1341,7 @@ bool Bitmap_DrawBoxCoords(Bitmap* the_bitmap, int16_t x1, int16_t y1, int16_t x2
 	int16_t		dy;
 	int16_t		dx;
 
-	DEBUG_OUT(("%s %d: x1=%i, y1=%i, x2=%i, y2=%i, the_color=%i", __func__, __LINE__, x1, y1, x2, y2, the_color));
+	//DEBUG_OUT(("%s %d: x1=%i, y1=%i, x2=%i, y2=%i, the_color=%i", __func__, __LINE__, x1, y1, x2, y2, the_color));
 	
 	if (the_bitmap == NULL)
 	{

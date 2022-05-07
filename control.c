@@ -169,7 +169,7 @@ static void Control_DrawCaption(Control* the_control)
 	
 	available_width = the_control->avail_text_width_;	
 	chars_that_fit = Font_MeasureStringWidth(the_font, the_control->caption_, GEN_NO_STRLEN_CAP, available_width, 0, &pixels_used);
-	//DEBUG_OUT(("%s %d: available_width=%i, chars_that_fit=%i", __func__, __LINE__, available_width, chars_that_fit));
+	//DEBUG_OUT(("%s %d: available_width=%i, chars_that_fit=%i, text='%s', pixels_used=%i", __func__, __LINE__, available_width, chars_that_fit, the_control->caption_, pixels_used));
 
 	x_offset = the_control->rect_.MinX + (the_control->width_ - the_control->avail_text_width_) / 2; // potentially, this could be problematic if a theme designer set up a theme with right width 10, left width 2. 
 	x = x_offset + (available_width - pixels_used) / 2;
@@ -204,6 +204,8 @@ static void Control_DrawCaption(Control* the_control)
 
 	if (Font_DrawString(the_control->parent_win_->bitmap_, the_control->caption_, chars_that_fit) == false)
 	{
+		DEBUG_OUT(("%s %d: font draw returned false; chars_that_fit=%i, text='%s'", __func__, __LINE__, chars_that_fit, the_control->caption_));
+		Sys_Destroy(&global_system);
 	}
 }
 
@@ -294,7 +296,7 @@ Control* Control_New(ControlTemplate* the_template, Window* the_window, Rectangl
 			LOG_ERR(("%s %d: could not allocate memory for the control's caption string", __func__ , __LINE__));
 			goto error;
 		}
-		DEBUG_OUT(("%s %d:	__ALLOC__	the_control->caption_	%p	size	%i		'%s'", __func__ , __LINE__, the_control->caption_, General_Strnlen(the_control->caption_, CONTROL_MAX_CAPTION_SIZE) + 1, the_control->caption_));
+		//DEBUG_OUT(("%s %d:	__ALLOC__	the_control->caption_	%p	size	%i		'%s'", __func__ , __LINE__, the_control->caption_, General_Strnlen(the_control->caption_, CONTROL_MAX_CAPTION_SIZE) + 1, the_control->caption_));
 	}
 	else
 	{

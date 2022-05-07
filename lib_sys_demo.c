@@ -870,6 +870,7 @@ void SharedEventHandler(EventRecord* the_event)
 			case controlClicked:
 				DEBUG_OUT(("%s %d: controlClicked event: %c", __func__, __LINE__, the_event->code_));
 				
+				the_window = the_event->window_;
 				the_control = the_event->control_;
 				the_control_id = Control_GetID(the_event->control_);
 				

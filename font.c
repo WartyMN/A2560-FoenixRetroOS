@@ -391,6 +391,7 @@ bool Font_DrawString(Bitmap* the_bitmap, char* the_string, int16_t max_chars)
 	available_width = the_bitmap->width_ - the_bitmap->x_;
 	
 	//DEBUG_OUT(("%s %d: the_bitmap->width_=%i, the_bitmap->x_=%i, max_chars=%i, num_chars=%i", __func__, __LINE__, the_bitmap->width_, the_bitmap->x_, max_chars, num_chars));
+	//DEBUG_OUT(("%s %d: the_string='%s'", __func__, __LINE__, the_string));
 	
 	fit_count = Font_MeasureStringWidth(the_bitmap->font_, the_string, num_chars, available_width, 0, &pixels_used);
 	
@@ -801,7 +802,7 @@ int16_t Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font
 		
 		if (row >= first_row && row < max_row)
 		{
-			int32_t	pixels_written = 0;
+			int16_t	pixels_written = 0;
 
 			// for each row, account for any H offset specified for the glyph
 			write_addr += h_offset_value;
@@ -843,9 +844,18 @@ int16_t Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font
 	}
 	
 	// finished writing visible pixels, but need to move pen further right if char's overall width was greater than amount moved so far
-	pixels_moved += width_value - pixels_moved;
+	DEBUG_OUT(("%s %d: before: pixels_moved=%i, width_value=%i", __func__, __LINE__, pixels_moved, width_value));
+	//pixels_moved += width_value - pixels_moved;
+	pixels_moved = width_value;
+// 	DEBUG_OUT(("%s %d: after: pixels_moved=%i", __func__, __LINE__, pixels_moved));
 	
+	//DEBUG_OUT(("%s %d: before: pixels_moved=%i, the_bitmap->x_=%i", __func__, __LINE__, pixels_moved, the_bitmap->x_));
+// 	int16_t	temp = the_bitmap->x_;
 	the_bitmap->x_ += pixels_moved;
+	//DEBUG_OUT(("%s %d: after: the_bitmap->x_=%i", __func__, __LINE__, the_bitmap->x_));
+// 	the_bitmap->x_ = temp;
+// 	the_bitmap->x_ += (int16_t)pixels_moved;
+// 	DEBUG_OUT(("%s %d: after cast: the_bitmap->x_=%i", __func__, __LINE__, the_bitmap->x_));
 	
 	return pixels_moved;
 }

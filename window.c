@@ -646,7 +646,7 @@ static void Window_DrawTitle(Window* the_window)
 	
 	available_width = the_window->avail_title_width_;
 	chars_that_fit = Font_MeasureStringWidth(new_font, the_window->title_, GEN_NO_STRLEN_CAP, available_width, 0, &pixels_used);
-	//DEBUG_OUT(("%s %d: available_width=%i, chars_that_fit=%i", __func__, __LINE__, available_width, chars_that_fit));
+	//DEBUG_OUT(("%s %d: available_width=%i, chars_that_fit=%i, title='%s', pixels_used=%i", __func__, __LINE__, available_width, chars_that_fit, the_window->title_, pixels_used));
 	
 	if (the_window->active_)
 	{
@@ -1468,14 +1468,17 @@ void Window_Render(Window* the_window)
 		return;
 	}
 	
-	if (the_window->is_backdrop_ && the_window->invalidated_ == true)
+	if (the_window->is_backdrop_)
 	{
-		// backdrop window: fill it with its pattern. no controls, borders, etc. 
-		// tile the default theme's background pattern
-		Bitmap_Tile(the_pattern, 0, 0, the_window->bitmap_, the_theme->pattern_width_, the_theme->pattern_height_);
-		the_window->invalidated_ = false;
+		if (the_window->invalidated_ == true)
+		{
+			// backdrop window: fill it with its pattern. no controls, borders, etc. 
+			// tile the default theme's background pattern
+			Bitmap_Tile(the_pattern, 0, 0, the_window->bitmap_, the_theme->pattern_width_, the_theme->pattern_height_);
+			the_window->invalidated_ = false;
 		
-		return;
+			return;
+		}
 	}
 	else
 	{
