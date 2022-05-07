@@ -441,6 +441,428 @@ void EventManager_AddEvent(event_kind the_what, uint32_t the_code, int16_t x, in
 }
 
 
+//! Handle Mouse Up events on the system level
+void EventManager_HandleMouseUp(EventManager* the_event_manager, EventRecord* the_event)
+{
+	int16_t			local_x;
+	int16_t			local_y;
+	MouseMode		starting_mode;
+	Window*			the_window;
+	Window*			the_active_window;
+	int16_t			x_delta;
+	int16_t			y_delta;
+				
+	//* Check if over a control. 
+	//   * If yes, check if that control has state set to pressed
+	//     * if yes, set the control's visual state to normal. add an event for control_clicked???
+	//       * should we eat the mouse up event? YES
+	//   * if no, give the window an event (why not?)
+
+	starting_mode = Mouse_GetMode(the_event_manager->mouse_tracker_);
+
+	the_active_window = Sys_GetActiveWindow(global_system);
+	the_window = Sys_GetWindowAtXY(global_system, the_event->x_, the_event->y_);
+
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: no window found at %i, %i!", __func__, __LINE__, the_event->x_, the_event->y_));
+		Sys_Destroy(&global_system);
+	}
+	DEBUG_OUT(("%s %d: active window = '%s', clicked window = '%s'", __func__, __LINE__, the_active_window->title_, the_window->title_));
+	
+	the_event->window_ = the_window;
+	
+	// no matter what, reset the mouse history position flags
+	Mouse_AcceptUpdate(the_event_manager->mouse_tracker_, the_event->x_, the_event->y_, false);
+
+	// get the delta between current and last clicked position
+	x_delta = Mouse_GetXDelta(the_event_manager->mouse_tracker_);
+	y_delta = Mouse_GetYDelta(the_event_manager->mouse_tracker_);
+	DEBUG_OUT(("%s %d: mouse delta at mouse up was %i, %i!", __func__, __LINE__, x_delta, y_delta));
+	
+	// LOGIC:
+	//   Based on what the mode had been before mouse button up, we take different actions
+	//   If mouseDragTitle > tell window to move to new coordinates
+	//   if mouseResizeXXX > tell window to accept new size
+	//   if mouseDownOnControl > create a control clicked event and send to user Window
+	//   (fill in the rest)
+	
+	// If this is mouseDragTitle mode, tell window to move to new coordinates
+	if (starting_mode == mouseDragTitle)
+	{					
+		DEBUG_OUT(("%s %d: mouse up from mouseDragTitle: move window '%s'!", __func__, __LINE__, the_window->title_));
+		
+		if (x_delta != 0 && y_delta != 0)
+		{
+			int16_t	new_x;
+			int16_t	new_y;
+			int16_t	new_width;
+			int16_t	new_height;
+			int32_t	the_code;
+			
+			new_x = Window_GetX(the_window) + x_delta;
+			new_y = Window_GetY(the_window) + y_delta;
+			new_width = Window_GetWidth(the_window);
+			new_height = Window_GetHeight(the_window);
+			the_code = (new_width << 16) + new_height;
+			
+			DEBUG_OUT(("%s %d: adding movewindow evt with %i, %i", __func__, __LINE__, new_x, new_y));
+			
+			EventManager_AddEvent(windowChanged, the_code, new_x, new_y, 0L, the_window, NULL);
+		}
+	}
+	else if (starting_mode >= mouseResizeUp) // this gets all the resize items
+	{
+		int16_t	new_x;
+		int16_t	new_y;
+		int16_t	new_width;
+		int16_t	new_height;
+		int32_t	the_code;
+		bool	change_made = false;
+		
+		new_x = Window_GetX(the_window);
+		new_y = Window_GetY(the_window);
+		new_width = Window_GetWidth(the_window);
+		new_height = Window_GetHeight(the_window);
+
+		DEBUG_OUT(("%s %d: mouse up from mouseResizeXXX: resize window '%s'!", __func__, __LINE__, the_window->title_));
+		
+		if (starting_mode == mouseResizeLeft || starting_mode == mouseResizeRight)
+		{
+			if (x_delta != 0)
+			{
+				new_width += x_delta;
+				
+				if (starting_mode == mouseResizeLeft)
+				{
+					new_x += x_delta;
+				}
+
+				change_made = true;						
+			}
+		}
+		else if (starting_mode == mouseResizeUp || starting_mode == mouseResizeDown)
+		{
+			if (y_delta != 0)
+			{
+				new_height += y_delta;
+				
+				if (starting_mode == mouseResizeUp)
+				{
+					new_y += y_delta;
+				}
+
+				change_made = true;
+			}
+		}
+		else if (starting_mode == mouseResizeDownRight)
+		{
+			if (y_delta != 0)
+			{
+				new_width += x_delta;
+				new_height += y_delta;
+				change_made = true;
+			}
+		}
+
+		if (change_made)
+		{
+			the_code = (new_width << 16) + new_height;
+			EventManager_AddEvent(windowChanged, the_code, new_x, new_y, 0L, the_window, NULL);
+		}
+	}
+	else if (starting_mode == mouseDownOnControl)
+	{
+		// check for a control that was pressed, and is now released = it got clicked
+		local_x = the_event->x_;
+		local_y = the_event->y_;
+		Window_GlobalToLocal(the_event->window_, &local_x, &local_y);
+	
+		DEBUG_OUT(("%s %d: mouse up from mouseDownOnControl: fire off a control click in window '%s'!", __func__, __LINE__, the_window->title_));
+		
+		the_event->control_ = Window_GetControlAtXY(the_event->window_, local_x, local_y);
+	
+		if (the_event->control_)
+		{
+			if (Control_GetPressed(the_event->control_))
+			{
+				DEBUG_OUT(("%s %d: ** control '%s' (id=%i) was down, now up!", __func__, __LINE__, the_event->control_->caption_, the_event->control_->id_));
+				//Control_SetPressed(the_event->control_, false);
+				EventManager_AddEvent(controlClicked, -1, the_event->x_, the_event->y_, 0L, the_event->window_, the_event->control_);
+			}
+			else
+			{
+				// a control was clicked on, button not let up until mouse left that control, and was placed over another
+				// first control needs to be unselected.
+				// second control does NOT need any action. should stay unselected/unpushed.
+				
+				// clear any selected control without setting another to selected.
+				Window_SetSelectedControl(the_event->window_, NULL);
+			}
+		}
+		else
+		{
+			// situation is SOME control was down. user let up mouse, but had moved mouse off of a control. 
+			// should the window get a mouse up event in that case? What would it do with that? 
+			// give window an event
+			//(*the_window->event_handler_)(the_event);
+			
+			// either way, need to unselect whatever control had been clicked on mouse-down
+			Window_SetSelectedControl(the_event->window_, NULL);
+		}
+	}
+	
+	Mouse_SetMode(the_event_manager->mouse_tracker_, mouseFree);
+}
+
+
+//! Handle Mouse Down events on the system level
+void EventManager_HandleMouseDown(EventManager* the_event_manager, EventRecord* the_event)
+{
+	int16_t			local_x;
+	int16_t			local_y;
+	Window*			the_window;
+	Window*			the_active_window;
+	int16_t			x_delta;
+	int16_t			y_delta;
+
+	//* Check if mouse is down in the active window, or in another window
+	//   * If not in active window, add 2 WindowActive events to the queue.
+	//     * Tell old front window it is now not active
+	//     * Make window the front most window
+	//    Cancel this add queue for hte mouse down, and add another AFTER the 2 activate/inactivate events.
+
+	the_active_window = Sys_GetActiveWindow(global_system);
+	the_window = Sys_GetWindowAtXY(global_system, the_event->x_, the_event->y_);
+
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: no window found at %i, %i!", __func__, __LINE__, the_event->x_, the_event->y_));
+		Sys_Destroy(&global_system);
+	}
+	DEBUG_OUT(("%s %d: active window = '%s', clicked window = '%s'", __func__, __LINE__, the_active_window->title_, the_window->title_));
+
+	// get the delta between current and last clicked position
+	x_delta = Mouse_GetXDelta(the_event_manager->mouse_tracker_);
+	y_delta = Mouse_GetYDelta(the_event_manager->mouse_tracker_);
+	
+	// update the mouse tracker so that if we end up dragging, we'll know where the original click was. (or if a future double click, what time the click was, etc.)
+	Mouse_AcceptUpdate(the_event_manager->mouse_tracker_, the_event->x_, the_event->y_, true);
+
+	// get local coords so we can check for drag and lasso
+	local_x = the_event->x_;
+	local_y = the_event->y_;
+	Window_GlobalToLocal(the_window, &local_x, &local_y);
+	
+	if (the_window != the_active_window)
+	{
+		// LOGIC:
+		//   Any mouse click on a window other than the active window causes change in active window. 
+		//   The mouse click is consumed by the system in this case: the target window does not get an event (but it will get one later for activate)
+		
+		Sys_SetActiveWindow(global_system, the_window);
+		DEBUG_OUT(("%s %d: **** changed active window to = '%s'; redrawing all windows", __func__, __LINE__, the_window->title_));
+
+		EventManager_AddEvent(inactivateEvt, -1, -1, -1, 0L, the_active_window, NULL);
+		EventManager_AddEvent(activateEvt, -1, -1, -1, 0L, the_window, NULL);
+
+		//Sys_Render(global_system);
+		//EventManager_AddEvent(mouseDown, -1, the_event->x_, the_event->y_, 0L, the_window, NULL); // add the mouse down event back in, AFTER the 2 window events.
+	}
+	else
+	{
+		// LOGIC:
+		//   A mouse click on the active window could be start of a drag action (if in appropriate place), 
+		//     or it could be the start of a click on a Control
+		//     if the start of a drag action, no event will be sent to the window until mouse up (end of drag)
+		//     if the click is on a control, no event will be sent to the window until mouse up (and mouse is still on control). 
+		//       the control itself, however, will get a <selected> call.
+
+		the_event->window_ = the_window;
+		
+		// check for a control that needs activating
+		the_event->control_ = Window_GetControlAtXY(the_event->window_, local_x, local_y);
+		
+		// have control change it's visual state to pressed. that is system's responsibility, not app's. 
+		// TODO: think about whether this should be limited to only controls that have 0/1 states?
+		// TODO: think about whether the system should eat the mouseDown event if over a control
+		if (the_event->control_)
+		{
+			DEBUG_OUT(("%s %d: ** control '%s' (id=%i) moused down!", __func__, __LINE__, the_event->control_->caption_, the_event->control_->id_));
+			Window_SetSelectedControl(the_event->window_, the_event->control_);
+			//Control_SetPressed(the_event->control_, true);
+			// give window an event
+			//(*the_window->event_handler_)(the_event);
+			
+			Mouse_SetMode(the_event_manager->mouse_tracker_, mouseDownOnControl);
+		}
+	}
+	
+	// LOGIC:
+	//   regardless of what window was clicked, we have to update mouse mode
+	//   if mouse is in title bar, it could be start of a drag action to move the window.
+	//   same for window resize widgets
+	//   we do not want to activate controls yet though. (TODO: revisit this decision if it seems weird from HF perspective)
+	//   first task is to determine if the point the mouse clicked on is in a draggable region.
+	//   if this is active window, if not draggable region, it could be a lassoable region.
+	
+	// check for click in a draggable region
+	MouseMode	possible_drag_mode;
+	
+	possible_drag_mode = Window_CheckForDragZone(the_event->window_, local_x, local_y);
+	
+	if (possible_drag_mode != mouseFree)
+	{
+		Mouse_SetMode(the_event_manager->mouse_tracker_, possible_drag_mode);
+	}
+}
+
+
+//! Handle Mouse Moved events on the system level
+void EventManager_HandleMouseMoved(EventManager* the_event_manager, EventRecord* the_event)
+{
+	int16_t			local_x;
+	int16_t			local_y;
+	MouseMode		starting_mode;
+	Window*			the_window;
+	Window*			the_active_window;
+	int16_t			x_delta;
+	int16_t			y_delta;
+	int16_t			prev_mouse_x;
+	int16_t			prev_mouse_y;
+
+	// LOGIC: 
+	//   what happens here depends on what the current event manager mouse mode is
+	//   if mouseFree: no real action.
+	//   if mouseDownOnControl: no real action
+	//   if mouseResizeXXX: draw window bounding box based on mouse x/y
+	//   if mouseDragTitle: draw window bounding box based on mouse x/y
+	//   if mouseLassoInProgress: draw lasso box
+	//   if other, then no action
+
+	starting_mode = Mouse_GetMode(the_event_manager->mouse_tracker_);
+
+	the_window = the_event->window_;
+	
+	// update the mouse so it knows it's X/Y, but first capture what it was last time, so we can see what movement was made since last move (not since last click)
+	prev_mouse_x = Mouse_GetX(the_event_manager->mouse_tracker_);
+	prev_mouse_y = Mouse_GetY(the_event_manager->mouse_tracker_);
+	Mouse_SetXY(the_event_manager->mouse_tracker_, the_event->x_, the_event->y_);
+
+	// get the delta between current and last clicked position
+	x_delta = Mouse_GetXDelta(the_event_manager->mouse_tracker_);
+	y_delta = Mouse_GetYDelta(the_event_manager->mouse_tracker_);
+
+	DEBUG_OUT(("%s %d: mouse clicked (%i, %i)", __func__, __LINE__, Mouse_GetClickedX(the_event_manager->mouse_tracker_), Mouse_GetClickedY(the_event_manager->mouse_tracker_)));
+	DEBUG_OUT(("%s %d: mouse now (%i, %i)", __func__, __LINE__, Mouse_GetX(the_event_manager->mouse_tracker_), Mouse_GetY(the_event_manager->mouse_tracker_)));
+	DEBUG_OUT(("%s %d: mouse delta (%i, %i)", __func__, __LINE__, Mouse_GetXDelta(the_event_manager->mouse_tracker_), Mouse_GetYDelta(the_event_manager->mouse_tracker_)));
+
+	if (starting_mode == mouseDragTitle)
+	{
+		// for a drag rect, we want to draw an outline same shape as the Window, in the foreground bitmap
+		// as mouse moves, we want to undraw the previous rect, and draw the new one.
+		// we need to know what the previous mouse X/Y was for that to work. (unless we just clear the whole foreground bitmap, but that seems dumb expensive)
+		// we will store every mouse-move X/Y as proposed X/Y in the window, and use that to draw/refresh rect as needed
+		// will also need proposed width/height, for size drags.
+		
+		if (the_event->window_ != NULL)
+		{
+			if (x_delta != 0 && y_delta != 0)
+			{
+				int16_t	new_x;
+				int16_t	new_y;
+				int16_t	new_width;
+				int16_t	new_height;
+				bool	change_made = false;
+				
+				DEBUG_OUT(("%s %d: window x/y (%i, %i)", __func__, __LINE__,  Window_GetX(the_window), Window_GetY(the_window)));
+				
+				new_x = Window_GetX(the_window) + x_delta;
+				new_y = Window_GetY(the_window) + y_delta;
+				new_width = Window_GetWidth(the_window);
+				new_height = Window_GetHeight(the_window);
+
+				//if (change_made)
+				{
+					Bitmap*		the_bitmap = Sys_GetScreenBitmap(global_system, back_layer);
+			
+					// undraw the old box, draw the new one. temporary problem: A2560 emulators are not currently doing composition, so we can't draw to foreground layer. 
+					//Bitmap_DrawBox(the_bitmap, prev_x, prev_y, prev_width, prev_height, 0, PARAM_DO_NOT_FILL)
+					Bitmap_DrawBox(the_bitmap, new_x, new_y, new_width, new_height, SYS_COLOR_RED1, PARAM_DO_NOT_FILL);						
+				}
+			}
+		}					
+	}
+	else if (starting_mode >= mouseResizeUp) // this gets all the resize items
+	{
+		int16_t	new_x;
+		int16_t	new_y;
+		int16_t	new_width;
+		int16_t	new_height;
+		bool	change_made = false;
+		
+		new_x = Window_GetX(the_window);
+		new_y = Window_GetY(the_window);
+		new_width = Window_GetWidth(the_window);
+		new_height = Window_GetHeight(the_window);
+
+		if (starting_mode == mouseResizeLeft || starting_mode == mouseResizeRight)
+		{
+			if (x_delta != 0)
+			{
+				new_width += x_delta;
+				
+				if (starting_mode == mouseResizeLeft)
+				{
+					new_x += x_delta;
+				}
+
+				change_made = true;						
+			}
+		}
+		else if (starting_mode == mouseResizeUp || starting_mode == mouseResizeDown)
+		{
+			if (y_delta != 0)
+			{
+				new_height += y_delta;
+				
+				if (starting_mode == mouseResizeUp)
+				{
+					new_y += y_delta;
+				}
+
+				change_made = true;
+			}
+		}
+		else if (starting_mode == mouseResizeDownRight)
+		{
+			if (y_delta != 0)
+			{
+				new_width += x_delta;
+				new_height += y_delta;
+				change_made = true;
+			}
+		}
+
+		DEBUG_OUT(("%s %d: mouse move in RESIZE evt; change_made=%i, new width/height=%i, %i", __func__, __LINE__, change_made, new_width, new_height));
+		
+		if (change_made)
+		{
+			Bitmap*		the_bitmap = Sys_GetScreenBitmap(global_system, back_layer);
+			
+			// undraw the old box, draw the new one. temporary problem: A2560 emulators are not currently doing composition, so we can't draw to foreground layer. 
+			//Bitmap_DrawBox(the_bitmap, prev_x, prev_y, prev_width, prev_height, 0, PARAM_DO_NOT_FILL)
+			Bitmap_DrawBox(the_bitmap, new_x, new_y, new_width, new_height, SYS_COLOR_GREEN1, PARAM_DO_NOT_FILL);						
+		}
+	}
+	else
+	{
+		// give window an event
+		(*the_window->event_handler_)(the_event);				
+	}					
+}
+
+
 //! Wait for an event to happen, do system-processing of it, then if appropriate, give the window responsible for the event a chance to do something with it
 void EventManager_WaitForEvent(void)
 {
@@ -495,405 +917,31 @@ void EventManager_WaitForEvent(void)
 				DEBUG_OUT(("%s %d: null event", __func__, __LINE__));
 				break;
 		
-			case mouseMoved:
-				
+			case mouseMoved:				
 				DEBUG_OUT(("%s %d: mouse move event (%i, %i)", __func__, __LINE__, the_event->x_, the_event->y_));
+
+				EventManager_HandleMouseMoved(the_event_manager, the_event);
 	
-				// LOGIC: 
-				//   what happens here depends on what the current event manager mouse mode is
-				//   if mouseFree: no real action.
-				//   if mouseDownOnControl: no real action
-				//   if mouseResizeXXX: draw window bounding box based on mouse x/y
-				//   if mouseDragTitle: draw window bounding box based on mouse x/y
-				//   if mouseLassoInProgress: draw lasso box
-				//   if other, then no action
-
-				the_window = the_event->window_;
-				
-				// update the mouse so it knows it's X/Y, but first capture what it was last time, so we can see what movement was made since last move (not since last click)
-				prev_mouse_x = Mouse_GetX(the_event_manager->mouse_tracker_);
-				prev_mouse_y = Mouse_GetY(the_event_manager->mouse_tracker_);
-				Mouse_SetXY(the_event_manager->mouse_tracker_, the_event->x_, the_event->y_);
-	
-				// get the delta between current and last clicked position
-				x_delta = Mouse_GetXDelta(the_event_manager->mouse_tracker_);
-				y_delta = Mouse_GetYDelta(the_event_manager->mouse_tracker_);
-			
-				DEBUG_OUT(("%s %d: mouse clicked (%i, %i)", __func__, __LINE__, Mouse_GetClickedX(the_event_manager->mouse_tracker_), Mouse_GetClickedY(the_event_manager->mouse_tracker_)));
-				DEBUG_OUT(("%s %d: mouse now (%i, %i)", __func__, __LINE__, Mouse_GetX(the_event_manager->mouse_tracker_), Mouse_GetY(the_event_manager->mouse_tracker_)));
-				DEBUG_OUT(("%s %d: mouse delta (%i, %i)", __func__, __LINE__, Mouse_GetXDelta(the_event_manager->mouse_tracker_), Mouse_GetYDelta(the_event_manager->mouse_tracker_)));
-			
-				if (starting_mode == mouseDragTitle)
-				{
-					// for a drag rect, we want to draw an outline same shape as the Window, in the foreground bitmap
-					// as mouse moves, we want to undraw the previous rect, and draw the new one.
-					// we need to know what the previous mouse X/Y was for that to work. (unless we just clear the whole foreground bitmap, but that seems dumb expensive)
-					// we will store every mouse-move X/Y as proposed X/Y in the window, and use that to draw/refresh rect as needed
-					// will also need proposed width/height, for size drags.
-					
-					if (the_event->window_ != NULL)
-					{
-						if (x_delta != 0 && y_delta != 0)
-						{
-							int16_t	new_x;
-							int16_t	new_y;
-							int16_t	new_width;
-							int16_t	new_height;
-							bool	change_made = false;
-							
-							DEBUG_OUT(("%s %d: window x/y (%i, %i)", __func__, __LINE__,  Window_GetX(the_window), Window_GetY(the_window)));
-							
-							new_x = Window_GetX(the_window) + x_delta;
-							new_y = Window_GetY(the_window) + y_delta;
-							new_width = Window_GetWidth(the_window);
-							new_height = Window_GetHeight(the_window);
-
-							//if (change_made)
-							{
-								Bitmap*		the_bitmap = Sys_GetScreenBitmap(global_system, back_layer);
-						
-								// undraw the old box, draw the new one. temporary problem: A2560 emulators are not currently doing composition, so we can't draw to foreground layer. 
-								//Bitmap_DrawBox(the_bitmap, prev_x, prev_y, prev_width, prev_height, 0, PARAM_DO_NOT_FILL)
-								Bitmap_DrawBox(the_bitmap, new_x, new_y, new_width, new_height, SYS_COLOR_RED1, PARAM_DO_NOT_FILL);						
-							}
-						}
-					}					
-				}
-				else if (starting_mode >= mouseResizeUp) // this gets all the resize items
-				{
-					int16_t	new_x;
-					int16_t	new_y;
-					int16_t	new_width;
-					int16_t	new_height;
-					bool	change_made = false;
-					
-					new_x = Window_GetX(the_window);
-					new_y = Window_GetY(the_window);
-					new_width = Window_GetWidth(the_window);
-					new_height = Window_GetHeight(the_window);
-
-					if (starting_mode == mouseResizeLeft || starting_mode == mouseResizeRight)
-					{
-						if (x_delta != 0)
-						{
-							new_width += x_delta;
-							
-							if (starting_mode == mouseResizeLeft)
-							{
-								new_x += x_delta;
-							}
-
-							change_made = true;						
-						}
-					}
-					else if (starting_mode == mouseResizeUp || starting_mode == mouseResizeDown)
-					{
-						if (y_delta != 0)
-						{
-							new_height += y_delta;
-							
-							if (starting_mode == mouseResizeUp)
-							{
-								new_y += y_delta;
-							}
-
-							change_made = true;
-						}
-					}
-					else if (starting_mode == mouseResizeDownRight)
-					{
-						if (y_delta != 0)
-						{
-							new_width += x_delta;
-							new_height += y_delta;
-							change_made = true;
-						}
-					}
-
-					DEBUG_OUT(("%s %d: mouse move in RESIZE evt; change_made=%i, new width/height=%i, %i", __func__, __LINE__, change_made, new_width, new_height));
-					
-					if (change_made)
-					{
-						Bitmap*		the_bitmap = Sys_GetScreenBitmap(global_system, back_layer);
-						
-						// undraw the old box, draw the new one. temporary problem: A2560 emulators are not currently doing composition, so we can't draw to foreground layer. 
-						//Bitmap_DrawBox(the_bitmap, prev_x, prev_y, prev_width, prev_height, 0, PARAM_DO_NOT_FILL)
-						Bitmap_DrawBox(the_bitmap, new_x, new_y, new_width, new_height, SYS_COLOR_GREEN1, PARAM_DO_NOT_FILL);						
-					}
-				}
-				else
-				{
-					// give window an event
-					(*the_window->event_handler_)(the_event);				
-				}
-								
 				break;
 				
-			case mouseDown:
-				
+			case mouseDown:				
 				DEBUG_OUT(("%s %d: mouse down event (%i, %i)", __func__, __LINE__, the_event->x_, the_event->y_));
 
-				//* Check if mouse is down in the active window, or in another window
-				//   * If not in active window, add 2 WindowActive events to the queue.
-				//     * Tell old front window it is now not active
-				//     * Make window the front most window
-				//    Cancel this add queue for hte mouse down, and add another AFTER the 2 activate/inactivate events.
-			
-				the_active_window = Sys_GetActiveWindow(global_system);
-				the_window = Sys_GetWindowAtXY(global_system, the_event->x_, the_event->y_);
-
-				if (the_window == NULL)
-				{
-					LOG_ERR(("%s %d: no window found at %i, %i!", __func__, __LINE__, the_event->x_, the_event->y_));
-					Sys_Destroy(&global_system);
-				}
-				DEBUG_OUT(("%s %d: active window = '%s', clicked window = '%s'", __func__, __LINE__, the_active_window->title_, the_window->title_));
-
-				// get the delta between current and last clicked position
-				x_delta = Mouse_GetXDelta(the_event_manager->mouse_tracker_);
-				y_delta = Mouse_GetYDelta(the_event_manager->mouse_tracker_);
-				
-				// update the mouse tracker so that if we end up dragging, we'll know where the original click was. (or if a future double click, what time the click was, etc.)
-				Mouse_AcceptUpdate(the_event_manager->mouse_tracker_, the_event->x_, the_event->y_, true);
-
-				// get local coords so we can check for drag and lasso
-				local_x = the_event->x_;
-				local_y = the_event->y_;
-				Window_GlobalToLocal(the_window, &local_x, &local_y);
-				
-				if (the_window != the_active_window)
-				{
-					// LOGIC:
-					//   Any mouse click on a window other than the active window causes change in active window. 
-					//   The mouse click is consumed by the system in this case: the target window does not get an event (but it will get one later for activate)
-					
-					Sys_SetActiveWindow(global_system, the_window);
-					DEBUG_OUT(("%s %d: **** changed active window to = '%s'; redrawing all windows", __func__, __LINE__, the_window->title_));
-
-					EventManager_AddEvent(inactivateEvt, -1, -1, -1, 0L, the_active_window, NULL);
-					EventManager_AddEvent(activateEvt, -1, -1, -1, 0L, the_window, NULL);
-
-					//Sys_Render(global_system);
-					//EventManager_AddEvent(mouseDown, -1, the_event->x_, the_event->y_, 0L, the_window, NULL); // add the mouse down event back in, AFTER the 2 window events.
-				}
-				else
-				{
-					// LOGIC:
-					//   A mouse click on the active window could be start of a drag action (if in appropriate place), 
-					//     or it could be the start of a click on a Control
-					//     if the start of a drag action, no event will be sent to the window until mouse up (end of drag)
-					//     if the click is on a control, no event will be sent to the window until mouse up (and mouse is still on control). 
-					//       the control itself, however, will get a <selected> call.
-
-					the_event->window_ = the_window;
-					
-					// check for a control that needs activating
-					the_event->control_ = Window_GetControlAtXY(the_event->window_, local_x, local_y);
-					
-					// have control change it's visual state to pressed. that is system's responsibility, not app's. 
-					// TODO: think about whether this should be limited to only controls that have 0/1 states?
-					// TODO: think about whether the system should eat the mouseDown event if over a control
-					if (the_event->control_)
-					{
-						DEBUG_OUT(("%s %d: ** control '%s' (id=%i) moused down!", __func__, __LINE__, the_event->control_->caption_, the_event->control_->id_));
-						Window_SetSelectedControl(the_event->window_, the_event->control_);
-						//Control_SetPressed(the_event->control_, true);
-						// give window an event
-						//(*the_window->event_handler_)(the_event);
-						
-						Mouse_SetMode(the_event_manager->mouse_tracker_, mouseDownOnControl);
-					}
-				}
-				
-				// LOGIC:
-				//   regardless of what window was clicked, we have to update mouse mode
-				//   if mouse is in title bar, it could be start of a drag action to move the window.
-				//   same for window resize widgets
-				//   we do not want to activate controls yet though. (TODO: revisit this decision if it seems weird from HF perspective)
-				//   first task is to determine if the point the mouse clicked on is in a draggable region.
-				//   if this is active window, if not draggable region, it could be a lassoable region.
-				
-				// check for click in a draggable region
-				MouseMode	possible_drag_mode;
-				
-				possible_drag_mode = Window_CheckForDragZone(the_event->window_, local_x, local_y);
-				
-				if (possible_drag_mode != mouseFree)
-				{
-					Mouse_SetMode(the_event_manager->mouse_tracker_, possible_drag_mode);
-				}
+				EventManager_HandleMouseDown(the_event_manager, the_event);
 				
 				break;
 
 			case mouseUp:
 				DEBUG_OUT(("%s %d: mouse up event (%i, %i)", __func__, __LINE__, the_event->x_, the_event->y_));
 
-				//* Check if over a control. 
-				//   * If yes, check if that control has state set to pressed
-				//     * if yes, set the control's visual state to normal. add an event for control_clicked???
-				//       * should we eat the mouse up event? YES
-				//   * if no, give the window an event (why not?)
-			
-				the_active_window = Sys_GetActiveWindow(global_system);
-				the_window = Sys_GetWindowAtXY(global_system, the_event->x_, the_event->y_);
-
-				if (the_window == NULL)
-				{
-					LOG_ERR(("%s %d: no window found at %i, %i!", __func__, __LINE__, the_event->x_, the_event->y_));
-					Sys_Destroy(&global_system);
-				}
-				DEBUG_OUT(("%s %d: active window = '%s', clicked window = '%s'", __func__, __LINE__, the_active_window->title_, the_window->title_));
-				
-				the_event->window_ = the_window;
-				
-				// no matter what, reset the mouse history position flags
-				Mouse_AcceptUpdate(the_event_manager->mouse_tracker_, the_event->x_, the_event->y_, false);
-
-				// get the delta between current and last clicked position
-				x_delta = Mouse_GetXDelta(the_event_manager->mouse_tracker_);
-				y_delta = Mouse_GetYDelta(the_event_manager->mouse_tracker_);
-				DEBUG_OUT(("%s %d: mouse delta at mouse up was %i, %i!", __func__, __LINE__, x_delta, y_delta));
-				
-				// LOGIC:
-				//   Based on what the mode had been before mouse button up, we take different actions
-				//   If mouseDragTitle > tell window to move to new coordinates
-				//   if mouseResizeXXX > tell window to accept new size
-				//   if mouseDownOnControl > create a control clicked event and send to user Window
-				//   (fill in the rest)
-				
-				// If this is mouseDragTitle mode, tell window to move to new coordinates
-				if (starting_mode == mouseDragTitle)
-				{					
-					DEBUG_OUT(("%s %d: mouse up from mouseDragTitle: move window '%s'!", __func__, __LINE__, the_window->title_));
-					
-					if (x_delta != 0 && y_delta != 0)
-					{
-						int16_t	new_x;
-						int16_t	new_y;
-						int16_t	new_width;
-						int16_t	new_height;
-						int32_t	the_code;
-						
-						new_x = Window_GetX(the_window) + x_delta;
-						new_y = Window_GetY(the_window) + y_delta;
-						new_width = Window_GetWidth(the_window);
-						new_height = Window_GetHeight(the_window);
-						the_code = (new_width << 16) + new_height;
-						
-						DEBUG_OUT(("%s %d: adding movewindow evt with %i, %i", __func__, __LINE__, new_x, new_y));
-						
-						EventManager_AddEvent(windowChanged, the_code, new_x, new_y, 0L, the_window, NULL);
-					}
-				}
-				else if (starting_mode >= mouseResizeUp) // this gets all the resize items
-				{
-					int16_t	new_x;
-					int16_t	new_y;
-					int16_t	new_width;
-					int16_t	new_height;
-					int32_t	the_code;
-					bool	change_made = false;
-					
-					new_x = Window_GetX(the_window);
-					new_y = Window_GetY(the_window);
-					new_width = Window_GetWidth(the_window);
-					new_height = Window_GetHeight(the_window);
-
-					DEBUG_OUT(("%s %d: mouse up from mouseResizeXXX: resize window '%s'!", __func__, __LINE__, the_window->title_));
-					
-					if (starting_mode == mouseResizeLeft || starting_mode == mouseResizeRight)
-					{
-						if (x_delta != 0)
-						{
-							new_width += x_delta;
-							
-							if (starting_mode == mouseResizeLeft)
-							{
-								new_x += x_delta;
-							}
-
-							change_made = true;						
-						}
-					}
-					else if (starting_mode == mouseResizeUp || starting_mode == mouseResizeDown)
-					{
-						if (y_delta != 0)
-						{
-							new_height += y_delta;
-							
-							if (starting_mode == mouseResizeUp)
-							{
-								new_y += y_delta;
-							}
-
-							change_made = true;
-						}
-					}
-					else if (starting_mode == mouseResizeDownRight)
-					{
-						if (y_delta != 0)
-						{
-							new_width += x_delta;
-							new_height += y_delta;
-							change_made = true;
-						}
-					}
-
-					if (change_made)
-					{
-						the_code = (new_width << 16) + new_height;
-						EventManager_AddEvent(windowChanged, the_code, new_x, new_y, 0L, the_window, NULL);
-					}
-				}
-				else if (starting_mode == mouseDownOnControl)
-				{
-					// check for a control that was pressed, and is now released = it got clicked
-					local_x = the_event->x_;
-					local_y = the_event->y_;
-					Window_GlobalToLocal(the_event->window_, &local_x, &local_y);
-				
-					DEBUG_OUT(("%s %d: mouse up from mouseDownOnControl: fire off a control click in window '%s'!", __func__, __LINE__, the_window->title_));
-					
-					the_event->control_ = Window_GetControlAtXY(the_event->window_, local_x, local_y);
-				
-					if (the_event->control_)
-					{
-						if (Control_GetPressed(the_event->control_))
-						{
-							DEBUG_OUT(("%s %d: ** control '%s' (id=%i) was down, now up!", __func__, __LINE__, the_event->control_->caption_, the_event->control_->id_));
-							//Control_SetPressed(the_event->control_, false);
-							EventManager_AddEvent(controlClicked, -1, the_event->x_, the_event->y_, 0L, the_event->window_, the_event->control_);
-						}
-						else
-						{
-							// a control was clicked on, button not let up until mouse left that control, and was placed over another
-							// first control needs to be unselected.
-							// second control does NOT need any action. should stay unselected/unpushed.
-							
-							// clear any selected control without setting another to selected.
-							Window_SetSelectedControl(the_event->window_, NULL);
-						}
-					}
-					else
-					{
-						// situation is SOME control was down. user let up mouse, but had moved mouse off of a control. 
-						// should the window get a mouse up event in that case? What would it do with that? 
-						// give window an event
-						//(*the_window->event_handler_)(the_event);
-						
-						// either way, need to unselect whatever control had been clicked on mouse-down
-						Window_SetSelectedControl(the_event->window_, NULL);
-					}
-				}
-				
-				Mouse_SetMode(the_event_manager->mouse_tracker_, mouseFree);
+				EventManager_HandleMouseUp(the_event_manager, the_event);
 				
 				break;
 
 			case controlClicked:
 				DEBUG_OUT(("%s %d: control clicked event: %c", __func__, __LINE__, the_event->code_));
 				// give window an event
-				(*the_window->event_handler_)(the_event);				
+				(*the_event->window_->event_handler_)(the_event);
 		
 				break;
 				

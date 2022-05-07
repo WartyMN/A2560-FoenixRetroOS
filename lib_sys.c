@@ -268,6 +268,9 @@ System* Sys_New(void)
 	// LOGIC: we don't have font info yet; just want to make it clear these are not set and not rely on compiler behavior
 	the_system->system_font_ = NULL;
 	the_system->app_font_ = NULL;
+	the_system->theme_ = NULL;
+	the_system->active_window_ = NULL;
+	the_system->window_count_ = 0;
 	
 	return the_system;
 	
@@ -544,6 +547,7 @@ bool Sys_AutoDetectMachine(System* the_system)
 
 	sys_get_info(the_sys_info);
 	the_system->model_number_ = the_sys_info->model;
+	//DEBUG_OUT(("%s %d: the_system->model_number_=%u", __func__, __LINE__, the_system->model_number_));
 	
 	switch (the_system->model_number_)
 	{
