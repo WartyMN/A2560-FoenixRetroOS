@@ -659,7 +659,7 @@ static void Window_DrawTitle(Window* the_window)
 		Bitmap_SetColor(the_window->bitmap_, Theme_GetInactiveForeColor(the_theme));
 	}
 	
-	Bitmap_SetXY(the_window->bitmap_, the_window->titlebar_rect_.MinX + the_theme->title_x_offset_, the_window->titlebar_rect_.MinY + (the_theme->titlebar_height_ + new_font->nDescent) / 2 - 1);
+	Bitmap_SetXY(the_window->bitmap_, the_window->titlebar_rect_.MinX + the_theme->title_x_offset_, the_window->titlebar_rect_.MinY + (new_font->fRectHeight - new_font->ascent) );
 
 	if (Font_DrawString(the_window->bitmap_, the_window->title_, chars_that_fit) == false)
 	{

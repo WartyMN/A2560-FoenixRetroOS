@@ -331,11 +331,6 @@ bool Font_Destroy(Font** the_font)
 Font* Font_LoadFontData(unsigned char* the_data)
 {
 	Font*			the_font;
-// 	uint16_t		image_table_count;
-// 	uint16_t		loc_table_count;
-// 	uint16_t		width_table_count;
-// 	uint16_t		height_table_count;
-// 	bool			has_height_table;
 	
 	if ( (the_font = Font_New(the_data)) == NULL)
 	{
@@ -343,6 +338,8 @@ Font* Font_LoadFontData(unsigned char* the_data)
 		return NULL;
 	}
 	
+	//Font_Print(the_font);
+
 	return the_font;
 
 }
@@ -844,7 +841,7 @@ int16_t Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font
 	}
 	
 	// finished writing visible pixels, but need to move pen further right if char's overall width was greater than amount moved so far
-	DEBUG_OUT(("%s %d: before: pixels_moved=%i, width_value=%i", __func__, __LINE__, pixels_moved, width_value));
+// 	DEBUG_OUT(("%s %d: before: pixels_moved=%i, width_value=%i", __func__, __LINE__, pixels_moved, width_value));
 	//pixels_moved += width_value - pixels_moved;
 	pixels_moved = width_value;
 // 	DEBUG_OUT(("%s %d: after: pixels_moved=%i", __func__, __LINE__, pixels_moved));

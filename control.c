@@ -115,7 +115,8 @@ static void Control_DrawCaption(Control* the_control)
 
 	x_offset = the_control->rect_.MinX + (the_control->width_ - the_control->avail_text_width_) / 2; // potentially, this could be problematic if a theme designer set up a theme with right width 10, left width 2. 
 	x = x_offset + (available_width - pixels_used) / 2;
-	y = the_control->rect_.MinY + (the_control->rect_.MaxY - the_control->rect_.MinY + the_font->nDescent) / 2 - 1;
+	//y = the_control->rect_.MinY + (the_control->rect_.MaxY - the_control->rect_.MinY + the_font->nDescent) / 2 - 1;
+	y = the_control->rect_.MinY + (the_font->fRectHeight - the_font->ascent);
 	//DEBUG_OUT(("%s %d: available_width=%i, x_offset=%i, x=%i, y=%i", __func__, __LINE__, available_width, x_offset, x, y));
 
 	if (the_control->active_)
