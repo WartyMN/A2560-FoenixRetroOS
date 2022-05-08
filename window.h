@@ -75,8 +75,10 @@
 
 #define WINDOW_MAX_WINTITLE_SIZE		128
 
-#define WIN_OPEN_AS_BACKDROP			true	// Window_New() parameter
-#define WIN_DO_NOT_OPEN_AS_BACKDROP		false	// Window_New() parameter
+#define WIN_MAX_CLIP_RECTS				10	//! if a window accumulates more clip rects than this, it will refresh the entire window in one go
+
+#define WIN_PARAM_OPEN_AS_BACKDROP				true	// Window_New() parameter
+#define WIN_PARAM_DO_NOT_OPEN_AS_BACKDROP		false	// Window_New() parameter
 
 #define WIN_PARAM_FORCE_CONTROL_REDRAW			true	// Window_DrawControls() parameter
 #define WIN_PARAM_ONLY_REDRAW_INVAL_CONTROLS	false	// Window_DrawControls() parameter
@@ -121,6 +123,15 @@ typedef enum window_base_control_id
 /*****************************************************************************/
 /*                                 Structs                                   */
 /*****************************************************************************/
+
+
+struct ClipRect
+{
+	int16_t					x_;								// horizontal coordinate, relative to the parent window
+	int16_t					y_;								// vertical coordinate, relative to the parent window
+	int16_t					width_;
+	int16_t					height_;	
+};
 
 struct Window
 {
@@ -187,7 +198,8 @@ struct Window
 	Window*					child_window_;					// can be NULL. used when a window spawns a requester. (This is the requester). NULLs out again when requester is closed. 
 	Control*				root_control_;					// first control in the window
 	Control*				selected_control_;				// the currently selected control for the window. Only 1 can be selected per window. No guarantee that any are selected.
-	ClipRect*				clip_rect_;						// one or more clipping rects; determines which parts of window need to be blitted to the main screen
+	ClipRect				clip_rect_[WIN_MAX_CLIP_RECTS];		// one or more clipping rects; determines which parts of window need to be blitted to the main screen
+	int16_t					clip_count_;					// number of clip rects the window is currently tracking
 	void					(*event_handler_)(EventRecord*);	// function that will be called by the system when an event related to the window is encountered.
 
 // 	MouseTracker*			mouse_tracker_;					// tracks mouse up/down points within this window
@@ -220,16 +232,6 @@ struct NewWinTemplate
 	int16_t					min_height_;					// minimum height of window when in window-sized (normal) mode. 
 	int16_t					max_width_;						// maximum width of window when in window-sized (normal) mode. If > 0, the window will not maximize. Default 0.
 	int16_t					max_height_;					// maximum height of window when in window-sized (normal) mode. If > 0, the window will not maximize. Default 0. 
-};
-
-
-struct ClipRect
-{
-	int16_t					x_;								// horizontal coordinate, relative to the parent window
-	int16_t					y_;								// vertical coordinate, relative to the parent window
-	int16_t					width_;
-	int16_t					height_;	
-	ClipRect*				next_;							// link to next clip rect
 };
 
 /*****************************************************************************/
@@ -268,9 +270,6 @@ NewWinTemplate* Window_GetNewWinTemplate(char* the_win_title);
 
 
 // **** CLIP RECT MANAGEMENT functions *****
-
-//! Remove and free any clip rects attached to the window
-void Window_ClearClipRects(Window* the_window);
 
 //! Copy the passed rectangle to the window's clip rect collection
 bool Window_AddClipRect(Window* the_window, Rectangle* new_rect);

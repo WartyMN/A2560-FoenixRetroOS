@@ -844,7 +844,7 @@ Window* Window_New(NewWinTemplate* the_win_template, void (* event_handler)(Even
 	the_window->show_iconbar_ = the_win_template->show_iconbar_;
 	the_window->is_backdrop_ = the_win_template->is_backdrop_;
 	the_window->can_resize_ = the_win_template->can_resize_;
-	the_window->clip_rect_ = NULL;
+	the_window->clip_count_ = 0;
 	the_window->event_handler_ = event_handler;
 	the_window->selected_control_ = NULL;
 	
@@ -994,44 +994,16 @@ NewWinTemplate* Window_GetNewWinTemplate(char* the_win_title)
 
 // **** CLIP RECT MANAGEMENT functions *****
 
-//! Remove and free any clip rects attached to the window
-void Window_ClearClipRects(Window* the_window)
-{
-	ClipRect*	the_clip;
-	ClipRect*	next_clip;
-	
-	if ( the_window == NULL)
-	{
-		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
-	}
-	
-	//DEBUG_OUT(("%s %d: reached", __func__, __LINE__));
-	
-	the_clip = the_window->clip_rect_;
-	
-	while (the_clip)
-	{
-		next_clip = the_clip->next_;
-		
-		DEBUG_OUT(("%s %d: clearing cliprect %p (%i, %i -- %i, %i)", __func__, __LINE__, the_clip, the_clip->x_, the_clip->y_, the_clip->width_, the_clip->height_));
-		
-		free(the_clip);
-		
-		the_clip = next_clip;
-	}
-	
-	the_window->clip_rect_ = NULL;
-	
-	return;
-}
-
 
 //! Copy the passed rectangle to the window's clip rect collection
 bool Window_AddClipRect(Window* the_window, Rectangle* new_rect)
 {
-	ClipRect*	first_clip;
 	ClipRect*	the_clip;
+	
+	// LOGIC:
+	//   A window has a maximum number of clip rects it will track
+	//   after that number has been reached, the whole window will need to be reblitted
+	//   therefore, once that number is reached, stop accepting new ones
 	
 	if ( the_window == NULL)
 	{
@@ -1045,41 +1017,23 @@ bool Window_AddClipRect(Window* the_window, Rectangle* new_rect)
 		return false;
 	}
 	
-	if ( (the_clip = (ClipRect*)calloc(1, sizeof(ClipRect)) ) == NULL)
+	if ( the_window->clip_count_ >= WIN_MAX_CLIP_RECTS)
 	{
-		LOG_ERR(("%s %d: could not allocate memory to create new ClipRect", __func__ , __LINE__));
 		return false;
 	}
-	LOG_ALLOC(("%s %d:	__ALLOC__	the_clip	%p	size	%i", __func__ , __LINE__, the_clip, sizeof(ClipRect)));
-
+	
 	// LOGIC:
 	//   controls / etc pass on their window-local coords
 	//   but to blit to screen, we need to correct to global coords
 
-// 	the_clip->rect_.MinX = new_rect->MinX + the_window->x_;
-// 	the_clip->rect_.MaxX = new_rect->MaxX + the_window->x_;
-// 	the_clip->rect_.MinY = new_rect->MinY + the_window->y_;
-// 	the_clip->rect_.MaxY = new_rect->MaxY + the_window->y_;
+	the_clip = &the_window->clip_rect_[the_window->clip_count_];
+	
 	the_clip->x_ = new_rect->MinX;
 	the_clip->y_ = new_rect->MinY;
 	the_clip->width_ = new_rect->MaxX - new_rect->MinX;
 	the_clip->height_ = new_rect->MaxY - new_rect->MinY;
 	
-	//DEBUG_OUT(("%s %d: reached", __func__, __LINE__));
-	
-	first_clip = the_window->clip_rect_;
-	
-	if (first_clip != NULL)
-	{
-		// one or more clips exist, we will insert ours at the head of the list
-		the_clip->next_ = first_clip;
-	}
-	else
-	{
-		the_clip->next_ = NULL;
-	}
-	
-	the_window->clip_rect_ = the_clip;
+	the_window->clip_count_++;
 	
 	return true;
 }
@@ -1096,6 +1050,7 @@ bool Window_AddClipRect(Window* the_window, Rectangle* new_rect)
 bool Window_BlitClipRects(Window* the_window)
 {
 	ClipRect*	the_clip;
+	int16_t		i;
 	
 	if ( the_window == NULL)
 	{
@@ -1103,10 +1058,15 @@ bool Window_BlitClipRects(Window* the_window)
 		return false;
 	}
 	
-	the_clip = the_window->clip_rect_;
-	
-	while (the_clip)
+	if (the_window->clip_count_ == 0)
 	{
+		return true; // not an error condition
+	}
+	
+	for (i = 0; i < the_window->clip_count_; i++)
+	{
+		the_clip = &the_window->clip_rect_[i];
+
 		DEBUG_OUT(("%s %d: blitting cliprect %p (%i, %i -- %i, %i)", __func__, __LINE__, the_clip, the_clip->x_, the_clip->y_, the_clip->width_, the_clip->height_));
 	
 		//Bitmap_BlitRect(the_window->bitmap_, the_clip->rect_, Sys_GetScreenBitmap(global_system, back_layer), the_window->x_, the_window->y_);
@@ -1120,15 +1080,13 @@ bool Window_BlitClipRects(Window* the_window)
 					the_clip->width_, 
 					the_clip->height_
 					);
-		
-		the_clip = the_clip->next_;
 	}
 	
 	// LOGIC: 
 	//   clip rects are one-time usage: once we have blitted them, we never want to blit them again
 	//   we want to clear the decks for the next set of updates
 	
-	Window_ClearClipRects(the_window);
+	the_window->clip_count_ = 0;
 	
 	return true;
 }
@@ -1520,10 +1478,9 @@ void Window_Render(Window* the_window)
 	//Window_AddClipRect(the_window, &the_window->overall_rect_);
 	
 	// if the entire window has had to be redrawn, then don't bother with individual cliprects, just do one for entire window
-	if (the_window->invalidated_ == true)
+	if (the_window->invalidated_ == true || the_window->clip_count_ >= WIN_MAX_CLIP_RECTS)
 	{
-		Window_ClearClipRects(the_window);
-		//Window_AddClipRect(the_window, &the_window->overall_rect_);
+		the_window->clip_count_ = 0;
 		Bitmap_BlitRect(the_window->bitmap_, the_window->overall_rect_, Sys_GetScreenBitmap(global_system, back_layer), the_window->x_, the_window->y_);
 		the_window->invalidated_ = false;
 	}
