@@ -134,7 +134,7 @@ void Mouse_AcceptUpdate(MouseTracker* the_mouse, int16_t x, int16_t y, bool butt
 		the_mouse->movement_area_.MaxY = the_mouse->clicked_y_ + MOUSE_MOVEMENT_THRESHOLD;
 	}
 	
-	Mouse_Print(the_mouse);
+	//Mouse_Print(the_mouse);
 }
 
 

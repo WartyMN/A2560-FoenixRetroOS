@@ -198,8 +198,10 @@ struct Window
 	Window*					child_window_;					// can be NULL. used when a window spawns a requester. (This is the requester). NULLs out again when requester is closed. 
 	Control*				root_control_;					// first control in the window
 	Control*				selected_control_;				// the currently selected control for the window. Only 1 can be selected per window. No guarantee that any are selected.
-	ClipRect				clip_rect_[WIN_MAX_CLIP_RECTS];		// one or more clipping rects; determines which parts of window need to be blitted to the main screen
+	Rectangle				clip_rect_[WIN_MAX_CLIP_RECTS];		// one or more clipping rects; determines which parts of window need to be blitted to the main screen
 	int16_t					clip_count_;					// number of clip rects the window is currently tracking
+	Rectangle				damage_rect_[4];				// 0 to 4 rects that describe to other windows under this one, which parts of the screen were previously covered by this window (prior to a move or resize)
+	int16_t					damage_count_;					// number of damage rects the window is currently tracking
 	void					(*event_handler_)(EventRecord*);	// function that will be called by the system when an event related to the window is encountered.
 
 // 	MouseTracker*			mouse_tracker_;					// tracks mouse up/down points within this window
@@ -281,6 +283,16 @@ bool Window_MergeClipRects(Window* the_window);
 //! Blit each clip rect to the screen, and clear all clip rects when done
 //! This is the actual mechanics of rendering the window to the screen
 bool Window_BlitClipRects(Window* the_window);
+
+//! Calculate damage rects, if any, caused by window moving or being resized
+//! @return:	Returns true if 1 or more damage rects were created
+bool Window_GenerateDamageRects(Window* the_window, Rectangle* the_old_rect);
+
+//! Copy the passed rectangle to the window's clip rect collection
+//! Note: will check for non-intersection; will trim copy of clip to just the intersection
+//! Note: it is safe to pass non-intersecting rects to this function
+//! @return:	Returns true if the passed rect has any intersection with the window. Returns false if not intersection, or on any error condition.
+bool Window_AcceptDamageRect(Window* the_window, Rectangle* damage_rect);
 
 
 

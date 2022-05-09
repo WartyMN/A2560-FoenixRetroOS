@@ -411,6 +411,36 @@ int32_t General_Round(double the_float)
 }
 
 
+//! min() implementation
+int32_t General_LongMin(int32_t a, int32_t b)
+{
+	return (a > b ? b : a);
+}
+
+
+//! max() implementation
+int32_t General_LongMax(int32_t a, int32_t b)
+{
+	return (a > b ? a : b);
+}
+
+
+//! min() implementation
+int16_t General_ShortMin(int16_t a, int16_t b)
+{
+	return (a > b ? b : a);
+}
+
+
+//! max() implementation
+int16_t General_ShortMax(int16_t a, int16_t b)
+{
+	return (a > b ? a : b);
+}
+
+
+
+
 
 // **** NUMBER<>STRING UTILITIES *****
 
@@ -779,6 +809,29 @@ int16_t General_StrFindNextLineBreak(const char* the_string, int16_t max_search_
 // **** RECTANGLE UTILITIES *****
 
 
+//! Test if one rectangle is entirely within the bounds of another Rectangle
+//! @param	r1: the rectangle being tested
+//! @param	r2: the rectangle being measured to determine if r1 fits entirely within it
+//! @return:	returns true if r1 is within bounds of r2. 
+bool General_RectWithinRect(Rectangle r1, Rectangle r2)
+{
+	if	(
+		(r1.MinX >= r2.MinX) &&
+		(r1.MaxX <= r2.MaxX) &&
+		(r1.MinY >= r2.MinY) &&
+		(r1.MaxY <= r2.MaxY)
+		)
+	{
+		DEBUG_OUT(("%s %d: r1 (%i, %i : %i, %i) IS entirely within r2 (%i, %i : %i, %i)", __func__, __LINE__, r1.MinX, r1.MinY, r1.MaxX, r1.MaxY, r2.MinX, r2.MinY, r2.MaxX, r2.MaxY));
+		return true;
+	}
+
+	DEBUG_OUT(("%s %d: r1 (%i, %i : %i, %i) is NOT entirely within r2 (%i, %i : %i, %i)", __func__, __LINE__, r1.MinX, r1.MinY, r1.MaxX, r1.MaxY, r2.MinX, r2.MinY, r2.MaxX, r2.MaxY));
+
+	return false;
+}
+
+
 // test if 2 rectangles intersect
 bool General_RectIntersect(Rectangle r1, Rectangle r2)
 {
@@ -858,6 +911,145 @@ void General_CenterRectWithinRect(Rectangle* the_frame_rect, Rectangle* the_hero
 
 	//DEBUG_OUT(("%s %d: coords=%i, %i / %i, %i", __func__ , __LINE__, the_frame_rect->MinX, the_frame_rect->MinY, the_frame_rect->MaxX, the_frame_rect->MaxY));
 }
+
+
+//! Copy values of one rect to another
+//! @param	r1: the rectangle to be overwritten (copied into)
+//! @param	r2: the rectangle to copy
+void General_CopyRect(Rectangle* r1, Rectangle* r2)
+{
+	memcpy(r1, r2, sizeof(Rectangle));
+}
+
+
+//! Calculate the difference between 2 rectangles and populate 0, 1, 2, 3, or 4 new rectangles with the difference
+//! If Rect 1 is larger than Rect 2, no new rect will be populated
+//! If Rect 1 is smaller than Rect 2 in one dimension (axis) only, 1 new rect will be populated
+//! If Rect 1 is smaller than Rect 2 in two dimensions (axes), 3 new rect will be populated
+//! If Rect 1 is same size as Rect 2 and moved in one dimension (axis) only, 1 new rect will be populated
+//! If Rect 1 is same size as Rect 2 and moved in two dimensions (axes), 3 new rect will be populated
+//! @param	r1: the lead, or foreground rect. When calculating a damage rect, this would typically be the rect of the window after it is moved/resized.
+//! @param	r2: the secondary, or background rect. When calculating a damage rect, this would typically be the rect of the window before it is moved/resized.
+//! @param	diff_r1: valid pointer to a rect object that will be populated if there is 1 or 3 difference rects resulting from the operation
+//! @param	diff_r2: valid pointer to a rect object that will be populated if there are 2 or more difference rects resulting from the operation
+//! @param	diff_r3: valid pointer to a rect object that will be populated if there are 3 or more difference rects resulting from the operation
+//! @param	diff_r4: valid pointer to a rect object that will be populated if there are 4 difference rects resulting from the operation
+//! @return	Returns number of new rects that represent the difference between the passed rectangles. This indicates how many, if any, of the diff_rects need to be evaluated. Returns -1 on any error condition.
+int16_t General_CalculateRectDifference(Rectangle* r1, Rectangle* r2, Rectangle* diff_r1, Rectangle* diff_r2, Rectangle* diff_r3, Rectangle* diff_r4)
+{
+	int16_t		num_rects = 0;
+	Rectangle*	diff_rects[4];
+	
+	// LOGIC:
+	//   if the 2 rects don't intersect at all, diff_r1 can be r2
+	//   if rect a is bigger than rect b in all dimensions, there will be no diff rects. 
+	//   if they do intersect, use 4 zone rect difference algo to get the rects
+	
+	if (diff_r1 == NULL || diff_r2 == NULL || diff_r3 == NULL || diff_r4 == NULL)
+	{
+		return -1;
+	}
+	
+	if (General_RectWithinRect(*r2, *r1) == true)
+	{
+		return 0;
+	}
+	
+	if (General_RectIntersect(*r1, *r2) == false)
+	{
+		General_CopyRect(r1, diff_r1);
+		return 1;
+	}
+
+	DEBUG_OUT(("%s %d: r1 (%i, %i : %i, %i) ---- r2 (%i, %i : %i, %i)", __func__, __LINE__, r1->MinX, r1->MinY, r1->MaxX, r1->MaxY, r2->MinX, r2->MinY, r2->MaxX, r2->MaxY));
+	
+	// for any other case, we need to calculate 1-4 rects
+	diff_rects[0] = diff_r1;
+	diff_rects[1] = diff_r2;
+	diff_rects[2] = diff_r3;
+	diff_rects[3] = diff_r4;
+	
+	// top rectangle?
+	if (r2->MinY < r1->MinY)
+	{
+		diff_rects[num_rects]->MinY = r2->MinY;
+		diff_rects[num_rects]->MaxY = r1->MinY - 1;
+		diff_rects[num_rects]->MinX = r1->MinX;
+		diff_rects[num_rects]->MaxX = r1->MaxX;
+		DEBUG_OUT(("%s %d: diff rect# %i (%i, %i : %i, %i)", __func__, __LINE__, num_rects, diff_rects[num_rects]->MinX, diff_rects[num_rects]->MinY, diff_rects[num_rects]->MaxX, diff_rects[num_rects]->MaxY));
+		num_rects++;
+		
+	}
+	
+	// bottom rectangle?
+	if (r2->MaxY > r1->MaxY)
+	{
+		diff_rects[num_rects]->MinY = r1->MaxY + 1;
+		diff_rects[num_rects]->MaxY = r2->MaxY;
+		diff_rects[num_rects]->MinX = r1->MinX;
+		diff_rects[num_rects]->MaxX = r1->MaxX;
+		DEBUG_OUT(("%s %d: diff rect# %i (%i, %i : %i, %i)", __func__, __LINE__, num_rects, diff_rects[num_rects]->MinX, diff_rects[num_rects]->MinY, diff_rects[num_rects]->MaxX, diff_rects[num_rects]->MaxY));
+		num_rects++;
+		
+	}
+
+	// left rectangle?
+	if (r2->MinX < r1->MinX)
+	{
+		diff_rects[num_rects]->MinX = r2->MinX;
+		diff_rects[num_rects]->MaxX = r1->MinX - 1;
+		diff_rects[num_rects]->MinY = r2->MinY;
+		diff_rects[num_rects]->MaxY = r2->MaxY;
+		DEBUG_OUT(("%s %d: diff rect# %i (%i, %i : %i, %i)", __func__, __LINE__, num_rects, diff_rects[num_rects]->MinX, diff_rects[num_rects]->MinY, diff_rects[num_rects]->MaxX, diff_rects[num_rects]->MaxY));
+		num_rects++;
+		
+	}
+	
+	// right rectangle?
+	if (r2->MaxX > r1->MaxX)
+	{
+		diff_rects[num_rects]->MinX = r1->MaxX + 1;
+		diff_rects[num_rects]->MaxX = r2->MaxX;
+		diff_rects[num_rects]->MinY = r2->MinY;
+		diff_rects[num_rects]->MaxY = r2->MaxY;
+		DEBUG_OUT(("%s %d: diff rect# %i (%i, %i : %i, %i)", __func__, __LINE__, num_rects, diff_rects[num_rects]->MinX, diff_rects[num_rects]->MinY, diff_rects[num_rects]->MaxX, diff_rects[num_rects]->MaxY));
+		num_rects++;
+		
+	}
+	
+	return num_rects;
+}
+
+
+//! Calculate the intersection between 2 rectangles, storing result in the 3rd rect passed
+//! @param	r1: valid pointer to a rect object
+//! @param	r2: valid pointer to a rect object
+//! @param	intersect_r: valid pointer to a rect object that will contain the intersection rectangle, if any, at end of operation
+//! @return:	Returns true if there is an intersecting rectangle between r1 and r2.
+bool General_CalculateRectIntersection(Rectangle* r1, Rectangle* r2, Rectangle* intersect_r)
+{
+	if (r1 == NULL || r2 == NULL || intersect_r == NULL)
+	{
+		return false;
+	}
+	
+	if (General_RectIntersect(*r1, *r2) == false)
+	{
+		return false;
+	}
+
+	DEBUG_OUT(("%s %d: r1 (%i, %i : %i, %i) ---- r2 (%i, %i : %i, %i)", __func__, __LINE__, r1->MinX, r1->MinY, r1->MaxX, r1->MaxY, r2->MinX, r2->MinY, r2->MaxX, r2->MaxY));
+	
+	intersect_r->MinX = General_ShortMax(r1->MinX, r2->MinX);
+	intersect_r->MinY = General_ShortMax(r1->MinY, r2->MinY);
+	intersect_r->MaxX = General_ShortMin(r1->MaxX, r2->MaxX);
+	intersect_r->MaxY = General_ShortMin(r1->MaxY, r2->MaxY);
+
+	DEBUG_OUT(("%s %d: intersect_r (%i, %i : %i, %i)", __func__, __LINE__, intersect_r->MinX, intersect_r->MinY, intersect_r->MaxX, intersect_r->MaxY));
+	
+	return true;
+}
+
 
 
 

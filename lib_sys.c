@@ -144,6 +144,7 @@ void Sys_RenumberWindows(System* the_system)
 		{
 			LOG_ERR(("%s %d: this_window was null, the_item=%p, win_num=%i, win count=%i", __func__ , __LINE__, the_item, win_num, the_system->window_count_));
 			Sys_Destroy(&the_system);
+			return;
 		}
 		
 		if (this_window->is_backdrop_)
@@ -1399,6 +1400,9 @@ bool Sys_SetActiveWindow(System* the_system, Window* the_window)
 		Window_SetActive(the_system->active_window_, false);
 	}
 	
+	// Before making the new window active, survey any windows in front of it, and add their shapes to this window's damage rects so it can fix itself.
+	Sys_CollectDamageRects(the_system, the_window);
+	
 	the_system->active_window_ = the_window;
 
 	Window_SetActive(the_window, true);
@@ -1452,10 +1456,12 @@ void Sys_CloseOneWindow(System* the_system, Window* the_window)
 	Window*		the_next_window;
 	bool		need_different_active_window = false;
 	List*		this_window_item;
+	Rectangle	the_old_rect;
 
  	if (the_system == NULL)
  	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		Sys_Destroy(&the_system);
 		return;
  	}
 	
@@ -1463,6 +1469,7 @@ void Sys_CloseOneWindow(System* the_system, Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed a null window -- no window to close", __func__ , __LINE__));
+		Sys_Destroy(&the_system);
 		return;
 	}
 
@@ -1475,6 +1482,18 @@ void Sys_CloseOneWindow(System* the_system, Window* the_window)
 		return; // shut up warnings
 	}
 	
+	// nullify any upcoming events that reference this Window
+	EventManager_RemoveEventsForWindow(the_window);
+	
+	// before destroying the window, calculate and distribute any damage rects that may result from it being removed from screen
+	General_CopyRect(&the_old_rect, &the_window->global_rect_);
+	the_window->global_rect_.MinX = -2;
+	the_window->global_rect_.MinY = -2;
+	the_window->global_rect_.MaxX = -1;
+	the_window->global_rect_.MaxY = -1;
+	Window_GenerateDamageRects(the_window, &the_old_rect);
+	Sys_IssueDamageRects(the_system);
+	
 	// if this was active window, we'll need to pick a new one after we delete it
 	need_different_active_window = (the_system->active_window_ == the_window);
 	DEBUG_OUT(("%s %d: closing active window=%i", __func__ , __LINE__, need_different_active_window));
@@ -1483,9 +1502,6 @@ void Sys_CloseOneWindow(System* the_system, Window* the_window)
 	{
 		the_system->active_window_ = NULL;
 	}
-	
-	// nullify any upcoming events that reference this Window
-	EventManager_RemoveEventsForWindow(the_window);
 	
 	// destroy the window, making sure to set a new active window
 	Window_Destroy(&the_window);
@@ -1508,15 +1524,128 @@ void Sys_CloseOneWindow(System* the_system, Window* the_window)
 
 		DEBUG_OUT(("%s %d: new active window='%s'", __func__ , __LINE__, the_system->active_window_->title_));		
 	}
-	else
-	{
-		// don't need a new active window, but do need to re-render all windows
-		Sys_Render(global_system);		
-	}
+
+	// Re-render all windows
+	Sys_Render(global_system);		
 	
 	return;
 }
 
+
+//! Issue damage rects from the Active Window down to each other window in the system so that they can redraw portions of themselves
+//! Note: does not call for system re-render
+void Sys_IssueDamageRects(System* the_system)
+{
+	List*		the_item;
+	Window*		the_active_window;
+	int16_t		num_rects;
+	
+	if (the_system == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		Sys_Destroy(&the_system);
+		return;
+	}
+	
+	if (the_system->list_windows_ == NULL)
+	{
+		LOG_ERR(("%s %d: the window list was NULL", __func__ , __LINE__));
+		Sys_Destroy(&the_system);
+		return;
+	}
+	
+	// LOGIC:
+	//   This will be called when the active window has been resized or moved
+	//   The goal of this function is to find out which parts of windows behind the active window were previously not exposed, and now are, so they windows can redraw those portions to Screen
+	//   Because this function does not actually re-render every window, the order they are processed here does not matter.
+	//   Windows are ordered in the window list, by Z order, from back (head) to front (tail)
+
+	the_active_window = Sys_GetActiveWindow(global_system);
+	num_rects = the_active_window->damage_count_;
+	
+	DEBUG_OUT(("%s %d: active window '%s' has %i damage rects", __func__ , __LINE__, the_active_window->title_, num_rects));
+
+	the_item = *(the_system->list_windows_);
+
+	while (the_item != NULL)
+	{
+		Window*		this_window = (Window*)(the_item->payload_);
+		
+		//DEBUG_OUT(("%s %d: this_window '%s' has %i clip rects", __func__ , __LINE__, this_window->title_, this_window->clip_count_));
+
+		if (this_window != the_active_window)
+		{
+			int16_t		i;
+			
+			for (i = 0; i < num_rects; i++)
+			{
+				if (Window_AcceptDamageRect(this_window, &the_active_window->damage_rect_[i]) == false)
+				{
+				}
+			}			
+		}
+
+		the_item = the_item->next_item_;
+	}	
+}
+
+
+//! Collect damage rects for a window that is about to be made the active (foremost) window, so it can redraw portions of itself that may have been covered up by other windows
+//! Note: does not call for system re-render
+void Sys_CollectDamageRects(System* the_system, Window* the_future_active_window)
+{
+	List*		the_item;
+	
+	if (the_system == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		Sys_Destroy(&the_system);
+		return;
+	}
+	
+	if (the_system->list_windows_ == NULL)
+	{
+		LOG_ERR(("%s %d: the window list was NULL", __func__ , __LINE__));
+		Sys_Destroy(&the_system);
+		return;
+	}
+
+	if (the_future_active_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed window object was null", __func__ , __LINE__));
+		Sys_Destroy(&the_system);
+		return;
+	}
+	
+	
+	// LOGIC:
+	//   This will be called when a non-active window is being brought to the foreground and made the active window
+	//   The goal of this function is to find out which parts of that window have been behind the active window and any other windows, so those portions can be redrawn
+	//   Windows are ordered in the window list, by Z order, from back (head) to front (tail)
+	//   Because this function does not actually re-render every window, the order they are processed here does not matter.
+	//     However, we do need to not include damage rects from windows that were under the window being brought forward
+	//     This can be accomplished by walking through window list until we hit the window in question, then start collecting from the next window after that
+	
+	DEBUG_OUT(("%s %d: future active win '%s' has display order of %i", __func__ , __LINE__, the_future_active_window->title_, the_future_active_window->display_order_));
+
+	the_item = *(the_system->list_windows_);
+
+	while (the_item != NULL)
+	{
+		Window*		this_window = (Window*)(the_item->payload_);
+		
+		DEBUG_OUT(("%s %d: this_window '%s' has display order of %i", __func__ , __LINE__, this_window->title_, this_window->display_order_));
+
+		if (this_window->display_order_ > the_future_active_window->display_order_)
+		{
+			if (Window_AcceptDamageRect(the_future_active_window, &this_window->global_rect_) == false)
+			{
+			}
+		}
+
+		the_item = the_item->next_item_;
+	}	
+}
 
 
 
@@ -1530,6 +1659,7 @@ Theme* Sys_GetTheme(System* the_system)
 	if (the_system == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		Sys_Destroy(&the_system);
 		return NULL;
 	}
 	

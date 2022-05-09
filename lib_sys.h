@@ -212,6 +212,14 @@ bool Window_CompareDisplayOrder(void* first_payload, void* second_payload);
 // remove one window from system's list of windows, and close it
 void Sys_CloseOneWindow(System* the_system, Window* the_window);
 
+//! Issue damage rects from the Active Window down to each other window in the system so that they can redraw portions of themselves
+//! Note: does not call for system re-render
+void Sys_IssueDamageRects(System* the_system);
+
+//! Collect damage rects for a window that is about to be made the active (foremost) window, so it can redraw portions of itself that may have been covered up by other windows
+//! Note: does not call for system re-render
+void Sys_CollectDamageRects(System* the_system, Window* the_future_active_window);
+
 
 
 

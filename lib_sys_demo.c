@@ -621,7 +621,7 @@ void AddControls(Window* the_window)
 
 void OpenMultipleWindows(void)
 {
-	int16_t				win_count = 4;
+	int16_t				win_count = 2;
 	Window*				the_window[5];
 	NewWinTemplate*		the_win_template;
 	int16_t				max_width = 640;
@@ -663,7 +663,7 @@ void OpenMultipleWindows(void)
 	
 	// one more guaranteed smallest window for testing
 	the_win_template->x_ = 10;
-	the_win_template->y_ = 10;
+	the_win_template->y_ = 400;
 	the_win_template->width_ = 1;
 	the_win_template->height_ = 1;
 	the_win_template->title_ = (char*)"Tiny Window";
@@ -726,6 +726,9 @@ void Open2Windows(void)
 		// declare the window to be visible
 		Window_SetVisible(the_window[win_num], true);
 	}
+
+	// lets get some more!
+	OpenMultipleWindows();
 
 	// temporary until event handler is written: tell system to render the screen and all windows
 	Sys_Render(global_system);
@@ -944,7 +947,8 @@ void SharedEventHandler(EventRecord* the_event)
 					DEBUG_OUT(("%s %d: ** new x,y=%i,%i; new w/h=%i,%i", __func__, __LINE__, new_x, new_y, new_width, new_height));
 					
 					Window_ChangeWindow(the_window, new_x, new_y, new_width, new_height, WIN_PARAM_UPDATE_NORM_SIZE_TO_MATCH);
-					Window_Render(the_window);
+					//Window_Render(the_window);
+					Sys_Render(global_system);
 				}
 				
 				break;

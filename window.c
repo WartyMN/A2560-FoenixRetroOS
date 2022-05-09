@@ -800,21 +800,10 @@ Window* Window_New(NewWinTemplate* the_win_template, void (* event_handler)(Even
 	// assign the bitmap passed by win_setup, or allocate a new one
 	if ( the_win_template->bitmap_ == NULL)
 	{
-		if ( the_win_template->is_backdrop_)
+		if ( (the_window->bitmap_ = Bitmap_New(the_win_template->width_, the_win_template->height_, Sys_GetAppFont(global_system), PARAM_NOT_IN_VRAM)) == NULL)
 		{
-			if ( (the_window->bitmap_ = Sys_GetScreenBitmap(global_system, back_layer)) == NULL)
-			{
-				LOG_ERR(("%s %d: Failed to acquire global screen bitmap for use with backdrop", __func__, __LINE__));
-				goto error;
-			}
-		}
-		else
-		{
-			if ( (the_window->bitmap_ = Bitmap_New(the_win_template->width_, the_win_template->height_, Sys_GetAppFont(global_system), PARAM_NOT_IN_VRAM)) == NULL)
-			{
-				LOG_ERR(("%s %d: Failed to create bitmap", __func__, __LINE__));
-				goto error;
-			}
+			LOG_ERR(("%s %d: Failed to create bitmap", __func__, __LINE__));
+			goto error;
 		}
 	}
 	else
@@ -831,9 +820,9 @@ Window* Window_New(NewWinTemplate* the_win_template, void (* event_handler)(Even
 	the_window->norm_width_ = the_win_template->width_;
 	the_window->norm_height_ = the_win_template->height_;
 	the_window->global_rect_.MinX = the_window->x_;
-	the_window->global_rect_.MaxX = the_window->x_ + the_window->width_;
+	the_window->global_rect_.MaxX = (the_window->x_ + the_window->width_) - 1;
 	the_window->global_rect_.MinY = the_window->y_;
-	the_window->global_rect_.MaxY = the_window->y_ + the_window->height_;
+	the_window->global_rect_.MaxY = (the_window->y_ + the_window->height_) - 1;
 	the_window->min_width_ = the_win_template->min_width_;
 	the_window->min_height_ = the_win_template->min_height_;
 	the_window->max_width_ = the_win_template->max_width_;
@@ -996,9 +985,10 @@ NewWinTemplate* Window_GetNewWinTemplate(char* the_win_title)
 
 
 //! Copy the passed rectangle to the window's clip rect collection
+//! NOTE: the incoming rect must be using window-local coordinates, not global. No translation will be performed.
 bool Window_AddClipRect(Window* the_window, Rectangle* new_rect)
 {
-	ClipRect*	the_clip;
+	Rectangle*	the_clip;
 	
 	// LOGIC:
 	//   A window has a maximum number of clip rects it will track
@@ -1027,13 +1017,16 @@ bool Window_AddClipRect(Window* the_window, Rectangle* new_rect)
 	//   but to blit to screen, we need to correct to global coords
 
 	the_clip = &the_window->clip_rect_[the_window->clip_count_];
-	
-	the_clip->x_ = new_rect->MinX;
-	the_clip->y_ = new_rect->MinY;
-	the_clip->width_ = new_rect->MaxX - new_rect->MinX;
-	the_clip->height_ = new_rect->MaxY - new_rect->MinY;
+
+	General_CopyRect(the_clip, new_rect);	
+// 	the_clip->x_ = new_rect->MinX;
+// 	the_clip->y_ = new_rect->MinY;
+// 	the_clip->width_ = new_rect->MaxX - new_rect->MinX;
+// 	the_clip->height_ = new_rect->MaxY - new_rect->MinY;
 	
 	the_window->clip_count_++;
+
+	//DEBUG_OUT(("%s %d: window '%s' picked up a clip rect, now has %i cliprects; new clip rect is %i, %i : %i, %i", __func__, __LINE__, the_window->title_, the_window->clip_count_, the_clip->MinX, the_clip->MinY, the_clip->MaxX, the_clip->MaxY));
 	
 	return true;
 }
@@ -1049,7 +1042,8 @@ bool Window_AddClipRect(Window* the_window, Rectangle* new_rect)
 //! This is the actual mechanics of rendering the window to the screen
 bool Window_BlitClipRects(Window* the_window)
 {
-	ClipRect*	the_clip;
+	Rectangle*	the_clip;
+	Bitmap*		the_screen_bitmap;
 	int16_t		i;
 	
 	if ( the_window == NULL)
@@ -1063,22 +1057,22 @@ bool Window_BlitClipRects(Window* the_window)
 		return true; // not an error condition
 	}
 	
+	the_screen_bitmap = Sys_GetScreenBitmap(global_system, back_layer);
+	
 	for (i = 0; i < the_window->clip_count_; i++)
 	{
 		the_clip = &the_window->clip_rect_[i];
 
-		DEBUG_OUT(("%s %d: blitting cliprect %p (%i, %i -- %i, %i)", __func__, __LINE__, the_clip, the_clip->x_, the_clip->y_, the_clip->width_, the_clip->height_));
+		DEBUG_OUT(("%s %d: blitting cliprect %p (%i, %i -- %i, %i)", __func__, __LINE__, the_clip, the_clip->MinX, the_clip->MinY, the_clip->MaxX, the_clip->MaxY));
 	
-		//Bitmap_BlitRect(the_window->bitmap_, the_clip->rect_, Sys_GetScreenBitmap(global_system, back_layer), the_window->x_, the_window->y_);
-		//Bitmap_BlitRect(the_window->bitmap_, the_window->overall_rect_, Sys_GetScreenBitmap(global_system, back_layer), the_window->x_, the_window->y_);
 		Bitmap_Blit(the_window->bitmap_, 
-					the_clip->x_, 
-					the_clip->y_, 
-					Sys_GetScreenBitmap(global_system, back_layer), 
-					the_clip->x_ + the_window->x_, 
-					the_clip->y_ + the_window->y_, 
-					the_clip->width_, 
-					the_clip->height_
+					the_clip->MinX, 
+					the_clip->MinY, 
+					the_screen_bitmap, 
+					the_clip->MinX + the_window->x_, 
+					the_clip->MinY + the_window->y_, 
+					the_clip->MaxX - the_clip->MinX + 1, 
+					the_clip->MaxY - the_clip->MinY + 1
 					);
 	}
 	
@@ -1090,6 +1084,73 @@ bool Window_BlitClipRects(Window* the_window)
 	
 	return true;
 }
+
+
+//! Calculate damage rects, if any, caused by window moving or being resized
+//! @return:	Returns true if 1 or more damage rects were created
+bool Window_GenerateDamageRects(Window* the_window, Rectangle* the_old_rect)
+{
+	if ( the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return false;
+	}
+		
+	the_window->damage_count_ = General_CalculateRectDifference(&the_window->global_rect_, the_old_rect, &the_window->damage_rect_[0], &the_window->damage_rect_[1], &the_window->damage_rect_[2], &the_window->damage_rect_[3]);
+	
+	return true;
+}
+
+
+//! Copy the passed rectangle to the window's clip rect collection, translating to local coordinates as it does so
+//! NOTE: the incoming rect is assumed to be using global, not window-local coordinates. Coordinates will be translated to window-local. 
+//! Note: it is safe to pass non-intersecting rects to this function: it will check for non-intersection; will trim copy of clip to just the intersection
+//! @return:	Returns true if the passed rect has any intersection with the window. Returns false if not intersection, or on any error condition.
+bool Window_AcceptDamageRect(Window* the_window, Rectangle* damage_rect)
+{
+	Rectangle*	the_clip;
+	
+	// LOGIC:
+	//   A window has a maximum number of clip rects it will track
+	//   after that number has been reached, the whole window will need to be reblitted
+	//   therefore, once that number is reached, stop accepting new ones
+	
+	if ( the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		return false;
+	}
+	
+	if ( damage_rect == NULL)
+	{
+		LOG_ERR(("%s %d: passed rect was null", __func__ , __LINE__));
+		return false;
+	}
+	
+	//DEBUG_OUT(("%s %d: window '%s' has %i cliprects; incoming dmg rect is %i, %i : %i, %i", __func__, __LINE__, the_window->title_, the_window->clip_count_, damage_rect->MinX, damage_rect->MinY, damage_rect->MaxX, damage_rect->MaxY));
+	
+	if ( the_window->clip_count_ >= WIN_MAX_CLIP_RECTS)
+	{
+		return false;
+	}
+	
+	the_clip = &the_window->clip_rect_[the_window->clip_count_];
+	
+	if (General_CalculateRectIntersection(&the_window->global_rect_, damage_rect, the_clip) == true)
+	{
+		Window_GlobalToLocal(the_window, &the_clip->MinX, &the_clip->MinY);
+		Window_GlobalToLocal(the_window, &the_clip->MaxX, &the_clip->MaxY);
+		
+		the_window->clip_count_++;
+	
+		DEBUG_OUT(("%s %d: win '%s' got new dmg rect, now has %i cliprects; new dmg rect (l) is %i, %i : %i, %i", __func__, __LINE__, the_window->title_, the_window->clip_count_, the_clip->MinX, the_clip->MinY, the_clip->MaxX, the_clip->MaxY));
+		
+		return true;
+	}
+	
+	return false;
+}
+
 
 
 
@@ -1445,9 +1506,6 @@ void Window_Render(Window* the_window)
 			// backdrop window: fill it with its pattern. no controls, borders, etc. 
 			// tile the default theme's background pattern
 			Bitmap_Tile(the_pattern, 0, 0, the_window->bitmap_, the_theme->pattern_width_, the_theme->pattern_height_);
-			the_window->invalidated_ = false;
-		
-			return;
 		}
 	}
 	else
@@ -1474,8 +1532,6 @@ void Window_Render(Window* the_window)
 	}
 
 	// blit to screen
-	//Bitmap_BlitRect(the_window->bitmap_, the_window->overall_rect_, Sys_GetScreenBitmap(global_system, back_layer), the_window->x_, the_window->y_);
-	//Window_AddClipRect(the_window, &the_window->overall_rect_);
 	
 	// if the entire window has had to be redrawn, then don't bother with individual cliprects, just do one for entire window
 	if (the_window->invalidated_ == true || the_window->clip_count_ >= WIN_MAX_CLIP_RECTS)
@@ -1486,6 +1542,8 @@ void Window_Render(Window* the_window)
 	}
 	else
 	{
+		DEBUG_OUT(("%s %d: window '%s' has %i clip rects to render", __func__, __LINE__, the_window->title_, the_window->clip_count_));
+		
 		Window_BlitClipRects(the_window);
 	}
 	
@@ -1604,7 +1662,8 @@ void Window_SetState(Window* the_window, window_state the_state)
 //! @param	update_norm: if true, the window's normal x/y/width/height properties will be updated to match the passed values. Pass false if setting maximize size, etc.
 void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width, int16_t height, bool update_norm)
 {
-	bool	width_changed = false;
+	bool		width_changed = false;
+	Rectangle	the_old_rect; //! will contain global rect of window before resize/move
 	
 	if (the_window == NULL)
 	{
@@ -1628,15 +1687,22 @@ void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width
 			the_window->norm_height_ = height;
 		}
 		
+		// get copy of window rect before changing it, for use with calculating damage rects
+		General_CopyRect(&the_old_rect, &the_window->global_rect_);
+		
 		the_window->x_ = x;
 		the_window->y_ = y;
 		the_window->width_ = width;
 		the_window->height_ = height;
 		the_window->global_rect_.MinX = the_window->x_;
-		the_window->global_rect_.MaxX = the_window->x_ + the_window->width_;
+		the_window->global_rect_.MaxX = the_window->x_ + the_window->width_ - 1;
 		the_window->global_rect_.MinY = the_window->y_;
-		the_window->global_rect_.MaxY = the_window->y_ + the_window->height_;
+		the_window->global_rect_.MaxY = the_window->y_ + the_window->height_ - 1;
 
+		// create damage rects at this point - does not percolate them anywhere, or do any rendering
+		Window_GenerateDamageRects(the_window, &the_old_rect);
+		Sys_IssueDamageRects(global_system);
+		
 		// set up the rects for titlebar, content, etc. 
 		Window_ConfigureStructureRects(the_window);
 	
@@ -1694,7 +1760,7 @@ void Window_Maximize(Window* the_window)
 
 	Window_SetState(the_window, WIN_MAXIMIZED);
 	Window_ChangeWindow(the_window, 0, 0, the_screen->width_, the_screen->height_, WIN_PARAM_DO_NOT_UPDATE_NORM_SIZE);
-	Window_Render(the_window);
+	Sys_Render(global_system);
 }
 
 
@@ -1718,7 +1784,7 @@ void Window_NormSize(Window* the_window)
 
 	Window_SetState(the_window, WIN_NORMAL);
 	Window_ChangeWindow(the_window, the_window->norm_x_, the_window->norm_y_, the_window->norm_width_, the_window->norm_height_, WIN_PARAM_DO_NOT_UPDATE_NORM_SIZE);
-	Window_Render(the_window);
+	Sys_Render(global_system);
 }
 
 

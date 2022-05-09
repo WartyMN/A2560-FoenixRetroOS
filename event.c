@@ -360,9 +360,9 @@ EventRecord* EventManager_NextEvent(void)
 	
 	the_event = the_event_manager->queue_[the_event_manager->read_idx_];
 
-	DEBUG_OUT(("%s %d: Next Event: type=%i", __func__, __LINE__, the_event->what_));
+	//DEBUG_OUT(("%s %d: Next Event: type=%i", __func__, __LINE__, the_event->what_));
 	//EventManager_Print(the_event_manager);
-	Event_Print(the_event);
+	//Event_Print(the_event);
 	
 	the_event_manager->read_idx_++;
 	the_event_manager->read_idx_ %= EVENT_QUEUE_SIZE;
@@ -373,8 +373,8 @@ EventRecord* EventManager_NextEvent(void)
 		return NULL;
 	}
 
-	DEBUG_OUT(("%s %d: read_idx_=%i, read_idx_ mod EVENT_QUEUE_SIZE=%i", __func__, __LINE__, the_event_manager->read_idx_, the_event_manager->read_idx_ % EVENT_QUEUE_SIZE));
-	DEBUG_OUT(("%s %d: exiting; event what=%i (%p), read_idx_=%i, write_idx_=%i", __func__, __LINE__, the_event->what_, the_event, the_event_manager->read_idx_, the_event_manager->write_idx_));
+	//DEBUG_OUT(("%s %d: read_idx_=%i, read_idx_ mod EVENT_QUEUE_SIZE=%i", __func__, __LINE__, the_event_manager->read_idx_, the_event_manager->read_idx_ % EVENT_QUEUE_SIZE));
+	//DEBUG_OUT(("%s %d: exiting; event what=%i (%p), read_idx_=%i, write_idx_=%i", __func__, __LINE__, the_event->what_, the_event, the_event_manager->read_idx_, the_event_manager->write_idx_));
 	
 	return the_event;
 }
@@ -478,7 +478,7 @@ void EventManager_HandleMouseUp(EventManager* the_event_manager, EventRecord* th
 	// get the delta between current and last clicked position
 	x_delta = Mouse_GetXDelta(the_event_manager->mouse_tracker_);
 	y_delta = Mouse_GetYDelta(the_event_manager->mouse_tracker_);
-	DEBUG_OUT(("%s %d: mouse delta at mouse up was %i, %i!", __func__, __LINE__, x_delta, y_delta));
+	//DEBUG_OUT(("%s %d: mouse delta at mouse up was %i, %i!", __func__, __LINE__, x_delta, y_delta));
 	
 	// LOGIC:
 	//   Based on what the mode had been before mouse button up, we take different actions
@@ -900,7 +900,7 @@ void EventManager_WaitForEvent(void)
 		int16_t			prev_mouse_y;
 		
 		DEBUG_OUT(("%s %d: Received Event Event: type=%i", __func__, __LINE__, the_event->what_));
-		Event_Print(the_event);
+		//Event_Print(the_event);
 		
 		starting_mode = Mouse_GetMode(the_event_manager->mouse_tracker_);
 		
