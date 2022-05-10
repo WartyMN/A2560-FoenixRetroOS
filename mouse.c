@@ -89,6 +89,7 @@ MouseTracker* Mouse_New(void)
 	
 error:
 	if (the_mouse) Mouse_Destroy(&the_mouse);
+	Sys_Destroy(&global_system);	// crash early, crash often
 	return NULL;
 }
 
@@ -99,12 +100,18 @@ void Mouse_Destroy(MouseTracker** the_mouse)
 	if (*the_mouse == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 
 	LOG_ALLOC(("%s %d:	__FREE__	*the_mouse	%p	size	%i", __func__ , __LINE__, *the_mouse, sizeof(MouseTracker)));
 	free(*the_mouse);
 	*the_mouse = NULL;
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -117,7 +124,7 @@ void Mouse_AcceptUpdate(MouseTracker* the_mouse, int16_t x, int16_t y, bool butt
 	if (the_mouse == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	the_mouse->x_ = x;
@@ -135,6 +142,12 @@ void Mouse_AcceptUpdate(MouseTracker* the_mouse, int16_t x, int16_t y, bool butt
 	}
 	
 	//Mouse_Print(the_mouse);
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -144,11 +157,17 @@ void Mouse_SetXY(MouseTracker* the_mouse, int16_t x, int16_t y)
 	if (the_mouse == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	the_mouse->x_ = x;
 	the_mouse->y_ = y;
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -158,7 +177,7 @@ void Mouse_Clear(MouseTracker* the_mouse)
 	if (the_mouse == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	the_mouse->clicked_x_ = -1;
@@ -166,6 +185,12 @@ void Mouse_Clear(MouseTracker* the_mouse)
 	the_mouse->x_ = -1;
 	the_mouse->y_ = -1;
 	the_mouse->mode_ = mouseFree;
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -175,10 +200,16 @@ void Mouse_SetMode(MouseTracker* the_mouse, MouseMode the_mode)
 	if (the_mouse == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	the_mouse->mode_ = the_mode;
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -193,10 +224,14 @@ MouseMode Mouse_GetMode(MouseTracker* the_mouse)
 	if (the_mouse == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return the_mouse->mode_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return -1;
 }
 
 
@@ -206,10 +241,14 @@ int16_t Mouse_GetX(MouseTracker* the_mouse)
 	if (the_mouse == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return the_mouse->x_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return -1;
 }
 
 
@@ -219,10 +258,14 @@ int16_t Mouse_GetY(MouseTracker* the_mouse)
 	if (the_mouse == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return the_mouse->y_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return -1;
 }
 
 
@@ -232,10 +275,14 @@ int16_t Mouse_GetClickedX(MouseTracker* the_mouse)
 	if (the_mouse == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return the_mouse->clicked_x_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return -1;
 }
 
 
@@ -245,10 +292,14 @@ int16_t Mouse_GetClickedY(MouseTracker* the_mouse)
 	if (the_mouse == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return the_mouse->clicked_y_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return -1;
 }
 
 
@@ -258,10 +309,14 @@ int16_t Mouse_GetXDelta(MouseTracker* the_mouse)
 	if (the_mouse == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return the_mouse->x_ - the_mouse->clicked_x_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return -1;
 }
 
 
@@ -271,10 +326,14 @@ int16_t Mouse_GetYDelta(MouseTracker* the_mouse)
 	if (the_mouse == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return the_mouse->y_ - the_mouse->clicked_y_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return -1;
 }
 
 
@@ -291,7 +350,7 @@ bool Mouse_WasDoubleClick(MouseTracker* the_mouse)
 	if (the_mouse == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	now_ticks = sys_time_jiffies();
@@ -309,6 +368,12 @@ bool Mouse_WasDoubleClick(MouseTracker* the_mouse)
 		the_mouse->clicked_ticks = now_ticks;
 		return false;
 	}
+	
+	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -318,7 +383,7 @@ void Mouse_UpdateSelectionRectangle(MouseTracker* the_mouse, int16_t x_scrolled,
 	if (the_mouse == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	// set up mouse rect differently depending on whether user dragged up->left, up->right, down->right, down->left
@@ -363,6 +428,12 @@ void Mouse_UpdateSelectionRectangle(MouseTracker* the_mouse, int16_t x_scrolled,
 	the_mouse->selection_area_.MaxY += y_scrolled;
 
 	//DEBUG_OUT(("%s %d: minx %i, maxX %i, content left %i", __func__ , __LINE__, the_mouse->selection_area_.MinX, the_mouse->selection_area_.MaxX, x_scrolled));
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -372,10 +443,14 @@ bool Mouse_DetectOverlap(MouseTracker* the_mouse, Rectangle the_other_object)
 	if (the_mouse == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return General_RectIntersect(the_mouse->selection_area_, the_other_object);
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -385,10 +460,14 @@ bool Mouse_MovedEnoughForLassoStart(MouseTracker* the_mouse)
 	if (the_mouse == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return !(General_PointInRect(the_mouse->x_, the_mouse->y_, the_mouse->movement_area_));
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 	
 
@@ -398,10 +477,14 @@ bool Mouse_MovedEnoughForDragStart(MouseTracker* the_mouse)
 	if (the_mouse == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return !(General_PointInRect(the_mouse->x_, the_mouse->y_, the_mouse->movement_area_));
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 

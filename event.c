@@ -191,6 +191,7 @@ EventRecord* Event_New(void)
 	
 error:
 	if (the_event)					Event_Destroy(&the_event);
+	Sys_Destroy(&global_system);	// crash early, crash often
 	return NULL;
 }
 
@@ -202,7 +203,7 @@ bool Event_Destroy(EventRecord** the_event)
 	if (*the_event == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 
 	LOG_ALLOC(("%s %d:	__FREE__	*the_event	%p	size	%i", __func__ , __LINE__, *the_event, sizeof(EventRecord)));
@@ -210,6 +211,10 @@ bool Event_Destroy(EventRecord** the_event)
 	*the_event = NULL;
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -250,13 +255,14 @@ EventManager* EventManager_New(void)
 			goto error;
 		}
 		
-		//DEBUG_OUT(("%s %d: Event %i (%p)(%p) created", __func__ , __LINE__, i, the_event, the_event_manager->queue_[i]));
+		//DEBUG_OUT(("%s %d: Event %i (%p)(%p) created", __func__ , __LINE__, i, the_event_manager->queue_[i], the_event_manager->queue_[i]));
 	}
 	
 	return the_event_manager;
 	
 error:
 	if (the_event_manager)					EventManager_Destroy(&the_event_manager);
+	Sys_Destroy(&global_system);	// crash early, crash often
 	return NULL;
 }
 
@@ -270,7 +276,7 @@ bool EventManager_Destroy(EventManager** the_event_manager)
 	if (*the_event_manager == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 
 	for (i=0; i < EVENT_QUEUE_SIZE; i++)
@@ -286,6 +292,10 @@ bool EventManager_Destroy(EventManager** the_event_manager)
 	*the_event_manager = NULL;
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -297,7 +307,6 @@ bool EventManager_Destroy(EventManager** the_event_manager)
 void EventManager_RemoveEventsForWindow(Window* the_window)
 {
 	EventManager*	the_event_manager;
-	EventRecord*	the_event;
 	uint16_t		start;
 	uint16_t		stop;
 	uint16_t		i;
@@ -321,6 +330,8 @@ void EventManager_RemoveEventsForWindow(Window* the_window)
 	
 	for (i = start; i <= stop; i++)
 	{
+		EventRecord*	the_event;
+	
 		the_event = the_event_manager->queue_[i];
 
 		DEBUG_OUT(("%s %d: this event: window=%p, readidx=%i", __func__, __LINE__, the_event->window_, i));
@@ -466,7 +477,7 @@ void EventManager_HandleMouseUp(EventManager* the_event_manager, EventRecord* th
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: no window found at %i, %i!", __func__, __LINE__, the_event->x_, the_event->y_));
-		Sys_Destroy(&global_system);
+		goto error;
 	}
 	DEBUG_OUT(("%s %d: active window = '%s', clicked window = '%s'", __func__, __LINE__, the_active_window->title_, the_window->title_));
 	
@@ -517,7 +528,6 @@ void EventManager_HandleMouseUp(EventManager* the_event_manager, EventRecord* th
 		int16_t	new_y;
 		int16_t	new_width;
 		int16_t	new_height;
-		int32_t	the_code;
 		bool	change_made = false;
 		
 		new_x = Window_GetX(the_window);
@@ -567,6 +577,8 @@ void EventManager_HandleMouseUp(EventManager* the_event_manager, EventRecord* th
 
 		if (change_made)
 		{
+			int32_t	the_code;
+			
 			the_code = (new_width << 16) + new_height;
 			EventManager_AddEvent(windowChanged, the_code, new_x, new_y, 0L, the_window, NULL);
 		}
@@ -613,6 +625,12 @@ void EventManager_HandleMouseUp(EventManager* the_event_manager, EventRecord* th
 	}
 	
 	Mouse_SetMode(the_event_manager->mouse_tracker_, mouseFree);
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -623,8 +641,6 @@ void EventManager_HandleMouseDown(EventManager* the_event_manager, EventRecord* 
 	int16_t			local_y;
 	Window*			the_window;
 	Window*			the_active_window;
-	int16_t			x_delta;
-	int16_t			y_delta;
 
 	//* Check if mouse is down in the active window, or in another window
 	//   * If not in active window, add 2 WindowActive events to the queue.
@@ -638,14 +654,10 @@ void EventManager_HandleMouseDown(EventManager* the_event_manager, EventRecord* 
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: no window found at %i, %i!", __func__, __LINE__, the_event->x_, the_event->y_));
-		Sys_Destroy(&global_system);
+		goto error;
 	}
 	DEBUG_OUT(("%s %d: active window = '%s', clicked window = '%s'", __func__, __LINE__, the_active_window->title_, the_window->title_));
 
-	// get the delta between current and last clicked position
-	x_delta = Mouse_GetXDelta(the_event_manager->mouse_tracker_);
-	y_delta = Mouse_GetYDelta(the_event_manager->mouse_tracker_);
-	
 	// update the mouse tracker so that if we end up dragging, we'll know where the original click was. (or if a future double click, what time the click was, etc.)
 	Mouse_AcceptUpdate(the_event_manager->mouse_tracker_, the_event->x_, the_event->y_, true);
 
@@ -715,21 +727,22 @@ void EventManager_HandleMouseDown(EventManager* the_event_manager, EventRecord* 
 	{
 		Mouse_SetMode(the_event_manager->mouse_tracker_, possible_drag_mode);
 	}
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
 //! Handle Mouse Moved events on the system level
 void EventManager_HandleMouseMoved(EventManager* the_event_manager, EventRecord* the_event)
 {
-	int16_t			local_x;
-	int16_t			local_y;
 	MouseMode		starting_mode;
 	Window*			the_window;
-	Window*			the_active_window;
 	int16_t			x_delta;
 	int16_t			y_delta;
-	int16_t			prev_mouse_x;
-	int16_t			prev_mouse_y;
 
 	// LOGIC: 
 	//   what happens here depends on what the current event manager mouse mode is
@@ -744,9 +757,7 @@ void EventManager_HandleMouseMoved(EventManager* the_event_manager, EventRecord*
 
 	the_window = the_event->window_;
 	
-	// update the mouse so it knows it's X/Y, but first capture what it was last time, so we can see what movement was made since last move (not since last click)
-	prev_mouse_x = Mouse_GetX(the_event_manager->mouse_tracker_);
-	prev_mouse_y = Mouse_GetY(the_event_manager->mouse_tracker_);
+	// update the mouse so it knows it's X/Y
 	Mouse_SetXY(the_event_manager->mouse_tracker_, the_event->x_, the_event->y_);
 
 	// get the delta between current and last clicked position
@@ -889,15 +900,8 @@ void EventManager_WaitForEvent(void)
 
 	while ( (the_event = EventManager_NextEvent()) != NULL)
 	{
-		int16_t			local_x;
-		int16_t			local_y;
 		MouseMode		starting_mode;
-		Window*			the_window;
 		Window*			the_active_window;
-		int16_t			x_delta;
-		int16_t			y_delta;
-		int16_t			prev_mouse_x;
-		int16_t			prev_mouse_y;
 		
 		DEBUG_OUT(("%s %d: Received Event Event: type=%i", __func__, __LINE__, the_event->what_));
 		//Event_Print(the_event);

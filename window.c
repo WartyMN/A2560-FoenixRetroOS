@@ -175,7 +175,7 @@ void Window_ConfigureStructureRects(Window* the_window)
 	if ( (the_theme = Sys_GetTheme(global_system)) == NULL)
 	{
 		LOG_ERR(("%s %d: failed to get the current system theme!", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 
 	the_window->overall_rect_.MinX = 0;
@@ -277,6 +277,12 @@ void Window_ConfigureStructureRects(Window* the_window)
 
 	//DEBUG_OUT(("%s %d: Window after configure struct rects...", __func__, __LINE__));
 	//Window_Print(the_window);
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -350,13 +356,13 @@ void Window_UpdateControlTheme(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	if ( (the_theme = Sys_GetTheme(global_system)) == NULL)
 	{
 		LOG_ERR(("%s %d: failed to get the current system theme!", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 
 	DEBUG_OUT(("%s %d: updating controls based on current system theme...", __func__, __LINE__));
@@ -405,7 +411,12 @@ void Window_UpdateControlTheme(Window* the_window)
 	// TODO: once other control types are defined (textfield, textbutton, etc,) add calls to update from template here....
 	
 	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
+
 
 //! Determine available pixel width for the title, based on theme's title x offset and left-most control
 //! Run after every re-size, or after a theme change
@@ -423,13 +434,13 @@ static int16_t Window_CalculateTitleSpace(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return -1;
+		goto error;
 	}
 	
 	if ( (the_theme = Sys_GetTheme(global_system)) == NULL)
 	{
 		LOG_ERR(("%s %d: failed to get the current system theme!", __func__ , __LINE__));
-		return -1;
+		goto error;
 	}
 	
 	// LOGIC:
@@ -482,6 +493,10 @@ static int16_t Window_CalculateTitleSpace(Window* the_window)
 	the_window->title_drag_rect_.MaxY = the_window->titlebar_rect_.MaxY;
 
 	return the_window->avail_title_width_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return -1;
 }
 
 
@@ -497,7 +512,7 @@ static void Window_DrawStructure(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 
 	// LOGIC:
@@ -512,6 +527,12 @@ static void Window_DrawStructure(Window* the_window)
 	}
 
 	Bitmap_DrawBoxRect(the_window->bitmap_, &the_window->overall_rect_, Theme_GetOutlineColor(the_theme));
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -522,12 +543,18 @@ static void Window_DrawAll(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 
 	Window_DrawStructure(the_window);
 	Window_ClearContent(the_window);
 	Window_DrawControls(the_window, WIN_PARAM_FORCE_CONTROL_REDRAW);
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -540,7 +567,7 @@ static void Window_DrawControls(Window* the_window, bool force_redraw)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 
 	this_control = Window_GetRootControl(the_window);
@@ -562,6 +589,12 @@ static void Window_DrawControls(Window* the_window, bool force_redraw)
 		
 		this_control = this_control->next_;
 	}
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -643,7 +676,7 @@ static void Window_DrawTitle(Window* the_window)
 	if (Bitmap_SetFont(the_window->bitmap_, new_font) == false)
 	{
 		DEBUG_OUT(("%s %d: Couldn't get the system font and assign it to bitmap", __func__, __LINE__));
-		Sys_Destroy(&global_system);	// crash early, crash often
+		goto error;
 	}
 	
 	available_width = the_window->avail_title_width_;
@@ -668,8 +701,14 @@ static void Window_DrawTitle(Window* the_window)
 	if (Bitmap_SetFont(the_window->bitmap_, old_font) == false)
 	{
 		DEBUG_OUT(("%s %d: Couldn't set the bitmap's font back to what it had been", __func__, __LINE__));
-		Sys_Destroy(&global_system);	// crash early, crash often
+		goto error;
 	}
+
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -913,6 +952,7 @@ Window* Window_New(NewWinTemplate* the_win_template, void (* event_handler)(Even
 	
 error:
 	if (the_window)					Window_Destroy(&the_window);
+	Sys_Destroy(&global_system);	// crash early, crash often
 	return NULL;
 }
 
@@ -924,7 +964,7 @@ bool Window_Destroy(Window** the_window)
 	if (*the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 
 	if ((*the_window)->title_)
@@ -939,6 +979,10 @@ bool Window_Destroy(Window** the_window)
 	*the_window = NULL;
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -952,7 +996,7 @@ NewWinTemplate* Window_GetNewWinTemplate(char* the_win_title)
 	if ( (the_win_template = (NewWinTemplate*)calloc(1, sizeof(NewWinTemplate)) ) == NULL)
 	{
 		LOG_ERR(("%s %d: could not allocate memory to create new window template", __func__ , __LINE__));
-		return NULL;
+		goto error;
 	}
 	LOG_ALLOC(("%s %d:	__ALLOC__	the_win_template	%p	size	%i", __func__ , __LINE__, the_win_template, sizeof(NewWinTemplate)));
 
@@ -973,6 +1017,10 @@ NewWinTemplate* Window_GetNewWinTemplate(char* the_win_title)
 	the_win_template->max_height_ = WIN_DEFAULT_MAX_HEIGHT;
 
 	return the_win_template;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -998,13 +1046,13 @@ bool Window_AddClipRect(Window* the_window, Rectangle* new_rect)
 	if ( the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 	
 	if ( new_rect == NULL)
 	{
 		LOG_ERR(("%s %d: passed rect was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 	
 	if ( the_window->clip_count_ >= WIN_MAX_CLIP_RECTS)
@@ -1029,6 +1077,10 @@ bool Window_AddClipRect(Window* the_window, Rectangle* new_rect)
 	//DEBUG_OUT(("%s %d: window '%s' picked up a clip rect, now has %i cliprects; new clip rect is %i, %i : %i, %i", __func__, __LINE__, the_window->title_, the_window->clip_count_, the_clip->MinX, the_clip->MinY, the_clip->MaxX, the_clip->MaxY));
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -1049,7 +1101,7 @@ bool Window_BlitClipRects(Window* the_window)
 	if ( the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 	
 	if (the_window->clip_count_ == 0)
@@ -1083,6 +1135,10 @@ bool Window_BlitClipRects(Window* the_window)
 	the_window->clip_count_ = 0;
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -1093,12 +1149,16 @@ bool Window_GenerateDamageRects(Window* the_window, Rectangle* the_old_rect)
 	if ( the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 		
 	the_window->damage_count_ = General_CalculateRectDifference(&the_window->global_rect_, the_old_rect, &the_window->damage_rect_[0], &the_window->damage_rect_[1], &the_window->damage_rect_[2], &the_window->damage_rect_[3]);
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -1118,13 +1178,13 @@ bool Window_AcceptDamageRect(Window* the_window, Rectangle* damage_rect)
 	if ( the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 	
 	if ( damage_rect == NULL)
 	{
 		LOG_ERR(("%s %d: passed rect was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 	
 	//DEBUG_OUT(("%s %d: window '%s' has %i cliprects; incoming dmg rect is %i, %i : %i, %i", __func__, __LINE__, the_window->title_, the_window->clip_count_, damage_rect->MinX, damage_rect->MinY, damage_rect->MaxX, damage_rect->MaxY));
@@ -1149,6 +1209,10 @@ bool Window_AcceptDamageRect(Window* the_window, Rectangle* damage_rect)
 	}
 	
 	return false;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -1169,7 +1233,7 @@ MouseMode Window_CheckForDragZone(Window* the_window, int16_t x, int16_t y)
 	if ( the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return mouseFree;
+		goto error;
 	}
 	
 	if (General_PointInRect(x, y, the_window->title_drag_rect_) == true)
@@ -1211,6 +1275,10 @@ MouseMode Window_CheckForDragZone(Window* the_window, int16_t x, int16_t y)
 	}
 
 	return mouseFree;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return mouseFree;
 }
 
 
@@ -1228,7 +1296,7 @@ bool Window_SetSelectedControl(Window* the_window, Control* the_control)
 	if ( the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 	
 	if (the_window->selected_control_ != NULL)
@@ -1240,6 +1308,10 @@ bool Window_SetSelectedControl(Window* the_window, Control* the_control)
 	Control_SetPressed(the_control, true);
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -1252,13 +1324,13 @@ bool Window_AddControl(Window* the_window, Control* the_control)
 	if ( the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 	
 	if ( the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed control was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 	
 	// The way that controls are associated with a window is to add them as the next_ property to the last control in the window
@@ -1273,6 +1345,10 @@ bool Window_AddControl(Window* the_window, Control* the_control)
 	}
 	
 	return false;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -1286,13 +1362,13 @@ Control* Window_AddNewControlFromTemplate(Window* the_window, ControlTemplate* t
 	if ( the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
 	}
 	
 	if ( the_template == NULL)
 	{
 		LOG_ERR(("%s %d: passed control template was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
 	}
 	
 	the_control = Control_New(the_template, the_window, &the_window->content_rect_, the_id, group_id);
@@ -1306,6 +1382,10 @@ Control* Window_AddNewControlFromTemplate(Window* the_window, ControlTemplate* t
 	}
 	
 	return the_control;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -1320,7 +1400,7 @@ Control* Window_AddNewControl(Window* the_window, control_type the_type, int16_t
 	if ( the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
 	}
 	
 	the_theme = Sys_GetTheme(global_system);
@@ -1344,6 +1424,10 @@ Control* Window_AddNewControl(Window* the_window, control_type the_type, int16_t
 	}
 	
 	return the_control;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -1352,10 +1436,14 @@ Control* Window_GetRootControl(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
 	}
 	
 	return the_window->root_control_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -1366,10 +1454,14 @@ Control* Window_GetSelectedControl(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
 	}
 	
 	return the_window->selected_control_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -1382,7 +1474,7 @@ Control* Window_GetLastControl(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
 	}
 	
 	the_control = Window_GetRootControl(the_window);
@@ -1398,6 +1490,10 @@ Control* Window_GetLastControl(Window* the_window)
 	}
 	
 	return NULL;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -1408,7 +1504,7 @@ Control* Window_GetControl(Window* the_window, uint16_t the_control_id)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
 	}
 	
 	the_control = Window_GetRootControl(the_window);
@@ -1424,6 +1520,10 @@ Control* Window_GetControl(Window* the_window, uint16_t the_control_id)
 	}
 	
 	return the_control;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -1432,10 +1532,14 @@ uint16_t Window_GetControlID(Window* the_window, Control* the_control)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return -1;
+		goto error;
 	}
 	
 	return Control_GetID(the_control);
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return -1;
 }
 
 
@@ -1447,7 +1551,7 @@ Control* Window_GetControlAtXY(Window* the_window, int16_t x, int16_t y)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
 	}
 
 	// LOGIC:
@@ -1472,6 +1576,10 @@ Control* Window_GetControlAtXY(Window* the_window, int16_t x, int16_t y)
 	}
 	
 	return NULL;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -1484,6 +1592,12 @@ void Window_Render(Window* the_window)
 	Theme*	the_theme;
 	Bitmap*	the_pattern;
 	
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		goto error;
+	}
+
 	// LOGIC:
 	//   From a rendering point of view, windows are split into "backdrop" and "not-backdrop" windows
 	//   Backdrop windows always fill the screen and always are filled with their backdrop pattern and never have borders, controls, etc. 
@@ -1547,6 +1661,11 @@ void Window_Render(Window* the_window)
 		Window_BlitClipRects(the_window);
 	}
 	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -1556,7 +1675,7 @@ void Window_UpdateTheme(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 
 	// adjust the rects for titlebar, content, etc., as each theme can change the position, height, etc. 
@@ -1567,6 +1686,12 @@ void Window_UpdateTheme(Window* the_window)
 	
 	// recalculate available title width
 	Window_CalculateTitleSpace(the_window);
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -1578,12 +1703,18 @@ void Window_ClearContent(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 
 	the_theme = Sys_GetTheme(global_system);
 
 	Bitmap_FillBoxRect(the_window->bitmap_, &the_window->content_rect_, Theme_GetContentAreaColor(the_theme));
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -1606,10 +1737,16 @@ void Window_SetVisible(Window* the_window, bool is_visible)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	the_window->visible_ = is_visible;
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -1620,10 +1757,16 @@ void Window_SetDisplayOrder(Window* the_window, int8_t the_display_order)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	the_window->display_order_ = the_display_order;
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -1633,11 +1776,17 @@ void Window_SetActive(Window* the_window, bool is_active)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	the_window->active_ = is_active;
 	the_window->titlebar_invalidated_ = true;
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -1647,13 +1796,19 @@ void Window_SetState(Window* the_window, window_state the_state)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	the_window->state_ = the_state;
 	
 	// need to do anything else? 
 	// TODO: analyze if setting state function needs to do anything besides simply set the property value
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -1668,7 +1823,7 @@ void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	// check if anything actually changed
@@ -1714,14 +1869,12 @@ void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width
 		if (Bitmap_Resize(the_window->bitmap_, width, height) == false)
 		{
 			LOG_ERR(("%s %d: could not resize window storage!", __func__ , __LINE__));
-			Sys_Destroy(&global_system); // crash early, crash often
-			return;
+			goto error;
 		}		
 
 		// only recalculate title space and move titlebar widgets if width changed (slow)
 		if ( the_window->is_backdrop_ == false && width_changed)
 		{
-			Control*	the_control;
 			int16_t		i;
 			
 			// calculate available title width
@@ -1730,11 +1883,19 @@ void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width
 			// have controls in titlebar realign themselves to new width
 			for (i = 0; i < MAX_BUILT_IN_WIDGET; i++)
 			{
+				Control*	the_control;
+
 				the_control = Window_GetControl(the_window, i);
 				Control_AlignToParentRect(the_control);
 			}
 		}
 	}	
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -1747,7 +1908,7 @@ void Window_Maximize(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	//   when a window is set to maximize size, we take the screen's width/height 
 	//   values and set window width/height to them (x/y to 0,0)
@@ -1761,6 +1922,12 @@ void Window_Maximize(Window* the_window)
 	Window_SetState(the_window, WIN_MAXIMIZED);
 	Window_ChangeWindow(the_window, 0, 0, the_screen->width_, the_screen->height_, WIN_PARAM_DO_NOT_UPDATE_NORM_SIZE);
 	Sys_Render(global_system);
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -1771,7 +1938,7 @@ void Window_NormSize(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	// LOGIC:
@@ -1785,6 +1952,12 @@ void Window_NormSize(Window* the_window)
 	Window_SetState(the_window, WIN_NORMAL);
 	Window_ChangeWindow(the_window, the_window->norm_x_, the_window->norm_y_, the_window->norm_width_, the_window->norm_height_, WIN_PARAM_DO_NOT_UPDATE_NORM_SIZE);
 	Sys_Render(global_system);
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -1795,7 +1968,7 @@ void Window_Minimize(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	// LOGIC:
@@ -1807,6 +1980,12 @@ void Window_Minimize(Window* the_window)
 	Window_SetState(the_window, WIN_MINIMIZED);
 	Window_SetVisible(the_window, false);
 	Window_Render(the_window);
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -1835,10 +2014,14 @@ char* Window_GetTitle(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
 	}
 	
 	return the_window->title_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -1847,10 +2030,14 @@ uint32_t Window_GetUserData(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return 0;
+		goto error;
 	}
 	
 	return the_window->user_data_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return 0;
 }
 
 
@@ -1859,10 +2046,14 @@ window_type Window_GetType(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return WIN_UNKNOWN_TYPE;
+		goto error;
 	}
 	
 	return the_window->type_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return WIN_UNKNOWN_TYPE;
 }
 
 
@@ -1871,10 +2062,14 @@ window_state Window_GetState(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return WIN_UNKNOWN_STATE;
+		goto error;
 	}
 	
 	return the_window->state_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return WIN_UNKNOWN_STATE;
 }
 
 
@@ -1883,10 +2078,14 @@ Bitmap* Window_GetBitmap(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
 	}
 	
 	return the_window->bitmap_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -1895,10 +2094,14 @@ int16_t Window_GetX(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return -1;
+		goto error;
 	}
 	
 	return the_window->x_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return -1;
 }
 
 
@@ -1907,10 +2110,14 @@ int16_t Window_GetY(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return -1;
+		goto error;
 	}
 	
 	return the_window->y_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return -1;
 }
 
 
@@ -1919,10 +2126,14 @@ int16_t Window_GetWidth(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return -1;
+		goto error;
 	}
 	
 	return the_window->width_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return -1;
 }
 
 
@@ -1931,10 +2142,14 @@ int16_t Window_GetHeight(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return -1;
+		goto error;
 	}
 	
 	return the_window->height_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return -1;
 }
 
 
@@ -1944,10 +2159,14 @@ bool Window_IsBackdrop(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 
 	return the_window->is_backdrop_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -1957,10 +2176,14 @@ bool Window_IsVisible(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 
 	return the_window->visible_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -1970,10 +2193,14 @@ window_state Window_IsActive(Window* the_window)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return WIN_UNKNOWN_STATE;
+		goto error;
 	}
 	
 	return the_window->active_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return WIN_UNKNOWN_STATE;
 }
 
 
@@ -1989,11 +2216,17 @@ void Window_GlobalToLocal(Window* the_window, int16_t* x, int16_t* y)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	*x = *x - the_window->x_;
 	*y = *y - the_window->y_;
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -2003,11 +2236,17 @@ void Window_LocalToGlobal(Window* the_window, int16_t* x, int16_t* y)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	*x = *x + the_window->x_;
 	*y = *y + the_window->y_;
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -2023,19 +2262,23 @@ bool Window_SetFont(Window* the_window, Font* the_font)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	if (the_font == NULL)
 	{
 		LOG_WARN(("%s %d: passed font was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 	
 	the_window->pen_font_ = the_font;
 	the_window->bitmap_->font_ = the_font;
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -2051,13 +2294,17 @@ bool Window_SetColor(Window* the_window, uint8_t the_color)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	the_window->pen_color_ = the_color;
 	the_window->bitmap_->color_ = the_color;
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -2073,7 +2320,7 @@ bool Window_SetPenXYFromGlobal(Window* the_window, int16_t x, int16_t y)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	//DEBUG_OUT(("%s %d: window global rect: %i, %i - %i, %i", __func__ , __LINE__, the_window->global_rect_.MinX, the_window->global_rect_.MinY, the_window->global_rect_.MaxX, the_window->global_rect_.MaxY));
@@ -2084,6 +2331,10 @@ bool Window_SetPenXYFromGlobal(Window* the_window, int16_t x, int16_t y)
 	//DEBUG_OUT(("%s %d: content rect: %i, %i - %i, %i", __func__ , __LINE__, the_window->content_rect_.MinX, the_window->content_rect_.MinY, the_window->content_rect_.MaxX, the_window->content_rect_.MaxY));
 	
 	return Window_SetPenXY(the_window, x, y);
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -2099,7 +2350,7 @@ bool Window_SetPenXY(Window* the_window, int16_t x, int16_t y)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	if (x < 0)
@@ -2128,6 +2379,10 @@ bool Window_SetPenXY(Window* the_window, int16_t x, int16_t y)
 	the_window->bitmap_->y_ = y + the_window->content_rect_.MinY;;
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -2142,10 +2397,14 @@ bool Window_Blit(Window* the_window, Bitmap* src_bm, int16_t src_x, int16_t src_
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return Bitmap_Blit(src_bm, src_x, src_y, the_window->bitmap_, the_window->pen_x_, the_window->pen_y_, width, height);
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -2160,10 +2419,14 @@ bool Window_FillBox(Window* the_window, int16_t width, int16_t height, uint8_t t
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return Bitmap_FillBox(the_window->bitmap_, the_window->pen_x_, the_window->pen_y_, width, height, the_color);
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -2182,7 +2445,7 @@ bool Window_FillBoxRect(Window* the_window, Rectangle* the_coords, uint8_t the_c
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	// localize to content area
@@ -2192,6 +2455,10 @@ bool Window_FillBoxRect(Window* the_window, Rectangle* the_coords, uint8_t the_c
 	y2 = the_coords->MaxY + the_window->content_rect_.MinY;
 	
 	return Bitmap_FillBox(the_window->bitmap_, x1, y1, x2 - x1, y2 - y1, the_color);
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -2204,10 +2471,14 @@ bool Window_SetPixel(Window* the_window, uint8_t the_color)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return Bitmap_SetPixelAtXY(the_window->bitmap_, the_window->pen_x_, the_window->pen_y_, the_color);
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -2225,7 +2496,7 @@ bool Window_DrawLine(Window* the_window, int16_t x1, int16_t y1, int16_t x2, int
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	// localize to content area
@@ -2235,6 +2506,10 @@ bool Window_DrawLine(Window* the_window, int16_t x1, int16_t y1, int16_t x2, int
 	y2 += the_window->content_rect_.MinY;
 	
 	return Bitmap_DrawLine(the_window->bitmap_, x1, y1, x2, y2, the_color);
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -2248,10 +2523,14 @@ bool Window_DrawHLine(Window* the_window, int16_t the_line_len, uint8_t the_colo
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return Bitmap_DrawHLine(the_window->bitmap_, the_window->pen_x_, the_window->pen_y_, the_line_len, the_color);
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -2265,10 +2544,14 @@ bool Window_DrawVLine(Window* the_window, int16_t the_line_len, uint8_t the_colo
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return Bitmap_DrawVLine(the_window->bitmap_, the_window->pen_x_, the_window->pen_y_, the_line_len, the_color);
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -2287,7 +2570,7 @@ bool Window_DrawBoxRect(Window* the_window, Rectangle* the_coords, uint8_t the_c
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	// localize to content area
@@ -2297,6 +2580,10 @@ bool Window_DrawBoxRect(Window* the_window, Rectangle* the_coords, uint8_t the_c
 	y2 = the_coords->MaxY + the_window->content_rect_.MinY;
 	
 	return Bitmap_DrawBoxCoords(the_window->bitmap_, x1, y1, x2, y2, the_color);
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -2313,7 +2600,7 @@ bool Window_DrawBoxCoords(Window* the_window, int16_t x1, int16_t y1, int16_t x2
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	// localize to content area
@@ -2323,6 +2610,10 @@ bool Window_DrawBoxCoords(Window* the_window, int16_t x1, int16_t y1, int16_t x2
 	y2 += the_window->content_rect_.MinY;
 	
 	return Bitmap_DrawBoxCoords(the_window->bitmap_, x1, y1, x2, y2, the_color);
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -2338,10 +2629,14 @@ bool Window_DrawBox(Window* the_window, int16_t width, int16_t height, uint8_t t
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return Bitmap_DrawBox(the_window->bitmap_, the_window->pen_x_, the_window->pen_y_, width, height, the_color, do_fill);
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -2358,10 +2653,14 @@ bool Window_DrawRoundBox(Window* the_window, int16_t width, int16_t height, int1
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return Bitmap_DrawRoundBox(the_window->bitmap_, the_window->pen_x_, the_window->pen_y_, width, height, radius, the_color, do_fill);
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -2375,10 +2674,14 @@ bool Window_DrawCircle(Window* the_window, int16_t radius, uint8_t the_color)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return Bitmap_DrawCircle(the_window->bitmap_, the_window->pen_x_, the_window->pen_y_, radius, the_color);
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -2392,10 +2695,14 @@ bool Window_DrawString(Window* the_window, char* the_string, int16_t max_chars)
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	return Font_DrawString(the_window->bitmap_, the_string, max_chars);
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -2415,7 +2722,7 @@ char* Window_DrawStringInBox(Window* the_window, int16_t width, int16_t height, 
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 	
 	// the next routine will check if it fits in the bitmap, but won't check if it fits within the window's content area
@@ -2430,6 +2737,10 @@ char* Window_DrawStringInBox(Window* the_window, int16_t width, int16_t height, 
 	}
 	
 	return Font_DrawStringInBox(the_window->bitmap_, width, height, the_string, num_chars, wrap_buffer, continue_function);
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 

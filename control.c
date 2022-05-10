@@ -91,7 +91,7 @@ static void Control_DrawCaption(Control* the_control)
 	if (the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system); // crash early, crash often
+		goto error;
 	}
 
 	// Draw control caption with parent window's current font. 
@@ -106,7 +106,7 @@ static void Control_DrawCaption(Control* the_control)
 	if (Bitmap_SetFont(the_control->parent_win_->bitmap_, the_font) == false)
 	{
 		DEBUG_OUT(("%s %d: Couldn't get the system font and assign it to bitmap", __func__, __LINE__));
-		Sys_Destroy(&global_system);	// crash early, crash often
+		goto error;
 	}
 	
 	available_width = the_control->avail_text_width_;	
@@ -148,8 +148,14 @@ static void Control_DrawCaption(Control* the_control)
 	if (Font_DrawString(the_control->parent_win_->bitmap_, the_control->caption_, chars_that_fit) == false)
 	{
 		DEBUG_OUT(("%s %d: font draw returned false; chars_that_fit=%i, text='%s'", __func__, __LINE__, chars_that_fit, the_control->caption_));
-		Sys_Destroy(&global_system);
+		goto error;
 	}
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -283,6 +289,7 @@ Control* Control_New(ControlTemplate* the_template, Window* the_window, Rectangl
 	
 error:
 	if (the_control)					Control_Destroy(&the_control);
+	Sys_Destroy(&global_system);	// crash early, crash often
 	return NULL;
 }
 
@@ -294,7 +301,7 @@ bool Control_Destroy(Control** the_control)
 	if (*the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 
 	if ((*the_control)->caption_ != NULL)
@@ -309,6 +316,10 @@ bool Control_Destroy(Control** the_control)
 	*the_control = NULL;
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -325,13 +336,13 @@ bool Control_UpdateFromTemplate(Control* the_control, ControlTemplate* the_templ
 	if ( the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was NULL", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 
 	if ( the_template == NULL)
 	{
 		LOG_ERR(("%s %d: passed template was NULL", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 
 	// LOGIC:
@@ -363,6 +374,10 @@ bool Control_UpdateFromTemplate(Control* the_control, ControlTemplate* the_templ
 	//Control_Print(the_control);
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -374,12 +389,16 @@ bool Control_SetNextControl(Control* the_control, Control* the_next_control)
 	if (the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 	
 	the_control->next_ = the_next_control;
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -389,13 +408,19 @@ void Control_SetActive(Control* the_control, bool is_active)
 	if (the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	the_control->active_ = is_active;
 
 	// ensure it will get rendered in next pass
 	the_control->invalidated_ = true;
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -405,13 +430,19 @@ void Control_SetPressed(Control* the_control, bool is_pressed)
 	if (the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	the_control->pressed_ = is_pressed;
 
 	// ensure it will get rendered in next pass
 	the_control->invalidated_ = true;
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -422,11 +453,16 @@ void Control_MarkInvalidated(Control* the_control, bool invalidated)
 	if (the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system);
-		return;
+		goto error;
 	}
 	
 	the_control->invalidated_ = invalidated;
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -447,15 +483,13 @@ void Control_AlignToParentRect(Control* the_control)
 	if (the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system);
-		return;
+		goto error;
 	}
 	
 	if (the_control->parent_rect_ == NULL)
 	{
 		LOG_ERR(("%s %d: parent rect was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system);
-		return;
+		goto error;
 	}
 
 	if (the_control->h_align_ == H_ALIGN_LEFT)
@@ -495,6 +529,12 @@ void Control_AlignToParentRect(Control* the_control)
 	
 	//DEBUG_OUT(("%s %d: Control after AlignToWindow...", __func__, __LINE__));
 	//Control_Print(the_control);
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -516,11 +556,14 @@ uint16_t Control_GetID(Control* the_control)
 	if (the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&global_system);
-		return -1;
+		goto error;
 	}
 	
 	return the_control->id_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return -1;
 }
 
 
@@ -531,10 +574,14 @@ Control* Control_GetNextControl(Control* the_control)
 	if (the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
 	}
 	
 	return the_control->next_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -545,10 +592,14 @@ control_type Control_GetType(Control* the_control)
 	if (the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return CONTROL_TYPE_ERROR;
+		goto error;
 	}
 	
 	return the_control->type_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return CONTROL_TYPE_ERROR;
 }
 
 
@@ -559,10 +610,14 @@ bool Control_GetPressed(Control* the_control)
 	if (the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 	
 	return the_control->pressed_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -574,7 +629,7 @@ bool Control_IsRighter(Control* the_control, int16_t* x)
 	if (the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 	
 	if (the_control->rect_.MaxX > *x)
@@ -583,6 +638,10 @@ bool Control_IsRighter(Control* the_control, int16_t* x)
 		return true;
 	}
 	
+	return false;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
 	return false;
 }
 
@@ -594,7 +653,7 @@ bool Control_IsLefter(Control* the_control, int16_t* x)
 	if (the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 	
 	if (the_control->rect_.MinX < *x)
@@ -603,6 +662,10 @@ bool Control_IsLefter(Control* the_control, int16_t* x)
 		return true;
 	}
 	
+	return false;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
 	return false;
 }
 
@@ -616,13 +679,13 @@ void Control_Render(Control* the_control)
 	if (the_control == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	if (the_control->parent_win_ == NULL)
 	{
 		LOG_ERR(("%s %d: control's parent window object was null", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	// LOGIC: 
@@ -666,6 +729,12 @@ void Control_Render(Control* the_control)
 	
 	// add this control's rect to the list of clip rects that need to be blitted from window to screen
 	Window_AddClipRect(the_control->parent_win_, &the_control->rect_);
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 

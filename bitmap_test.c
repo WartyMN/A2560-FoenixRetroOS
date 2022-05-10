@@ -103,7 +103,6 @@ MU_TEST(bitmap_test_tiling)
 	int16_t	i;
 	int16_t	times_to_run = 100;
 	
-	Screen* the_screen = Sys_GetScreen(global_system, ID_CHANNEL_B);
 	Theme*	the_theme = Sys_GetTheme(global_system);
 	Bitmap*	the_pattern = Theme_GetDesktopPattern(the_theme);
 	Bitmap*	the_target_bitmap = Sys_GetScreenBitmap(global_system, back_layer);

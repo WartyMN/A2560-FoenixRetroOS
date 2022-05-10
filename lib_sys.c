@@ -101,7 +101,7 @@ void Sys_UpdateWindowTheme(System* the_system)
  	if (the_system == NULL)
  	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
  	}
 	
 	the_item = *(the_system->list_windows_);
@@ -115,6 +115,10 @@ void Sys_UpdateWindowTheme(System* the_system)
 		the_item = the_item->next_item_;
 	}
 	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
 	return;
 }
 
@@ -143,8 +147,7 @@ void Sys_RenumberWindows(System* the_system)
 		if (this_window == NULL)
 		{
 			LOG_ERR(("%s %d: this_window was null, the_item=%p, win_num=%i, win count=%i", __func__ , __LINE__, the_item, win_num, the_system->window_count_));
-			Sys_Destroy(&the_system);
-			return;
+			goto error;
 		}
 		
 		if (this_window->is_backdrop_)
@@ -161,6 +164,10 @@ void Sys_RenumberWindows(System* the_system)
 		the_item = the_item->next_item_;
 	}
 	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
 	return;
 }
 
@@ -223,6 +230,8 @@ System* Sys_New(void)
 		goto error;
 	}
 	LOG_ALLOC(("%s %d:	__ALLOC__	the_system	%p	size	%i", __func__ , __LINE__, the_system, sizeof(System)));
+	
+	DEBUG_OUT(("%s %d: System object created ok...", __func__ , __LINE__));
 
 	// event manager
 	if ( (the_system->event_manager_ = EventManager_New() ) == NULL)
@@ -329,6 +338,8 @@ bool Sys_Destroy(System** the_system)
 	free(*the_system);
 	*the_system = NULL;
 	
+	exit(-1);
+	
 	return true;
 }
 
@@ -343,13 +354,13 @@ void Sys_DestroyAllWindows(System* the_system)
  	if (the_system == NULL)
  	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
  	}
 	
 	if (the_system->list_windows_ == NULL)
 	{
 		DEBUG_OUT(("%s %d: the window list was NULL", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	the_item = *(the_system->list_windows_);
@@ -369,7 +380,11 @@ void Sys_DestroyAllWindows(System* the_system)
 	List_Destroy(the_system->list_windows_);
 
 	DEBUG_OUT(("%s %d: %i windows closed", __func__ , __LINE__, num_nodes));
-
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
 	return;
 }
 
@@ -507,6 +522,7 @@ bool Sys_InitSystem(void)
 	return true;
 	
 error:
+	Sys_Destroy(&global_system);	// crash early, crash often
 	return false;
 }
 
@@ -670,7 +686,7 @@ bool Sys_SetModeGraphics(System* the_system)
 	if (the_system == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was NULL", __func__, __LINE__));
-		return false;
+		goto error;
 	}
 	
 	// LOGIC:
@@ -689,6 +705,10 @@ bool Sys_SetModeGraphics(System* the_system)
 	#endif
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -700,7 +720,7 @@ bool Sys_SetModeText(System* the_system, bool as_overlay)
 	if (the_system == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was NULL", __func__, __LINE__));
-		return false;
+		goto error;
 	}
 	
 	// LOGIC:
@@ -730,6 +750,10 @@ bool Sys_SetModeText(System* the_system, bool as_overlay)
 	}
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -748,7 +772,7 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 	if (the_screen == NULL)
 	{
 		LOG_ERR(("%s %d: passed screen was NULL", __func__, __LINE__));
-		return false;
+		goto error;
 	}
 
 	// detect the video mode and set resolution based on it
@@ -880,6 +904,10 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 	the_screen->rect_.MaxY = the_screen->height_;	
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -894,7 +922,7 @@ bool Sys_SetVideoMode(Screen* the_screen, screen_resolution new_mode)
 	if (the_screen == NULL)
 	{
 		LOG_ERR(("%s %d: passed screen was NULL", __func__, __LINE__));
-		return false;
+		goto error;
 	}
 
 	// TODO: figure out smarter way of knowing which video modes are legal for the machine being run on
@@ -981,6 +1009,10 @@ bool Sys_SetVideoMode(Screen* the_screen, screen_resolution new_mode)
 	//sys_text_setsizes();
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -993,7 +1025,7 @@ bool Sys_EnableTextModeCursor(System* the_system, Screen* the_screen, bool enabl
 	if (the_screen == NULL)
 	{
 		LOG_ERR(("%s %d: passed screen was NULL", __func__, __LINE__));
-		return false;
+		goto error;
 	}
 
 	if (enable_it)
@@ -1006,6 +1038,10 @@ bool Sys_EnableTextModeCursor(System* the_system, Screen* the_screen, bool enabl
 	}
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -1025,13 +1061,13 @@ bool Sys_AddToWindowList(System* the_system, Window* the_new_window)
 	if (the_system == NULL)
  	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&the_system); // crash early, crash often
+		goto error;
  	}
 	
  	if (the_new_window == NULL)
  	{
 		LOG_ERR(("%s %d: passed window object was null", __func__ , __LINE__));
-		Sys_Destroy(&the_system); // crash early, crash often
+		goto error;
  	}
 
 	// are there too many windows already? 
@@ -1050,7 +1086,7 @@ bool Sys_AddToWindowList(System* the_system, Window* the_new_window)
 		if ( (the_system->list_windows_ = (List**)calloc(1, sizeof(List*)) ) == NULL)
 		{
 			LOG_ERR(("%s %d: could not allocate memory to create new list of windows", __func__ , __LINE__));
-			return false;
+			goto error;
 		}
 		LOG_ALLOC(("%s %d:	__ALLOC__	the_system->list_windows_	%p	size	%i", __func__ , __LINE__, the_system->list_windows_, sizeof(List*)));
 		
@@ -1072,6 +1108,10 @@ bool Sys_AddToWindowList(System* the_system, Window* the_new_window)
 // 	List_Print(the_system->list_windows_, (void*)&Window_PrintBrief);
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -1087,13 +1127,13 @@ bool Sys_CreateBackdropWindow(System* the_system)
  	if (the_system == NULL)
  	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return false;
+		goto error;
  	}
 
 	if ( (the_win_template = Window_GetNewWinTemplate(the_win_title)) == NULL)
 	{
 		LOG_ERR(("%s %d: Could not get a new window template", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 		
 	the_screen = the_system->screen_[ID_CHANNEL_B];
@@ -1123,6 +1163,7 @@ bool Sys_CreateBackdropWindow(System* the_system)
 	return true;
 	
 error:
+	Sys_Destroy(&global_system);	// crash early, crash often
 	return false;
 }
 
@@ -1134,10 +1175,14 @@ Window* Sys_GetActiveWindow(System* the_system)
  	if (the_system == NULL)
  	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
  	}
 	
 	return the_system->active_window_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -1150,7 +1195,7 @@ Window* Sys_GetBackdropWindow(System* the_system)
  	if (the_system == NULL)
  	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
  	}
 	
 	the_item = *(the_system->list_windows_);
@@ -1167,6 +1212,10 @@ Window* Sys_GetBackdropWindow(System* the_system)
 		the_item = the_item->next_item_;
 	}
 	
+	return NULL;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
 	return NULL;
 }
 
@@ -1185,7 +1234,7 @@ Window* Sys_GetNextWindow(System* the_system)
  	if (the_system == NULL)
  	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
  	}
 	
 	if (the_system->window_count_ < 1)
@@ -1214,8 +1263,7 @@ Window* Sys_GetNextWindow(System* the_system)
 	if (current_window_item == NULL)
 	{
 		LOG_ERR(("%s %d: couldn't find current window in the list of windows", __func__ , __LINE__));
-		Sys_Destroy(&the_system); // crash early, crash often
-		return NULL; // shut up warnings
+		goto error;
 	}
 	
 	next_window_item = current_window_item->next_item_;
@@ -1258,6 +1306,10 @@ Window* Sys_GetNextWindow(System* the_system)
 	}
 	
 	return next_window;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -1274,7 +1326,7 @@ Window* Sys_GetPreviousWindow(System* the_system)
  	if (the_system == NULL)
  	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
  	}
 	
 	if (the_system->window_count_ < 1)
@@ -1299,8 +1351,7 @@ Window* Sys_GetPreviousWindow(System* the_system)
 	if (current_window_item == NULL)
 	{
 		LOG_ERR(("%s %d: couldn't find current window in the list of windows", __func__ , __LINE__));
-		Sys_Destroy(&the_system); // crash early, crash often
-		return NULL;
+		goto error;
 	}
 	
 	next_window_item = current_window_item->prev_item_;
@@ -1329,6 +1380,10 @@ Window* Sys_GetPreviousWindow(System* the_system)
 	}
 	
 	return next_window;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -1343,7 +1398,7 @@ Window* Sys_GetWindowAtXY(System* the_system, int16_t x, int16_t y)
  	if (the_system == NULL)
  	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
  	}
 	
 	if (the_system->window_count_ < 1)
@@ -1380,6 +1435,10 @@ Window* Sys_GetWindowAtXY(System* the_system, int16_t x, int16_t y)
 	}
 	
 	return NULL;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -1392,7 +1451,7 @@ bool Sys_SetActiveWindow(System* the_system, Window* the_window)
 	if (the_system == NULL)
  	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return false;
+		goto error;
  	}
 
 	if (the_system->active_window_ != NULL)
@@ -1428,6 +1487,10 @@ bool Sys_SetActiveWindow(System* the_system, Window* the_window)
 	Sys_Render(global_system);
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -1453,7 +1516,6 @@ bool Window_CompareDisplayOrder(void* first_payload, void* second_payload)
 // remove one window from system's list of windows, and close it
 void Sys_CloseOneWindow(System* the_system, Window* the_window)
 {
-	Window*		the_next_window;
 	bool		need_different_active_window = false;
 	List*		this_window_item;
 	Rectangle	the_old_rect;
@@ -1461,16 +1523,14 @@ void Sys_CloseOneWindow(System* the_system, Window* the_window)
  	if (the_system == NULL)
  	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&the_system);
-		return;
+		goto error;
  	}
 	
 	// check that we have a window
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed a null window -- no window to close", __func__ , __LINE__));
-		Sys_Destroy(&the_system);
-		return;
+		goto error;
 	}
 
 	this_window_item = List_FindThisObject(the_system->list_windows_, (void*)the_window);
@@ -1478,8 +1538,7 @@ void Sys_CloseOneWindow(System* the_system, Window* the_window)
 	if (this_window_item == NULL)
 	{
 		LOG_ERR(("%s %d: couldn't find current window in the list of windows", __func__ , __LINE__));
-		Sys_Destroy(&the_system); // crash early, crash often
-		return; // shut up warnings
+		goto error;
 	}
 	
 	// nullify any upcoming events that reference this Window
@@ -1514,6 +1573,8 @@ void Sys_CloseOneWindow(System* the_system, Window* the_window)
 	
 	if (need_different_active_window)
 	{
+		Window*		the_next_window;
+
 		DEBUG_OUT(("%s %d: trying to get next window...", __func__ , __LINE__));
 		the_next_window = Sys_GetNextWindow(the_system);
 
@@ -1529,6 +1590,10 @@ void Sys_CloseOneWindow(System* the_system, Window* the_window)
 	Sys_Render(global_system);		
 	
 	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -1543,15 +1608,13 @@ void Sys_IssueDamageRects(System* the_system)
 	if (the_system == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&the_system);
-		return;
+		goto error;
 	}
 	
 	if (the_system->list_windows_ == NULL)
 	{
 		LOG_ERR(("%s %d: the window list was NULL", __func__ , __LINE__));
-		Sys_Destroy(&the_system);
-		return;
+		goto error;
 	}
 	
 	// LOGIC:
@@ -1586,7 +1649,13 @@ void Sys_IssueDamageRects(System* the_system)
 		}
 
 		the_item = the_item->next_item_;
-	}	
+	}
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -1599,22 +1668,19 @@ void Sys_CollectDamageRects(System* the_system, Window* the_future_active_window
 	if (the_system == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&the_system);
-		return;
+		goto error;
 	}
 	
 	if (the_system->list_windows_ == NULL)
 	{
 		LOG_ERR(("%s %d: the window list was NULL", __func__ , __LINE__));
-		Sys_Destroy(&the_system);
-		return;
+		goto error;
 	}
 
 	if (the_future_active_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed window object was null", __func__ , __LINE__));
-		Sys_Destroy(&the_system);
-		return;
+		goto error;
 	}
 	
 	
@@ -1644,7 +1710,13 @@ void Sys_CollectDamageRects(System* the_system, Window* the_future_active_window
 		}
 
 		the_item = the_item->next_item_;
-	}	
+	}
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -1659,11 +1731,14 @@ Theme* Sys_GetTheme(System* the_system)
 	if (the_system == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		Sys_Destroy(&the_system);
-		return NULL;
+		goto error;
 	}
 	
 	return the_system->theme_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 //! @param	the_system: valid pointer to system object
@@ -1672,10 +1747,14 @@ Font* Sys_GetSystemFont(System* the_system)
 	if (the_system == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
 	}
 	
 	return the_system->system_font_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -1685,10 +1764,14 @@ Font* Sys_GetAppFont(System* the_system)
 	if (the_system == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
 	}
 	
 	return the_system->app_font_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -1698,16 +1781,20 @@ Screen* Sys_GetScreen(System* the_system, int16_t channel_id)
 	if (the_system == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
 	}
 	
 	if (channel_id != ID_CHANNEL_A && channel_id != ID_CHANNEL_B)
 	{
 		LOG_ERR(("%s %d: passed channel_id (%i) was invalid", __func__ , __LINE__, channel_id));
-		return NULL;
+		goto error;
 	}
 	
 	return the_system->screen_[channel_id];
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -1718,16 +1805,20 @@ Bitmap* Sys_GetScreenBitmap(System* the_system, bitmap_layer the_layer)
 	if (the_system == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
 	}
 	
 	if (the_layer > fore_layer)
 	{
 		LOG_ERR(("%s %d: passed layer (%i) was invalid", __func__ , __LINE__, the_layer));
-		return NULL;
+		goto error;
 	}
 	
 	return the_system->screen_[ID_CHANNEL_B]->bitmap_[the_layer];
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -1737,10 +1828,14 @@ EventManager* Sys_GetEventManager(System* the_system)
 	if (the_system == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return NULL;
+		goto error;
 	}
 	
 	return the_system->event_manager_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -1755,10 +1850,16 @@ void Sys_SetSystemFont(System* the_system, Font* the_font)
 	if (the_system == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	the_system->system_font_ = the_font;
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -1768,10 +1869,16 @@ void Sys_SetAppFont(System* the_system, Font* the_font)
 	if (the_system == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	the_system->app_font_ = the_font;
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -1781,16 +1888,22 @@ void Sys_SetScreen(System* the_system, int16_t channel_id, Screen* the_screen)
 	if (the_system == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	if (channel_id != ID_CHANNEL_A && channel_id != ID_CHANNEL_B)
 	{
 		LOG_ERR(("%s %d: passed channel_id (%i) was invalid", __func__ , __LINE__, channel_id));
-		return;
+		goto error;
 	}
 	
 	the_system->screen_[channel_id] = the_screen;
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -1801,19 +1914,19 @@ void Sys_SetScreenBitmap(System* the_system, Bitmap* the_bitmap, bitmap_layer th
 	if (the_system == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	if (the_bitmap == NULL)
 	{
 		LOG_WARN(("%s %d: passed bitmap object was null", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	if (the_layer > fore_layer)
 	{
 		LOG_ERR(("%s %d: passed layer (%i) was invalid", __func__ , __LINE__, the_layer));
-		return;
+		goto error;
 	}
 	
 	the_system->screen_[ID_CHANNEL_B]->bitmap_[the_layer] = the_bitmap;
@@ -1821,6 +1934,12 @@ void Sys_SetScreenBitmap(System* the_system, Bitmap* the_bitmap, bitmap_layer th
 	Sys_SetVRAMAddr(the_system, the_layer, the_bitmap->addr_);
 	
 	DEBUG_OUT(("%s %d: layer=%i, bitmap_[the_layer]=%p", __func__, __LINE__, the_layer, the_bitmap->addr_));
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
 
@@ -1833,13 +1952,13 @@ bool Sys_SetTheme(System* the_system, Theme* the_theme)
 	if (the_system == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 	
 	if (the_theme == NULL)
 	{
 		LOG_WARN(("%s %d: passed theme object was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 	
 	if (the_system->theme_ != NULL)
@@ -1862,6 +1981,10 @@ bool Sys_SetTheme(System* the_system, Theme* the_theme)
 	}	
 	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -1882,13 +2005,13 @@ bool Sys_SetVRAMAddr(System* the_system, uint8_t the_bitmap_layer, unsigned char
 	if (the_system == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return false;
+		goto error;
 	}
 	
 	if (the_bitmap_layer > 1)
 	{
 		LOG_ERR(("%s %d: passed bitmap layer number (%u) was invalid", __func__ , __LINE__, the_bitmap_layer));
-		return false;
+		goto error;
 	}
 	
 	//DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0: want to point to bitmap at %p", __func__, __LINE__, the_address));
@@ -1909,8 +2032,12 @@ bool Sys_SetVRAMAddr(System* the_system, uint8_t the_bitmap_layer, unsigned char
 	}
 	
 	//DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0 now set to 0x%x (with offset=0x%x)", __func__, __LINE__, R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L), (uint32_t)VRAM_BUFFER_A + R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L)));
-
+	
 	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
 }
 
 
@@ -2570,7 +2697,7 @@ void Sys_Render(System* the_system)
  	if (the_system == NULL)
  	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
-		return;
+		goto error;
  	}
 	
 	// LOGIC:
@@ -2584,7 +2711,7 @@ void Sys_Render(System* the_system)
 	if (the_system->list_windows_ == NULL)
 	{
 		DEBUG_OUT(("%s %d: the window list was NULL", __func__ , __LINE__));
-		return;
+		goto error;
 	}
 	
 	//List_Print(the_system->list_windows_, (void*)&Window_PrintBrief);
@@ -2610,5 +2737,11 @@ void Sys_Render(System* the_system)
 	}
 
 	//DEBUG_OUT(("%s %d: %i windows rendered out of %i total window", __func__ , __LINE__, num_nodes, the_system->window_count_));
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
 }
 
