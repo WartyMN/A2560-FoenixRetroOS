@@ -81,6 +81,7 @@ typedef enum MouseMode
 
 struct MouseTracker
 {
+	Window*			clicked_window_;	// window the mouse was in when clicked. Not updated during a move or mouse up.
 	int16_t			clicked_x_;
 	int16_t			clicked_y_;
 	int16_t			x_;
@@ -122,7 +123,9 @@ void Mouse_SetMode(MouseTracker* the_mouse, MouseMode the_mode);
 void Mouse_SetXY(MouseTracker* the_mouse, int16_t x, int16_t y);
 
 // sets the current x, y coord. If button_down is true, it also sets button down coord to passed coord.
-void Mouse_AcceptUpdate(MouseTracker* the_mouse, int16_t x, int16_t y, bool button_down);
+// Note: regardless of the value of the_window, clicked_window_ will only be updated if button_down is true. 
+//   Window should only be set when calling AcceptUpdate on a mouse down (click)
+void Mouse_AcceptUpdate(MouseTracker* the_mouse, Window* the_window, int16_t x, int16_t y, bool button_down);
 
 // updates the selection rectangle
 void Mouse_UpdateSelectionRectangle(MouseTracker* the_mouse, int16_t x_scrolled, int16_t y_scrolled);
@@ -147,6 +150,9 @@ int16_t Mouse_GetX(MouseTracker* the_mouse);
 
 // Get the y coord
 int16_t Mouse_GetY(MouseTracker* the_mouse);
+
+// Get the window the mouse was clicked on
+Window* Mouse_GetClickedWindow(MouseTracker* the_mouse);
 
 // Get the last clicked x coord
 int16_t Mouse_GetClickedX(MouseTracker* the_mouse);

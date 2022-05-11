@@ -345,7 +345,13 @@ void Demo_Font_DrawString(Bitmap* the_bitmap, int16_t y);
 // Bitmap* LoadFakeIconGame(void);
 // Bitmap* LoadFakeIconWrite(void);
 Bitmap* LoadFakeIcon(int16_t icon_num);
+
+// open 1 window at less than default min size
+void OpenTinyWindow(void);
+
+// open multiple windows at random locations
 void OpenMultipleWindows(void);
+
 void SimulateEvents(void);
 void AddControls(Window* the_window);
 
@@ -619,10 +625,41 @@ void AddControls(Window* the_window)
 }
 
 
+void OpenTinyWindow(void)
+{
+	Window*				the_window;
+	NewWinTemplate*		the_win_template;
+	char*				the_win_title = (char*)"Tiny Window";
+	
+	if ( (the_win_template = Window_GetNewWinTemplate(the_win_title)) == NULL)
+	{
+		LOG_ERR(("%s %d: Could not get a new window template", __func__ , __LINE__));
+		return;
+	}	
+	// note: all the default values are fine for us in this case.
+		
+	// one guaranteed smallest window for testing
+	the_win_template->x_ = 10;
+	the_win_template->y_ = 400;
+	the_win_template->width_ = 1;
+	the_win_template->height_ = 1;
+
+	if ( (the_window = Window_New(the_win_template, &SharedEventHandler)) == NULL)
+	{
+		DEBUG_OUT(("%s %d: Couldn't instantiate a window", __func__, __LINE__));
+		return;
+	}
+
+	// declare the window to be visible
+	Window_SetVisible(the_window, true);
+}
+
+
+// open multiple windows at random locations
 void OpenMultipleWindows(void)
 {
 	int16_t				win_count = 2;
-	Window*				the_window[5];
+	Window*				the_window[4];
 	NewWinTemplate*		the_win_template;
 	int16_t				max_width = 640;
 	int16_t				max_height = 460;
@@ -660,22 +697,6 @@ void OpenMultipleWindows(void)
 		// declare the window to be visible
 		Window_SetVisible(the_window[win_num], true);
 	}
-	
-	// one more guaranteed smallest window for testing
-	the_win_template->x_ = 10;
-	the_win_template->y_ = 400;
-	the_win_template->width_ = 1;
-	the_win_template->height_ = 1;
-	the_win_template->title_ = (char*)"Tiny Window";
-
-	if ( (the_window[4] = Window_New(the_win_template, &SharedEventHandler)) == NULL)
-	{
-		DEBUG_OUT(("%s %d: Couldn't instantiate a window", __func__, __LINE__));
-		return;
-	}
-
-	// declare the window to be visible
-	Window_SetVisible(the_window[4], true);
 }
 
 
@@ -728,22 +749,35 @@ void Open2Windows(void)
 	}
 
 	// lets get some more!
-	OpenMultipleWindows();
+	//OpenMultipleWindows();
+	OpenTinyWindow();
 
 	// temporary until event handler is written: tell system to render the screen and all windows
 	Sys_Render(global_system);
 
 	// test out event handling
+	int16_t	titlebar_offset_x = 25; // safe place to click in titlebar without hitting a close/etc button
+	int16_t	titlebar_offset_y = 5; // safe place to click in titlebar without hitting a close/etc button
+	int16_t	win0_x = win_orig_x;
+	int16_t	win0_y = win_orig_y;
+	int16_t	win1_x = win_orig_x + (max_width + 12);
+	int16_t	win1_y = win_orig_y;
+	int16_t win1_x_dist = -70; // for drag, amount to move the window
+	int16_t win1_y_dist = 4;
+	int16_t drag_zone_offset = 2; // distance from edge of window to click when drag-resizing
+	int16_t drag_resize_amt = 60; // distance to drag resize the window by
+	int16_t	tinywin_x = 10;
+	int16_t	tinywin_y = 400;
 	
 	// click on window 0 to activate it.
-	EventManager_AddEvent(mouseDown, 0L, win_orig_x + 25, win_orig_y + 5, 0L, NULL, NULL);
-	EventManager_AddEvent(mouseUp, 0L, win_orig_x + 25, win_orig_y + 5, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseDown, 0L, win0_x + titlebar_offset_x, win0_y + titlebar_offset_y, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseUp, 0L, win0_x + titlebar_offset_x, win0_y + titlebar_offset_y, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for activate win 0 events", __func__, __LINE__));
 	EventManager_WaitForEvent();
 	
 	// click and release button on Window 0's maximize control when in norm size mode, original pos
-	EventManager_AddEvent(mouseDown, 0L, win_orig_x + 290, win_orig_y + 12, 0L, NULL, NULL);
-	EventManager_AddEvent(mouseUp, 0L, win_orig_x + 290, win_orig_y + 12, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseDown, 0L, win0_x + 290, win0_y + 12, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseUp, 0L, win0_x + 290, win0_y + 12, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for max size events", __func__, __LINE__));
 	EventManager_WaitForEvent();
 	
@@ -754,33 +788,47 @@ void Open2Windows(void)
 	EventManager_WaitForEvent();
 	
 	// click and release button on Window 0's close control
-	EventManager_AddEvent(mouseDown, 0L, win_orig_x + 12, win_orig_y + 12, 0L, NULL, NULL);
-	EventManager_AddEvent(mouseUp, 0L, win_orig_x + 12, win_orig_y + 12, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseDown, 0L, win0_x + 12, win0_y + 12, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseUp, 0L, win0_x + 12, win0_y + 12, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for close win 0 events", __func__, __LINE__));
 	EventManager_WaitForEvent();
 
-	// 60x410
-	// click and release the minimize button fro the tiny window
-	EventManager_AddEvent(mouseDown, 0L, 60,410, 0L, NULL, NULL);
-	EventManager_AddEvent(mouseUp, 0L, 60, 410, 0L, NULL, NULL);
-	EventManager_AddEvent(mouseDown, 0L, 60,410, 0L, NULL, NULL);	// one click to make it active window, second click to have control get action. first click could be anywhere in window.
-	EventManager_AddEvent(mouseUp, 0L, 60, 410, 0L, NULL, NULL);
+	// click and release the minimize button for the tiny window
+	EventManager_AddEvent(mouseDown, 0L, tinywin_x + titlebar_offset_x, tinywin_y + titlebar_offset_y, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseUp, 0L, tinywin_x + titlebar_offset_x, tinywin_y + titlebar_offset_y, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseDown, 0L, tinywin_x + 50, tinywin_y + 10, 0L, NULL, NULL);	// one click to make it active window, second click to have control get action. first click could be anywhere in window.
+	EventManager_AddEvent(mouseUp, 0L, tinywin_x + 50, tinywin_y + 10, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for minimize tiny win events", __func__, __LINE__));
 	EventManager_WaitForEvent();
 	
-	// click and hold on window 1's title bar, move it a little, let go.
-	EventManager_AddEvent(mouseDown, 0L, win_orig_x + (max_width + 12) + 24, win_orig_y + 6, 0L, NULL, NULL);
-	EventManager_AddEvent(mouseMoved, 0L, win_orig_x + (max_width + 12) + 50, win_orig_y + 0, 0L, NULL, NULL);
-	EventManager_AddEvent(mouseMoved, 0L, win_orig_x + (max_width + 12) + 70, win_orig_y + 9, 0L, NULL, NULL);
-	EventManager_AddEvent(mouseUp, 0L, win_orig_x + (max_width + 12) + 71, win_orig_y + 11, 0L, NULL, NULL);
-	// drag left side of window to resize leftwards
-	EventManager_AddEvent(mouseDown, 0L, win_orig_x + (max_width + 12) + 71 + 4, win_orig_y + 24, 0L, NULL, NULL);
-	EventManager_AddEvent(mouseMoved, 0L, win_orig_x + (max_width + 12) - 60, win_orig_y + 34, 0L, NULL, NULL);
-	EventManager_AddEvent(mouseUp, 0L, win_orig_x + (max_width + 12) - 65, win_orig_y + 34, 0L, NULL, NULL);
-	DEBUG_OUT(("%s %d: about to wait for events 2", __func__, __LINE__));
+	// click and release one of the push buttons in window 2
+	int16_t	button_x_offset = 10 + 5; // 10,30 is upper left of first button
+	int16_t	button_y_offset = WIN_DEFAULT_TITLEBAR_HEIGHT + 30 + 5;
+	
+	EventManager_AddEvent(mouseDown, 0L, win1_x + titlebar_offset_x, win1_y + titlebar_offset_y, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseUp, 0L, win1_x + titlebar_offset_x, win1_y + titlebar_offset_y, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseDown, 0L,  win1_x + button_x_offset, win1_y + button_y_offset, 0L, NULL, NULL);	// one click to make it active window, second click to have control get action. first click could be anywhere in window.
+	EventManager_AddEvent(mouseUp, 0L,  win1_x + button_x_offset, win1_y + button_y_offset, 0L, NULL, NULL);
+	DEBUG_OUT(("%s %d: about to wait for win1 push button events", __func__, __LINE__));
 	EventManager_WaitForEvent();
-	EventManager_AddEvent(mouseDown, 0L, win_orig_x + (max_width + 12) + 72, win_orig_y + 12, 0L, NULL, NULL);
-	EventManager_AddEvent(mouseUp, 0L, win_orig_x + (max_width + 12) + 73, win_orig_y + 9, 0L, NULL, NULL);
+	
+	// drag window 1 to new place: click and hold on window 1's title bar, move it a little, let go.
+	EventManager_AddEvent(mouseDown, 0L, win1_x + titlebar_offset_x, win0_y + titlebar_offset_y, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseMoved, 0L, win1_x + titlebar_offset_x + win1_x_dist - 20, win0_y + 0, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseMoved, 0L, win1_x + titlebar_offset_x + win1_x_dist, win0_y + 9, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseUp, 0L, win1_x + titlebar_offset_x + win1_x_dist, win0_y + 9, 0L, NULL, NULL);
+	DEBUG_OUT(("%s %d: about to wait for win1 drag move events", __func__, __LINE__));
+	EventManager_WaitForEvent();
+	
+	// resize window 1 by dragging left side of window to resize leftwards
+	EventManager_AddEvent(mouseDown, 0L, win1_x + win1_x_dist + drag_zone_offset, win0_y + 24, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseMoved, 0L, win1_x + win1_x_dist - drag_resize_amt - 5, win0_y + 34, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseUp, 0L, win1_x + win1_x_dist - drag_resize_amt, win0_y + 34, 0L, NULL, NULL);
+	DEBUG_OUT(("%s %d: about to wait for win1 drag resize events", __func__, __LINE__));
+	EventManager_WaitForEvent();
+
+	EventManager_AddEvent(mouseDown, 0L, win1_x + win1_x_dist - drag_resize_amt, win0_y + 12, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseUp, 0L, win1_x + win1_x_dist - drag_resize_amt + 1, win0_y + 9, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for events 3", __func__, __LINE__));
 	EventManager_WaitForEvent();
 	DEBUG_OUT(("%s %d: about to wait for events 4", __func__, __LINE__));
@@ -789,6 +837,7 @@ void Open2Windows(void)
 	while(true)
 	{
 		DEBUG_OUT(("%s %d: about to wait for events 5", __func__, __LINE__));
+		Sys_Destroy(&global_system);
 		EventManager_WaitForEvent();
 	}
 	
@@ -978,7 +1027,7 @@ void SharedEventHandler(EventRecord* the_event)
 		}
 		
 		//General_DelaySeconds(2);
-		getchar();
+		//getchar();
 	}	
 }
 

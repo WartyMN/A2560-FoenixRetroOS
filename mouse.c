@@ -119,7 +119,9 @@ error:
 // **** SETTERS *****
 
 // sets the current x, y coord. If button_down is true, it also sets button down coord to passed coord.
-void Mouse_AcceptUpdate(MouseTracker* the_mouse, int16_t x, int16_t y, bool button_down)
+// Note: regardless of the value of the_window, clicked_window_ will only be updated if button_down is true. 
+//   Window should only be set when calling AcceptUpdate on a mouse down (click)
+void Mouse_AcceptUpdate(MouseTracker* the_mouse, Window* the_window, int16_t x, int16_t y, bool button_down)
 {
 	if (the_mouse == NULL)
 	{
@@ -132,6 +134,7 @@ void Mouse_AcceptUpdate(MouseTracker* the_mouse, int16_t x, int16_t y, bool butt
 	
 	if (button_down)
 	{
+		the_mouse->clicked_window_ = the_window;
 		the_mouse->clicked_x_ = x;
 		the_mouse->clicked_y_ = y;
 		
@@ -180,6 +183,7 @@ void Mouse_Clear(MouseTracker* the_mouse)
 		goto error;
 	}
 	
+	the_mouse->clicked_window_ = NULL;
 	the_mouse->clicked_x_ = -1;
 	the_mouse->clicked_y_ = -1;
 	the_mouse->x_ = -1;
@@ -266,6 +270,23 @@ int16_t Mouse_GetY(MouseTracker* the_mouse)
 error:
 	Sys_Destroy(&global_system);	// crash early, crash often
 	return -1;
+}
+
+
+// Get the window the mouse was clicked on
+Window* Mouse_GetClickedWindow(MouseTracker* the_mouse)
+{
+	if (the_mouse == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		goto error;
+	}
+	
+	return the_mouse->clicked_window_;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return NULL;
 }
 
 
@@ -545,6 +566,7 @@ void Mouse_Print(MouseTracker* the_mouse)
 	DEBUG_OUT(("Mouse print out:"));
 	DEBUG_OUT(("  x_: %i",				the_mouse->x_));	
 	DEBUG_OUT(("  y_: %i",				the_mouse->y_));	
+	DEBUG_OUT(("  clicked_window_: %p",	the_mouse->clicked_window_));	
 	DEBUG_OUT(("  clicked_x_: %i",		the_mouse->clicked_x_));	
 	DEBUG_OUT(("  clicked_y_: %i",		the_mouse->clicked_y_));	
 	DEBUG_OUT(("  mode_: %i", 			the_mouse->mode_));

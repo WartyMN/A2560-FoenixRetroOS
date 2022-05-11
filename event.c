@@ -460,6 +460,7 @@ void EventManager_HandleMouseUp(EventManager* the_event_manager, EventRecord* th
 	MouseMode		starting_mode;
 	Window*			the_window;
 	Window*			the_active_window;
+	Window*			clicked_window;
 	int16_t			x_delta;
 	int16_t			y_delta;
 				
@@ -481,10 +482,11 @@ void EventManager_HandleMouseUp(EventManager* the_event_manager, EventRecord* th
 	}
 	DEBUG_OUT(("%s %d: active window = '%s', clicked window = '%s'", __func__, __LINE__, the_active_window->title_, the_window->title_));
 	
-	the_event->window_ = the_window;
+	the_event->window_ = the_window; // mouse up window not necessarily same as mouse down window!
+	clicked_window = Mouse_GetClickedWindow(the_event_manager->mouse_tracker_);
 	
 	// no matter what, reset the mouse history position flags
-	Mouse_AcceptUpdate(the_event_manager->mouse_tracker_, the_event->x_, the_event->y_, false);
+	Mouse_AcceptUpdate(the_event_manager->mouse_tracker_, NULL, the_event->x_, the_event->y_, false);
 
 	// get the delta between current and last clicked position
 	x_delta = Mouse_GetXDelta(the_event_manager->mouse_tracker_);
@@ -497,11 +499,22 @@ void EventManager_HandleMouseUp(EventManager* the_event_manager, EventRecord* th
 	//   if mouseResizeXXX > tell window to accept new size
 	//   if mouseDownOnControl > create a control clicked event and send to user Window
 	//   (fill in the rest)
+	// NOTE: it doesn't matter what window the mouse is over on mouse up, if we have been dragging a title or resizing a window. we need window that had been moused down on.
+	//   we have to use the window pointer recorded in the mouse object to get that.
 	
+	if (starting_mode == mouseDragTitle || starting_mode >= mouseResizeUp)
+	{
+		if (clicked_window == NULL)
+		{
+			LOG_ERR(("%s %d: clicked window was NULL on a mouse up -- some kind of error", __func__, __LINE__));
+			goto error;
+		}
+	}
+		
 	// If this is mouseDragTitle mode, tell window to move to new coordinates
 	if (starting_mode == mouseDragTitle)
 	{					
-		DEBUG_OUT(("%s %d: mouse up from mouseDragTitle: move window '%s'!", __func__, __LINE__, the_window->title_));
+		DEBUG_OUT(("%s %d: mouse up from mouseDragTitle: move window '%s'!", __func__, __LINE__, clicked_window->title_));
 		
 		if (x_delta != 0 && y_delta != 0)
 		{
@@ -511,15 +524,15 @@ void EventManager_HandleMouseUp(EventManager* the_event_manager, EventRecord* th
 			int16_t	new_height;
 			int32_t	the_code;
 			
-			new_x = Window_GetX(the_window) + x_delta;
-			new_y = Window_GetY(the_window) + y_delta;
-			new_width = Window_GetWidth(the_window);
-			new_height = Window_GetHeight(the_window);
+			new_x = Window_GetX(clicked_window) + x_delta;
+			new_y = Window_GetY(clicked_window) + y_delta;
+			new_width = Window_GetWidth(clicked_window);
+			new_height = Window_GetHeight(clicked_window);
 			the_code = (new_width << 16) + new_height;
 			
 			DEBUG_OUT(("%s %d: adding movewindow evt with %i, %i", __func__, __LINE__, new_x, new_y));
 			
-			EventManager_AddEvent(windowChanged, the_code, new_x, new_y, 0L, the_window, NULL);
+			EventManager_AddEvent(windowChanged, the_code, new_x, new_y, 0L, clicked_window, NULL);
 		}
 	}
 	else if (starting_mode >= mouseResizeUp) // this gets all the resize items
@@ -530,22 +543,25 @@ void EventManager_HandleMouseUp(EventManager* the_event_manager, EventRecord* th
 		int16_t	new_height;
 		bool	change_made = false;
 		
-		new_x = Window_GetX(the_window);
-		new_y = Window_GetY(the_window);
-		new_width = Window_GetWidth(the_window);
-		new_height = Window_GetHeight(the_window);
+		new_x = Window_GetX(clicked_window);
+		new_y = Window_GetY(clicked_window);
+		new_width = Window_GetWidth(clicked_window);
+		new_height = Window_GetHeight(clicked_window);
 
-		DEBUG_OUT(("%s %d: mouse up from mouseResizeXXX: resize window '%s'!", __func__, __LINE__, the_window->title_));
+		DEBUG_OUT(("%s %d: mouse up from mouseResizeXXX: resize window '%s'!", __func__, __LINE__, clicked_window->title_));
 		
 		if (starting_mode == mouseResizeLeft || starting_mode == mouseResizeRight)
 		{
 			if (x_delta != 0)
 			{
-				new_width += x_delta;
-				
 				if (starting_mode == mouseResizeLeft)
 				{
 					new_x += x_delta;
+					new_width -= x_delta;
+				}
+				else
+				{
+					new_width += x_delta;
 				}
 
 				change_made = true;						
@@ -554,12 +570,15 @@ void EventManager_HandleMouseUp(EventManager* the_event_manager, EventRecord* th
 		else if (starting_mode == mouseResizeUp || starting_mode == mouseResizeDown)
 		{
 			if (y_delta != 0)
-			{
-				new_height += y_delta;
-				
+			{				
 				if (starting_mode == mouseResizeUp)
 				{
 					new_y += y_delta;
+					new_height -= y_delta;
+				}
+				else
+				{
+					new_height += y_delta;
 				}
 
 				change_made = true;
@@ -580,48 +599,59 @@ void EventManager_HandleMouseUp(EventManager* the_event_manager, EventRecord* th
 			int32_t	the_code;
 			
 			the_code = (new_width << 16) + new_height;
-			EventManager_AddEvent(windowChanged, the_code, new_x, new_y, 0L, the_window, NULL);
+			EventManager_AddEvent(windowChanged, the_code, new_x, new_y, 0L, clicked_window, NULL);
 		}
 	}
 	else if (starting_mode == mouseDownOnControl)
 	{
-		// check for a control that was pressed, and is now released = it got clicked
-		local_x = the_event->x_;
-		local_y = the_event->y_;
-		Window_GlobalToLocal(the_event->window_, &local_x, &local_y);
-	
-		DEBUG_OUT(("%s %d: mouse up from mouseDownOnControl: fire off a control click in window '%s'!", __func__, __LINE__, the_window->title_));
-		
-		the_event->control_ = Window_GetControlAtXY(the_event->window_, local_x, local_y);
-	
-		if (the_event->control_)
+		// first check if mouse up happened in the same window as mouse down; in theory, could be different with same x/y
+		if (clicked_window != the_window)
 		{
-			if (Control_GetPressed(the_event->control_))
-			{
-				DEBUG_OUT(("%s %d: ** control '%s' (id=%i) was down, now up!", __func__, __LINE__, the_event->control_->caption_, the_event->control_->id_));
-				//Control_SetPressed(the_event->control_, false);
-				EventManager_AddEvent(controlClicked, -1, the_event->x_, the_event->y_, 0L, the_event->window_, the_event->control_);
-			}
-			else
-			{
-				// a control was clicked on, button not let up until mouse left that control, and was placed over another
-				// first control needs to be unselected.
-				// second control does NOT need any action. should stay unselected/unpushed.
-				
-				// clear any selected control without setting another to selected.
-				Window_SetSelectedControl(the_event->window_, NULL);
-			}
+			// need to cancel the mouse down on control, and let original window/control know it's not going to turn into an actual click
+
+			// clear any selected control without setting another to selected.
+			Window_SetSelectedControl(the_window, NULL);
 		}
 		else
 		{
-			// situation is SOME control was down. user let up mouse, but had moved mouse off of a control. 
-			// should the window get a mouse up event in that case? What would it do with that? 
-			// give window an event
-			//(*the_window->event_handler_)(the_event);
+			// check for a control that was pressed, and is now released = it got clicked
+			local_x = the_event->x_;
+			local_y = the_event->y_;
+			Window_GlobalToLocal(the_event->window_, &local_x, &local_y);
+	
+			DEBUG_OUT(("%s %d: mouse up from mouseDownOnControl: fire off a control click in window '%s'!", __func__, __LINE__, the_window->title_));
+		
+			the_event->control_ = Window_GetControlAtXY(the_event->window_, local_x, local_y);
+	
+			if (the_event->control_)
+			{
+				if (Control_GetPressed(the_event->control_))
+				{
+					DEBUG_OUT(("%s %d: ** control '%s' (id=%i) was down, now up!", __func__, __LINE__, the_event->control_->caption_, the_event->control_->id_));
+					//Control_SetPressed(the_event->control_, false);
+					EventManager_AddEvent(controlClicked, -1, the_event->x_, the_event->y_, 0L, the_event->window_, the_event->control_);
+				}
+				else
+				{
+					// a control was clicked on, button not let up until mouse left that control, and was placed over another
+					// first control needs to be unselected.
+					// second control does NOT need any action. should stay unselected/unpushed.
+				
+					// clear any selected control without setting another to selected.
+					Window_SetSelectedControl(the_event->window_, NULL);
+				}
+			}
+			else
+			{
+				// situation is SOME control was down. user let up mouse, but had moved mouse off of a control. 
+				// should the window get a mouse up event in that case? What would it do with that? 
+				// give window an event
+				//(*the_window->event_handler_)(the_event);
 			
-			// either way, need to unselect whatever control had been clicked on mouse-down
-			Window_SetSelectedControl(the_event->window_, NULL);
-		}
+				// either way, need to unselect whatever control had been clicked on mouse-down
+				Window_SetSelectedControl(the_event->window_, NULL);
+			}
+		}		
 	}
 	
 	Mouse_SetMode(the_event_manager->mouse_tracker_, mouseFree);
@@ -659,7 +689,7 @@ void EventManager_HandleMouseDown(EventManager* the_event_manager, EventRecord* 
 	DEBUG_OUT(("%s %d: active window = '%s', clicked window = '%s'", __func__, __LINE__, the_active_window->title_, the_window->title_));
 
 	// update the mouse tracker so that if we end up dragging, we'll know where the original click was. (or if a future double click, what time the click was, etc.)
-	Mouse_AcceptUpdate(the_event_manager->mouse_tracker_, the_event->x_, the_event->y_, true);
+	Mouse_AcceptUpdate(the_event_manager->mouse_tracker_, the_window, the_event->x_, the_event->y_, true);
 
 	// get local coords so we can check for drag and lasso
 	local_x = the_event->x_;
@@ -821,11 +851,14 @@ void EventManager_HandleMouseMoved(EventManager* the_event_manager, EventRecord*
 		{
 			if (x_delta != 0)
 			{
-				new_width += x_delta;
-				
 				if (starting_mode == mouseResizeLeft)
 				{
 					new_x += x_delta;
+					new_width -= x_delta;
+				}
+				else
+				{
+					new_width += x_delta;
 				}
 
 				change_made = true;						
@@ -834,12 +867,15 @@ void EventManager_HandleMouseMoved(EventManager* the_event_manager, EventRecord*
 		else if (starting_mode == mouseResizeUp || starting_mode == mouseResizeDown)
 		{
 			if (y_delta != 0)
-			{
-				new_height += y_delta;
-				
+			{				
 				if (starting_mode == mouseResizeUp)
 				{
 					new_y += y_delta;
+					new_height -= y_delta;
+				}
+				else
+				{
+					new_height += y_delta;
 				}
 
 				change_made = true;
@@ -855,7 +891,7 @@ void EventManager_HandleMouseMoved(EventManager* the_event_manager, EventRecord*
 			}
 		}
 
-		DEBUG_OUT(("%s %d: mouse move in RESIZE evt; change_made=%i, new width/height=%i, %i", __func__, __LINE__, change_made, new_width, new_height));
+		DEBUG_OUT(("%s %d: mouse move in RESIZE evt; changed=%i, new x/y/w/h=%i, %i -- %i, %i", __func__, __LINE__, change_made, new_x, new_y, new_width, new_height));
 		
 		if (change_made)
 		{

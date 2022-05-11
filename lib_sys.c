@@ -337,6 +337,8 @@ bool Sys_Destroy(System** the_system)
 	LOG_ALLOC(("%s %d:	__FREE__	*the_system	%p	size	%i", __func__ , __LINE__, *the_system, sizeof(System)));
 	free(*the_system);
 	*the_system = NULL;
+
+	DEBUG_OUT(("%s %d: **** BYE ****", __func__, __LINE__));
 	
 	exit(-1);
 	
