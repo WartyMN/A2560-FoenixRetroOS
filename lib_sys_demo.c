@@ -759,6 +759,15 @@ void Open2Windows(void)
 	DEBUG_OUT(("%s %d: about to wait for close win 0 events", __func__, __LINE__));
 	EventManager_WaitForEvent();
 
+	// 60x410
+	// click and release the minimize button fro the tiny window
+	EventManager_AddEvent(mouseDown, 0L, 60,410, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseUp, 0L, 60, 410, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseDown, 0L, 60,410, 0L, NULL, NULL);	// one click to make it active window, second click to have control get action. first click could be anywhere in window.
+	EventManager_AddEvent(mouseUp, 0L, 60, 410, 0L, NULL, NULL);
+	DEBUG_OUT(("%s %d: about to wait for minimize tiny win events", __func__, __LINE__));
+	EventManager_WaitForEvent();
+	
 	// click and hold on window 1's title bar, move it a little, let go.
 	EventManager_AddEvent(mouseDown, 0L, win_orig_x + (max_width + 12) + 24, win_orig_y + 6, 0L, NULL, NULL);
 	EventManager_AddEvent(mouseMoved, 0L, win_orig_x + (max_width + 12) + 50, win_orig_y + 0, 0L, NULL, NULL);

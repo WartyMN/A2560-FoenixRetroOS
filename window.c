@@ -2021,6 +2021,8 @@ error:
 //! Does not change the window's x, y, width, height parameters, it just makes it invisible
 void Window_Minimize(Window* the_window)
 {
+	Rectangle	the_new_rect;
+
 	if (the_window == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
@@ -2032,10 +2034,21 @@ void Window_Minimize(Window* the_window)
 	//   to access it, the contextual menu or a keyboard shortcut needs to be used
 	//   so we need to set state to minimized, and also make it invisible.
 	//   TODO: figure out what future actions need to take place when a window is minimized
+
+	
+	// before hiding the window, calculate and distribute any damage rects that may result from it being removed from screen
+	the_new_rect.MinX = -2;
+	the_new_rect.MinY = -2;
+	the_new_rect.MaxX = -1;
+	the_new_rect.MaxY = -1;
+	Window_GenerateDamageRects(the_window, &the_new_rect);
+	Sys_IssueDamageRects(global_system);
 	
 	Window_SetState(the_window, WIN_MINIMIZED);
 	Window_SetVisible(the_window, false);
-	Window_Render(the_window);
+	Sys_Render(global_system);
+	
+	DEBUG_OUT(("%s %d: window '%s' has been minimized", __func__, __LINE__, the_window->title_));
 	
 	return;
 	
