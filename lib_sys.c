@@ -338,7 +338,7 @@ bool Sys_Destroy(System** the_system)
 	free(*the_system);
 	*the_system = NULL;
 
-	DEBUG_OUT(("%s %d: **** BYE ****", __func__, __LINE__));
+	DEBUG_OUT(("%s %d: **** SYSTEM EXIT ON ERROR! ****", __func__, __LINE__));
 	
 	exit(-1);
 	

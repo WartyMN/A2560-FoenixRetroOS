@@ -1095,7 +1095,8 @@ void EventManager_WaitForEvent(void)
 		
 		//DEBUG_OUT(("%s %d: r idx=%i, w idx=%i, meets_mask will be=%x", __func__, __LINE__, the_event_manager->write_idx_, the_event_manager->read_idx_, the_event->what_ & the_mask));
 		
-		getchar();		
+		//getchar();	
+		General_DelayTicks(10);
 	}
 	
 	return;

@@ -222,7 +222,7 @@ void Window_ConfigureStructureRects(Window* the_window)
 	
 		the_window->titlebar_rect_.MaxY = the_window->titlebar_rect_.MinY + the_theme->titlebar_height_;
 		the_window->titlebar_rect_.MinX = 0;
-		the_window->titlebar_rect_.MaxX = the_window->width_;
+		the_window->titlebar_rect_.MaxX = the_window->width_ - 1;
 	
 
 		// LOGIC for iconbar placement:

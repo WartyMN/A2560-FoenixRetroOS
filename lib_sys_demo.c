@@ -372,13 +372,13 @@ void SharedEventHandler(EventRecord* the_event);
 // have user hit a key, then clear screens
 void WaitForUser(void)
 {
-	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 1, 4, (char*)"Press any key to continue", FG_COLOR_YELLOW, 0);
+	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 1, 5, (char*)"Press any key to continue", FG_COLOR_YELLOW, BG_COLOR_DK_BLUE);
 	
 	getchar();
 	
 // 	Bitmap_FillMemory(global_system->screen_[ID_CHANNEL_B], 0xbb);
-// 	Text_FillCharMem(global_system->screen_[ID_CHANNEL_B], ' ');
-// 	Text_FillAttrMem(global_system->screen_[ID_CHANNEL_B], 0);
+	Text_FillCharMem(global_system->screen_[ID_CHANNEL_B], ' ');
+	Text_FillAttrMem(global_system->screen_[ID_CHANNEL_B], 0);
 }
 
 // Draw fancy box on the B screen and display demo description
@@ -387,14 +387,14 @@ void ShowDescription(char* the_message)
 	int16_t		x1 = 0;
 	int16_t		x2 = global_system->screen_[ID_CHANNEL_B]->text_cols_vis_ - 1;
 	int16_t		y1 = 0;
-	int16_t		y2 = 5;
+	int16_t		y2 = 6;
 
 	// draw box and fill contents in prep for next demo description
-	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, FG_COLOR_BLUE, 0);
-	Text_FillBox(global_system->screen_[ID_CHANNEL_B], x1+1, y1+1, x2-1, y2-1, ' ', FG_COLOR_WHITE, 0);
+	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, FG_COLOR_BLUE, BG_COLOR_DK_BLUE);
+	Text_FillBox(global_system->screen_[ID_CHANNEL_B], x1+1, y1+1, x2-1, y2-1, ' ', FG_COLOR_WHITE, BG_COLOR_DK_BLUE);
 	
 	// wrap text into the message box, leaving one row at the bottom for "press any key"
-	Text_DrawStringInBox(global_system->screen_[ID_CHANNEL_B], x1+1, y1+1, x2-1, y2-1, the_message, FG_COLOR_WHITE, 0, NULL);
+	Text_DrawStringInBox(global_system->screen_[ID_CHANNEL_B], x1+1, y1+1, x2-1, y2-1, the_message, FG_COLOR_WHITE, BG_COLOR_DK_BLUE, NULL);
 }
 
 
@@ -718,6 +718,9 @@ void Open2Windows(void)
 	srand(sys_time_jiffies());
 	//srand(time(NULL));   // Initialization, should only be called once.
 
+	ShowDescription("This is a demo of event handling, including mouse clicks, window resizing, closing, and moving. Each event has a 10 tick delay for demo'ing purposes.");	
+	WaitForUser();
+
 	if ( (the_win_template = Window_GetNewWinTemplate(the_win_title)) == NULL)
 	{
 		LOG_ERR(("%s %d: Could not get a new window template", __func__ , __LINE__));
@@ -770,30 +773,45 @@ void Open2Windows(void)
 	int16_t	tinywin_y = 400;
 	
 	// click on window 0 to activate it.
+	ShowDescription("Next action: Click on Window #1's titlebar to activate it (make it front-most window)");	
+	WaitForUser();
+
 	EventManager_AddEvent(mouseDown, 0L, win0_x + titlebar_offset_x, win0_y + titlebar_offset_y, 0L, NULL, NULL);
 	EventManager_AddEvent(mouseUp, 0L, win0_x + titlebar_offset_x, win0_y + titlebar_offset_y, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for activate win 0 events", __func__, __LINE__));
 	EventManager_WaitForEvent();
 	
 	// click and release button on Window 0's maximize control when in norm size mode, original pos
+	ShowDescription("Next action: Click on Window #1's maximize button");	
+	WaitForUser();
+
 	EventManager_AddEvent(mouseDown, 0L, win0_x + 290, win0_y + 12, 0L, NULL, NULL);
 	EventManager_AddEvent(mouseUp, 0L, win0_x + 290, win0_y + 12, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for max size events", __func__, __LINE__));
 	EventManager_WaitForEvent();
 	
 	// click and release button on Window 0's norm size control when in maximized mode
+	ShowDescription("Next action: Click on Window #1's normal/window size button");	
+	WaitForUser();
+
 	EventManager_AddEvent(mouseDown, 0L, 640-25, 12, 0L, NULL, NULL);
 	EventManager_AddEvent(mouseUp, 0L, 640-25, 12, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for norm size events", __func__, __LINE__));
 	EventManager_WaitForEvent();
 	
 	// click and release button on Window 0's close control
+	ShowDescription("Next action: Click on Window #1's close button");	
+	WaitForUser();
+
 	EventManager_AddEvent(mouseDown, 0L, win0_x + 12, win0_y + 12, 0L, NULL, NULL);
 	EventManager_AddEvent(mouseUp, 0L, win0_x + 12, win0_y + 12, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for close win 0 events", __func__, __LINE__));
 	EventManager_WaitForEvent();
 
 	// click and release the minimize button for the tiny window
+	ShowDescription("Next action: Click on the Tiny window's minimize button (this hides the window without closing it)");	
+	WaitForUser();
+
 	EventManager_AddEvent(mouseDown, 0L, tinywin_x + titlebar_offset_x, tinywin_y + titlebar_offset_y, 0L, NULL, NULL);
 	EventManager_AddEvent(mouseUp, 0L, tinywin_x + titlebar_offset_x, tinywin_y + titlebar_offset_y, 0L, NULL, NULL);
 	EventManager_AddEvent(mouseDown, 0L, tinywin_x + 50, tinywin_y + 10, 0L, NULL, NULL);	// one click to make it active window, second click to have control get action. first click could be anywhere in window.
@@ -802,6 +820,9 @@ void Open2Windows(void)
 	EventManager_WaitForEvent();
 	
 	// click and release one of the push buttons in window 2
+	ShowDescription("Next action: Click on one of the buttons in Window #2");	
+	WaitForUser();
+
 	int16_t	button_x_offset = 10 + 5; // 10,30 is upper left of first button
 	int16_t	button_y_offset = WIN_DEFAULT_TITLEBAR_HEIGHT + 30 + 5;
 	
@@ -813,6 +834,9 @@ void Open2Windows(void)
 	EventManager_WaitForEvent();
 	
 	// drag window 1 to new place: click and hold on window 1's title bar, move it a little, let go.
+	ShowDescription("Next action: Click and drag Window #2 by its title bar. Red rectangles show future position of window as it is dragged. These are not erased currently because emulator does not support layer 1 transparency/composition, so they are drawn on layer 0.");	
+	WaitForUser();
+
 	EventManager_AddEvent(mouseDown, 0L, win1_x + titlebar_offset_x, win0_y + titlebar_offset_y, 0L, NULL, NULL);
 	EventManager_AddEvent(mouseMoved, 0L, win1_x + titlebar_offset_x + win1_x_dist - 20, win0_y + 0, 0L, NULL, NULL);
 	EventManager_AddEvent(mouseMoved, 0L, win1_x + titlebar_offset_x + win1_x_dist, win0_y + 9, 0L, NULL, NULL);
@@ -821,6 +845,9 @@ void Open2Windows(void)
 	EventManager_WaitForEvent();
 	
 	// resize window 1 by dragging left side of window to resize leftwards
+	ShowDescription("Next action: Resize Window #2 by clicking and dragging anywhere on the left edge of the window. Drag left/right/up/down plus down-right are supported. Green rectangles show future position/size of window as it is resized.");	
+	WaitForUser();
+
 	EventManager_AddEvent(mouseDown, 0L, win1_x + win1_x_dist + drag_zone_offset, win0_y + 24, 0L, NULL, NULL);
 	EventManager_AddEvent(mouseMoved, 0L, win1_x + win1_x_dist - drag_resize_amt - 5, win0_y + 34, 0L, NULL, NULL);
 	EventManager_AddEvent(mouseUp, 0L, win1_x + win1_x_dist - drag_resize_amt, win0_y + 34, 0L, NULL, NULL);
@@ -833,13 +860,6 @@ void Open2Windows(void)
 	EventManager_WaitForEvent();
 	DEBUG_OUT(("%s %d: about to wait for events 4", __func__, __LINE__));
 	EventManager_WaitForEvent();
-	
-	while(true)
-	{
-		DEBUG_OUT(("%s %d: about to wait for events 5", __func__, __LINE__));
-		Sys_Destroy(&global_system);
-		EventManager_WaitForEvent();
-	}
 	
 }
 
@@ -977,7 +997,7 @@ void SharedEventHandler(EventRecord* the_event)
 					DEBUG_OUT(("%s %d: some control other than the standard 4 clicked: %i", __func__, __LINE__, the_control_id));
 				}
 				
-				getchar();
+				//getchar();
 				break;
 				
 			case windowChanged:
@@ -1038,9 +1058,10 @@ void RunDemo(void)
 	srand(sys_time_jiffies());
 	//srand(time(NULL));   // Initialization, should only be called once.
 	
-	DEBUG_OUT(("%s %d: Setting graphics mode...", __func__, __LINE__));
 
-	Sys_SetModeGraphics(global_system);
+	
+	//Sys_SetModeGraphics(global_system);
+ 	//Sys_SetModeText(global_system, true);
 	
 	//ShowWhatYouWantMessage();
 	
@@ -1100,6 +1121,8 @@ void WhatYouWantWindowEventHandler(EventRecord* the_event)
 
 int main(int argc, char* argv[])
 {
+	Screen*		the_screen;
+
 	if (Sys_InitSystem() == false)
 	{
 		DEBUG_OUT(("%s %d: Couldn't initialize the system", __func__, __LINE__));
@@ -1107,15 +1130,23 @@ int main(int argc, char* argv[])
 	}
 	
 	// NOTE: at this point, the_system should equal global_system, as that is set by Sys_InitSystem().
-	
-// 	Sys_SetModeGraphics(global_system);;
-//  Sys_SetModeText(global_system, true);
-	
- 	RunDemo();
 
-	getchar();
+	the_screen = Sys_GetScreen(global_system, ID_CHANNEL_B);
 	
+	Sys_EnableTextModeCursor(global_system, the_screen, false);
+	
+// 	Sys_SetModeGraphics(global_system);
+	Sys_SetModeText(global_system, true);
+
+ 	RunDemo();
+	
+	ShowDescription("Demo complete");	
+	WaitForUser();
+	
+	Sys_EnableTextModeCursor(global_system, the_screen, true);
  	Sys_SetModeText(global_system, false);
+	
+	DEBUG_OUT(("%s %d: **** DEMO COMPLETE ****", __func__, __LINE__));
 	
 	return 0;
 }
