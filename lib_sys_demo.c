@@ -738,7 +738,7 @@ void Open2Windows(void)
 	// click on window 0 to activate it.
 	EventManager_AddEvent(mouseDown, 0L, win_orig_x + 25, win_orig_y + 5, 0L, NULL, NULL);
 	EventManager_AddEvent(mouseUp, 0L, win_orig_x + 25, win_orig_y + 5, 0L, NULL, NULL);
-	DEBUG_OUT(("%s %d: about to wait for activeate win 0 events", __func__, __LINE__));
+	DEBUG_OUT(("%s %d: about to wait for activate win 0 events", __func__, __LINE__));
 	EventManager_WaitForEvent();
 	
 	// click and release button on Window 0's maximize control when in norm size mode, original pos
@@ -759,19 +759,19 @@ void Open2Windows(void)
 	DEBUG_OUT(("%s %d: about to wait for close win 0 events", __func__, __LINE__));
 	EventManager_WaitForEvent();
 
-	// click and hold on window 0's title bar, move it a little, let go.
-	EventManager_AddEvent(mouseDown, 0L, win_orig_x + 24, win_orig_y + 6, 0L, NULL, NULL);
-	EventManager_AddEvent(mouseMoved, 0L, win_orig_x + 50, win_orig_y + 0, 0L, NULL, NULL);
-	EventManager_AddEvent(mouseMoved, 0L, win_orig_x + 70, win_orig_y + 9, 0L, NULL, NULL);
-	EventManager_AddEvent(mouseUp, 0L, win_orig_x + 71, win_orig_y + 11, 0L, NULL, NULL);
+	// click and hold on window 1's title bar, move it a little, let go.
+	EventManager_AddEvent(mouseDown, 0L, win_orig_x + (max_width + 12) + 24, win_orig_y + 6, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseMoved, 0L, win_orig_x + (max_width + 12) + 50, win_orig_y + 0, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseMoved, 0L, win_orig_x + (max_width + 12) + 70, win_orig_y + 9, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseUp, 0L, win_orig_x + (max_width + 12) + 71, win_orig_y + 11, 0L, NULL, NULL);
 	// drag left side of window to resize leftwards
-	EventManager_AddEvent(mouseDown, 0L, win_orig_x + 71 + 4, win_orig_y + 24, 0L, NULL, NULL);
-	EventManager_AddEvent(mouseMoved, 0L, win_orig_x - 5, win_orig_y + 34, 0L, NULL, NULL);
-	EventManager_AddEvent(mouseUp, 0L, win_orig_x - 7, win_orig_y + 34, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseDown, 0L, win_orig_x + (max_width + 12) + 71 + 4, win_orig_y + 24, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseMoved, 0L, win_orig_x + (max_width + 12) - 60, win_orig_y + 34, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseUp, 0L, win_orig_x + (max_width + 12) - 65, win_orig_y + 34, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for events 2", __func__, __LINE__));
 	EventManager_WaitForEvent();
-	EventManager_AddEvent(mouseDown, 0L, win_orig_x + 72, win_orig_y + 12, 0L, NULL, NULL);
-	EventManager_AddEvent(mouseUp, 0L, win_orig_x + 73, win_orig_y + 9, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseDown, 0L, win_orig_x + (max_width + 12) + 72, win_orig_y + 12, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseUp, 0L, win_orig_x + (max_width + 12) + 73, win_orig_y + 9, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for events 3", __func__, __LINE__));
 	EventManager_WaitForEvent();
 	DEBUG_OUT(("%s %d: about to wait for events 4", __func__, __LINE__));
@@ -945,6 +945,16 @@ void SharedEventHandler(EventRecord* the_event)
 					new_height = the_event->code_ & 0xffff;
 					
 					DEBUG_OUT(("%s %d: ** new x,y=%i,%i; new w/h=%i,%i", __func__, __LINE__, new_x, new_y, new_width, new_height));
+					
+					// before actually telling window to change its size to the new dimensions, 
+					// we can first check if these locations/sizes are going to be accepted, and potentially do 
+					// something differently based on the actual loc/size that will be accepted.
+					// user program is not required to call this function, it will get called internally before actual resize
+					// calling it first gives user-programmer a chance to act on the info
+					Window_EvaluateWindowChange(the_window, &new_x, &new_y, &new_width, &new_height);
+					// new_x, etc have now been evaluated, and potentially changed, to conform to window min width/height/et. 
+					
+					// do something here if you need to
 					
 					Window_ChangeWindow(the_window, new_x, new_y, new_width, new_height, WIN_PARAM_UPDATE_NORM_SIZE_TO_MATCH);
 					//Window_Render(the_window);

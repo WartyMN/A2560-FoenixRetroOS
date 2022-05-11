@@ -1115,7 +1115,7 @@ bool Window_BlitClipRects(Window* the_window)
 	{
 		the_clip = &the_window->clip_rect_[i];
 
-		DEBUG_OUT(("%s %d: blitting cliprect %p (%i, %i -- %i, %i)", __func__, __LINE__, the_clip, the_clip->MinX, the_clip->MinY, the_clip->MaxX, the_clip->MaxY));
+		DEBUG_OUT(("%s %d: win '%s' blitting cliprect %p (%i, %i -- %i, %i)", __func__, __LINE__, the_window->title_, the_clip, the_clip->MinX, the_clip->MinY, the_clip->MaxX, the_clip->MaxY));
 	
 		Bitmap_Blit(the_window->bitmap_, 
 					the_clip->MinX, 
@@ -1153,6 +1153,8 @@ bool Window_GenerateDamageRects(Window* the_window, Rectangle* the_old_rect)
 	}
 		
 	the_window->damage_count_ = General_CalculateRectDifference(&the_window->global_rect_, the_old_rect, &the_window->damage_rect_[0], &the_window->damage_rect_[1], &the_window->damage_rect_[2], &the_window->damage_rect_[3]);
+
+	//DEBUG_OUT(("%s %d: window '%s' has damage count of %i", __func__, __LINE__, the_window->title_, the_window->damage_count_));
 	
 	return true;
 	
@@ -1812,8 +1814,59 @@ error:
 }
 
 
-//! Change position and/or size of window when not in Maximize mode
+//! Evaluate potential change to window position or size, and correct if out of allowed limits
+//! Negative value positions will be corrected to 0.
+//! @param	x: Pointer to the proposed new horizontal position. If less than 0, it will be set to 0.
+//! @param	y: Pointer to the proposed new vertical position. If less than 0, it will be set to 0.
+//! @param	width: Pointer to the proposed new width. Will be set to window's minimum or maximum if necessary.
+//! @param	height: Pointer to the proposed new height. Will be set to window's minimum or maximum if necessary.
+void Window_EvaluateWindowChange(Window* the_window, int16_t* x, int16_t* y, int16_t* width, int16_t* height)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		goto error;
+	}
+	
+	*x = (*x < 0 ? 0 : *x);
+	*y = (*y < 0 ? 0 : *y);
+
+	if (*width < the_window->min_width_)
+	{
+		DEBUG_OUT(("%s %d: width (%i) < min_width (%i) ; changing", __func__, __LINE__, *width, the_window->min_width_));
+		*width = the_window->min_width_;
+	}
+	else if (*width > the_window->max_width_)
+	{
+		DEBUG_OUT(("%s %d: width (%i) > max_width (%i); changing", __func__, __LINE__, *width, the_window->max_width_));
+		*width = the_window->max_width_;
+	}
+	
+	if (*height < the_window->min_height_)
+	{
+		DEBUG_OUT(("%s %d: height (%i) < min_height_ (%i); changing", __func__, __LINE__, *height, the_window->min_height_));
+		*height = the_window->min_height_;
+	}
+	else if (*height > the_window->max_height_)
+	{
+		DEBUG_OUT(("%s %d: height (%i) > max_height (%i); changing", __func__, __LINE__, *height, the_window->max_height_));
+		*height = the_window->max_height_;
+	}
+	
+	return;
+
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
+}
+
+//! Change position and/or size of window
+//! NOTE: passed x, y will be checked against the window's min/max values
 //! Will also adjust the position of the built-in maximize/minimize/normsize controls
+//! @param	x: The new horizontal position
+//! @param	y: The new vertical position
+//! @param	width: The new width
+//! @param	height: The new height
 //! @param	update_norm: if true, the window's normal x/y/width/height properties will be updated to match the passed values. Pass false if setting maximize size, etc.
 void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width, int16_t height, bool update_norm)
 {
@@ -1829,6 +1882,9 @@ void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width
 	// check if anything actually changed
 	if (the_window->x_ != x || the_window->y_ != y || the_window->width_ != width || the_window->height_ != height)
 	{
+		// ensure width/height are within min/max, and x/y are not negative
+		Window_EvaluateWindowChange(the_window, &x, &y, &width, &height);
+
 		if (the_window->width_ != width)
 		{
 			width_changed = true;

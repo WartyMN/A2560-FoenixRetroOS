@@ -1518,7 +1518,7 @@ void Sys_CloseOneWindow(System* the_system, Window* the_window)
 {
 	bool		need_different_active_window = false;
 	List*		this_window_item;
-	Rectangle	the_old_rect;
+	Rectangle	the_new_rect;
 
  	if (the_system == NULL)
  	{
@@ -1545,12 +1545,11 @@ void Sys_CloseOneWindow(System* the_system, Window* the_window)
 	EventManager_RemoveEventsForWindow(the_window);
 	
 	// before destroying the window, calculate and distribute any damage rects that may result from it being removed from screen
-	General_CopyRect(&the_old_rect, &the_window->global_rect_);
-	the_window->global_rect_.MinX = -2;
-	the_window->global_rect_.MinY = -2;
-	the_window->global_rect_.MaxX = -1;
-	the_window->global_rect_.MaxY = -1;
-	Window_GenerateDamageRects(the_window, &the_old_rect);
+	the_new_rect.MinX = -2;
+	the_new_rect.MinY = -2;
+	the_new_rect.MaxX = -1;
+	the_new_rect.MaxY = -1;
+	Window_GenerateDamageRects(the_window, &the_new_rect);
 	Sys_IssueDamageRects(the_system);
 	
 	// if this was active window, we'll need to pick a new one after we delete it

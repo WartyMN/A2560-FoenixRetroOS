@@ -369,7 +369,22 @@ void Window_SetActive(Window* the_window, bool is_active);
 //! Set the window's state (maximized, minimized, etc.)
 void Window_SetState(Window* the_window, window_state the_state);
 
+//! Evaluate potential change to window position or size, and correct if out of allowed limits
+//! Negative value positions will be corrected to 0.
+//! @param	x: Pointer to the proposed new horizontal position. If less than 0, it will be set to 0.
+//! @param	y: Pointer to the proposed new vertical position. If less than 0, it will be set to 0.
+//! @param	width: Pointer to the proposed new width. Will be set to window's minimum or maximum if necessary.
+//! @param	height: Pointer to the proposed new height. Will be set to window's minimum or maximum if necessary.
+void Window_EvaluateWindowChange(Window* the_window, int16_t* x, int16_t* y, int16_t* width, int16_t* height);
+
 //! Change position and/or size of window
+//! NOTE: passed x, y will be checked against the window's min/max values
+//! Will also adjust the position of the built-in maximize/minimize/normsize controls
+//! @param	x: The new horizontal position
+//! @param	y: The new vertical position
+//! @param	width: The new width
+//! @param	height: The new height
+//! @param	update_norm: if true, the window's normal x/y/width/height properties will be updated to match the passed values. Pass false if setting maximize size, etc.
 void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width, int16_t height, bool update_norm);
 
 //! Set the window to full-screen size (maximize mode)

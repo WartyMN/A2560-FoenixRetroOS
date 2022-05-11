@@ -952,12 +952,14 @@ int16_t General_CalculateRectDifference(Rectangle* r1, Rectangle* r2, Rectangle*
 	
 	if (General_RectWithinRect(*r2, *r1) == true)
 	{
+		//DEBUG_OUT(("%s %d: r1 (%i, %i : %i, %i) ---- r2 (%i, %i : %i, %i)", __func__, __LINE__, r1->MinX, r1->MinY, r1->MaxX, r1->MaxY, r2->MinX, r2->MinY, r2->MaxX, r2->MaxY));
 		return 0;
 	}
 	
 	if (General_RectIntersect(*r1, *r2) == false)
 	{
-		General_CopyRect(r1, diff_r1);
+		General_CopyRect(diff_r1, r1);
+		//DEBUG_OUT(("%s %d: r1 (%i, %i : %i, %i) ---- diff_r1 (%i, %i : %i, %i)", __func__, __LINE__, r1->MinX, r1->MinY, r1->MaxX, r1->MaxY, diff_r1->MinX, diff_r1->MinY, diff_r1->MaxX, diff_r1->MaxY));
 		return 1;
 	}
 
