@@ -328,6 +328,13 @@ Control* Window_AddNewControlFromTemplate(Window* the_window, ControlTemplate* t
 //! @return	Returns a pointer to the new control, or NULL in any error condition
 Control* Window_AddNewControl(Window* the_window, control_type the_type, int16_t width, int16_t height, int16_t x_offset, int16_t y_offset, h_align_type the_h_align, v_align_type the_v_align, char* the_caption, uint16_t the_id, uint16_t group_id);
 
+//! Invalidate the title bar and the controls in the title bar
+//! Call when switching from inactive to active window, and vice versa, to force controls and title bar to redraw appropriately
+void Window_InvalidateTitlebar(Window* the_window);
+
+//! Invalidate the control matching the ID passed
+void Window_InvalidateControlByID(Window* the_window, uint16_t the_control_id);
+
 
 
 Control* Window_GetRootControl(Window* the_window);

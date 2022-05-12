@@ -1433,6 +1433,41 @@ error:
 }
 
 
+//! Invalidate the title bar and the controls in the title bar
+//! Call when switching from inactive to active window, and vice versa, to force controls and title bar to redraw appropriately
+void Window_InvalidateTitlebar(Window* the_window)
+{
+	int16_t		i;
+
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		goto error;
+	}
+	
+	the_window->titlebar_invalidated_ = true;
+
+	// calculate available title width
+	Window_CalculateTitleSpace(the_window);
+	
+	// also invalidate any controls in the titlebar, as re-drawing titlebar will draw over them
+	// controls in titlebar have IDs 0-3
+	for (i = 0; i < MAX_BUILT_IN_WIDGET; i++)
+	{
+		Control*	the_control;
+
+		the_control = Window_GetControl(the_window, i);
+		Control_MarkInvalidated(the_control, true);
+	}
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
+}
+
+
 Control* Window_GetRootControl(Window* the_window)
 {
 	if (the_window == NULL)
@@ -1636,12 +1671,13 @@ void Window_Render(Window* the_window)
 		{
 			Window_DrawAll(the_window);
 		}
-		else if (the_window->titlebar_invalidated_ == true)
-		{
-			Window_DrawStructure(the_window);
-		}
 		else
 		{
+			if (the_window->titlebar_invalidated_ == true)
+			{
+				Window_DrawStructure(the_window);
+			}
+			
 			// Re-draw any controls that were invalidated and queue them for render
 			Window_DrawControls(the_window, WIN_PARAM_ONLY_REDRAW_INVAL_CONTROLS);
 		}
@@ -1782,7 +1818,11 @@ void Window_SetActive(Window* the_window, bool is_active)
 	}
 	
 	the_window->active_ = is_active;
-	the_window->titlebar_invalidated_ = true;
+	
+	if (the_window->is_backdrop_ == false)
+	{
+		Window_InvalidateTitlebar(the_window);
+	}
 	
 	return;
 	
@@ -1919,7 +1959,7 @@ void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width
 	
 		// invalidate the window and titlebar so they redraw
 		the_window->invalidated_ = true;
-		the_window->titlebar_invalidated_ = true;
+		Window_InvalidateTitlebar(the_window);
 
 		// get bigger storage if necessary
 		if (Bitmap_Resize(the_window->bitmap_, width, height) == false)

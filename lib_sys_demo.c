@@ -41,7 +41,9 @@
 /*                               Definitions                                 */
 /*****************************************************************************/
 
-
+#define DESCRIPTION_START_Y_LINE	20
+#define	DESCRIPTION_NUM_LINES		5
+#define	USER_PROMPT_NUM_LINES		1
 
 /*****************************************************************************/
 /*                             Global Variables                              */
@@ -372,11 +374,10 @@ void SharedEventHandler(EventRecord* the_event);
 // have user hit a key, then clear screens
 void WaitForUser(void)
 {
-	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 1, 5, (char*)"Press any key to continue", FG_COLOR_YELLOW, BG_COLOR_DK_BLUE);
+	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 1, DESCRIPTION_START_Y_LINE + DESCRIPTION_NUM_LINES, (char*)"Press any key to continue", FG_COLOR_YELLOW, BG_COLOR_DK_BLUE);
 	
 	getchar();
 	
-// 	Bitmap_FillMemory(global_system->screen_[ID_CHANNEL_B], 0xbb);
 	Text_FillCharMem(global_system->screen_[ID_CHANNEL_B], ' ');
 	Text_FillAttrMem(global_system->screen_[ID_CHANNEL_B], 0);
 }
@@ -386,8 +387,8 @@ void ShowDescription(char* the_message)
 {
 	int16_t		x1 = 0;
 	int16_t		x2 = global_system->screen_[ID_CHANNEL_B]->text_cols_vis_ - 1;
-	int16_t		y1 = 0;
-	int16_t		y2 = 6;
+	int16_t		y1 = DESCRIPTION_START_Y_LINE;
+	int16_t		y2 = y1 + DESCRIPTION_NUM_LINES + USER_PROMPT_NUM_LINES + 1;
 
 	// draw box and fill contents in prep for next demo description
 	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, FG_COLOR_BLUE, BG_COLOR_DK_BLUE);
@@ -1132,6 +1133,7 @@ int main(int argc, char* argv[])
 	// NOTE: at this point, the_system should equal global_system, as that is set by Sys_InitSystem().
 
 	the_screen = Sys_GetScreen(global_system, ID_CHANNEL_B);
+	Text_FillCharMem(the_screen, ' ');
 	
 	Sys_EnableTextModeCursor(global_system, the_screen, false);
 	
