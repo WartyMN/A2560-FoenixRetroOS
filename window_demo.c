@@ -254,7 +254,7 @@ void AddControls(Window* the_window)
 	// for user docs:
 	// first way of adding a control is to call Window_AddNewControl(), and supply all the information at once. 
 	button_1 = Window_AddNewControl(the_window, TEXT_BUTTON, width, height, x_offset, y_offset, H_ALIGN_LEFT, V_ALIGN_TOP, caption_1, the_id++, group_id);
-	Control_SetPressed(button_1, CONTROL_UP);
+	Control_SetPressed(button_1, CONTROL_NOT_PRESSED);
 	
 	// for user docs:
 	// 2nd way of adding a control is to call get a control template first, then call Window_AddNewControlFromTemplate()
@@ -272,7 +272,7 @@ void AddControls(Window* the_window)
 
 	button_2 = Window_AddNewControlFromTemplate(the_window, the_template, the_id++, group_id);
 	Control_SetActive(button_2, CONTROL_ACTIVE);
-	Control_SetPressed(button_2, CONTROL_DOWN);
+	Control_SetPressed(button_2, CONTROL_PRESSED);
 	ControlTemplate_Destroy(&the_template);
 	
 	// for user docs:
@@ -298,13 +298,13 @@ void AddControls(Window* the_window)
 	}
 	
 	Control_SetActive(the_control, CONTROL_INACTIVE);
-	Control_SetPressed(the_control, CONTROL_UP);
+	Control_SetPressed(the_control, CONTROL_NOT_PRESSED);
 
 	width = 140;
 	y_offset += 30;
 	button_4 = Window_AddNewControl(the_window, TEXT_BUTTON, width, height, x_offset, y_offset, H_ALIGN_LEFT, V_ALIGN_TOP, caption_4, the_id++, group_id);
 	Control_SetActive(button_4, CONTROL_INACTIVE);
-	Control_SetPressed(button_4, CONTROL_DOWN);
+	Control_SetPressed(button_4, CONTROL_PRESSED);
 	
 	
 	// temporary until event handler is written: tell system to render the screen and all windows

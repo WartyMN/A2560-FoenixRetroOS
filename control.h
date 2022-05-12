@@ -75,8 +75,8 @@ typedef enum control_active_state
 
 typedef enum control_pushed_state
 {
-	CONTROL_UP = 0,
-	CONTROL_DOWN = 1,
+	CONTROL_NOT_PRESSED = 0,
+	CONTROL_PRESSED = 1,
 } control_pushed_state;
 
 typedef enum control_type

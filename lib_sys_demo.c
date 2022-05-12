@@ -617,7 +617,7 @@ void AddControls(Window* the_window)
 	{
 		sprintf(caption, "Button #%i", i+1);
 		button[i] = Window_AddNewControl(the_window, TEXT_BUTTON, width, height, x_offset, y_offset, H_ALIGN_LEFT, V_ALIGN_TOP, caption, the_id++, group_id);
-		Control_SetPressed(button[i], CONTROL_UP);
+		Control_SetPressed(button[i], CONTROL_NOT_PRESSED);
 		y_offset += 30;		
 	}
 		
@@ -970,32 +970,41 @@ void SharedEventHandler(EventRecord* the_event)
 				the_control = the_event->control_;
 				the_control_id = Control_GetID(the_event->control_);
 				
-				Control_SetPressed(the_control, true);
-				Window_Render(the_window);
-				
 				if (the_control_id == CLOSE_WIDGET_ID)
 				{
 					DEBUG_OUT(("%s %d: close control clicked!", __func__, __LINE__));
+					
+					// this is where you'd put up a "are you sure you want to quit?" or "save changes before exiting"?" etc. type thing. 
+					// if you do want to cancel out of the close, you'll want to set the close widget to not pressed and re-render window.
+					
 					Sys_CloseOneWindow(global_system, the_window);
-				}
-				else if (the_control_id == MINIMIZE_WIDGET_ID)
-				{
-					DEBUG_OUT(("%s %d: minimize control clicked!", __func__, __LINE__));
-					Window_Minimize(the_window);
-				}
-				else if (the_control_id == NORM_SIZE_WIDGET_ID)
-				{
-					DEBUG_OUT(("%s %d: standard size control clicked!", __func__, __LINE__));
-					Window_NormSize(the_window);
-				}
-				else if (the_control_id == MAXIMIZE_WIDGET_ID)
-				{
-					DEBUG_OUT(("%s %d: maximize control clicked!", __func__, __LINE__));
-					Window_Maximize(the_window);
 				}
 				else
 				{
-					DEBUG_OUT(("%s %d: some control other than the standard 4 clicked: %i", __func__, __LINE__, the_control_id));
+					if (the_control_id == MINIMIZE_WIDGET_ID)
+					{
+						DEBUG_OUT(("%s %d: minimize control clicked!", __func__, __LINE__));
+						Window_Minimize(the_window);
+					}
+					else if (the_control_id == NORM_SIZE_WIDGET_ID)
+					{
+						DEBUG_OUT(("%s %d: standard size control clicked!", __func__, __LINE__));
+						Window_NormSize(the_window);
+					}
+					else if (the_control_id == MAXIMIZE_WIDGET_ID)
+					{
+						DEBUG_OUT(("%s %d: maximize control clicked!", __func__, __LINE__));
+						Window_Maximize(the_window);
+					}
+					else
+					{
+						DEBUG_OUT(("%s %d: some control other than the standard 4 clicked: %i", __func__, __LINE__, the_control_id));
+						// do whatever you want here. 
+					}
+					
+					// done with whatever action the control was supposed to take, so time to unpress it and re-render it.
+					Control_SetPressed(the_control, CONTROL_NOT_PRESSED);
+					Window_Render(the_window);
 				}
 				
 				//getchar();

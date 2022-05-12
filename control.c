@@ -187,10 +187,10 @@ void Control_Print(Control* the_control)
 	DEBUG_OUT(("  value_: %i",	 			the_control->value_));
 	DEBUG_OUT(("  min_: %i",	 			the_control->min_));
 	DEBUG_OUT(("  max_: %i", 				the_control->max_));
-	DEBUG_OUT(("  inactive image up: %p", 	the_control->image_[CONTROL_INACTIVE][CONTROL_UP]));
-	DEBUG_OUT(("  inactive image dn: %p", 	the_control->image_[CONTROL_INACTIVE][CONTROL_DOWN]));
-	DEBUG_OUT(("  active image up: %p", 	the_control->image_[CONTROL_ACTIVE][CONTROL_UP]));
-	DEBUG_OUT(("  active image dn: %p", 	the_control->image_[CONTROL_ACTIVE][CONTROL_DOWN]));
+	DEBUG_OUT(("  inactive image up: %p", 	the_control->image_[CONTROL_INACTIVE][CONTROL_NOT_PRESSED]));
+	DEBUG_OUT(("  inactive image dn: %p", 	the_control->image_[CONTROL_INACTIVE][CONTROL_PRESSED]));
+	DEBUG_OUT(("  active image up: %p", 	the_control->image_[CONTROL_ACTIVE][CONTROL_NOT_PRESSED]));
+	DEBUG_OUT(("  active image dn: %p", 	the_control->image_[CONTROL_ACTIVE][CONTROL_PRESSED]));
 	DEBUG_OUT(("  caption_: %p", 			the_control->caption_));	
 	DEBUG_OUT(("  avail_text_width_: %i", 	the_control->avail_text_width_));
 }
@@ -262,10 +262,10 @@ Control* Control_New(ControlTemplate* the_template, Window* the_window, Rectangl
 	the_control->height_ = the_template->height_;
 	the_control->min_ = the_template->min_;
 	the_control->max_ = the_template->max_;
-	the_control->image_[CONTROL_INACTIVE][CONTROL_UP] = the_template->image_[CONTROL_INACTIVE][CONTROL_UP];
-	the_control->image_[CONTROL_INACTIVE][CONTROL_DOWN] = the_template->image_[CONTROL_INACTIVE][CONTROL_DOWN];
-	the_control->image_[CONTROL_ACTIVE][CONTROL_UP] = the_template->image_[CONTROL_ACTIVE][CONTROL_UP];
-	the_control->image_[CONTROL_ACTIVE][CONTROL_DOWN] = the_template->image_[CONTROL_ACTIVE][CONTROL_DOWN];
+	the_control->image_[CONTROL_INACTIVE][CONTROL_NOT_PRESSED] = the_template->image_[CONTROL_INACTIVE][CONTROL_NOT_PRESSED];
+	the_control->image_[CONTROL_INACTIVE][CONTROL_PRESSED] = the_template->image_[CONTROL_INACTIVE][CONTROL_PRESSED];
+	the_control->image_[CONTROL_ACTIVE][CONTROL_NOT_PRESSED] = the_template->image_[CONTROL_ACTIVE][CONTROL_NOT_PRESSED];
+	the_control->image_[CONTROL_ACTIVE][CONTROL_PRESSED] = the_template->image_[CONTROL_ACTIVE][CONTROL_PRESSED];
 	the_control->avail_text_width_ = the_template->avail_text_width_;
 	
 	// at start, all new controls are inactive, value 0, disabled, not-pressed, and invisible
@@ -360,10 +360,10 @@ bool Control_UpdateFromTemplate(Control* the_control, ControlTemplate* the_templ
 	the_control->avail_text_width_ = the_template->avail_text_width_;
 
 	// do NOT free old images, they didn't really belong to the control, they belonged to the previous theme
-	the_control->image_[CONTROL_INACTIVE][CONTROL_UP] = the_template->image_[CONTROL_INACTIVE][CONTROL_UP];
-	the_control->image_[CONTROL_INACTIVE][CONTROL_DOWN] = the_template->image_[CONTROL_INACTIVE][CONTROL_DOWN];
-	the_control->image_[CONTROL_ACTIVE][CONTROL_UP] = the_template->image_[CONTROL_ACTIVE][CONTROL_UP];
-	the_control->image_[CONTROL_ACTIVE][CONTROL_DOWN] = the_template->image_[CONTROL_ACTIVE][CONTROL_DOWN];
+	the_control->image_[CONTROL_INACTIVE][CONTROL_NOT_PRESSED] = the_template->image_[CONTROL_INACTIVE][CONTROL_NOT_PRESSED];
+	the_control->image_[CONTROL_INACTIVE][CONTROL_PRESSED] = the_template->image_[CONTROL_INACTIVE][CONTROL_PRESSED];
+	the_control->image_[CONTROL_ACTIVE][CONTROL_NOT_PRESSED] = the_template->image_[CONTROL_ACTIVE][CONTROL_NOT_PRESSED];
+	the_control->image_[CONTROL_ACTIVE][CONTROL_PRESSED] = the_template->image_[CONTROL_ACTIVE][CONTROL_PRESSED];
 		
 	// localize to the parent window
 	Control_AlignToParentRect(the_control);

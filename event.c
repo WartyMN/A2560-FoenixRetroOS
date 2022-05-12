@@ -628,7 +628,7 @@ void EventManager_HandleMouseUp(EventManager* the_event_manager, EventRecord* th
 				if (Control_GetPressed(the_event->control_))
 				{
 					DEBUG_OUT(("%s %d: ** control '%s' (id=%i) was down, now up!", __func__, __LINE__, the_event->control_->caption_, the_event->control_->id_));
-					//Control_SetPressed(the_event->control_, false);
+					//Control_SetPressed(the_event->control_, CONTROL_NOT_PRESSED);
 					EventManager_AddEvent(controlClicked, -1, the_event->x_, the_event->y_, 0L, the_event->window_, the_event->control_);
 				}
 				else
@@ -732,7 +732,8 @@ void EventManager_HandleMouseDown(EventManager* the_event_manager, EventRecord* 
 		{
 			DEBUG_OUT(("%s %d: ** control '%s' (id=%i) moused down!", __func__, __LINE__, the_event->control_->caption_, the_event->control_->id_));
 			Window_SetSelectedControl(the_event->window_, the_event->control_);
-			//Control_SetPressed(the_event->control_, true);
+			Control_SetPressed(the_event->control_, CONTROL_PRESSED);
+			Window_Render(the_event->window_);
 			// give window an event
 			//(*the_window->event_handler_)(the_event);
 			
@@ -771,6 +772,8 @@ void EventManager_HandleMouseMoved(EventManager* the_event_manager, EventRecord*
 {
 	MouseMode		starting_mode;
 	Window*			the_window;
+	int16_t			local_x;
+	int16_t			local_y;
 	int16_t			x_delta;
 	int16_t			y_delta;
 
@@ -793,6 +796,9 @@ void EventManager_HandleMouseMoved(EventManager* the_event_manager, EventRecord*
 	// get the delta between current and last clicked position
 	x_delta = Mouse_GetXDelta(the_event_manager->mouse_tracker_);
 	y_delta = Mouse_GetYDelta(the_event_manager->mouse_tracker_);
+
+	// check if mouse is over a control
+	the_event->control_ = Window_GetControlAtXY(the_event->window_, local_x, local_y);
 
 	DEBUG_OUT(("%s %d: mouse clicked (%i, %i)", __func__, __LINE__, Mouse_GetClickedX(the_event_manager->mouse_tracker_), Mouse_GetClickedY(the_event_manager->mouse_tracker_)));
 	DEBUG_OUT(("%s %d: mouse now (%i, %i)", __func__, __LINE__, Mouse_GetX(the_event_manager->mouse_tracker_), Mouse_GetY(the_event_manager->mouse_tracker_)));
@@ -900,6 +906,27 @@ void EventManager_HandleMouseMoved(EventManager* the_event_manager, EventRecord*
 			// undraw the old box, draw the new one. temporary problem: A2560 emulators are not currently doing composition, so we can't draw to foreground layer. 
 			//Bitmap_DrawBox(the_bitmap, prev_x, prev_y, prev_width, prev_height, 0, PARAM_DO_NOT_FILL)
 			Bitmap_DrawBox(the_bitmap, new_x, new_y, new_width, new_height, SYS_COLOR_GREEN1, PARAM_DO_NOT_FILL);						
+		}
+	}
+	else if (starting_mode == mouseDownOnControl)
+	{
+		// if mouse is down on a control, and is still on control, check that control is currently showing pressed down. if not set, set pressed down and re-render.
+		// if mouse is down on a control, and moves off the control, set the control to not-pressed, and re-render. do NOT change mouse mode. That only happens at mouse up. 
+		Window_SetSelectedControl(the_event->window_, the_event->control_);
+		Control_SetPressed(the_event->control_, CONTROL_NOT_PRESSED);
+		Window_Render(the_event->window_);
+		if (the_event->control_)
+		{
+			Control*	clicked_control;
+			
+			DEBUG_OUT(("%s %d: ** moused moved over control '%s' (id=%i)", __func__, __LINE__, the_event->control_->caption_, the_event->control_->id_));
+			clicked_control = Window_GetSelectedControl(the_event->window_);
+			
+			if (clicked_control != the_event->control_)
+			{
+				Control_SetPressed(the_event->control_, CONTROL_NOT_PRESSED);
+				Window_Render(the_event->window_);
+			}
 		}
 	}
 	else
