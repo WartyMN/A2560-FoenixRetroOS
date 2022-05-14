@@ -889,7 +889,6 @@ bool Bitmap_TileV1(Bitmap* src_bm, int16_t src_x, int16_t src_y, Bitmap* dst_bm,
 
 
 // Fill graphics memory with specified value
-// calling function must validate the screen ID before passing!
 //! @param	the_color: a 1-byte index to the current LUT
 //! @return	returns false on any error/invalid input.
 bool Bitmap_FillMemory(Bitmap* the_bitmap, uint8_t the_color)

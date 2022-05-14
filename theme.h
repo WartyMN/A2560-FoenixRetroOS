@@ -74,6 +74,8 @@
 #define WIN_DEFAULT_INACTIVE_FORE_COLOR			SYS_COLOR_GRAY4
 #define WIN_DEFAULT_HIGHLIGHT_BACK_COLOR		SYS_COLOR_TETRA_3
 #define WIN_DEFAULT_HIGHLIGHT_FORE_COLOR		SYS_COLOR_WHITE
+#define WIN_DEFAULT_MENU_FORE_COLOR				SYS_COLOR_BLACK
+#define WIN_DEFAULT_MENU_BACK_COLOR				SYS_COLOR_GRAY1
 #define WIN_DEFAULT_DESKTOP_COLOR				SYS_DEF_COLOR_DESKTOP
 #define WIN_DEFAULT_DESKTOP_WIDTH				16
 #define WIN_DEFAULT_DESKTOP_HEIGHT				16
@@ -125,6 +127,8 @@ struct Theme
 	uint8_t					inactive_fore_color_;			//! Index to the color LUT	
 	uint8_t					highlight_back_color_;			//! Index to the color LUT
 	uint8_t					highlight_fore_color_;			//! Index to the color LUT	
+	uint8_t					menu_back_color_;				//! Index to the color LUT
+	uint8_t					menu_fore_color_;				//! Index to the color LUT	
 	uint8_t					desktop_color_;					//! Required LUT index for the desktop color; Used when no pattern bitmap
 	Bitmap*					desktop_pattern_;				//! Optional bitmap to be tiled into a desktop pattern
 	uint8_t					pattern_width_;					//! Width of the desktop pattern
@@ -203,6 +207,10 @@ ColorIdx Theme_GetContentAreaColor(Theme* the_theme);
 ColorIdx Theme_GetDesktopColor(Theme* the_theme);
 ColorIdx Theme_GetInactiveBackColor(Theme* the_theme);
 ColorIdx Theme_GetInactiveForeColor(Theme* the_theme);
+ColorIdx Theme_GetMenuBackColor(Theme* the_theme);
+ColorIdx Theme_GetMenuForeColor(Theme* the_theme);
+ColorIdx Theme_GetHighlightBackColor(Theme* the_theme);
+ColorIdx Theme_GetHighlightForeColor(Theme* the_theme);
 
 
 
