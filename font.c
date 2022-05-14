@@ -659,7 +659,7 @@ int16_t Font_MeasureStringWidth(Font* the_font, char* the_string, int16_t num_ch
 //! Draw one character on the bitmap, at the current bitmap pen coordinates
 //! NOTE: if the draw action is successful, the bitmaps current pen position will be updated in preparation for the next character draw.
 //! TODO: stop passing Font, and have the concept of a current font for a given bitmap. and maybe a default system font. 
-//! return Returns number of horizontal pixels used, including left/right offsets, or -1 on any error condition.
+//! @return:	Returns number of horizontal pixels used, including left/right offsets, or -1 on any error condition.
 int16_t Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font)
 {
 	uint8_t			next_char;

@@ -12,4 +12,6 @@
                      palette4 palette5 palette6 palette7))
     (memory vram (address (#xb00000 . #xefffff))
             (section vram))
+    (block stack (size #x1000))
+    (block heap (size #x180000))
     ))

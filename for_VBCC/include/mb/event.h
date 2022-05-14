@@ -49,7 +49,7 @@
 
 // A2560 includes
 #include <mcp/syscalls.h>
-#include "a2560_platform.h"
+//#include "a2560_platform.h"
 #include "general.h"
 #include "text.h"
 #include "bitmap.h"

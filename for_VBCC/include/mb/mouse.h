@@ -1,3 +1,5 @@
+//! @file mouse.h
+
 /*
  * mouse.h
  *
@@ -67,11 +69,12 @@ typedef enum MouseMode
 	mouseLassoInProgress	= 5,	// user has moved mouse from origin point with mouse down, lasso is actively being drawn
 	mouseDownOnControl		= 6,	// mouse was clicked within bounds of a control. Mouse button is not released.
 	mouseDragTitle			= 7,
-	mouseResizeUp			= 8,
-	mouseResizeRight		= 9,
-	mouseResizeDown			= 10,
-	mouseResizeLeft			= 11,
-	mouseResizeDownRight	= 12,
+	mouseMenuOpen			= 8,	// right click opened a menu, and menu has not been closed yet.
+	mouseResizeUp			= 9,
+	mouseResizeRight		= 10,
+	mouseResizeDown			= 11,
+	mouseResizeLeft			= 12,
+	mouseResizeDownRight	= 13,
 } MouseMode;
 
 

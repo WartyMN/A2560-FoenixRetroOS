@@ -367,6 +367,11 @@ typedef struct List List;						// defined in list.h
 typedef struct EventRecord EventRecord;			// defined in event.h
 typedef struct EventManager EventManager;		// defined in event.h
 typedef struct MouseTracker MouseTracker;		// defined in mouse.h
+typedef struct MenuItem MenuItem;				// defined in menu.h
+typedef struct MenuGroup MenuGroup;				// defined in menu.h
+typedef struct Menu Menu;						// defined in menu.h
+
+//typedef enum event_modifiers event_modifiers;	// defined in event.h
 
 
 typedef struct Coordinate

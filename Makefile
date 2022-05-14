@@ -5,12 +5,12 @@ FOENIX = module/Calypsi-m68k-Foenix
 TARGET = $(DEVA2560)/_target_foenix
 
 # Common source files
-LIB_SRCS = lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c event.c mouse.c
+LIB_SRCS = lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c event.c mouse.c menu.c
 TEST_SRCS = bitmap_test.c font_test.c lib_sys_test.c text_test.c window_test.c general_test.c 
 DEMO_SRCS = bitmap_demo.c font_demo.c lib_sys_demo.c text_demo.c window_demo.c
 TUTORIAL_SRCS = blackjack.c
-TEXT_DEMO_SRCS = lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c event.c mouse.c text_demo.c
-SYS_DEMO_SRCS = lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c event.c mouse.c lib_sys_demo.c
+TEXT_DEMO_SRCS = lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c event.c mouse.c menu.c text_demo.c
+SYS_DEMO_SRCS = lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c event.c mouse.c menu.c lib_sys_demo.c
 
 MODEL = --code-model=large --data-model=large
 LIB_MODEL = lc-ld
@@ -53,6 +53,7 @@ headers:
 	cp general.h $(TARGET)/include/mb/
 	cp lib_sys.h $(TARGET)/include/mb/
 	cp list.h $(TARGET)/include/mb/
+	cp menu.h $(TARGET)/include/mb/
 	cp mouse.h $(TARGET)/include/mb/
 	cp text.h $(TARGET)/include/mb/
 	cp theme.h $(TARGET)/include/mb/

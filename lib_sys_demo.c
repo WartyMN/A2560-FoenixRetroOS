@@ -31,6 +31,7 @@
 #include <mb/a2560_platform.h>
 #include <mb/event.h>
 #include <mb/general.h>
+#include <mb/menu.h>
 #include <mb/text.h>
 #include <mb/bitmap.h>
 #include <mb/font.h>
@@ -50,6 +51,17 @@
 /*****************************************************************************/
 
 extern System*			global_system;
+
+// for menus
+MenuGroup		MyAppMenu;
+MenuGroup		MyWindowSubMenu;
+MenuItem		SwitchTheme;
+MenuItem		Divider;
+MenuItem		WindowSubmenu;
+MenuItem		ShowAllWindows;
+MenuItem		OpenMoreWindows;
+MenuItem		SayHi;
+MenuItem		CloseWindow;
 
 static const uint8_t icon_64p_files[] = 
 {
@@ -360,6 +372,12 @@ void AddControls(Window* the_window);
 // open 2 windows covering most of the screen, side-by-side
 void Open2Windows(void);
 
+// set up a menu group for the app
+void CreateMenuSystem(void);
+
+// test use of menus
+void TestMenus(void);
+
 // handler for the what-do-you-want-to-do window
 void WhatYouWantWindowEventHandler(EventRecord* the_event);
 
@@ -611,7 +629,7 @@ void AddControls(Window* the_window)
 	width = 280;
 	the_id = 1000; // arbitrary, for use of programmer. manage them though, and keep them unique within any one window
 	x_offset = 10;
-	y_offset = 30;
+	y_offset = 15;
 	
 	for (i = 0; i < BTN_COUNT; i++)
 	{
@@ -700,6 +718,91 @@ void OpenMultipleWindows(void)
 	}
 }
 
+
+// set up a menu group for the app
+void CreateMenuSystem(void)
+{
+	OpenMoreWindows.id_ = 0;
+	OpenMoreWindows.parent_id_ = MENU_ID_NO_PARENT;
+	OpenMoreWindows.text_ = (char*)"Open More Windows";
+	OpenMoreWindows.shortcut_ = 'O';
+	OpenMoreWindows.modifiers_ = (foenixKey);
+	OpenMoreWindows.type_ = menuItem;
+	
+	CloseWindow.id_ = 1;
+	CloseWindow.parent_id_ = MENU_ID_NO_PARENT;
+	CloseWindow.text_ = (char*)"Close Window";
+	CloseWindow.shortcut_ = 'W';
+	CloseWindow.modifiers_ = (foenixKey|optionKey);
+	CloseWindow.type_ = menuItem;
+	
+	Divider.id_ = MENU_ID_DIVIDER;
+	Divider.parent_id_ = MENU_ID_NO_PARENT;
+	Divider.text_ = NULL;
+	Divider.shortcut_ = 0;
+	Divider.modifiers_ = 0;
+	Divider.type_ = menuDivider;
+	
+	ShowAllWindows.id_ = 3;
+	ShowAllWindows.parent_id_ = MENU_ID_NO_PARENT;
+	ShowAllWindows.text_ = (char*)"Show All Windows";
+	ShowAllWindows.shortcut_ = 'H';
+	ShowAllWindows.modifiers_ = (foenixKey|shiftKey|controlKey);
+	ShowAllWindows.type_ = menuItem;
+	
+	SwitchTheme.id_ = 4;
+	SwitchTheme.parent_id_ = MENU_ID_NO_PARENT;
+	SwitchTheme.text_ = (char*)"Switch Theme";
+	SwitchTheme.shortcut_ = 0;
+	SwitchTheme.modifiers_ = 0;
+	SwitchTheme.type_ = menuItem;
+	
+	WindowSubmenu.id_ = 5;
+	WindowSubmenu.parent_id_ = MENU_ID_NO_PARENT;
+	WindowSubmenu.text_ = (char*)"Window";
+	WindowSubmenu.shortcut_ = 0;
+	WindowSubmenu.modifiers_ = 0;
+	WindowSubmenu.type_ = menuSubmenu;
+	
+	SayHi.id_ = 6;
+	SayHi.parent_id_ = MENU_ID_NO_PARENT;
+	SayHi.text_ = (char*)"Say Hi!";
+	SayHi.shortcut_ = 0;
+	SayHi.modifiers_ = 0;
+	SayHi.type_ = menuItem;
+	
+	MyWindowSubMenu.title_ = (char*)"Window";
+	MyWindowSubMenu.item_[0] = &OpenMoreWindows;
+	MyWindowSubMenu.item_[1] = &CloseWindow;
+	MyWindowSubMenu.item_[2] = &Divider;
+	MyWindowSubMenu.item_[3] = &ShowAllWindows;
+	MyWindowSubMenu.num_menu_items_ = 4;
+
+	MyAppMenu.title_ = (char*)"Sys Demo";
+	MyAppMenu.item_[0] = &SwitchTheme;
+	MyAppMenu.item_[1] = &Divider;
+	MyAppMenu.item_[2] = &WindowSubmenu;
+	MyAppMenu.num_menu_items_ = 3;
+	
+}
+
+// struct MenuItem
+// {
+// 	int16_t					id_;
+// 	char*					text_;					//! the label/text of the menu item
+// 	event_modifier_flags	modifiers_;				//! none, or some/all of (foenixKey|shiftKey|optionKey|controlKey)
+// 	unsigned char			shortcut_;				//! the shortcut key. Must be typeable or user won't be able to use it.
+// 	menu_item_type			type_;					//! the type of menu object: a submenu, a menu item, or a divider
+// 	int16_t					parent_id_;				//! the id_ of the parent menu item, if any. Populated by the system as menus are built.
+// 	Rectangle				selection_rect_;		//! the local (to menu) rect describing the area the user would click in to select the menu item. Populated by the system as menus are built.
+// };
+// 
+// struct MenuGroup
+// {
+// 	char*					title_;					//! displayed at top of menu panel, and in the 'back' part of a child menu
+// 	struct MenuItem*		item_[MENU_MAX_ITEMS];
+// 	int16_t					num_menu_items_;		//! of the total possible menu items defined by MENU_MAX_ITEMS, for this menu, how many are currently used. -1 if none.
+// };
 
 // open 2 windows covering most of the screen, side-by-side
 void Open2Windows(void)
@@ -825,7 +928,7 @@ void Open2Windows(void)
 	WaitForUser();
 
 	int16_t	button_x_offset = 10 + 5; // 10,30 is upper left of first button
-	int16_t	button_y_offset = WIN_DEFAULT_TITLEBAR_HEIGHT + 30 + 5;
+	int16_t	button_y_offset = WIN_DEFAULT_TITLEBAR_HEIGHT + 15 + 5;
 	
 	EventManager_AddEvent(mouseDown, 0L, win1_x + titlebar_offset_x, win1_y + titlebar_offset_y, 0L, NULL, NULL);
 	EventManager_AddEvent(mouseUp, 0L, win1_x + titlebar_offset_x, win1_y + titlebar_offset_y, 0L, NULL, NULL);
@@ -864,6 +967,93 @@ void Open2Windows(void)
 	
 }
 
+
+// test use of menus
+void TestMenus(void)
+{
+	int16_t	mouse_x = 320; // doesn't matter where you right-click: menu is always opened for the active window
+	int16_t	mouse_y = 250;	
+	
+	CreateMenuSystem();
+	
+	// open a menu, release button, move right, click and release r button again
+	ShowDescription("Next action: Open a menu by right-clicking near the middle of the screen (menus stay open until dismissed)");	
+	WaitForUser();
+
+	EventManager_AddEvent(rMouseDown, 0L, mouse_x, mouse_y, 0L, NULL, NULL);	// one click to open the menu
+	EventManager_AddEvent(rMouseUp, 0L, mouse_x, mouse_y, 0L, NULL, NULL);
+	DEBUG_OUT(("%s %d: about to wait for first open menu events", __func__, __LINE__));
+	EventManager_WaitForEvent();
+	EventManager_AddEvent(mouseMoved, 0L, mouse_x + 15, mouse_y + 10, 0L, NULL, NULL);
+	EventManager_WaitForEvent();
+
+	ShowDescription("Next action: Select first menu item by right- or left-clicking on the desired item");	
+	WaitForUser();
+
+	EventManager_AddEvent(rMouseDown, 0L, mouse_x + 15, mouse_y + 10, 0L, NULL, NULL);	// another click to select something
+	EventManager_AddEvent(rMouseUp, 0L, mouse_x + 15, mouse_y + 10, 0L, NULL, NULL);
+	DEBUG_OUT(("%s %d: about to wait for first select menu events", __func__, __LINE__));
+	EventManager_WaitForEvent();
+
+	// open a menu, release button, move right, move down, click and release r button again = select 3rd menu item
+	ShowDescription("Next action: Open and menu again from far right side -- menu will slide left to fit onto screen");	
+	WaitForUser();
+
+	mouse_x = 630;
+	mouse_y = 20;	
+
+	EventManager_AddEvent(rMouseDown, 0L, mouse_x, mouse_y, 0L, NULL, NULL);	// one click to open the menu
+	EventManager_AddEvent(rMouseUp, 0L, mouse_x, mouse_y, 0L, NULL, NULL);
+	DEBUG_OUT(("%s %d: about to wait for second open menu events", __func__, __LINE__));
+	EventManager_WaitForEvent();
+	EventManager_AddEvent(mouseMoved, 0L, mouse_x - 67 + 15, mouse_y + 45, 0L, NULL, NULL);
+	EventManager_WaitForEvent();
+
+	ShowDescription("Next action: Select 3rd menu item - a submenu");	
+	WaitForUser();
+
+	EventManager_AddEvent(rMouseDown, 0L, mouse_x - 67 + 15, mouse_y + 45, 0L, NULL, NULL);	// another click to select something
+	EventManager_AddEvent(rMouseUp, 0L, mouse_x - 67 + 15, mouse_y + 45, 0L, NULL, NULL);
+	DEBUG_OUT(("%s %d: about to wait for second select menu events", __func__, __LINE__));
+	EventManager_WaitForEvent();
+
+	mouse_x -= 67;
+	mouse_y += 45;	
+
+	EventManager_AddEvent(mouseMoved, 0L, mouse_x + 15, mouse_y + 20, 0L, NULL, NULL);
+	EventManager_WaitForEvent();
+
+	ShowDescription("Next action: Select 2nd item from the submenu - close window");	
+	WaitForUser();
+
+	EventManager_AddEvent(rMouseDown, 0L, mouse_x + 15, mouse_y + 20, 0L, NULL, NULL);	// another click to select something
+	EventManager_AddEvent(rMouseUp, 0L, mouse_x + 15, mouse_y + 20, 0L, NULL, NULL);
+	DEBUG_OUT(("%s %d: about to wait for second select menu events", __func__, __LINE__));
+	EventManager_WaitForEvent();
+
+	// open a menu, release button, move right, move down, click and release r button again = select 2nd menu item
+	ShowDescription("Next action: Open and menu again from lower left corner -- menu will be slid up to fit onto screen");	
+	WaitForUser();
+
+	mouse_x = 20; // doesn't matter where you right-click: menu is always opened for the active window
+	mouse_y = 470;	
+
+	EventManager_AddEvent(rMouseDown, 0L, mouse_x, mouse_y, 0L, NULL, NULL);	// one click to open the menu
+	EventManager_AddEvent(rMouseUp, 0L, mouse_x, mouse_y, 0L, NULL, NULL);
+	DEBUG_OUT(("%s %d: about to wait for 3rd open menu events", __func__, __LINE__));
+	EventManager_WaitForEvent();
+	EventManager_AddEvent(mouseMoved, 0L, mouse_x + 15, mouse_y - 40 + 20, 0L, NULL, NULL);
+	EventManager_WaitForEvent();
+
+	ShowDescription("Next action: Select 2nd menu item");	
+	WaitForUser();
+
+	EventManager_AddEvent(rMouseDown, 0L, mouse_x + 15, mouse_y - 40 + 20, 0L, NULL, NULL);	// another click to select something
+	EventManager_AddEvent(rMouseUp, 0L, mouse_x + 15, mouse_y - 40 + 20, 0L, NULL, NULL);
+	DEBUG_OUT(("%s %d: about to wait for 3rd select menu events", __func__, __LINE__));
+	EventManager_WaitForEvent();
+	
+}
 
 void SharedEventHandler(EventRecord* the_event)
 {
@@ -963,6 +1153,113 @@ void SharedEventHandler(EventRecord* the_event)
 				
 				break;
 			
+			case menuOpened:
+				DEBUG_OUT(("%s %d: menu opened event: %i", __func__, __LINE__, the_event->code_));
+				
+				// the event record's x/y properties will have the location of the mouse when menu was opened, and the event's window will have the (at the time) active window's pointer
+				// this event is the window's opportunity to create a contextual menu and open it
+				// if you do not want to show a menu, or if there are no menu items that would be relevant for the active window, you do not need to show a menu
+				//   if you don't want menu to show, call Menu_CancelOpen()
+				// NOTE: you are not required to build menus contextually. You could establish all the menu groups ahead of time, and just do Menu_Open with the preconfigured menu groups
+
+				// simple demonstration: if tiny window is hidden, we'll offer Show All Windows and a divider. If tiny window not hidden, the only choices will be open mroe windows and close window
+				Window*	the_window;
+				Menu*	the_menu;
+				
+				the_window = the_event->window_;
+				
+				if (the_window->is_backdrop_)
+				{
+					MyAppMenu.item_[0] = &OpenMoreWindows;
+					MyAppMenu.item_[1] = &CloseWindow;
+					MyAppMenu.num_menu_items_ = 2;
+				}
+				else
+				{
+					MyAppMenu.item_[0] = &SwitchTheme;
+					MyAppMenu.item_[1] = &SayHi;
+					MyAppMenu.item_[2] = &Divider;
+					MyAppMenu.item_[3] = &WindowSubmenu;
+					MyAppMenu.num_menu_items_ = 4;
+				}
+
+				the_menu = Sys_GetMenu(global_system);
+				Menu_Open(the_menu, &MyAppMenu, the_event->x_, the_event->y_);
+	
+				break;
+				
+			case menuSelected:
+				DEBUG_OUT(("%s %d: menu selected event: %i", __func__, __LINE__, the_event->code_));
+				
+				// the event records 'code' property will have the ID value of the selected menu item
+				// the event manager will not pass on non-valid / non-existent menu item codes: if the user clicked off the menu, you will never hear about that menu event at all
+				// if the item selected is a submenu, you call Menu_Open() with the submenu menugroup.
+				
+				if (the_event->code_ == WindowSubmenu.id_)
+				{
+					DEBUG_OUT(("%s %d: Window submenu selected from the menu!", __func__, __LINE__));
+
+					MyWindowSubMenu.title_ = (char*)"Window";
+					MyWindowSubMenu.item_[0] = &OpenMoreWindows;
+					MyWindowSubMenu.item_[1] = &CloseWindow;
+					MyWindowSubMenu.item_[2] = &Divider;
+					MyWindowSubMenu.item_[3] = &ShowAllWindows;
+					MyWindowSubMenu.num_menu_items_ = 4;
+
+					the_menu = Sys_GetMenu(global_system);
+					Menu_Open(the_menu, &MyWindowSubMenu, the_event->x_, the_event->y_);
+				}
+				else if (the_event->code_ == CloseWindow.id_)
+				{
+					DEBUG_OUT(("%s %d: Close Window selected from the menu!", __func__, __LINE__));
+					Sys_CloseOneWindow(global_system, the_event->window_);
+				}
+				else if (the_event->code_ == SwitchTheme.id_)
+				{
+					DEBUG_OUT(("%s %d: Switch Theme selected from the menu!", __func__, __LINE__));
+					
+					Theme*	old_theme;
+					Theme*	new_theme;
+					
+					old_theme = Sys_GetTheme(global_system);
+					
+					if (old_theme->titlebar_color_ == WIN_DEFAULT_TITLEBAR_COLOR)
+					{
+						if ( (new_theme = Theme_CreateGreenTheme() ) == NULL)
+						{
+							LOG_ERR(("%s %d: Failed to create custom green theme", __func__, __LINE__));
+							return;
+						}
+					}
+					else
+					{
+						if ( (new_theme = Theme_CreateDefaultTheme() ) == NULL)
+						{
+							LOG_ERR(("%s %d: Failed to create default theme", __func__, __LINE__));
+							return;
+						}
+					}
+					Theme_Activate(new_theme);
+				}
+				else if (the_event->code_ == OpenMoreWindows.id_)
+				{
+					DEBUG_OUT(("%s %d: Open More Windows selected from the menu!", __func__, __LINE__));
+				}
+				else if (the_event->code_ == ShowAllWindows.id_)
+				{
+					DEBUG_OUT(("%s %d: Show All Windows selected from the menu!", __func__, __LINE__));
+				}
+				else if (the_event->code_ == SayHi.id_)
+				{
+					DEBUG_OUT(("%s %d: 'Say Hi!' selected from the menu!", __func__, __LINE__));
+				}
+				else
+				{
+					DEBUG_OUT(("%s %d: Some other menu item selected??? shouldn't happen!", __func__, __LINE__));
+				}
+
+				break;
+				
 			case controlClicked:
 				DEBUG_OUT(("%s %d: controlClicked event: %c", __func__, __LINE__, the_event->code_));
 				
@@ -1079,6 +1376,7 @@ void RunDemo(void)
 	
 	Open2Windows();
 	
+	TestMenus();
 
 // 	// delay a bit before switching
 // 	General_DelaySeconds(3);

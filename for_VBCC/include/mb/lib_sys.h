@@ -82,6 +82,7 @@ struct System
 	Window*			active_window_;
 	uint8_t			window_count_;
 	uint16_t		model_number_;
+	Menu*			menu_manager_;
 };
 
 
@@ -216,6 +217,10 @@ void Sys_CloseOneWindow(System* the_system, Window* the_window);
 //! Note: does not call for system re-render
 void Sys_IssueDamageRects(System* the_system);
 
+//! Issue damage rects from the menu down to every other window in the system so that they can redraw portions of themselves when menu closes
+//! Note: does not call for system re-render
+void Sys_IssueMenuDamageRects(System* the_system);
+
 //! Collect damage rects for a window that is about to be made the active (foremost) window, so it can redraw portions of itself that may have been covered up by other windows
 //! Note: does not call for system re-render
 void Sys_CollectDamageRects(System* the_system, Window* the_future_active_window);
@@ -233,6 +238,9 @@ Font* Sys_GetAppFont(System* the_system);
 
 //! @param	the_system: valid pointer to system object
 Screen* Sys_GetScreen(System* the_system, int16_t channel_id);
+
+//! @param	the_system: valid pointer to system object
+Menu* Sys_GetMenu(System* the_system);
 
 //! @param	the_system: valid pointer to system object
 Theme* Sys_GetTheme(System* the_system);

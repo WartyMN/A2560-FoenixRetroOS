@@ -168,10 +168,6 @@ void Window_ConfigureStructureRects(Window* the_window)
 {
 	Theme*		the_theme;
 	
-	// LOGIC: 
-	//   In final model, the location and height of the content and titlebar rects will be configurable
-	//   In this early prototype, they are going to be hard coded here
-	
 	if ( (the_theme = Sys_GetTheme(global_system)) == NULL)
 	{
 		LOG_ERR(("%s %d: failed to get the current system theme!", __func__ , __LINE__));
@@ -973,6 +969,11 @@ bool Window_Destroy(Window** the_window)
 		free((*the_window)->title_);
 		(*the_window)->title_ = NULL;
 	}
+
+	if ((*the_window)->bitmap_)
+	{
+		Bitmap_Destroy(&(*the_window)->bitmap_);
+	}
 	
 	LOG_ALLOC(("%s %d:	__FREE__	*the_window	%p	size	%i", __func__ , __LINE__, *the_window, sizeof(Window)));
 	free(*the_window);
@@ -1067,10 +1068,6 @@ bool Window_AddClipRect(Window* the_window, Rectangle* new_rect)
 	the_clip = &the_window->clip_rect_[the_window->clip_count_];
 
 	General_CopyRect(the_clip, new_rect);	
-// 	the_clip->x_ = new_rect->MinX;
-// 	the_clip->y_ = new_rect->MinY;
-// 	the_clip->width_ = new_rect->MaxX - new_rect->MinX;
-// 	the_clip->height_ = new_rect->MaxY - new_rect->MinY;
 	
 	the_window->clip_count_++;
 
@@ -1725,6 +1722,8 @@ void Window_UpdateTheme(Window* the_window)
 	// recalculate available title width
 	Window_CalculateTitleSpace(the_window);
 	
+	Window_Invalidate(the_window);	
+	
 	return;
 	
 error:
@@ -1747,6 +1746,31 @@ void Window_ClearContent(Window* the_window)
 	the_theme = Sys_GetTheme(global_system);
 
 	Bitmap_FillBoxRect(the_window->bitmap_, &the_window->content_rect_, Theme_GetContentAreaColor(the_theme));
+	
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
+}
+
+
+//! Mark entire window as invalidated
+//! This will cause it to be redrawn and fully reblitted in the next render cycle
+void Window_Invalidate(Window* the_window)
+{
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		goto error;
+	}
+	
+	the_window->invalidated_ = true;
+	
+	if (the_window->is_backdrop_ == false)
+	{
+		Window_InvalidateTitlebar(the_window);
+	}
 	
 	return;
 	

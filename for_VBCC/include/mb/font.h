@@ -52,6 +52,14 @@
 
 #define FONT_RECORD_SIZE		26	//!< size, in bytes, of the font record (minus tables) as stored in Mac FONT resources
 
+#define FONT_CHAR_FOENIX_OUTLINE	0x11	//!< the outlined Foenix character
+#define FONT_CHAR_CHECKMARK			0x12	//!< the checkmark character
+#define FONT_CHAR_DIAMOND			0x13	//!< the diamond character
+#define FONT_CHAR_FOENIX_REG		0x14	//!< the non-outlined Foenix character
+#define FONT_CHAR_MENU_RIGHT		0x15	//!< the '>' style character for use in showing submenus
+#define FONT_CHAR_MENU_RIGHT_WIDTH	7		//!< the width, in pixels, of the standard '>' for menu sub-menus. Every font is to use the same width, regardless of style or size.
+
+
 /*****************************************************************************/
 /*                               Enumerations                                */
 /*****************************************************************************/
@@ -176,7 +184,7 @@ int16_t Font_MeasureStringWidth(Font* the_font, char* the_string, int16_t num_ch
 //! Draw one character on the bitmap, at the current bitmap pen coordinates
 //! NOTE: if the draw action is successful, the bitmaps current pen position will be updated in preparation for the next character draw.
 //! TODO: stop passing Font, and have the concept of a current font for a given bitmap. and maybe a default system font. 
-//! @return Returns number of horizontal pixels used, including left/right offsets
+//! @return:	Returns number of horizontal pixels used, including left/right offsets, or -1 on any error condition.
 int16_t Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font);
 
 

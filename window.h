@@ -76,6 +76,7 @@
 #define WINDOW_MAX_WINTITLE_SIZE		128
 
 #define WIN_MAX_CLIP_RECTS				10	//! if a window accumulates more clip rects than this, it will refresh the entire window in one go
+#define WIN_MENU_MAX_GROUPS				4	//! Maximum number of menus levels that can be defined per window
 
 #define WIN_PARAM_OPEN_AS_BACKDROP				true	// Window_New() parameter
 #define WIN_PARAM_DO_NOT_OPEN_AS_BACKDROP		false	// Window_New() parameter
@@ -203,14 +204,13 @@ struct Window
 	Rectangle				damage_rect_[4];				// 0 to 4 rects that describe to other windows under this one, which parts of the screen were previously covered by this window (prior to a move or resize)
 	int16_t					damage_count_;					// number of damage rects the window is currently tracking
 	void					(*event_handler_)(EventRecord*);	// function that will be called by the system when an event related to the window is encountered.
-
-// 	MouseTracker*			mouse_tracker_;					// tracks mouse up/down points within this window
+	Menu*					menu_[WIN_MENU_MAX_GROUPS];				// non-permanent containers for menu structures; will be used for first, 2nd, 3rd, and 4th level menus as used in the window.
+	int16_t					current_menu_level_;			// index to menu_[]; starts out at menu_no_menu; when a menu is opened, it goes to menu_level_0; increases with each submenu. Resets to menu_no_men uon close of menu.
 // 	Window*					zoom_to_window_;				// the window that contains the zoom_to_file, so we can get offset to global screen coords
 // 	int16_t					zoom_x_[WIN_ZOOM_RECT_COUNT];	// Used to plot the coords for zoom rects when opening/closing window
 // 	int16_t					zoom_y_[WIN_ZOOM_RECT_COUNT];	// Used to plot the coords for zoom rects when opening/closing window
 // 	int16_t					zoom_w_[WIN_ZOOM_RECT_COUNT];	// Used to plot the coords for zoom rects when opening/closing window
 // 	int16_t					zoom_h_[WIN_ZOOM_RECT_COUNT];	// Used to plot the coords for zoom rects when opening/closing window
-// 	struct Menu*			menu_;
 // 	unsigned char*			keyboard_buffer_;		// used by key detection
 //	uint16_t				keyboard_buf_pos_;		// used by key detection
 };
@@ -446,6 +446,9 @@ void Window_ClearContent(Window* the_window);
 //! Updates the current window controls, etc., to match the current system theme 
 void Window_UpdateTheme(Window* the_window);
 
+//! Mark entire window as invalidated
+//! This will cause it to be redrawn and fully reblitted in the next render cycle
+void Window_Invalidate(Window* the_window);
 
 
 

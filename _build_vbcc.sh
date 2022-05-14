@@ -20,6 +20,7 @@ cp bitmap.h $VBCC/targets/a2560-micah/include/mb/
 cp list.h $VBCC/targets/a2560-micah/include/mb/
 cp event.h $VBCC/targets/a2560-micah/include/mb/
 cp mouse.h $VBCC/targets/a2560-micah/include/mb/
+cp menu.h $VBCC/targets/a2560-micah/include/mb/
 
 # copy headers to easy-to-share for-vbcc folder
 cp lib_sys.h for_vbcc/include/mb/
@@ -35,9 +36,10 @@ cp bitmap.h for_vbcc/include/mb/
 cp list.h for_vbcc/include/mb/
 cp event.h for_vbcc/include/mb/
 cp mouse.h for_vbcc/include/mb/
+cp menu.h for_vbcc/include/mb/
 
 # make SYS as static lib
-vc +/opt/vbcc/config/a2560-4lib-micah -o a2560_sys.lib lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c startup.c event.c mouse.c -lm -D_A2560K_ -D_f68_
+vc +/opt/vbcc/config/a2560-4lib-micah -o a2560_sys.lib lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c startup.c event.c mouse.c menu.c -lm -D_A2560K_ -D_f68_
 cp a2560_sys.lib for_vbcc/lib/
 mv a2560_sys.lib $VBCC/targets/a2560-micah/lib/
 
@@ -51,7 +53,7 @@ mv a2560_sys.lib $VBCC/targets/a2560-micah/lib/
 vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/sys_demo.s28 lib_sys_demo.c -lm -D_A2560K_ -D_f68_
 
 # make demo code - SYS but not from library
-# vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/sys_demo.s28 lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c startup.c event.c lib_sys_demo.c mouse.c -lm -D_A2560K_
+# vc +/opt/vbcc/config/a2560-s28-micahwlib -o build_vbcc/sys_demo.s28 lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c startup.c event.c lib_sys_demo.c mouse.c menu.c -lm -D_A2560K_
 perl -i -0777 -pe 's/S804000000FB/S804020000FB/' "$DEVA2560/frOS/build_vbcc/sys_demo.s28"
 
 # build test code - SYS

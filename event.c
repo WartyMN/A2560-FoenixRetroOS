@@ -30,6 +30,7 @@
 #include "bitmap.h"
 #include "text.h"
 #include "font.h"
+#include "menu.h"
 #include "window.h"
 
 
@@ -767,6 +768,81 @@ error:
 }
 
 
+//! Handle Right Mouse Down events on the system level
+void EventManager_HandleRightMouseDown(EventManager* the_event_manager, EventRecord* the_event)
+{
+	int16_t			local_x;
+	int16_t			local_y;
+	Window*			the_window;
+	MouseMode		starting_mode;
+
+	// * User right clicks down > rMouseDown event > check for mouse mode > 
+	//     * if mouseFree:identify the window > send window a menuOpened event > set mouse tracker to mouseMenuOpen (window can then call Menu_Open at the mouse x/y if it wants to)
+	//     * If mouseMenuOpen, call Menu_AcceptClick() > examine click loc >
+	//         * In any case: call Menu_Hide() 
+	//         * If not on menu, return MENU_ID_NO_SELECTION
+	//         * If on menu, iterate through menu_item_[] array and check rect intersect.
+	//             * If a match, return the id_ of the selected item
+	//             * If not match, return MENU_ID_NO_SELECTION
+	//         * In event.c, set mouse mode to free
+	//         * If result was not MENU_ID_NO_SELECTION, create a menuSelected event with the window and menu item ID.
+
+	// LOGIC:
+	//   Menu actions are ALWAYS for the active window, and no other
+	
+	the_window = Sys_GetActiveWindow(global_system);
+
+	if (the_window == NULL)
+	{
+		LOG_ERR(("%s %d: no active window!? right mouse click at %i, %i!", __func__, __LINE__, the_event->x_, the_event->y_));
+		goto error;
+	}
+
+	// check if menu is already open (ie, this clicks means a selection was made, or menu was canceled), or if we are opening menu
+	starting_mode = Mouse_GetMode(the_event_manager->mouse_tracker_);
+	
+	if (starting_mode == mouseFree)
+	{
+		DEBUG_OUT(("%s %d: previous mode was mouseFree; creating open menu event", __func__, __LINE__));
+		//Mouse_SetMode(the_event_manager->mouse_tracker_, mouseMenuOpen);
+		EventManager_AddEvent(menuOpened, -1, the_event->x_, the_event->y_, 0L, the_window, NULL);
+	}
+	else if (starting_mode == mouseMenuOpen)
+	{
+		Menu*		the_menu;
+		int16_t		menu_selection;
+		
+		DEBUG_OUT(("%s %d: previous mode was mouseMenuOpen", __func__, __LINE__));
+		
+		the_menu = Sys_GetMenu(global_system);
+		menu_selection = Menu_AcceptClick(the_menu, the_event->x_, the_event->y_);
+		
+		DEBUG_OUT(("%s %d: menu_selection=%i", __func__, __LINE__, menu_selection));
+		
+		// if this wasn't a submenu, the menu will have closed, so mouse needs to be set back to free. 
+		// but if it had been a submenu, and mouse was freed, the next move will go wrong place, and the next down action will try to open a new menu.
+		// we will set it to free here, and Menu_Open() function can set it to the right mode
+		Mouse_SetMode(the_event_manager->mouse_tracker_, mouseFree);
+		
+		if (menu_selection != MENU_ID_NO_SELECTION)
+		{
+			EventManager_AddEvent(menuSelected, menu_selection, the_event->x_, the_event->y_, 0L, the_window, NULL);
+		}
+	}
+	else
+	{
+		LOG_ERR(("%s %d: unexpected mouse mode during right button down: %i", __func__, __LINE__, starting_mode));
+		goto error;
+	}
+		
+	return;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return;
+}
+
+
 //! Handle Mouse Moved events on the system level
 void EventManager_HandleMouseMoved(EventManager* the_event_manager, EventRecord* the_event)
 {
@@ -784,6 +860,7 @@ void EventManager_HandleMouseMoved(EventManager* the_event_manager, EventRecord*
 	//   if mouseResizeXXX: draw window bounding box based on mouse x/y
 	//   if mouseDragTitle: draw window bounding box based on mouse x/y
 	//   if mouseLassoInProgress: draw lasso box
+	//   if mouseMenuOpen: give menu current mouse x/y so it can update selection highlighting
 	//   if other, then no action
 
 	starting_mode = Mouse_GetMode(the_event_manager->mouse_tracker_);
@@ -804,7 +881,27 @@ void EventManager_HandleMouseMoved(EventManager* the_event_manager, EventRecord*
 	DEBUG_OUT(("%s %d: mouse now (%i, %i)", __func__, __LINE__, Mouse_GetX(the_event_manager->mouse_tracker_), Mouse_GetY(the_event_manager->mouse_tracker_)));
 	DEBUG_OUT(("%s %d: mouse delta (%i, %i)", __func__, __LINE__, Mouse_GetXDelta(the_event_manager->mouse_tracker_), Mouse_GetYDelta(the_event_manager->mouse_tracker_)));
 
-	if (starting_mode == mouseDragTitle)
+	if (starting_mode == mouseMenuOpen)
+	{
+		Menu*		the_menu;
+		
+		DEBUG_OUT(("%s %d: previous mode was mouseMenuOpen", __func__, __LINE__));
+		
+		// * User moves mouse >  check for mouseMenuOpen mode > call Menu_AcceptMouseMove()
+		//     * If not on menu, check if the_menu->current_selection_
+		//         * If -1, nothing was selected before, no need to act
+		//         * If not -1, re-render that item, create a cliprect for it
+		//     * If on menu, check intersection with the_menu->current_selection_ first. Most likely thing is that previous selected item is still under mouse. 
+		//         * If intersect, no action
+		//         * If no intersect, iterate through menu_item_[] array and check rect intersect.
+		//             * If a match, draw the item with selected colors, create clip rect
+		//             * If no match, mouse is in a dead zone, no need to do anything
+		//     * Call Menu_Render() in all cases (will only do something if clip rect was added above)
+		
+		the_menu = Sys_GetMenu(global_system);
+		Menu_AcceptMouseMove(the_menu, the_event->x_, the_event->y_);
+	}
+	else if (starting_mode == mouseDragTitle)
 	{
 		// for a drag rect, we want to draw an outline same shape as the Window, in the foreground bitmap
 		// as mouse moves, we want to undraw the previous rect, and draw the new one.
@@ -1005,6 +1102,34 @@ void EventManager_WaitForEvent(void)
 				
 				break;
 
+			case rMouseDown:				
+				DEBUG_OUT(("%s %d: right mouse down event (%i, %i)", __func__, __LINE__, the_event->x_, the_event->y_));
+
+				EventManager_HandleRightMouseDown(the_event_manager, the_event);
+				
+				break;
+
+			case rMouseUp:
+				DEBUG_OUT(("%s %d: right mouse up event (%i, %i)", __func__, __LINE__, the_event->x_, the_event->y_));
+
+				// eat this event: we don't care about right mouse up: menu events are designed to fire on right mouse DOWN
+				
+				break;
+
+			case menuOpened:
+				DEBUG_OUT(("%s %d: menu opened event: %c", __func__, __LINE__, the_event->code_));
+				// give window an event
+				(*the_event->window_->event_handler_)(the_event);
+		
+				break;
+				
+			case menuSelected:
+				DEBUG_OUT(("%s %d: menu item selected event: %c", __func__, __LINE__, the_event->code_));
+				// give window an event
+				(*the_event->window_->event_handler_)(the_event);
+		
+				break;
+				
 			case controlClicked:
 				DEBUG_OUT(("%s %d: control clicked event: %c", __func__, __LINE__, the_event->code_));
 				// give window an event
@@ -1123,7 +1248,7 @@ void EventManager_WaitForEvent(void)
 		//DEBUG_OUT(("%s %d: r idx=%i, w idx=%i, meets_mask will be=%x", __func__, __LINE__, the_event_manager->write_idx_, the_event_manager->read_idx_, the_event->what_ & the_mask));
 		
 		//getchar();	
-		General_DelayTicks(10);
+		//General_DelayTicks(5);
 	}
 	
 	return;
