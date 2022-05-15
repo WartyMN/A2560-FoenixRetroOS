@@ -103,16 +103,17 @@ struct MenuItem
 	event_modifier_flags	modifiers_;				//! none, or some/all of (foenixKey|shiftKey|optionKey|controlKey)
 	unsigned char			shortcut_;				//! the shortcut key. Must be typeable or user won't be able to use it.
 	menu_item_type			type_;					//! the type of menu object: a submenu, a menu item, or a divider
-	int16_t					parent_id_;				//! the id_ of the parent menu item, if any. Populated by the system as menus are built.
 	Rectangle				selection_rect_;		//! the local (to menu) rect describing the area the user would click in to select the menu item. Populated by the system as menus are built.
 };
 
 struct MenuGroup
 {
+	int16_t					id_;
 	char*					title_;					//! displayed at top of menu panel, and in the 'back' part of a child menu
 	struct MenuItem*		item_[MENU_MAX_ITEMS];
 	int16_t					num_menu_items_;		//! of the total possible menu items defined by MENU_MAX_ITEMS, for this menu, how many are currently used. -1 if none.
 	bool					is_submenu_;			// if this menu group is a submenu, it will get a < back item at the top of the menu.
+	int16_t					parent_id_;				//! the id_ of the parent menu group, if any. Will be assigned by the system to a pseudo menu item that provides a "back" functionality. 
 };
 
 struct Menu

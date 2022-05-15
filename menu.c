@@ -93,6 +93,7 @@ void Menu_LayoutMenu(Menu* the_menu)
 	Font*		the_font;
 	int16_t		chars_that_fit;
 	int16_t		pixels_used;
+	MenuItem*	back_menu;
 
 	// LOGIC:
 	//   this is called when a menu is first generated for a given menu group
@@ -122,14 +123,24 @@ void Menu_LayoutMenu(Menu* the_menu)
 
 	if (the_menu_group->is_submenu_)
 	{
+		// LOGIC:
+		//   Submenus need a way to get back to the previous menu group
+		//   This is done by creating a "< back" type menu item at the top of the list
+		//   The ID of this menu item is set to match the ID of the menu_group's parent_id. 
+		//   The menu item is then inserted into the list of menu_items, at the end
+
+		back_menu = the_menu_group->item_[the_menu_group->num_menu_items_]; // one past the current end... don't increase count until all the normal items are rendered below
+		back_menu->id_ = the_menu_group->parent_id_;
+		back_menu->text_ = the_menu_group->title_;
+		
 		back_row_height = the_font->fRectHeight + 5;
 
-		chars_that_fit = Font_MeasureStringWidth(the_font, the_menu_group->title_, GEN_NO_STRLEN_CAP, available_width, 0, &pixels_used);
-		DEBUG_OUT(("%s %d: available_width=%i, chars_that_fit=%i, text='%s', pixels_used=%i", __func__, __LINE__, available_width, chars_that_fit, the_menu_group->title_, pixels_used));
+		chars_that_fit = Font_MeasureStringWidth(the_font, back_menu->text_, GEN_NO_STRLEN_CAP, available_width, 0, &pixels_used);
+		DEBUG_OUT(("%s %d: available_width=%i, chars_that_fit=%i, text='%s', pixels_used=%i", __func__, __LINE__, available_width, chars_that_fit, back_menu->text_, pixels_used));
 
 		Bitmap_SetXY(the_menu->bitmap_, MENU_MARGIN + MENU_TEXT_PADDING, MENU_MARGIN);
 
-		if (Font_DrawString(the_menu->bitmap_, the_menu_group->title_, chars_that_fit) == false)
+		if (Font_DrawString(the_menu->bitmap_, back_menu->text_, chars_that_fit) == false)
 		{
 		}
 	}
@@ -214,6 +225,17 @@ void Menu_LayoutMenu(Menu* the_menu)
 		DEBUG_OUT(("%s %d: r1 (%i, %i : %i, %i)", __func__, __LINE__, this_menu_item->selection_rect_.MinX, this_menu_item->selection_rect_.MinY, this_menu_item->selection_rect_.MaxX, this_menu_item->selection_rect_.MaxY));
 	}
 
+	// now that the normal items are all set up, we can increment the count of items, and set up the selection rect for the "back" item (if any)
+	if (the_menu_group->is_submenu_)
+	{
+		back_menu->selection_rect_.MinX = MENU_MARGIN;
+		back_menu->selection_rect_.MinY = MENU_MARGIN;
+		back_menu->selection_rect_.MaxX = MENU_MARGIN + the_menu->inner_width_ -1; // mouse selection will stop at the margins
+		back_menu->selection_rect_.MaxY = back_menu->selection_rect_.MinY + row_height - 1;
+		
+		the_menu_group->num_menu_items_++;
+	}
+	
 	the_menu->invalidated_ = true;
 }
 
@@ -290,6 +312,9 @@ void Menu_DrawOneMenuItem(Menu* the_menu, int16_t selection_index, bool as_selec
 	uint8_t		fore_color;
 	
 	the_menu_group = the_menu->menu_group_;
+
+	DEBUG_OUT(("%s %d: text='%s', selection_index=%i, as_selected=%i, count=%i", __func__, __LINE__, the_menu_item->text_, selection_index, as_selected, the_menu_group->num_menu_items_));
+
 	the_menu_item = the_menu_group->item_[selection_index];
 		
 	// Need the theme to be able to get current highlight/standard back and fore colors	

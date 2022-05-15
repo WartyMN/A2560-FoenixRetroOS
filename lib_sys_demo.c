@@ -725,55 +725,62 @@ void OpenMultipleWindows(void)
 // set up a menu group for the app
 void CreateMenuSystem(void)
 {
-	OpenMoreWindows.id_ = 0;
-	OpenMoreWindows.parent_id_ = MENU_ID_NO_PARENT;
+
+// if doing for real, you'd probably want to have these in a header file...
+#define MENU_ROOT_GROUP_ID			255
+#define MENU_WINDOW_GROUP_ID		254
+#define MENU_OPEN_MORE_WINDOWS_ID	0
+#define MENU_CLOSE_WINDOW_ID		1
+#define MENU_SHOW_ALL_WINDOWS_ID	3
+#define MENU_SWITCH_THEME_ID		4
+#define MENU_WINDOW_SUBMENU_ID		5
+#define MENU_SAY_HI_ID				6
+
+
+	OpenMoreWindows.id_ = MENU_OPEN_MORE_WINDOWS_ID;
 	OpenMoreWindows.text_ = (char*)"Open More Windows";
 	OpenMoreWindows.shortcut_ = 'O';
 	OpenMoreWindows.modifiers_ = (foenixKey);
 	OpenMoreWindows.type_ = menuItem;
 	
-	CloseWindow.id_ = 1;
-	CloseWindow.parent_id_ = MENU_ID_NO_PARENT;
+	CloseWindow.id_ = MENU_CLOSE_WINDOW_ID;
 	CloseWindow.text_ = (char*)"Close Window";
 	CloseWindow.shortcut_ = 'W';
 	CloseWindow.modifiers_ = (foenixKey|optionKey);
 	CloseWindow.type_ = menuItem;
 	
 	Divider.id_ = MENU_ID_DIVIDER;
-	Divider.parent_id_ = MENU_ID_NO_PARENT;
 	Divider.text_ = NULL;
 	Divider.shortcut_ = 0;
 	Divider.modifiers_ = 0;
 	Divider.type_ = menuDivider;
 	
-	ShowAllWindows.id_ = 3;
-	ShowAllWindows.parent_id_ = MENU_ID_NO_PARENT;
+	ShowAllWindows.id_ = MENU_SHOW_ALL_WINDOWS_ID;
 	ShowAllWindows.text_ = (char*)"Show All Windows";
 	ShowAllWindows.shortcut_ = 'H';
 	ShowAllWindows.modifiers_ = (foenixKey|shiftKey|controlKey);
 	ShowAllWindows.type_ = menuItem;
 	
-	SwitchTheme.id_ = 4;
-	SwitchTheme.parent_id_ = MENU_ID_NO_PARENT;
+	SwitchTheme.id_ = MENU_SWITCH_THEME_ID;
 	SwitchTheme.text_ = (char*)"Switch Theme";
 	SwitchTheme.shortcut_ = 0;
 	SwitchTheme.modifiers_ = 0;
 	SwitchTheme.type_ = menuItem;
 	
-	WindowSubmenu.id_ = 5;
-	WindowSubmenu.parent_id_ = MENU_ID_NO_PARENT;
+	WindowSubmenu.id_ = MENU_WINDOW_SUBMENU_ID;
 	WindowSubmenu.text_ = (char*)"Window";
 	WindowSubmenu.shortcut_ = 0;
 	WindowSubmenu.modifiers_ = 0;
 	WindowSubmenu.type_ = menuSubmenu;
 	
-	SayHi.id_ = 6;
-	SayHi.parent_id_ = MENU_ID_NO_PARENT;
+	SayHi.id_ = MENU_SAY_HI_ID;
 	SayHi.text_ = (char*)"Say Hi!";
 	SayHi.shortcut_ = 0;
 	SayHi.modifiers_ = 0;
 	SayHi.type_ = menuItem;
 	
+	MyWindowSubMenu.id_ = MENU_WINDOW_GROUP_ID;
+	MyWindowSubMenu.parent_id_ = MENU_ROOT_GROUP_ID;
 	MyWindowSubMenu.title_ = (char*)"< Sys Demo";
 	MyWindowSubMenu.is_submenu_ = true;
 	MyWindowSubMenu.item_[0] = &OpenMoreWindows;
@@ -782,6 +789,8 @@ void CreateMenuSystem(void)
 	MyWindowSubMenu.item_[3] = &ShowAllWindows;
 	MyWindowSubMenu.num_menu_items_ = 4;
 
+	MyAppMenu.id_ = MENU_ROOT_GROUP_ID;
+	MyAppMenu.parent_id_ = MENU_ID_NO_PARENT;
 	MyAppMenu.title_ = (char*)"Sys Demo";
 	MyAppMenu.is_submenu_ = false;
 	MyAppMenu.item_[0] = &SwitchTheme;
@@ -809,9 +818,6 @@ void Open2Windows(void)
 	
 	srand(sys_time_jiffies());
 	//srand(time(NULL));   // Initialization, should only be called once.
-
-	ShowDescription("This is a demo of event handling, including mouse clicks, window resizing, closing, and moving. Each event has a 10 tick delay for demo'ing purposes.");	
-	WaitForUser();
 
 	if ( (the_win_template = Window_GetNewWinTemplate(the_win_title)) == NULL)
 	{
@@ -865,10 +871,10 @@ void TestWindowEvents(void)
 	int16_t	tinywin_y = 400;
 	
 	
-	// click on window 0 to activate it.
-	ShowDescription("Next action: Click on Window #1's titlebar to activate it (make it front-most window)");	
+	ShowDescription("This is a demo of window event handling, including mouse clicks, window resizing, closing, and moving. Next action: Click on Window #1's titlebar to activate it (make it front-most window)");	
 	WaitForUser();
 
+	// click on window 0 to activate it.
 	EventManager_AddEvent(mouseDown, 0L, win0_x + titlebar_offset_x, win0_y + titlebar_offset_y, 0L, NULL, NULL);
 	EventManager_AddEvent(mouseUp, 0L, win0_x + titlebar_offset_x, win0_y + titlebar_offset_y, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for activate win 0 events", __func__, __LINE__));
@@ -966,7 +972,7 @@ void TestMenus(void)
 	CreateMenuSystem();
 	
 	// open a menu, release button, move right, click and release r button again
-	ShowDescription("Next action: Open a menu by right-clicking near the middle of the screen (menus stay open until dismissed)");	
+	ShowDescription("This is a demo of the menu system. Next step: open a menu by right-clicking near the middle of the screen (menus stay open until dismissed)");	
 	WaitForUser();
 
 	EventManager_AddEvent(rMouseDown, 0L, mouse_x, mouse_y, 0L, NULL, NULL);	// one click to open the menu
@@ -985,7 +991,7 @@ void TestMenus(void)
 	EventManager_WaitForEvent();
 
 	// open a menu, release button, move right, move down, click and release r button again = select 3rd menu item
-	ShowDescription("Next action: Open and menu again from far right side -- menu will slide left to fit onto screen");	
+	ShowDescription("Next action: Open a menu again from far right side -- menu will slide left to fit onto screen");	
 	WaitForUser();
 
 	mouse_x = 630;
@@ -1021,7 +1027,8 @@ void TestMenus(void)
 	DEBUG_OUT(("%s %d: about to wait for second select menu events", __func__, __LINE__));
 	EventManager_WaitForEvent();
 
-	// open a menu, release button, move right, move down, click and release r button again = select 2nd menu item
+
+	// open a menu, open a submenu, click the back button to get back to the original menu, then pick something else
 	ShowDescription("Next action: Open and menu again from lower left corner -- menu will be slid up to fit onto screen");	
 	WaitForUser();
 
@@ -1032,14 +1039,44 @@ void TestMenus(void)
 	EventManager_AddEvent(rMouseUp, 0L, mouse_x, mouse_y, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for 3rd open menu events", __func__, __LINE__));
 	EventManager_WaitForEvent();
-	EventManager_AddEvent(mouseMoved, 0L, mouse_x + 15, mouse_y - 40 + 20, 0L, NULL, NULL);
+	mouse_y -= 40; // amount menu window slide up from bottom so it all draws
+	EventManager_AddEvent(mouseMoved, 0L, mouse_x + 15, mouse_y + 40, 0L, NULL, NULL);
+	EventManager_WaitForEvent();
+
+
+	ShowDescription("Next action: Select 3rd menu item - a submenu");	
+	WaitForUser();
+
+	EventManager_AddEvent(rMouseDown, 0L, mouse_x + 15, mouse_y + 40, 0L, NULL, NULL);	// another click to select something
+	EventManager_AddEvent(rMouseUp, 0L, mouse_x + 15, mouse_y + 40, 0L, NULL, NULL);
+	DEBUG_OUT(("%s %d: about to wait for second select menu events", __func__, __LINE__));
+	EventManager_WaitForEvent();
+
+	mouse_x += 15; // window got opened at spot of last last, which was 15 to the right.
+	mouse_y -= 25;	
+
+	EventManager_AddEvent(mouseMoved, 0L, mouse_x + 15, mouse_y + 5, 0L, NULL, NULL);
+	EventManager_WaitForEvent();
+
+	ShowDescription("Next action: Go back to the parent menu without selecting anything");	
+	WaitForUser();
+
+	EventManager_AddEvent(rMouseDown, 0L, mouse_x + 15, mouse_y + 5, 0L, NULL, NULL);	// another click to select something
+	EventManager_AddEvent(rMouseUp, 0L, mouse_x + 15, mouse_y + 5, 0L, NULL, NULL);
+	DEBUG_OUT(("%s %d: about to wait for second select menu events", __func__, __LINE__));
+	EventManager_WaitForEvent();
+
+	mouse_x += 15; // window got opened at spot of last last, which was 15 to the right.
+	mouse_y += 5;	
+
+	EventManager_AddEvent(mouseMoved, 0L, mouse_x + 15, mouse_y + 20, 0L, NULL, NULL);
 	EventManager_WaitForEvent();
 
 	ShowDescription("Next action: Select 2nd menu item");	
 	WaitForUser();
 
-	EventManager_AddEvent(rMouseDown, 0L, mouse_x + 15, mouse_y - 40 + 20, 0L, NULL, NULL);	// another click to select something
-	EventManager_AddEvent(rMouseUp, 0L, mouse_x + 15, mouse_y - 40 + 20, 0L, NULL, NULL);
+	EventManager_AddEvent(rMouseDown, 0L, mouse_x + 15, mouse_y + 20, 0L, NULL, NULL);	// another click to select something
+	EventManager_AddEvent(rMouseUp, 0L, mouse_x + 15, mouse_y + 20, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for 3rd select menu events", __func__, __LINE__));
 	EventManager_WaitForEvent();
 	
@@ -1185,7 +1222,15 @@ void SharedEventHandler(EventRecord* the_event)
 				// the event manager will not pass on non-valid / non-existent menu item codes: if the user clicked off the menu, you will never hear about that menu event at all
 				// if the item selected is a submenu, you call Menu_Open() with the submenu menugroup.
 				
-				if (the_event->code_ == WindowSubmenu.id_)
+				
+				if (the_event->code_ == MENU_ROOT_GROUP_ID)
+				{
+					DEBUG_OUT(("%s %d: 'back' action selected from a sub menu -> showing root menu again", __func__, __LINE__));
+
+					the_menu = Sys_GetMenu(global_system);
+					Menu_Open(the_menu, &MyAppMenu, the_event->x_, the_event->y_);
+				}
+				else if (the_event->code_ == WindowSubmenu.id_)
 				{
 					DEBUG_OUT(("%s %d: Window submenu selected from the menu!", __func__, __LINE__));
 
@@ -1363,12 +1408,15 @@ void RunDemo(void)
 	//ShowWhatYouWantMessage();
 	
 	//OpenMultipleWindows();
+	ShowDescription("This is a demo of various system functionality. When you see this text-mode message overlaid on the screen, click any key to proceed to the next step.");	
+	WaitForUser();
+
 	
 	Open2Windows();
 
 	//OpenMultipleWindows();
 
-	OpenTinyWindow();
+	//OpenTinyWindow();
 
 	// temporary until event handler is written: tell system to render the screen and all windows
 	Sys_Render(global_system);
