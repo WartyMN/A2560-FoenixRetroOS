@@ -375,6 +375,9 @@ void Open2Windows(void);
 // set up a menu group for the app
 void CreateMenuSystem(void);
 
+// test out event handling - clicking on windows, dragging windows, resizing windows, etc.
+void TestWindowEvents(void);
+
 // test use of menus
 void TestMenus(void);
 
@@ -771,7 +774,8 @@ void CreateMenuSystem(void)
 	SayHi.modifiers_ = 0;
 	SayHi.type_ = menuItem;
 	
-	MyWindowSubMenu.title_ = (char*)"Window";
+	MyWindowSubMenu.title_ = (char*)"< Sys Demo";
+	MyWindowSubMenu.is_submenu_ = true;
 	MyWindowSubMenu.item_[0] = &OpenMoreWindows;
 	MyWindowSubMenu.item_[1] = &CloseWindow;
 	MyWindowSubMenu.item_[2] = &Divider;
@@ -779,6 +783,7 @@ void CreateMenuSystem(void)
 	MyWindowSubMenu.num_menu_items_ = 4;
 
 	MyAppMenu.title_ = (char*)"Sys Demo";
+	MyAppMenu.is_submenu_ = false;
 	MyAppMenu.item_[0] = &SwitchTheme;
 	MyAppMenu.item_[1] = &Divider;
 	MyAppMenu.item_[2] = &WindowSubmenu;
@@ -786,23 +791,6 @@ void CreateMenuSystem(void)
 	
 }
 
-// struct MenuItem
-// {
-// 	int16_t					id_;
-// 	char*					text_;					//! the label/text of the menu item
-// 	event_modifier_flags	modifiers_;				//! none, or some/all of (foenixKey|shiftKey|optionKey|controlKey)
-// 	unsigned char			shortcut_;				//! the shortcut key. Must be typeable or user won't be able to use it.
-// 	menu_item_type			type_;					//! the type of menu object: a submenu, a menu item, or a divider
-// 	int16_t					parent_id_;				//! the id_ of the parent menu item, if any. Populated by the system as menus are built.
-// 	Rectangle				selection_rect_;		//! the local (to menu) rect describing the area the user would click in to select the menu item. Populated by the system as menus are built.
-// };
-// 
-// struct MenuGroup
-// {
-// 	char*					title_;					//! displayed at top of menu panel, and in the 'back' part of a child menu
-// 	struct MenuItem*		item_[MENU_MAX_ITEMS];
-// 	int16_t					num_menu_items_;		//! of the total possible menu items defined by MENU_MAX_ITEMS, for this menu, how many are currently used. -1 if none.
-// };
 
 // open 2 windows covering most of the screen, side-by-side
 void Open2Windows(void)
@@ -854,15 +842,15 @@ void Open2Windows(void)
 		// declare the window to be visible
 		Window_SetVisible(the_window[win_num], true);
 	}
+}
 
-	// lets get some more!
-	//OpenMultipleWindows();
-	OpenTinyWindow();
 
-	// temporary until event handler is written: tell system to render the screen and all windows
-	Sys_Render(global_system);
-
-	// test out event handling
+// test out event handling - clicking on windows, dragging windows, resizing windows, etc.
+void TestWindowEvents(void)
+{
+	int16_t				max_width = 300;
+	int16_t				win_orig_x = 10;
+	int16_t				win_orig_y = 10;
 	int16_t	titlebar_offset_x = 25; // safe place to click in titlebar without hitting a close/etc button
 	int16_t	titlebar_offset_y = 5; // safe place to click in titlebar without hitting a close/etc button
 	int16_t	win0_x = win_orig_x;
@@ -875,6 +863,7 @@ void Open2Windows(void)
 	int16_t drag_resize_amt = 60; // distance to drag resize the window by
 	int16_t	tinywin_x = 10;
 	int16_t	tinywin_y = 400;
+	
 	
 	// click on window 0 to activate it.
 	ShowDescription("Next action: Click on Window #1's titlebar to activate it (make it front-most window)");	
@@ -1006,28 +995,29 @@ void TestMenus(void)
 	EventManager_AddEvent(rMouseUp, 0L, mouse_x, mouse_y, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for second open menu events", __func__, __LINE__));
 	EventManager_WaitForEvent();
-	EventManager_AddEvent(mouseMoved, 0L, mouse_x - 67 + 15, mouse_y + 45, 0L, NULL, NULL);
+	mouse_x -= 67;
+	EventManager_AddEvent(mouseMoved, 0L, mouse_x + 15, mouse_y + 45, 0L, NULL, NULL);
 	EventManager_WaitForEvent();
 
 	ShowDescription("Next action: Select 3rd menu item - a submenu");	
 	WaitForUser();
 
-	EventManager_AddEvent(rMouseDown, 0L, mouse_x - 67 + 15, mouse_y + 45, 0L, NULL, NULL);	// another click to select something
-	EventManager_AddEvent(rMouseUp, 0L, mouse_x - 67 + 15, mouse_y + 45, 0L, NULL, NULL);
+	EventManager_AddEvent(rMouseDown, 0L, mouse_x + 15, mouse_y + 45, 0L, NULL, NULL);	// another click to select something
+	EventManager_AddEvent(rMouseUp, 0L, mouse_x + 15, mouse_y + 45, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for second select menu events", __func__, __LINE__));
 	EventManager_WaitForEvent();
 
-	mouse_x -= 67;
+	mouse_x -= 0;
 	mouse_y += 45;	
 
-	EventManager_AddEvent(mouseMoved, 0L, mouse_x + 15, mouse_y + 20, 0L, NULL, NULL);
+	EventManager_AddEvent(mouseMoved, 0L, mouse_x + 15, mouse_y + 35, 0L, NULL, NULL);
 	EventManager_WaitForEvent();
 
 	ShowDescription("Next action: Select 2nd item from the submenu - close window");	
 	WaitForUser();
 
-	EventManager_AddEvent(rMouseDown, 0L, mouse_x + 15, mouse_y + 20, 0L, NULL, NULL);	// another click to select something
-	EventManager_AddEvent(rMouseUp, 0L, mouse_x + 15, mouse_y + 20, 0L, NULL, NULL);
+	EventManager_AddEvent(rMouseDown, 0L, mouse_x + 15, mouse_y + 35, 0L, NULL, NULL);	// another click to select something
+	EventManager_AddEvent(rMouseUp, 0L, mouse_x + 15, mouse_y + 35, 0L, NULL, NULL);
 	DEBUG_OUT(("%s %d: about to wait for second select menu events", __func__, __LINE__));
 	EventManager_WaitForEvent();
 
@@ -1199,7 +1189,7 @@ void SharedEventHandler(EventRecord* the_event)
 				{
 					DEBUG_OUT(("%s %d: Window submenu selected from the menu!", __func__, __LINE__));
 
-					MyWindowSubMenu.title_ = (char*)"Window";
+					MyWindowSubMenu.title_ = (char*)"< Sys Demo";
 					MyWindowSubMenu.item_[0] = &OpenMoreWindows;
 					MyWindowSubMenu.item_[1] = &CloseWindow;
 					MyWindowSubMenu.item_[2] = &Divider;
@@ -1375,7 +1365,19 @@ void RunDemo(void)
 	//OpenMultipleWindows();
 	
 	Open2Windows();
-	
+
+	//OpenMultipleWindows();
+
+	OpenTinyWindow();
+
+	// temporary until event handler is written: tell system to render the screen and all windows
+	Sys_Render(global_system);
+
+
+	// test window click, titlebar drag, window resize, etc.
+	//TestWindowEvents();
+
+	// test menu system. Expects some kind of window to be open, but doesn't care what.	
 	TestMenus();
 
 // 	// delay a bit before switching

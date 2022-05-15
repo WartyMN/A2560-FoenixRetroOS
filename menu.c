@@ -89,7 +89,10 @@ void Menu_LayoutMenu(Menu* the_menu)
 	int16_t		available_width;
 	int16_t		available_height;
 	int16_t		row_height;
+	int16_t		back_row_height;
 	Font*		the_font;
+	int16_t		chars_that_fit;
+	int16_t		pixels_used;
 
 	// LOGIC:
 	//   this is called when a menu is first generated for a given menu group
@@ -99,6 +102,8 @@ void Menu_LayoutMenu(Menu* the_menu)
 	//   we could use the font measure function to first measure each menu item title, then size the menu, then draw, 
 	//     but this is not necessary: the menu's bitmap is already sized to the max menu size...
 	//     we can just draw the menu text, and keep track of whichever was longest.
+	//   when a menu displays a submenu, it needs to allow extra space at the top for a < back item
+	//     back_row_height will cover this. if used, it will allow also a little extra whitespace under the back.
 	
 	the_menu_group = the_menu->menu_group_;
 	the_font = Bitmap_GetFont(the_menu->bitmap_);
@@ -115,6 +120,24 @@ void Menu_LayoutMenu(Menu* the_menu)
 	available_width = MENU_MAX_WIDTH - MENU_MARGIN - MENU_MARGIN;
 	available_height = MENU_MAX_HEIGHT - MENU_MARGIN - MENU_MARGIN;
 
+	if (the_menu_group->is_submenu_)
+	{
+		back_row_height = the_font->fRectHeight + 5;
+
+		chars_that_fit = Font_MeasureStringWidth(the_font, the_menu_group->title_, GEN_NO_STRLEN_CAP, available_width, 0, &pixels_used);
+		DEBUG_OUT(("%s %d: available_width=%i, chars_that_fit=%i, text='%s', pixels_used=%i", __func__, __LINE__, available_width, chars_that_fit, the_menu_group->title_, pixels_used));
+
+		Bitmap_SetXY(the_menu->bitmap_, MENU_MARGIN + MENU_TEXT_PADDING, MENU_MARGIN);
+
+		if (Font_DrawString(the_menu->bitmap_, the_menu_group->title_, chars_that_fit) == false)
+		{
+		}
+	}
+	else
+	{
+		back_row_height = 0;
+	}
+	
 	for (i = 0; i < the_menu_group->num_menu_items_; i ++)
 	{
 		MenuItem*	this_menu_item;
@@ -124,13 +147,11 @@ void Menu_LayoutMenu(Menu* the_menu)
 		
 		if (this_menu_item->type_ != menuDivider)
 		{
-			int16_t		chars_that_fit;
-			int16_t		pixels_used;
 
 			chars_that_fit = Font_MeasureStringWidth(the_font, this_menu_item->text_, GEN_NO_STRLEN_CAP, available_width, 0, &pixels_used);
 			DEBUG_OUT(("%s %d: available_width=%i, chars_that_fit=%i, text='%s', pixels_used=%i", __func__, __LINE__, available_width, chars_that_fit, this_menu_item->text_, pixels_used));
 	
-			Bitmap_SetXY(the_menu->bitmap_, MENU_MARGIN + MENU_TEXT_PADDING, MENU_MARGIN + (row_height * i));
+			Bitmap_SetXY(the_menu->bitmap_, MENU_MARGIN + MENU_TEXT_PADDING, MENU_MARGIN + back_row_height + (row_height * i));
 
 			if (Font_DrawString(the_menu->bitmap_, this_menu_item->text_, chars_that_fit) == false)
 			{
@@ -149,7 +170,7 @@ void Menu_LayoutMenu(Menu* the_menu)
 	
 	// we now have max width, can set up final size of menu box
 	the_menu->inner_width_ = max_width;
-	the_menu->inner_height_ = row_height * i;
+	the_menu->inner_height_ = back_row_height + row_height * i;
 	the_menu->width_ = MENU_MARGIN + the_menu->inner_width_ + MENU_MARGIN;
 	the_menu->height_ = MENU_MARGIN + the_menu->inner_height_ + MENU_MARGIN;
 	the_menu->overall_rect_.MinX = 0;
@@ -171,7 +192,7 @@ void Menu_LayoutMenu(Menu* the_menu)
 		{
 			// draw divider by using a simple h-line
 			// TODO: investigate drawing menu divider in a different color, or maybe dotted?
-			if (Bitmap_DrawHLine(the_menu->bitmap_, MENU_MARGIN + MENU_TEXT_PADDING, MENU_MARGIN + row_height * i + row_height/2, max_width - MENU_TEXT_PADDING - MENU_TEXT_PADDING, fore_color) == false)
+			if (Bitmap_DrawHLine(the_menu->bitmap_, MENU_MARGIN + MENU_TEXT_PADDING, MENU_MARGIN + back_row_height + row_height * i + row_height/2, max_width - MENU_TEXT_PADDING - MENU_TEXT_PADDING, fore_color) == false)
 			{
 			}
 		}
@@ -180,14 +201,14 @@ void Menu_LayoutMenu(Menu* the_menu)
 			// draw the ">" char at far right
 			int16_t		pixels_used;
 			
-			Bitmap_SetXY(the_menu->bitmap_, MENU_MARGIN + the_menu->inner_width_ - 1 - FONT_CHAR_MENU_RIGHT_WIDTH, MENU_MARGIN + (row_height * i));
+			Bitmap_SetXY(the_menu->bitmap_, MENU_MARGIN + the_menu->inner_width_ - 1 - FONT_CHAR_MENU_RIGHT_WIDTH, MENU_MARGIN + back_row_height + (row_height * i));
 			pixels_used = Font_DrawChar(the_menu->bitmap_, FONT_CHAR_MENU_RIGHT, the_font);
 			
 			DEBUG_OUT(("%s %d: menu id %i was a submenu, > drawn at %i, %i; %i pixels used", __func__, __LINE__, this_menu_item->id_, MENU_MARGIN + the_menu->inner_width_ - 1 - FONT_CHAR_MENU_RIGHT_WIDTH, MENU_MARGIN + (row_height * i)));
 		}
 		
 		this_menu_item->selection_rect_.MinX = MENU_MARGIN;
-		this_menu_item->selection_rect_.MinY = MENU_MARGIN + row_height * i;
+		this_menu_item->selection_rect_.MinY = MENU_MARGIN + back_row_height + row_height * i;
 		this_menu_item->selection_rect_.MaxX = MENU_MARGIN + the_menu->inner_width_ -1; // mouse selection will stop at the margins
 		this_menu_item->selection_rect_.MaxY = this_menu_item->selection_rect_.MinY + row_height - 1;
 		DEBUG_OUT(("%s %d: r1 (%i, %i : %i, %i)", __func__, __LINE__, this_menu_item->selection_rect_.MinX, this_menu_item->selection_rect_.MinY, this_menu_item->selection_rect_.MaxX, this_menu_item->selection_rect_.MaxY));

@@ -112,6 +112,7 @@ struct MenuGroup
 	char*					title_;					//! displayed at top of menu panel, and in the 'back' part of a child menu
 	struct MenuItem*		item_[MENU_MAX_ITEMS];
 	int16_t					num_menu_items_;		//! of the total possible menu items defined by MENU_MAX_ITEMS, for this menu, how many are currently used. -1 if none.
+	bool					is_submenu_;			// if this menu group is a submenu, it will get a < back item at the top of the menu.
 };
 
 struct Menu
