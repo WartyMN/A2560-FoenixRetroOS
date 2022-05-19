@@ -100,10 +100,10 @@ $(document).ready(function(){initNavTree('control_8h.html',''); initResizable();
 <div class="contents">
 <div class="textblock"><code>#include &lt;stdbool.h&gt;</code><br />
 <code>#include &lt;mcp/syscalls.h&gt;</code><br />
-<code>#include &lt;mb/a2560_platform.h&gt;</code><br />
-<code>#include &lt;mb/general.h&gt;</code><br />
-<code>#include &lt;mb/text.h&gt;</code><br />
-<code>#include &lt;mb/bitmap.h&gt;</code><br />
+<code>#include &quot;a2560_platform.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="general_8h_source.html">general.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="text_8h_source.html">text.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="bitmap_8h_source.html">bitmap.h</a>&quot;</code><br />
 </div>
 <p><a href="control_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -121,9 +121,8 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a2f247eaa87375938d47b8c62747ac973"><td class="memItemLeft" align="right" valign="top"><a id="a2f247eaa87375938d47b8c62747ac973" name="a2f247eaa87375938d47b8c62747ac973"></a>
-<a class="el" href="struct_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>Control_New</b> (<a class="el" href="struct_control_template.html">ControlTemplate</a> *the_template, <a class="el" href="struct_window.html">Window</a> *the_window, <a class="el" href="struct_rectangle.html">Rectangle</a> *the_parent_rect, uint16_t the_id, int8_t the_group)</td></tr>
-<tr class="memdesc:a2f247eaa87375938d47b8c62747ac973"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a <a class="el" href="struct_control.html" title="This structure describes an instantiated control on a window.">Control</a> object. <br /></td></tr>
+<tr class="memitem:a2f247eaa87375938d47b8c62747ac973"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="control_8h.html#a2f247eaa87375938d47b8c62747ac973">Control_New</a> (<a class="el" href="struct_control_template.html">ControlTemplate</a> *the_template, <a class="el" href="struct_window.html">Window</a> *the_window, <a class="el" href="struct_rectangle.html">Rectangle</a> *the_parent_rect, uint16_t the_id, int8_t the_group)</td></tr>
+<tr class="memdesc:a2f247eaa87375938d47b8c62747ac973"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a <a class="el" href="struct_control.html" title="This structure describes an instantiated control on a window.">Control</a> object.  <a href="control_8h.html#a2f247eaa87375938d47b8c62747ac973">More...</a><br /></td></tr>
 <tr class="separator:a2f247eaa87375938d47b8c62747ac973"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46769dd3cce2ceb0afa3753e9ec931ca"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="control_8h.html#a46769dd3cce2ceb0afa3753e9ec931ca">Control_GetID</a> (<a class="el" href="struct_control.html">Control</a> *the_control)</td></tr>
 <tr class="memdesc:a46769dd3cce2ceb0afa3753e9ec931ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the ID of the control.  <a href="control_8h.html#a46769dd3cce2ceb0afa3753e9ec931ca">More...</a><br /></td></tr>
@@ -149,6 +148,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Control_SetPressed</b
 void&#160;</td><td class="memItemRight" valign="bottom"><b>Control_MarkInvalidated</b> (<a class="el" href="struct_control.html">Control</a> *the_control, bool invalidated)</td></tr>
 <tr class="memdesc:af118ac1bd83f672571ed5dbec27ece28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mark the specified control is invalidated or validated Note: Marking a control as invalidated causes it to be added to the parent window's list of rects to be reblitted to the screen in next render pass. <br /></td></tr>
 <tr class="separator:af118ac1bd83f672571ed5dbec27ece28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9f00ea73c6593af13c24acbaf5393db"><td class="memItemLeft" align="right" valign="top"><a id="ad9f00ea73c6593af13c24acbaf5393db" name="ad9f00ea73c6593af13c24acbaf5393db"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>Control_AlignToParentRect</b> (<a class="el" href="struct_control.html">Control</a> *the_control)</td></tr>
+<tr class="memdesc:ad9f00ea73c6593af13c24acbaf5393db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set or uppdate the control's position and/or size as appropriate to the control's parent rect Call when parent window size has changed, when control is first created, etc. <br /></td></tr>
+<tr class="separator:ad9f00ea73c6593af13c24acbaf5393db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bce602a52229e7da7cb00d1fac5a6c8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="control_8h.html#a4bce602a52229e7da7cb00d1fac5a6c8">Control_IsRighter</a> (<a class="el" href="struct_control.html">Control</a> *the_control, int16_t *x)</td></tr>
 <tr class="memdesc:a4bce602a52229e7da7cb00d1fac5a6c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare the control's right-edge coordinate to the passed value If the control is more to the right than the passed value, the passed value is updated with the control's right edge.  <a href="control_8h.html#a4bce602a52229e7da7cb00d1fac5a6c8">More...</a><br /></td></tr>
 <tr class="separator:a4bce602a52229e7da7cb00d1fac5a6c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -342,6 +345,65 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Control_UpdateFromTem
 
 <p>Compare the control's right-edge coordinate to the passed value If the control is more to the right than the passed value, the passed value is updated with the control's right edge. </p>
 <dl class="section return"><dt>Returns</dt><dd>Returns true if the control is further to the right than the passed value. </dd></dl>
+
+</div>
+</div>
+<a id="a2f247eaa87375938d47b8c62747ac973" name="a2f247eaa87375938d47b8c62747ac973"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f247eaa87375938d47b8c62747ac973">&#9670;&nbsp;</a></span>Control_New()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_control.html">Control</a> * Control_New </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_control_template.html">ControlTemplate</a> *&#160;</td>
+          <td class="paramname"><em>the_template</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_rectangle.html">Rectangle</a> *&#160;</td>
+          <td class="paramname"><em>the_parent_rect</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>the_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int8_t&#160;</td>
+          <td class="paramname"><em>the_group</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Allocate a <a class="el" href="struct_control.html" title="This structure describes an instantiated control on a window.">Control</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_template</td><td>reference to a valid, populated <a class="el" href="struct_control_template.html" title="A structure that can be used to instantiate a ControlTemplate object instance in a window The Control...">ControlTemplate</a> object. The created control will take most of its properties from this template. </td></tr>
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. The newly-created control will not be added to the window's list of controls, but the control will remember this window as its parent </td></tr>
+    <tr><td class="paramname">the_parent_rect</td><td>Reference to rect object that the control will position itself relative to. This rect must remain valid throughout the life of the control. </td></tr>
+    <tr><td class="paramname">the_id</td><td>the unique ID (within the specified window) to be assigned to the control. WARNING: assigning multiple controls the same ID will result in undefined behavior. </td></tr>
+    <tr><td class="paramname">group_id</td><td>1 byte group ID value to be assigned to the control. Pass CONTROL_NO_GROUP if the control is not to be part of a group. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns a new <a class="el" href="struct_control.html" title="This structure describes an instantiated control on a window.">Control</a> object that has been localized to the passed parent rect. Returns NULL on any error condition. </dd></dl>
 
 </div>
 </div>

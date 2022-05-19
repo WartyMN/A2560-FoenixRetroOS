@@ -100,7 +100,7 @@ $(document).ready(function(){initNavTree('general_8h.html',''); initResizable();
 <div class="textblock"><code>#include &lt;stdbool.h&gt;</code><br />
 <code>#include &lt;stdlib.h&gt;</code><br />
 <code>#include &lt;mcp/syscalls.h&gt;</code><br />
-<code>#include &lt;mb/a2560_platform.h&gt;</code><br />
+<code>#include &quot;a2560_platform.h&quot;</code><br />
 </div>
 <p><a href="general_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -127,6 +127,22 @@ Functions</h2></td></tr>
 <tr class="memitem:a6d15a10ba145726c598611b6eb97cf0d"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a6d15a10ba145726c598611b6eb97cf0d">General_Round</a> (double the_float)</td></tr>
 <tr class="memdesc:a6d15a10ba145726c598611b6eb97cf0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Round a float to the nearest integer value THINK C's and SAS/C's math.h don't include round() from: <a href="https://stackoverflow.com/questions/4572556/concise-way-to-implement-round-in-c">https://stackoverflow.com/questions/4572556/concise-way-to-implement-round-in-c</a>.  <a href="general_8h.html#a6d15a10ba145726c598611b6eb97cf0d">More...</a><br /></td></tr>
 <tr class="separator:a6d15a10ba145726c598611b6eb97cf0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ba88cd8aca9fc94a9f0b4753350fa1c"><td class="memItemLeft" align="right" valign="top"><a id="a3ba88cd8aca9fc94a9f0b4753350fa1c" name="a3ba88cd8aca9fc94a9f0b4753350fa1c"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>General_LongMin</b> (int32_t a, int32_t b)</td></tr>
+<tr class="memdesc:a3ba88cd8aca9fc94a9f0b4753350fa1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">min() implementation <br /></td></tr>
+<tr class="separator:a3ba88cd8aca9fc94a9f0b4753350fa1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00a67d19dc4c861aeb2897bb12058e09"><td class="memItemLeft" align="right" valign="top"><a id="a00a67d19dc4c861aeb2897bb12058e09" name="a00a67d19dc4c861aeb2897bb12058e09"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>General_LongMax</b> (int32_t a, int32_t b)</td></tr>
+<tr class="memdesc:a00a67d19dc4c861aeb2897bb12058e09"><td class="mdescLeft">&#160;</td><td class="mdescRight">max() implementation <br /></td></tr>
+<tr class="separator:a00a67d19dc4c861aeb2897bb12058e09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ad6735e82893523c216772b8808df48"><td class="memItemLeft" align="right" valign="top"><a id="a2ad6735e82893523c216772b8808df48" name="a2ad6735e82893523c216772b8808df48"></a>
+int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>General_ShortMin</b> (int16_t a, int16_t b)</td></tr>
+<tr class="memdesc:a2ad6735e82893523c216772b8808df48"><td class="mdescLeft">&#160;</td><td class="mdescRight">min() implementation <br /></td></tr>
+<tr class="separator:a2ad6735e82893523c216772b8808df48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace700af5549955b598573cf894b766ef"><td class="memItemLeft" align="right" valign="top"><a id="ace700af5549955b598573cf894b766ef" name="ace700af5549955b598573cf894b766ef"></a>
+int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>General_ShortMax</b> (int16_t a, int16_t b)</td></tr>
+<tr class="memdesc:ace700af5549955b598573cf894b766ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">max() implementation <br /></td></tr>
+<tr class="separator:ace700af5549955b598573cf894b766ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1db800160346891a591a3525a25ef0c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#ad1db800160346891a591a3525a25ef0c">General_StrToLower</a> (char *the_string)</td></tr>
 <tr class="memdesc:ad1db800160346891a591a3525a25ef0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a string, in place, to lower case This overwrites the string with a lower case version of itself.  <a href="general_8h.html#ad1db800160346891a591a3525a25ef0c">More...</a><br /></td></tr>
 <tr class="separator:ad1db800160346891a591a3525a25ef0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -134,7 +150,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:aa9ef78619dd4f8a5704da0c13892a3b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the case of the passed character from upper to lower (if necessary) Scope is limited to characters A-Z, ascii.  <a href="general_8h.html#aa9ef78619dd4f8a5704da0c13892a3b7">More...</a><br /></td></tr>
 <tr class="separator:aa9ef78619dd4f8a5704da0c13892a3b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a713680694fa24efa6d58916907948703"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a713680694fa24efa6d58916907948703">General_StrlcpyWithAlloc</a> (const char *src, signed long max_len)</td></tr>
-<tr class="memdesc:a713680694fa24efa6d58916907948703"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates memory for a new string and copies up to max_len - 1 characters from the NUL-terminated string src to the new string, NUL-terminating the result This is meant to be a one stop shop for getting a copy of a string In this implementation, f_calloc with MEM_STANDARD is used.  <a href="general_8h.html#a713680694fa24efa6d58916907948703">More...</a><br /></td></tr>
+<tr class="memdesc:a713680694fa24efa6d58916907948703"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates memory for a new string and copies up to max_len - 1 characters from the NUL-terminated string src to the new string, NUL-terminating the result This is meant to be a one stop shop for getting a copy of a string.  <a href="general_8h.html#a713680694fa24efa6d58916907948703">More...</a><br /></td></tr>
 <tr class="separator:a713680694fa24efa6d58916907948703"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5acad0656288c01f2f4c96f5e6ca0c61"><td class="memItemLeft" align="right" valign="top">signed long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a5acad0656288c01f2f4c96f5e6ca0c61">General_Strlcpy</a> (char *dst, const char *src, signed long max_len)</td></tr>
 <tr class="memdesc:a5acad0656288c01f2f4c96f5e6ca0c61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies up to max_len - 1 characters from the NUL-terminated string src to dst, NUL-terminating the result.  <a href="general_8h.html#a5acad0656288c01f2f4c96f5e6ca0c61">More...</a><br /></td></tr>
@@ -154,6 +170,18 @@ Functions</h2></td></tr>
 <tr class="memitem:a56721e3b15f39cd8df76755c8befa85a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a56721e3b15f39cd8df76755c8befa85a">General_CompareStringLength</a> (void *first_payload, void *second_payload)</td></tr>
 <tr class="memdesc:a56721e3b15f39cd8df76755c8befa85a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare the length of two strings, returning true if the first is longer than the second.  <a href="general_8h.html#a56721e3b15f39cd8df76755c8befa85a">More...</a><br /></td></tr>
 <tr class="separator:a56721e3b15f39cd8df76755c8befa85a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6823b507adb7b9fdadf44ad29c7ead4f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a6823b507adb7b9fdadf44ad29c7ead4f">General_RectWithinRect</a> (<a class="el" href="struct_rectangle.html">Rectangle</a> r1, <a class="el" href="struct_rectangle.html">Rectangle</a> r2)</td></tr>
+<tr class="memdesc:a6823b507adb7b9fdadf44ad29c7ead4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test if one rectangle is entirely within the bounds of another <a class="el" href="struct_rectangle.html">Rectangle</a>.  <a href="general_8h.html#a6823b507adb7b9fdadf44ad29c7ead4f">More...</a><br /></td></tr>
+<tr class="separator:a6823b507adb7b9fdadf44ad29c7ead4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af64d19ccaf76bb0c8102f249b5f202fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#af64d19ccaf76bb0c8102f249b5f202fe">General_CopyRect</a> (<a class="el" href="struct_rectangle.html">Rectangle</a> *r1, <a class="el" href="struct_rectangle.html">Rectangle</a> *r2)</td></tr>
+<tr class="memdesc:af64d19ccaf76bb0c8102f249b5f202fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy values of one rect to another.  <a href="general_8h.html#af64d19ccaf76bb0c8102f249b5f202fe">More...</a><br /></td></tr>
+<tr class="separator:af64d19ccaf76bb0c8102f249b5f202fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c4b1ee409d6776186ce7fc8bfd91d28"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a7c4b1ee409d6776186ce7fc8bfd91d28">General_CalculateRectDifference</a> (<a class="el" href="struct_rectangle.html">Rectangle</a> *r1, <a class="el" href="struct_rectangle.html">Rectangle</a> *r2, <a class="el" href="struct_rectangle.html">Rectangle</a> *diff_r1, <a class="el" href="struct_rectangle.html">Rectangle</a> *diff_r2, <a class="el" href="struct_rectangle.html">Rectangle</a> *diff_r3, <a class="el" href="struct_rectangle.html">Rectangle</a> *diff_r4)</td></tr>
+<tr class="memdesc:a7c4b1ee409d6776186ce7fc8bfd91d28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the difference between 2 rectangles and populate 0, 1, 2, 3, or 4 new rectangles with the difference If Rect 1 is larger than Rect 2, no new rect will be populated If Rect 1 is smaller than Rect 2 in one dimension (axis) only, 1 new rect will be populated If Rect 1 is smaller than Rect 2 in two dimensions (axes), 3 new rect will be populated If Rect 1 is same size as Rect 2 and moved in one dimension (axis) only, 1 new rect will be populated If Rect 1 is same size as Rect 2 and moved in two dimensions (axes), 3 new rect will be populated.  <a href="general_8h.html#a7c4b1ee409d6776186ce7fc8bfd91d28">More...</a><br /></td></tr>
+<tr class="separator:a7c4b1ee409d6776186ce7fc8bfd91d28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3348567899570f7c7772d33666ee16ac"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#a3348567899570f7c7772d33666ee16ac">General_CalculateRectIntersection</a> (<a class="el" href="struct_rectangle.html">Rectangle</a> *r1, <a class="el" href="struct_rectangle.html">Rectangle</a> *r2, <a class="el" href="struct_rectangle.html">Rectangle</a> *intersect_r)</td></tr>
+<tr class="memdesc:a3348567899570f7c7772d33666ee16ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the intersection between 2 rectangles, storing result in the 3rd rect passed.  <a href="general_8h.html#a3348567899570f7c7772d33666ee16ac">More...</a><br /></td></tr>
+<tr class="separator:a3348567899570f7c7772d33666ee16ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abde981427d1921294f66061a4d7ed11b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general_8h.html#abde981427d1921294f66061a4d7ed11b">General_ExtractFileExtensionFromFilename</a> (const char *the_file_name, char *the_extension)</td></tr>
 <tr class="memdesc:abde981427d1921294f66061a4d7ed11b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract file extension into the passed char pointer, as new lowercased string pointer, if any found.  <a href="general_8h.html#abde981427d1921294f66061a4d7ed11b">More...</a><br /></td></tr>
 <tr class="separator:abde981427d1921294f66061a4d7ed11b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -165,6 +193,117 @@ Functions</h2></td></tr>
 <tr class="separator:ae31497a81342c86b3c2491eee833dfce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a7c4b1ee409d6776186ce7fc8bfd91d28" name="a7c4b1ee409d6776186ce7fc8bfd91d28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c4b1ee409d6776186ce7fc8bfd91d28">&#9670;&nbsp;</a></span>General_CalculateRectDifference()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int16_t General_CalculateRectDifference </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_rectangle.html">Rectangle</a> *&#160;</td>
+          <td class="paramname"><em>r1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_rectangle.html">Rectangle</a> *&#160;</td>
+          <td class="paramname"><em>r2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_rectangle.html">Rectangle</a> *&#160;</td>
+          <td class="paramname"><em>diff_r1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_rectangle.html">Rectangle</a> *&#160;</td>
+          <td class="paramname"><em>diff_r2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_rectangle.html">Rectangle</a> *&#160;</td>
+          <td class="paramname"><em>diff_r3</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_rectangle.html">Rectangle</a> *&#160;</td>
+          <td class="paramname"><em>diff_r4</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate the difference between 2 rectangles and populate 0, 1, 2, 3, or 4 new rectangles with the difference If Rect 1 is larger than Rect 2, no new rect will be populated If Rect 1 is smaller than Rect 2 in one dimension (axis) only, 1 new rect will be populated If Rect 1 is smaller than Rect 2 in two dimensions (axes), 3 new rect will be populated If Rect 1 is same size as Rect 2 and moved in one dimension (axis) only, 1 new rect will be populated If Rect 1 is same size as Rect 2 and moved in two dimensions (axes), 3 new rect will be populated. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">r1</td><td>the lead, or foreground rect. When calculating a damage rect, this would typically be the rect of the window after it is moved/resized. </td></tr>
+    <tr><td class="paramname">r2</td><td>the secondary, or background rect. When calculating a damage rect, this would typically be the rect of the window before it is moved/resized. </td></tr>
+    <tr><td class="paramname">diff_r1</td><td>valid pointer to a rect object that will be populated if there is 1 or 3 difference rects resulting from the operation </td></tr>
+    <tr><td class="paramname">diff_r2</td><td>valid pointer to a rect object that will be populated if there are 2 or more difference rects resulting from the operation </td></tr>
+    <tr><td class="paramname">diff_r3</td><td>valid pointer to a rect object that will be populated if there are 3 or more difference rects resulting from the operation </td></tr>
+    <tr><td class="paramname">diff_r4</td><td>valid pointer to a rect object that will be populated if there are 4 difference rects resulting from the operation </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns number of new rects that represent the difference between the passed rectangles. This indicates how many, if any, of the diff_rects need to be evaluated. Returns -1 on any error condition. </dd></dl>
+
+</div>
+</div>
+<a id="a3348567899570f7c7772d33666ee16ac" name="a3348567899570f7c7772d33666ee16ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3348567899570f7c7772d33666ee16ac">&#9670;&nbsp;</a></span>General_CalculateRectIntersection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool General_CalculateRectIntersection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_rectangle.html">Rectangle</a> *&#160;</td>
+          <td class="paramname"><em>r1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_rectangle.html">Rectangle</a> *&#160;</td>
+          <td class="paramname"><em>r2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_rectangle.html">Rectangle</a> *&#160;</td>
+          <td class="paramname"><em>intersect_r</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate the intersection between 2 rectangles, storing result in the 3rd rect passed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">r1</td><td>valid pointer to a rect object </td></tr>
+    <tr><td class="paramname">r2</td><td>valid pointer to a rect object </td></tr>
+    <tr><td class="paramname">intersect_r</td><td>valid pointer to a rect object that will contain the intersection rectangle, if any, at end of operation </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns true if there is an intersecting rectangle between r1 and r2. </dd></dl>
+
+</div>
+</div>
 <a id="a56721e3b15f39cd8df76755c8befa85a" name="a56721e3b15f39cd8df76755c8befa85a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a56721e3b15f39cd8df76755c8befa85a">&#9670;&nbsp;</a></span>General_CompareStringLength()</h2>
 
@@ -201,6 +340,43 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns true if the first string is longer than the second. Returns false if the strings are equivalent in length, or if second is longer. <br  />
  </dd></dl>
+
+</div>
+</div>
+<a id="af64d19ccaf76bb0c8102f249b5f202fe" name="af64d19ccaf76bb0c8102f249b5f202fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af64d19ccaf76bb0c8102f249b5f202fe">&#9670;&nbsp;</a></span>General_CopyRect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void General_CopyRect </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_rectangle.html">Rectangle</a> *&#160;</td>
+          <td class="paramname"><em>r1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_rectangle.html">Rectangle</a> *&#160;</td>
+          <td class="paramname"><em>r2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy values of one rect to another. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">r1</td><td>the rectangle to be overwritten (copied into) </td></tr>
+    <tr><td class="paramname">r2</td><td>the rectangle to copy </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -283,6 +459,45 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns false if no file extension found. </dd></dl>
+
+</div>
+</div>
+<a id="a6823b507adb7b9fdadf44ad29c7ead4f" name="a6823b507adb7b9fdadf44ad29c7ead4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6823b507adb7b9fdadf44ad29c7ead4f">&#9670;&nbsp;</a></span>General_RectWithinRect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool General_RectWithinRect </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_rectangle.html">Rectangle</a>&#160;</td>
+          <td class="paramname"><em>r1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_rectangle.html">Rectangle</a>&#160;</td>
+          <td class="paramname"><em>r2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Test if one rectangle is entirely within the bounds of another <a class="el" href="struct_rectangle.html">Rectangle</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">r1</td><td>the rectangle being tested </td></tr>
+    <tr><td class="paramname">r2</td><td>the rectangle being measured to determine if r1 fits entirely within it </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: returns true if r1 is within bounds of r2. <br  />
+ </dd></dl>
 
 </div>
 </div>
@@ -429,8 +644,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Allocates memory for a new string and copies up to max_len - 1 characters from the NUL-terminated string src to the new string, NUL-terminating the result This is meant to be a one stop shop for getting a copy of a string In this implementation, f_calloc with MEM_STANDARD is used. </p>
-<p >When freeing the returned string, use f_free with MEM_STANDARD. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Allocates memory for a new string and copies up to max_len - 1 characters from the NUL-terminated string src to the new string, NUL-terminating the result This is meant to be a one stop shop for getting a copy of a string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">src</td><td>The string to copy </td></tr>
     <tr><td class="paramname">max_len</td><td>The maximum number of bytes to use in the destination string, including the terminator. If this is shorter than the length of the source string + 1, the resulting copy string will be capped at max_len - 1. </td></tr>

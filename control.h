@@ -62,6 +62,9 @@
 #define CONTROL_NO_GROUP			-1	//! For any given control's group_ value, this denotes a control that is not part of any other group
 #define CONTROL_MAX_CAPTION_SIZE	128	//! The maximum length (including terminator) for the caption string
 
+#define CONTROL_ID_ERROR			-2	//! For any function trying to return the ID of a control, a value indicating an error occurred. This error must be handled.
+#define CONTROL_ID_NOT_FOUND		-1	//! For any function trying to return the ID of a control, a value indicating the that the described control could not be found.
+
 
 /*****************************************************************************/
 /*                               Enumerations                                */
@@ -174,6 +177,12 @@ struct Control
 
 // constructor
 //! Allocate a Control object
+//! @param	the_template: reference to a valid, populated ControlTemplate object. The created control will take most of its properties from this template.
+//! @param	the_window: reference to a valid Window object. The newly-created control will not be added to the window's list of controls, but the control will remember this window as its parent
+//! @param	the_parent_rect: Reference to rect object that the control will position itself relative to. This rect must remain valid throughout the life of the control.
+//! @param	the_id: the unique ID (within the specified window) to be assigned to the control. WARNING: assigning multiple controls the same ID will result in undefined behavior.
+//! @param	group_id: 1 byte group ID value to be assigned to the control. Pass CONTROL_NO_GROUP if the control is not to be part of a group.
+//! @return:	Returns a new Control object that has been localized to the passed parent rect. Returns NULL on any error condition.
 Control* Control_New(ControlTemplate* the_template, Window* the_window, Rectangle* the_parent_rect, uint16_t the_id, int8_t the_group);
 
 // destructor

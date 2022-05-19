@@ -147,8 +147,8 @@ $(document).ready(function(){initNavTree('text_8h_source.html',''); initResizabl
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="preprocessor">#include &lt;stdbool.h&gt;</span></div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment">// A2560 includes</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="preprocessor">#include &lt;mb/a2560_platform.h&gt;</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="preprocessor">#include &lt;mb/general.h&gt;</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="preprocessor">#include &quot;a2560_platform.h&quot;</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="preprocessor">#include &quot;<a class="code" href="general_8h.html">general.h</a>&quot;</span></div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment">/*****************************************************************************/</span></div>
@@ -379,8 +379,9 @@ $(document).ready(function(){initNavTree('text_8h_source.html',''); initResizabl
 <div class="line"><a id="l00518" name="l00518"></a><span class="lineno">  518</span> </div>
 <div class="line"><a id="l00519" name="l00519"></a><span class="lineno">  519</span> </div>
 <div class="line"><a id="l00520" name="l00520"></a><span class="lineno">  520</span><span class="preprocessor">#endif </span><span class="comment">/* LIB_TEXT_H_ */</span><span class="preprocessor"></span></div>
-<div class="ttc" id="astruct_font_html"><div class="ttname"><a href="struct_font.html">Font</a></div><div class="ttdoc">This Font object is essentially the Mac &quot;fontRecord&quot; struct, with added pointers for the data tables.</div><div class="ttdef"><b>Definition:</b> font.h:67</div></div>
-<div class="ttc" id="astruct_screen_html"><div class="ttname"><a href="struct_screen.html">Screen</a></div><div class="ttdef"><b>Definition:</b> a2560_platform.h:368</div></div>
+<div class="ttc" id="ageneral_8h_html"><div class="ttname"><a href="general_8h.html">general.h</a></div></div>
+<div class="ttc" id="astruct_font_html"><div class="ttname"><a href="struct_font.html">Font</a></div><div class="ttdoc">This Font object is essentially the Mac &quot;fontRecord&quot; struct, with added pointers for the data tables.</div><div class="ttdef"><b>Definition:</b> font.h:75</div></div>
+<div class="ttc" id="astruct_screen_html"><div class="ttname"><a href="struct_screen.html">Screen</a></div><div class="ttdef"><b>Definition:</b> a2560_platform.h:390</div></div>
 <div class="ttc" id="atext_8h_html_a044f613306fe5b55043d623d3f7f91b5"><div class="ttname"><a href="text_8h.html#a044f613306fe5b55043d623d3f7f91b5">Text_DrawStringInBox</a></div><div class="ttdeci">char * Text_DrawStringInBox(Screen *the_screen, int16_t x1, int16_t y1, int16_t x2, int16_t y2, char *the_string, uint8_t fore_color, uint8_t back_color, bool(*continue_function)(void))</div><div class="ttdoc">Draw a string in a rectangular block on the screen, with wrap.</div><div class="ttdef"><b>Definition:</b> text.c:1595</div></div>
 <div class="ttc" id="atext_8h_html_a0ff658ed17d7c2204d62a71db1e86c58"><div class="ttname"><a href="text_8h.html#a0ff658ed17d7c2204d62a71db1e86c58">Text_ShowFontChars</a></div><div class="ttdeci">bool Text_ShowFontChars(Screen *the_screen, int16_t y)</div><div class="ttdoc">Test function to display all 256 font characters.</div><div class="ttdef"><b>Definition:</b> text.c:877</div></div>
 <div class="ttc" id="atext_8h_html_a102aa3fec15d7a43af197462c1c84720"><div class="ttname"><a href="text_8h.html#a102aa3fec15d7a43af197462c1c84720">Text_DrawStringAtXY</a></div><div class="ttdeci">bool Text_DrawStringAtXY(Screen *the_screen, int16_t x, int16_t y, char *the_string, uint8_t fore_color, uint8_t back_color)</div><div class="ttdoc">Draw a string at a specified x, y coord, also setting the color attributes.</div><div class="ttdef"><b>Definition:</b> text.c:1533</div></div>

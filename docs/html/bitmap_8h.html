@@ -100,9 +100,9 @@ $(document).ready(function(){initNavTree('bitmap_8h.html',''); initResizable(); 
 <div class="contents">
 <div class="textblock"><code>#include &lt;stdbool.h&gt;</code><br />
 <code>#include &lt;mcp/syscalls.h&gt;</code><br />
-<code>#include &lt;mb/a2560_platform.h&gt;</code><br />
-<code>#include &lt;mb/general.h&gt;</code><br />
-<code>#include &lt;mb/text.h&gt;</code><br />
+<code>#include &quot;a2560_platform.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="general_8h_source.html">general.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="text_8h_source.html">text.h</a>&quot;</code><br />
 </div>
 <p><a href="bitmap_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -153,12 +153,23 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>PARAM_DO_NOT_FILL</b>&#160;&#160;&#160;false</td></tr>
 <tr class="memdesc:ac482be2b2935b862925f66705f3f2cc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">for various graphic routines <br /></td></tr>
 <tr class="separator:ac482be2b2935b862925f66705f3f2cc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ffb24d8771141e6b439eac5849aff25"><td class="memItemLeft" align="right" valign="top"><a id="a3ffb24d8771141e6b439eac5849aff25" name="a3ffb24d8771141e6b439eac5849aff25"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>PARAM_IN_VRAM</b>&#160;&#160;&#160;true</td></tr>
+<tr class="memdesc:a3ffb24d8771141e6b439eac5849aff25"><td class="mdescLeft">&#160;</td><td class="mdescRight">for Bitmap_New <br /></td></tr>
+<tr class="separator:a3ffb24d8771141e6b439eac5849aff25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4e28c3ca621cb998ce36cb05a00f28e"><td class="memItemLeft" align="right" valign="top"><a id="ad4e28c3ca621cb998ce36cb05a00f28e" name="ad4e28c3ca621cb998ce36cb05a00f28e"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>PARAM_NOT_IN_VRAM</b>&#160;&#160;&#160;false</td></tr>
+<tr class="memdesc:ad4e28c3ca621cb998ce36cb05a00f28e"><td class="mdescLeft">&#160;</td><td class="mdescRight">for Bitmap_New <br /></td></tr>
+<tr class="separator:ad4e28c3ca621cb998ce36cb05a00f28e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a216eca9c0c5484158047c9537aae94c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a216eca9c0c5484158047c9537aae94c1">Bitmap_New</a> (int16_t width, int16_t height, <a class="el" href="struct_font.html">Font</a> *the_font)</td></tr>
-<tr class="memdesc:a216eca9c0c5484158047c9537aae94c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new bitmap object by allocating space for the bitmap struct in regular memory, and for the graphics, in VRAM.  <a href="bitmap_8h.html#a216eca9c0c5484158047c9537aae94c1">More...</a><br /></td></tr>
-<tr class="separator:a216eca9c0c5484158047c9537aae94c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8771ad3af58381f3f60d90a34130ec0e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a8771ad3af58381f3f60d90a34130ec0e">Bitmap_New</a> (int16_t width, int16_t height, <a class="el" href="struct_font.html">Font</a> *the_font, bool in_vram)</td></tr>
+<tr class="memdesc:a8771ad3af58381f3f60d90a34130ec0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new bitmap object by allocating space for the bitmap struct in regular memory, and for the graphics, in VRAM NOTE: when creating a bitmap to represent something actually in VRAM, pass true to in_vram, and manually assign a known VRAM location afterwards.  <a href="bitmap_8h.html#a8771ad3af58381f3f60d90a34130ec0e">More...</a><br /></td></tr>
+<tr class="separator:a8771ad3af58381f3f60d90a34130ec0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bbfc29781107ee6538aad9938288f74"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a5bbfc29781107ee6538aad9938288f74">Bitmap_Resize</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, int16_t width, int16_t height)</td></tr>
+<tr class="memdesc:a5bbfc29781107ee6538aad9938288f74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resize and existing bitmap by setting new width/height and allocating bigger storage if necessary NOTE: if the bitmap is held in VRAM, storage will not be reallocated NOTE: if the new size for the bitmap is smaller than the previous size, storage will not be reallocated - extra bytes will simply not be used.  <a href="bitmap_8h.html#a5bbfc29781107ee6538aad9938288f74">More...</a><br /></td></tr>
+<tr class="separator:a5bbfc29781107ee6538aad9938288f74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d338c4832ddb16eacaad76d26397f84"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bitmap_8h.html#a1d338c4832ddb16eacaad76d26397f84">Bitmap_BlitRect</a> (<a class="el" href="struct_bitmap.html">Bitmap</a> *src_bm, <a class="el" href="struct_rectangle.html">Rectangle</a> src_rect, <a class="el" href="struct_bitmap.html">Bitmap</a> *dst_bm, int16_t dst_x, int16_t dst_y)</td></tr>
 <tr class="memdesc:a1d338c4832ddb16eacaad76d26397f84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blit a rect from source bitmap to distination bitmap This is a wrapper around <a class="el" href="bitmap_8h.html#a5033e773db5a1fb8000e7b3113737e37" title="Blit from source bitmap to distination bitmap.">Bitmap_Blit()</a> The source and destination bitmaps can be the same: you can use this to copy a chunk of pixels from one part of a screen to another.  <a href="bitmap_8h.html#a1d338c4832ddb16eacaad76d26397f84">More...</a><br /></td></tr>
 <tr class="separator:a1d338c4832ddb16eacaad76d26397f84"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1117,8 +1128,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle</b>
 
 </div>
 </div>
-<a id="a216eca9c0c5484158047c9537aae94c1" name="a216eca9c0c5484158047c9537aae94c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a216eca9c0c5484158047c9537aae94c1">&#9670;&nbsp;</a></span>Bitmap_New()</h2>
+<a id="a8771ad3af58381f3f60d90a34130ec0e" name="a8771ad3af58381f3f60d90a34130ec0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8771ad3af58381f3f60d90a34130ec0e">&#9670;&nbsp;</a></span>Bitmap_New()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1139,7 +1150,13 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle</b>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_font.html">Font</a> *&#160;</td>
-          <td class="paramname"><em>the_font</em>&#160;</td>
+          <td class="paramname"><em>the_font</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>in_vram</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1149,14 +1166,60 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Bitmap_DrawCircle</b>
       </table>
 </div><div class="memdoc">
 
-<p>Create a new bitmap object by allocating space for the bitmap struct in regular memory, and for the graphics, in VRAM. </p>
+<p>Create a new bitmap object by allocating space for the bitmap struct in regular memory, and for the graphics, in VRAM NOTE: when creating a bitmap to represent something actually in VRAM, pass true to in_vram, and manually assign a known VRAM location afterwards. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname"><a class="el" href="struct_font.html" title="This Font object is essentially the Mac &quot;fontRecord&quot; struct, with added pointers for the data tables.">Font</a></td><td>optional font object to associate with the <a class="el" href="struct_bitmap.html">Bitmap</a>. <br  />
- </td></tr>
+    <tr><td class="paramname">width</td><td>width, in pixels, of the bitmap to be created </td></tr>
+    <tr><td class="paramname">height</td><td>height, in pixels, of the bitmap to be created </td></tr>
+    <tr><td class="paramname">the_font</td><td>optional font object to associate with the <a class="el" href="struct_bitmap.html">Bitmap</a>. </td></tr>
+    <tr><td class="paramname">in_vram</td><td>if true, no space will be allocated for the bitmap graphics. If false, width * height area of memory will be allocated in standard memory. </td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a5bbfc29781107ee6538aad9938288f74" name="a5bbfc29781107ee6538aad9938288f74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bbfc29781107ee6538aad9938288f74">&#9670;&nbsp;</a></span>Bitmap_Resize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Bitmap_Resize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
+          <td class="paramname"><em>the_bitmap</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>height</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Resize and existing bitmap by setting new width/height and allocating bigger storage if necessary NOTE: if the bitmap is held in VRAM, storage will not be reallocated NOTE: if the new size for the bitmap is smaller than the previous size, storage will not be reallocated - extra bytes will simply not be used. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">width</td><td>the new width, in pixels, to resize the bitmap to </td></tr>
+    <tr><td class="paramname">height</td><td>the new height, in pixels, to resize the bitmap to </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns false in any error condition </dd></dl>
 
 </div>
 </div>

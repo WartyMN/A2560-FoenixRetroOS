@@ -100,10 +100,10 @@ $(document).ready(function(){initNavTree('font_8h.html',''); initResizable(); })
 <div class="contents">
 <div class="textblock"><code>#include &lt;stdbool.h&gt;</code><br />
 <code>#include &lt;mcp/syscalls.h&gt;</code><br />
-<code>#include &lt;mb/a2560_platform.h&gt;</code><br />
-<code>#include &lt;mb/general.h&gt;</code><br />
-<code>#include &lt;mb/text.h&gt;</code><br />
-<code>#include &lt;mb/bitmap.h&gt;</code><br />
+<code>#include &quot;a2560_platform.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="general_8h_source.html">general.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="text_8h_source.html">text.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="bitmap_8h_source.html">bitmap.h</a>&quot;</code><br />
 </div>
 <p><a href="font_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -119,6 +119,30 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>FONT_RECORD_SIZE</b>&#160;&#160;&#160;26</td></tr>
 <tr class="memdesc:a360f820240b09b10c01c03670ab40df4"><td class="mdescLeft">&#160;</td><td class="mdescRight">size, in bytes, of the font record (minus tables) as stored in Mac FONT resources <br /></td></tr>
 <tr class="separator:a360f820240b09b10c01c03670ab40df4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c5f6383ecb01b0a52798654f144d771"><td class="memItemLeft" align="right" valign="top"><a id="a4c5f6383ecb01b0a52798654f144d771" name="a4c5f6383ecb01b0a52798654f144d771"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>FONT_CHAR_FOENIX_OUTLINE</b>&#160;&#160;&#160;0x11</td></tr>
+<tr class="memdesc:a4c5f6383ecb01b0a52798654f144d771"><td class="mdescLeft">&#160;</td><td class="mdescRight">the outlined Foenix character <br /></td></tr>
+<tr class="separator:a4c5f6383ecb01b0a52798654f144d771"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b81847c957d647dda25a934e6762fb3"><td class="memItemLeft" align="right" valign="top"><a id="a2b81847c957d647dda25a934e6762fb3" name="a2b81847c957d647dda25a934e6762fb3"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>FONT_CHAR_CHECKMARK</b>&#160;&#160;&#160;0x12</td></tr>
+<tr class="memdesc:a2b81847c957d647dda25a934e6762fb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">the checkmark character <br /></td></tr>
+<tr class="separator:a2b81847c957d647dda25a934e6762fb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8ef4f0b7fc603417865ec3f52328a89"><td class="memItemLeft" align="right" valign="top"><a id="aa8ef4f0b7fc603417865ec3f52328a89" name="aa8ef4f0b7fc603417865ec3f52328a89"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>FONT_CHAR_DIAMOND</b>&#160;&#160;&#160;0x13</td></tr>
+<tr class="memdesc:aa8ef4f0b7fc603417865ec3f52328a89"><td class="mdescLeft">&#160;</td><td class="mdescRight">the diamond character <br /></td></tr>
+<tr class="separator:aa8ef4f0b7fc603417865ec3f52328a89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4674c5f7dcba8e34f99cb0fc78d1f31"><td class="memItemLeft" align="right" valign="top"><a id="ac4674c5f7dcba8e34f99cb0fc78d1f31" name="ac4674c5f7dcba8e34f99cb0fc78d1f31"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>FONT_CHAR_FOENIX_REG</b>&#160;&#160;&#160;0x14</td></tr>
+<tr class="memdesc:ac4674c5f7dcba8e34f99cb0fc78d1f31"><td class="mdescLeft">&#160;</td><td class="mdescRight">the non-outlined Foenix character <br /></td></tr>
+<tr class="separator:ac4674c5f7dcba8e34f99cb0fc78d1f31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58e9af9e42aca39a83c575c89b614fde"><td class="memItemLeft" align="right" valign="top"><a id="a58e9af9e42aca39a83c575c89b614fde" name="a58e9af9e42aca39a83c575c89b614fde"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>FONT_CHAR_MENU_RIGHT</b>&#160;&#160;&#160;0x15</td></tr>
+<tr class="memdesc:a58e9af9e42aca39a83c575c89b614fde"><td class="mdescLeft">&#160;</td><td class="mdescRight">the '&gt;' style character for use in showing submenus <br /></td></tr>
+<tr class="separator:a58e9af9e42aca39a83c575c89b614fde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4d3ae18367d8554a72132eea5b1b30d"><td class="memItemLeft" align="right" valign="top"><a id="aa4d3ae18367d8554a72132eea5b1b30d" name="aa4d3ae18367d8554a72132eea5b1b30d"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>FONT_CHAR_MENU_RIGHT_WIDTH</b>&#160;&#160;&#160;7</td></tr>
+<tr class="memdesc:aa4d3ae18367d8554a72132eea5b1b30d"><td class="mdescLeft">&#160;</td><td class="mdescRight">the width, in pixels, of the standard '&gt;' for menu sub-menus. Every font is to use the same width, regardless of style or size. <br /></td></tr>
+<tr class="separator:aa4d3ae18367d8554a72132eea5b1b30d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -172,8 +196,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Draw one character on the bitmap, at the current bitmap pen coordinates NOTE: if the draw action is successful, the bitmaps current pen position will be updated in preparation for the next character draw. </p>
-<p >TODO: stop passing <a class="el" href="struct_font.html" title="This Font object is essentially the Mac &quot;fontRecord&quot; struct, with added pointers for the data tables.">Font</a>, and have the concept of a current font for a given bitmap. and maybe a default system font. </p><dl class="section return"><dt>Returns</dt><dd>Returns number of horizontal pixels used, including left/right offsets</dd></dl>
-<p>TODO: stop passing <a class="el" href="struct_font.html" title="This Font object is essentially the Mac &quot;fontRecord&quot; struct, with added pointers for the data tables.">Font</a>, and have the concept of a current font for a given bitmap. and maybe a default system font. return Returns number of horizontal pixels used, including left/right offsets, or -1 on any error condition. </p>
+<p >TODO: stop passing <a class="el" href="struct_font.html" title="This Font object is essentially the Mac &quot;fontRecord&quot; struct, with added pointers for the data tables.">Font</a>, and have the concept of a current font for a given bitmap. and maybe a default system font. </p><dl class="section return"><dt>Returns</dt><dd>: Returns number of horizontal pixels used, including left/right offsets, or -1 on any error condition. </dd></dl>
 <p >&lt; the width of the character's actual pixels at max width</p>
 <p >&lt; the horizontal offset from pen position before the first pixel should be drawn</p>
 <p >&lt; the total width of the character including any whitespace to left/right</p>

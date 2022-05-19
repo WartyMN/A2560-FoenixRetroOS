@@ -98,16 +98,15 @@ $(document).ready(function(){initNavTree('lib__sys_8h.html',''); initResizable()
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;list.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="memory__manager_8h_source.html">memory_manager.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="theme_8h_source.html">theme.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="control__template_8h_source.html">control_template.h</a>&quot;</code><br />
 <code>#include &lt;stdbool.h&gt;</code><br />
 <code>#include &lt;mcp/syscalls.h&gt;</code><br />
-<code>#include &lt;mb/a2560_platform.h&gt;</code><br />
-<code>#include &lt;mb/general.h&gt;</code><br />
-<code>#include &lt;mb/text.h&gt;</code><br />
-<code>#include &lt;mb/bitmap.h&gt;</code><br />
-<code>#include &lt;mb/window.h&gt;</code><br />
+<code>#include &quot;a2560_platform.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="general_8h_source.html">general.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="text_8h_source.html">text.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="bitmap_8h_source.html">bitmap.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="window_8h_source.html">window.h</a>&quot;</code><br />
 </div>
 <p><a href="lib__sys_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -167,16 +166,31 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_InitSystem</b> (v
 <tr class="memitem:aadad43b6c5eaa6981951eac2536ce10b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#aadad43b6c5eaa6981951eac2536ce10b">Sys_SetActiveWindow</a> (<a class="el" href="struct_system.html">System</a> *the_system, <a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
 <tr class="memdesc:aadad43b6c5eaa6981951eac2536ce10b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the passed window to the active window, and marks the previously active window as inactive NOTE: This will resort the list of windows to move the (new) active one to the front NOTE: The exception to this is that the backdrop window is never moved in front of other windows.  <a href="lib__sys_8h.html#aadad43b6c5eaa6981951eac2536ce10b">More...</a><br /></td></tr>
 <tr class="separator:aadad43b6c5eaa6981951eac2536ce10b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab623aeab6f4d9d7cb590443784f5fb21"><td class="memItemLeft" align="right" valign="top"><a id="ab623aeab6f4d9d7cb590443784f5fb21" name="ab623aeab6f4d9d7cb590443784f5fb21"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_IssueDamageRects</b> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
+<tr class="memdesc:ab623aeab6f4d9d7cb590443784f5fb21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Issue damage rects from the Active <a class="el" href="struct_window.html">Window</a> down to each other window in the system so that they can redraw portions of themselves Note: does not call for system re-render. <br /></td></tr>
+<tr class="separator:ab623aeab6f4d9d7cb590443784f5fb21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42408a44288eff4198b872aee08f34e9"><td class="memItemLeft" align="right" valign="top"><a id="a42408a44288eff4198b872aee08f34e9" name="a42408a44288eff4198b872aee08f34e9"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_IssueMenuDamageRects</b> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
+<tr class="memdesc:a42408a44288eff4198b872aee08f34e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Issue damage rects from the menu down to every other window in the system so that they can redraw portions of themselves when menu closes Note: does not call for system re-render. <br /></td></tr>
+<tr class="separator:a42408a44288eff4198b872aee08f34e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f2272ea55be32476762fe7f63dafe1f"><td class="memItemLeft" align="right" valign="top"><a id="a1f2272ea55be32476762fe7f63dafe1f" name="a1f2272ea55be32476762fe7f63dafe1f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_CollectDamageRects</b> (<a class="el" href="struct_system.html">System</a> *the_system, <a class="el" href="struct_window.html">Window</a> *the_future_active_window)</td></tr>
+<tr class="memdesc:a1f2272ea55be32476762fe7f63dafe1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collect damage rects for a window that is about to be made the active (foremost) window, so it can redraw portions of itself that may have been covered up by other windows Note: does not call for system re-render. <br /></td></tr>
+<tr class="separator:a1f2272ea55be32476762fe7f63dafe1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad932137a967df1c9ca838bae43362045"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_font.html">Font</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#ad932137a967df1c9ca838bae43362045">Sys_GetSystemFont</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
 <tr class="separator:ad932137a967df1c9ca838bae43362045"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a677c804fa2b6068e4ec0dbcd63bb9c4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_font.html">Font</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a677c804fa2b6068e4ec0dbcd63bb9c4f">Sys_GetAppFont</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
 <tr class="separator:a677c804fa2b6068e4ec0dbcd63bb9c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f17fdc9762295321c42c166d5022c20"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_screen.html">Screen</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a8f17fdc9762295321c42c166d5022c20">Sys_GetScreen</a> (<a class="el" href="struct_system.html">System</a> *the_system, int16_t channel_id)</td></tr>
 <tr class="separator:a8f17fdc9762295321c42c166d5022c20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac17125fd80c4fc5a76b0218206047be4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_menu.html">Menu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#ac17125fd80c4fc5a76b0218206047be4">Sys_GetMenu</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
+<tr class="separator:ac17125fd80c4fc5a76b0218206047be4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd5862c5cf34c09cba051d4c896322e5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_theme.html">Theme</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#abd5862c5cf34c09cba051d4c896322e5">Sys_GetTheme</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
 <tr class="separator:abd5862c5cf34c09cba051d4c896322e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63aedad641566d0d1dc865d5d0a35159"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a63aedad641566d0d1dc865d5d0a35159">Sys_GetScreenBitmap</a> (<a class="el" href="struct_system.html">System</a> *the_system, int16_t channel_id)</td></tr>
-<tr class="separator:a63aedad641566d0d1dc865d5d0a35159"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc49eb62dfe89d2b36b696a2b452dfb3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#abc49eb62dfe89d2b36b696a2b452dfb3">Sys_GetScreenBitmap</a> (<a class="el" href="struct_system.html">System</a> *the_system, bitmap_layer the_layer)</td></tr>
+<tr class="memdesc:abc49eb62dfe89d2b36b696a2b452dfb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">NOTE: Foenix systems only have 1 screen with bitmap graphics, even if the system has 2 screens overall.  <a href="lib__sys_8h.html#abc49eb62dfe89d2b36b696a2b452dfb3">More...</a><br /></td></tr>
+<tr class="separator:abc49eb62dfe89d2b36b696a2b452dfb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15c8506e06311bbe6c815d64eb685bda"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_event_manager.html">EventManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a15c8506e06311bbe6c815d64eb685bda">Sys_GetEventManager</a> (<a class="el" href="struct_system.html">System</a> *the_system)</td></tr>
 <tr class="separator:a15c8506e06311bbe6c815d64eb685bda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a064e8b27c30d58b3a65a8ec7e709bfdb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a064e8b27c30d58b3a65a8ec7e709bfdb">Sys_SetSystemFont</a> (<a class="el" href="struct_system.html">System</a> *the_system, <a class="el" href="struct_font.html">Font</a> *the_font)</td></tr>
@@ -185,8 +199,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_InitSystem</b> (v
 <tr class="separator:a424d04e97f5b784500098ea5c1ff263a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa08811e1f1c5e90dacebb1c5502afc71"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#aa08811e1f1c5e90dacebb1c5502afc71">Sys_SetScreen</a> (<a class="el" href="struct_system.html">System</a> *the_system, int16_t channel_id, <a class="el" href="struct_screen.html">Screen</a> *the_screen)</td></tr>
 <tr class="separator:aa08811e1f1c5e90dacebb1c5502afc71"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a430bc3ebc69806ead9035112ec0f24"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a6a430bc3ebc69806ead9035112ec0f24">Sys_SetScreenBitmap</a> (<a class="el" href="struct_system.html">System</a> *the_system, int16_t channel_id, <a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap)</td></tr>
-<tr class="separator:a6a430bc3ebc69806ead9035112ec0f24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af643b8e356213197c003f5002d8930b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#af643b8e356213197c003f5002d8930b5">Sys_SetScreenBitmap</a> (<a class="el" href="struct_system.html">System</a> *the_system, <a class="el" href="struct_bitmap.html">Bitmap</a> *the_bitmap, bitmap_layer the_layer)</td></tr>
+<tr class="memdesc:af643b8e356213197c003f5002d8930b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">NOTE: Foenix systems only have 1 screen with bitmap graphics, even if the system has 2 screens overall.  <a href="lib__sys_8h.html#af643b8e356213197c003f5002d8930b5">More...</a><br /></td></tr>
+<tr class="separator:af643b8e356213197c003f5002d8930b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39f1fbbd7a6b0a38ff0c9884e188d4d4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lib__sys_8h.html#a39f1fbbd7a6b0a38ff0c9884e188d4d4">Sys_SetTheme</a> (<a class="el" href="struct_system.html">System</a> *the_system, <a class="el" href="struct_theme.html">Theme</a> *the_theme)</td></tr>
 <tr class="memdesc:a39f1fbbd7a6b0a38ff0c9884e188d4d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the passed theme as the <a class="el" href="struct_system.html">System</a>'s current theme Note: this will dispose of the current theme after setting the new one.  <a href="lib__sys_8h.html#a39f1fbbd7a6b0a38ff0c9884e188d4d4">More...</a><br /></td></tr>
 <tr class="separator:a39f1fbbd7a6b0a38ff0c9884e188d4d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -506,6 +521,30 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_InitSystem</b> (v
 
 </div>
 </div>
+<a id="ac17125fd80c4fc5a76b0218206047be4" name="ac17125fd80c4fc5a76b0218206047be4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac17125fd80c4fc5a76b0218206047be4">&#9670;&nbsp;</a></span>Sys_GetMenu()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_menu.html">Menu</a> * Sys_GetMenu </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_system.html">System</a> *&#160;</td>
+          <td class="paramname"><em>the_system</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a6739e8ef26b70432c009d8fe80bd435a" name="a6739e8ef26b70432c009d8fe80bd435a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6739e8ef26b70432c009d8fe80bd435a">&#9670;&nbsp;</a></span>Sys_GetNextWindow()</h2>
 
@@ -588,8 +627,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_InitSystem</b> (v
 
 </div>
 </div>
-<a id="a63aedad641566d0d1dc865d5d0a35159" name="a63aedad641566d0d1dc865d5d0a35159"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63aedad641566d0d1dc865d5d0a35159">&#9670;&nbsp;</a></span>Sys_GetScreenBitmap()</h2>
+<a id="abc49eb62dfe89d2b36b696a2b452dfb3" name="abc49eb62dfe89d2b36b696a2b452dfb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc49eb62dfe89d2b36b696a2b452dfb3">&#9670;&nbsp;</a></span>Sys_GetScreenBitmap()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -603,8 +642,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_InitSystem</b> (v
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int16_t&#160;</td>
-          <td class="paramname"><em>channel_id</em>&#160;</td>
+          <td class="paramtype">bitmap_layer&#160;</td>
+          <td class="paramname"><em>the_layer</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -613,7 +652,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_InitSystem</b> (v
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
+
+<p>NOTE: Foenix systems only have 1 screen with bitmap graphics, even if the system has 2 screens overall. </p>
+<p >The bitmap returned will always be from the appropriate channel (A or B). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
   </table>
@@ -911,8 +952,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_InitSystem</b> (v
 
 </div>
 </div>
-<a id="a6a430bc3ebc69806ead9035112ec0f24" name="a6a430bc3ebc69806ead9035112ec0f24"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6a430bc3ebc69806ead9035112ec0f24">&#9670;&nbsp;</a></span>Sys_SetScreenBitmap()</h2>
+<a id="af643b8e356213197c003f5002d8930b5" name="af643b8e356213197c003f5002d8930b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af643b8e356213197c003f5002d8930b5">&#9670;&nbsp;</a></span>Sys_SetScreenBitmap()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -926,14 +967,14 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_InitSystem</b> (v
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int16_t&#160;</td>
-          <td class="paramname"><em>channel_id</em>, </td>
+          <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
+          <td class="paramname"><em>the_bitmap</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td>
-          <td class="paramname"><em>the_bitmap</em>&#160;</td>
+          <td class="paramtype">bitmap_layer&#160;</td>
+          <td class="paramname"><em>the_layer</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -942,7 +983,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Sys_InitSystem</b> (v
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
+
+<p>NOTE: Foenix systems only have 1 screen with bitmap graphics, even if the system has 2 screens overall. </p>
+<p >The bitmap returned will always be from the appropriate channel (A or B). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">the_system</td><td>valid pointer to system object </td></tr>
   </table>

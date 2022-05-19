@@ -203,6 +203,12 @@ void Control_Print(Control* the_control)
 // **** CONSTRUCTOR AND DESTRUCTOR *****
 
 // constructor
+//! @param	the_template: reference to a valid, populated ControlTemplate object. The created control will take most of its properties from this template.
+//! @param	the_window: reference to a valid Window object. The newly-created control will not be added to the window's list of controls, but the control will remember this window as its parent
+//! @param	the_parent_rect: Reference to rect object that the control will position itself relative to. This rect must remain valid throughout the life of the control.
+//! @param	the_id: the unique ID (within the specified window) to be assigned to the control. WARNING: assigning multiple controls the same ID will result in undefined behavior.
+//! @param	group_id: 1 byte group ID value to be assigned to the control. Pass CONTROL_NO_GROUP if the control is not to be part of a group.
+//! @return:	Returns a new Control object that has been localized to the passed parent rect. Returns NULL on any error condition.
 Control* Control_New(ControlTemplate* the_template, Window* the_window, Rectangle* the_parent_rect, uint16_t the_id, int8_t the_group)
 {
 	Control*		the_control;
@@ -279,6 +285,7 @@ Control* Control_New(ControlTemplate* the_template, Window* the_window, Rectangl
 	
 	// localize to the parent window
 	the_control->id_ = the_id;
+	the_control->group_ = the_group;
 	the_control->parent_win_ = the_window;
 	the_control->parent_rect_ = the_parent_rect;
 	Control_AlignToParentRect(the_control);
@@ -498,7 +505,7 @@ void Control_AlignToParentRect(Control* the_control)
 	}
 	else if (the_control->h_align_ == H_ALIGN_RIGHT)
 	{
-		the_control->rect_.MinX = the_control->parent_rect_->MaxX - the_control->x_offset_;
+		the_control->rect_.MinX = the_control->parent_rect_->MaxX - the_control->x_offset_ - the_control->width_;
 	}
 	else
 	{
@@ -514,7 +521,7 @@ void Control_AlignToParentRect(Control* the_control)
 	}
 	else if (the_control->v_align_ == V_ALIGN_BOTTOM)
 	{
-		the_control->rect_.MinY = the_control->parent_rect_->MaxY - the_control->y_offset_;
+		the_control->rect_.MinY = the_control->parent_rect_->MaxY - the_control->y_offset_ -  the_control->height_;
 	}
 	else
 	{

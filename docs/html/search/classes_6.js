@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['qlinks_0',['qlinks',['../structqlinks.html',1,'']]]
+  ['newwintemplate_0',['NewWinTemplate',['../struct_new_win_template.html',1,'']]]
 ];

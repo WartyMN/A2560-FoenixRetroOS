@@ -19,12 +19,13 @@ var searchData=
   ['bitmap_5fgetpixelatxy_16',['Bitmap_GetPixelAtXY',['../bitmap_8h.html#a80798125dce1dbd21e53bfd0eae05f07',1,'bitmap.c']]],
   ['bitmap_5fgetx_17',['Bitmap_GetX',['../bitmap_8h.html#a133023077dfdefaab36d11e66bb4b101',1,'bitmap.c']]],
   ['bitmap_5fgety_18',['Bitmap_GetY',['../bitmap_8h.html#ae1ed084e11d653fc15c14ba9e843dd01',1,'bitmap.c']]],
-  ['bitmap_5fnew_19',['Bitmap_New',['../bitmap_8h.html#a216eca9c0c5484158047c9537aae94c1',1,'bitmap.c']]],
-  ['bitmap_5fsetcolor_20',['Bitmap_SetColor',['../bitmap_8h.html#a0f0e02c6f955bb61dfabb36faf1ab6ec',1,'bitmap.c']]],
-  ['bitmap_5fsetfont_21',['Bitmap_SetFont',['../bitmap_8h.html#a5aa17cbd948f5e6c4bb4601a1efc82f8',1,'bitmap.c']]],
-  ['bitmap_5fsetpixelatxy_22',['Bitmap_SetPixelAtXY',['../bitmap_8h.html#a890f5e90bf830a6a7f80ea9c041fb601',1,'bitmap.c']]],
-  ['bitmap_5fsetxy_23',['Bitmap_SetXY',['../bitmap_8h.html#aa31a1573bc86e96d93df337b05ce632a',1,'bitmap.c']]],
-  ['bitmap_5ftile_24',['Bitmap_Tile',['../bitmap_8h.html#a3272fa959a54195930c4ec563ae1970b',1,'bitmap.c']]],
-  ['bitmap_5ftilev1_25',['Bitmap_TileV1',['../bitmap_8h.html#a7761f98923af89bb316a5e279ab266dd',1,'bitmap.c']]],
-  ['bitmap_5ftilev2_26',['Bitmap_TileV2',['../bitmap_8h.html#a0431dd5565c39a0447bceec0deafc296',1,'bitmap.c']]]
+  ['bitmap_5fnew_19',['Bitmap_New',['../bitmap_8h.html#a8771ad3af58381f3f60d90a34130ec0e',1,'bitmap.c']]],
+  ['bitmap_5fresize_20',['Bitmap_Resize',['../bitmap_8h.html#a5bbfc29781107ee6538aad9938288f74',1,'bitmap.c']]],
+  ['bitmap_5fsetcolor_21',['Bitmap_SetColor',['../bitmap_8h.html#a0f0e02c6f955bb61dfabb36faf1ab6ec',1,'bitmap.c']]],
+  ['bitmap_5fsetfont_22',['Bitmap_SetFont',['../bitmap_8h.html#a5aa17cbd948f5e6c4bb4601a1efc82f8',1,'bitmap.c']]],
+  ['bitmap_5fsetpixelatxy_23',['Bitmap_SetPixelAtXY',['../bitmap_8h.html#a890f5e90bf830a6a7f80ea9c041fb601',1,'bitmap.c']]],
+  ['bitmap_5fsetxy_24',['Bitmap_SetXY',['../bitmap_8h.html#aa31a1573bc86e96d93df337b05ce632a',1,'bitmap.c']]],
+  ['bitmap_5ftile_25',['Bitmap_Tile',['../bitmap_8h.html#a3272fa959a54195930c4ec563ae1970b',1,'bitmap.c']]],
+  ['bitmap_5ftilev1_26',['Bitmap_TileV1',['../bitmap_8h.html#a7761f98923af89bb316a5e279ab266dd',1,'bitmap.c']]],
+  ['bitmap_5ftilev2_27',['Bitmap_TileV2',['../bitmap_8h.html#a0431dd5565c39a0447bceec0deafc296',1,'bitmap.c']]]
 ];

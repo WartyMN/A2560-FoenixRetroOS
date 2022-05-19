@@ -184,7 +184,7 @@ void SwitchThemes(Window* the_window)
 
 void ToggleButtonStates(Window* the_window)
 {	
-	Control*	root_control;
+	Control*	first_non_base_control;
 	Control*	this_control;
 	int8_t		is_active;
 	int8_t		is_pushed;
@@ -197,8 +197,8 @@ void ToggleButtonStates(Window* the_window)
 		for (is_pushed = 0; is_pushed < 2; is_pushed++)
 		{
 
-			root_control = Window_GetRootControl(the_window);
-			this_control = root_control;
+			first_non_base_control = Window_GetControl(the_window, MAX_BUILT_IN_WIDGET);
+			this_control = first_non_base_control;
 	
 			while (this_control)
 			{

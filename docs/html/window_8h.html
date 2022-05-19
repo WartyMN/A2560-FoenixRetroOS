@@ -100,20 +100,21 @@ $(document).ready(function(){initNavTree('window_8h.html',''); initResizable(); 
 <div class="textblock"><code>#include &quot;<a class="el" href="control_8h_source.html">control.h</a>&quot;</code><br />
 <code>#include &lt;stdbool.h&gt;</code><br />
 <code>#include &lt;mcp/syscalls.h&gt;</code><br />
-<code>#include &lt;mb/a2560_platform.h&gt;</code><br />
-<code>#include &lt;mb/general.h&gt;</code><br />
-<code>#include &lt;mb/text.h&gt;</code><br />
-<code>#include &lt;mb/bitmap.h&gt;</code><br />
+<code>#include &quot;a2560_platform.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="general_8h_source.html">general.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="text_8h_source.html">text.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="bitmap_8h_source.html">bitmap.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="mouse_8h_source.html">mouse.h</a>&quot;</code><br />
 </div>
 <p><a href="window_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Data Structures</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_clip_rect.html">ClipRect</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_window.html">Window</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_new_win_template.html">NewWinTemplate</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_clip_rect.html">ClipRect</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
@@ -121,32 +122,34 @@ Functions</h2></td></tr>
 <tr class="memitem:afc36763466439d38b9156b57a1ba18df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_window.html">Window</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#afc36763466439d38b9156b57a1ba18df">Window_New</a> (<a class="el" href="struct_new_win_template.html">NewWinTemplate</a> *the_win_template, void(*event_handler)(<a class="el" href="struct_event_record.html">EventRecord</a> *))</td></tr>
 <tr class="memdesc:afc36763466439d38b9156b57a1ba18df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a <a class="el" href="struct_window.html">Window</a> object the_win_template-&gt;width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH, cannot be greater than WIN_DEFAULT_MAX_WIDTH the_win_template-&gt;height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT, cannot be greater than WIN_DEFAULT_MAX_HEIGHT the_win_template-&gt;min_width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH the_win_template-&gt;min_height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT the_win_template-&gt;max_width_: cannot be smaller than WIN_DEFAULT_MIN_WIDTH the_win_template-&gt;max_height_: cannot be smaller than WIN_DEFAULT_MIN_HEIGHT.  <a href="window_8h.html#afc36763466439d38b9156b57a1ba18df">More...</a><br /></td></tr>
 <tr class="separator:afc36763466439d38b9156b57a1ba18df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d058388394655102535714c45df65e1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a7d058388394655102535714c45df65e1">Window_Destroy</a> (<a class="el" href="struct_window.html">Window</a> **the_window)</td></tr>
+<tr class="separator:a7d058388394655102535714c45df65e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a87dc477da203456e5a58d26d0512e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_new_win_template.html">NewWinTemplate</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a1a87dc477da203456e5a58d26d0512e4">Window_GetNewWinTemplate</a> (char *the_win_title)</td></tr>
-<tr class="memdesc:a1a87dc477da203456e5a58d26d0512e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate and populate a new window template object Ensures that all fields have appropriate default values Calling method must free this after creating a window with it.  <a href="window_8h.html#a1a87dc477da203456e5a58d26d0512e4">More...</a><br /></td></tr>
+<tr class="memdesc:a1a87dc477da203456e5a58d26d0512e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate and populate a new window template object Assigns (but does not copy) the passed title string; leaves bitmaps NULL; assigns the pre-defined default value to all other fields Calling method must free the returned <a class="el" href="struct_new_win_template.html">NewWinTemplate</a> pointer after creating a window with it.  <a href="window_8h.html#a1a87dc477da203456e5a58d26d0512e4">More...</a><br /></td></tr>
 <tr class="separator:a1a87dc477da203456e5a58d26d0512e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a70b77bdbc9f6523380f7679fa01655"><td class="memItemLeft" align="right" valign="top"><a id="a7a70b77bdbc9f6523380f7679fa01655" name="a7a70b77bdbc9f6523380f7679fa01655"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_ClearClipRects</b> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
-<tr class="memdesc:a7a70b77bdbc9f6523380f7679fa01655"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove and free any clip rects attached to the window. <br /></td></tr>
-<tr class="separator:a7a70b77bdbc9f6523380f7679fa01655"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c78417665114d5f2f2a5a2936bf765f"><td class="memItemLeft" align="right" valign="top"><a id="a0c78417665114d5f2f2a5a2936bf765f" name="a0c78417665114d5f2f2a5a2936bf765f"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>Window_AddClipRect</b> (<a class="el" href="struct_window.html">Window</a> *the_window, <a class="el" href="struct_rectangle.html">Rectangle</a> *new_rect)</td></tr>
-<tr class="memdesc:a0c78417665114d5f2f2a5a2936bf765f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy the passed rectangle to the window's clip rect collection. <br /></td></tr>
+<tr class="memitem:a0c78417665114d5f2f2a5a2936bf765f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a0c78417665114d5f2f2a5a2936bf765f">Window_AddClipRect</a> (<a class="el" href="struct_window.html">Window</a> *the_window, <a class="el" href="struct_rectangle.html">Rectangle</a> *new_rect)</td></tr>
+<tr class="memdesc:a0c78417665114d5f2f2a5a2936bf765f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy the passed rectangle to the window's clip rect collection If the window already has the maximum allowed number of clip rects, the rectangle will not be added.  <a href="window_8h.html#a0c78417665114d5f2f2a5a2936bf765f">More...</a><br /></td></tr>
 <tr class="separator:a0c78417665114d5f2f2a5a2936bf765f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f79996e24465fa14b2b1abe5193df9e"><td class="memItemLeft" align="right" valign="top"><a id="a3f79996e24465fa14b2b1abe5193df9e" name="a3f79996e24465fa14b2b1abe5193df9e"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>Window_MergeClipRects</b> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
-<tr class="memdesc:a3f79996e24465fa14b2b1abe5193df9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge and de-duplicate clip rects Consolidating the clip rects will happen reduce unnecessary reblitting. <br /></td></tr>
+<tr class="memitem:a3f79996e24465fa14b2b1abe5193df9e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a3f79996e24465fa14b2b1abe5193df9e">Window_MergeClipRects</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:a3f79996e24465fa14b2b1abe5193df9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge and de-duplicate clip rects Consolidating the clip rects will happen reduce unnecessary reblitting.  <a href="window_8h.html#a3f79996e24465fa14b2b1abe5193df9e">More...</a><br /></td></tr>
 <tr class="separator:a3f79996e24465fa14b2b1abe5193df9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ba6fab2abe3c84eb0f231ea8183828c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a6ba6fab2abe3c84eb0f231ea8183828c">Window_BlitClipRects</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
 <tr class="memdesc:a6ba6fab2abe3c84eb0f231ea8183828c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blit each clip rect to the screen, and clear all clip rects when done This is the actual mechanics of rendering the window to the screen.  <a href="window_8h.html#a6ba6fab2abe3c84eb0f231ea8183828c">More...</a><br /></td></tr>
 <tr class="separator:a6ba6fab2abe3c84eb0f231ea8183828c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa46b88f5600872b937c26f2a8e632ef0"><td class="memItemLeft" align="right" valign="top">mouse_mode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#aa46b88f5600872b937c26f2a8e632ef0">Window_CheckForDragZone</a> (<a class="el" href="struct_window.html">Window</a> *the_window, int16_t x, int16_t y)</td></tr>
-<tr class="memdesc:aa46b88f5600872b937c26f2a8e632ef0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the passed coordinate is within one of the draggable event zones Draggable event zones include the title bar, 4 single-direction resize zones on the window edges, and the lower-right traditional resize zone.  <a href="window_8h.html#aa46b88f5600872b937c26f2a8e632ef0">More...</a><br /></td></tr>
-<tr class="separator:aa46b88f5600872b937c26f2a8e632ef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27c9d4c4c25556442f0ebef99313d104"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a27c9d4c4c25556442f0ebef99313d104">Window_GenerateDamageRects</a> (<a class="el" href="struct_window.html">Window</a> *the_window, <a class="el" href="struct_rectangle.html">Rectangle</a> *the_old_rect)</td></tr>
+<tr class="memdesc:a27c9d4c4c25556442f0ebef99313d104"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate damage rects, if any, caused by window moving or being resized NOTE: it is not necessarily an error condition if a given window doesn't end up with damage rects as a result of this operation: if the window rect doesn't intersect the incoming rect, no damage is relevant.  <a href="window_8h.html#a27c9d4c4c25556442f0ebef99313d104">More...</a><br /></td></tr>
+<tr class="separator:a27c9d4c4c25556442f0ebef99313d104"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca2ab4377a7336fb06798008645c51de"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#aca2ab4377a7336fb06798008645c51de">Window_AcceptDamageRect</a> (<a class="el" href="struct_window.html">Window</a> *the_window, <a class="el" href="struct_rectangle.html">Rectangle</a> *damage_rect)</td></tr>
+<tr class="memdesc:aca2ab4377a7336fb06798008645c51de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy the passed rectangle to the window's clip rect collection, translating to local coordinates as it does so NOTE: the incoming rect is assumed to be using global, not window-local coordinates.  <a href="window_8h.html#aca2ab4377a7336fb06798008645c51de">More...</a><br /></td></tr>
+<tr class="separator:aca2ab4377a7336fb06798008645c51de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59249072b93ed7b4823ce6433ac85b73"><td class="memItemLeft" align="right" valign="top">MouseMode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a59249072b93ed7b4823ce6433ac85b73">Window_CheckForDragZone</a> (<a class="el" href="struct_window.html">Window</a> *the_window, int16_t x, int16_t y)</td></tr>
+<tr class="memdesc:a59249072b93ed7b4823ce6433ac85b73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the passed coordinate is within one of the draggable event zones Draggable event zones include the title bar, 4 single-direction resize zones on the window edges, and the lower-right traditional resize zone.  <a href="window_8h.html#a59249072b93ed7b4823ce6433ac85b73">More...</a><br /></td></tr>
+<tr class="separator:a59249072b93ed7b4823ce6433ac85b73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad21a1d6f6ced3cbb01af21ce558985d4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#ad21a1d6f6ced3cbb01af21ce558985d4">Window_SetSelectedControl</a> (<a class="el" href="struct_window.html">Window</a> *the_window, <a class="el" href="struct_control.html">Control</a> *the_control)</td></tr>
-<tr class="memdesc:ad21a1d6f6ced3cbb01af21ce558985d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the passed control as the currently selected control and unselect any previously selected control.  <a href="window_8h.html#ad21a1d6f6ced3cbb01af21ce558985d4">More...</a><br /></td></tr>
+<tr class="memdesc:ad21a1d6f6ced3cbb01af21ce558985d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the passed control as the currently selected control and unselects any previously selected control.  <a href="window_8h.html#ad21a1d6f6ced3cbb01af21ce558985d4">More...</a><br /></td></tr>
 <tr class="separator:ad21a1d6f6ced3cbb01af21ce558985d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b0d0004b11c05b168e151175363ce95"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a8b0d0004b11c05b168e151175363ce95">Window_AddControl</a> (<a class="el" href="struct_window.html">Window</a> *the_window, <a class="el" href="struct_control.html">Control</a> *the_control)</td></tr>
-<tr class="memdesc:a8b0d0004b11c05b168e151175363ce95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add the passed control to the window's list of controls.  <a href="window_8h.html#a8b0d0004b11c05b168e151175363ce95">More...</a><br /></td></tr>
+<tr class="memdesc:a8b0d0004b11c05b168e151175363ce95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the passed control to the window's list of controls.  <a href="window_8h.html#a8b0d0004b11c05b168e151175363ce95">More...</a><br /></td></tr>
 <tr class="separator:a8b0d0004b11c05b168e151175363ce95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96a3ee208da7c3921c86d61b093d7546"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a96a3ee208da7c3921c86d61b093d7546">Window_AddNewControlFromTemplate</a> (<a class="el" href="struct_window.html">Window</a> *the_window, <a class="el" href="struct_control_template.html">ControlTemplate</a> *the_template, uint16_t the_id, uint16_t group_id)</td></tr>
 <tr class="memdesc:a96a3ee208da7c3921c86d61b093d7546"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiate a new control from the passed template, and add it to the window's list of controls.  <a href="window_8h.html#a96a3ee208da7c3921c86d61b093d7546">More...</a><br /></td></tr>
@@ -154,39 +157,110 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Window_MergeClipRects
 <tr class="memitem:a5e63287515d49271cf0c69a627cd1199"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a5e63287515d49271cf0c69a627cd1199">Window_AddNewControl</a> (<a class="el" href="struct_window.html">Window</a> *the_window, <a class="el" href="control_8h.html#a8d0ec0ac6c53b09d8759c8c35b96434d">control_type</a> the_type, int16_t width, int16_t height, int16_t x_offset, int16_t y_offset, h_align_type the_h_align, v_align_type the_v_align, char *the_caption, uint16_t the_id, uint16_t group_id)</td></tr>
 <tr class="memdesc:a5e63287515d49271cf0c69a627cd1199"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiate a new control of the type specified, and add it to the window's list of controls.  <a href="window_8h.html#a5e63287515d49271cf0c69a627cd1199">More...</a><br /></td></tr>
 <tr class="separator:a5e63287515d49271cf0c69a627cd1199"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6fb4dde75e63fc4e0dfa6374af59885"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#ab6fb4dde75e63fc4e0dfa6374af59885">Window_InvalidateTitlebar</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:ab6fb4dde75e63fc4e0dfa6374af59885"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invalidate the title bar and the controls in the title bar Call when switching from inactive to active window, and vice versa, to force controls and title bar to redraw appropriately.  <a href="window_8h.html#ab6fb4dde75e63fc4e0dfa6374af59885">More...</a><br /></td></tr>
+<tr class="separator:ab6fb4dde75e63fc4e0dfa6374af59885"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f72140d3e7a5b7e632bd8abb0328e99"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a8f72140d3e7a5b7e632bd8abb0328e99">Window_InvalidateControlByID</a> (<a class="el" href="struct_window.html">Window</a> *the_window, uint16_t the_control_id)</td></tr>
+<tr class="memdesc:a8f72140d3e7a5b7e632bd8abb0328e99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invalidate the control matching the ID passed.  <a href="window_8h.html#a8f72140d3e7a5b7e632bd8abb0328e99">More...</a><br /></td></tr>
+<tr class="separator:a8f72140d3e7a5b7e632bd8abb0328e99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd8ead0337ad4ce74de865ebb7720517"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#afd8ead0337ad4ce74de865ebb7720517">Window_GetSelectedControl</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
 <tr class="memdesc:afd8ead0337ad4ce74de865ebb7720517"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the control listed as the currently selected control.  <a href="window_8h.html#afd8ead0337ad4ce74de865ebb7720517">More...</a><br /></td></tr>
 <tr class="separator:afd8ead0337ad4ce74de865ebb7720517"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a15ad33cabfaa482929e4cf8cc95eab9d"><td class="memItemLeft" align="right" valign="top"><a id="a15ad33cabfaa482929e4cf8cc95eab9d" name="a15ad33cabfaa482929e4cf8cc95eab9d"></a>
-<a class="el" href="struct_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>Window_GetLastControl</b> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
-<tr class="memdesc:a15ad33cabfaa482929e4cf8cc95eab9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find and return the last control in the window's chain of controls This corresponds to the first control with a NULL value for next_. <br /></td></tr>
+<tr class="memitem:a15ad33cabfaa482929e4cf8cc95eab9d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a15ad33cabfaa482929e4cf8cc95eab9d">Window_GetLastControl</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:a15ad33cabfaa482929e4cf8cc95eab9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find and return the last control in the window's chain of controls This corresponds to the first control with a NULL value for next_.  <a href="window_8h.html#a15ad33cabfaa482929e4cf8cc95eab9d">More...</a><br /></td></tr>
 <tr class="separator:a15ad33cabfaa482929e4cf8cc95eab9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa803e44ea1836cd957f6177544f876e0"><td class="memItemLeft" align="right" valign="top"><a id="aa803e44ea1836cd957f6177544f876e0" name="aa803e44ea1836cd957f6177544f876e0"></a>
-<a class="el" href="struct_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>Window_GetControlAtXY</b> (<a class="el" href="struct_window.html">Window</a> *the_window, int16_t x, int16_t y)</td></tr>
-<tr class="memdesc:aa803e44ea1836cd957f6177544f876e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find the <a class="el" href="struct_control.html" title="This structure describes an instantiated control on a window.">Control</a> under the mouse. <br /></td></tr>
+<tr class="memitem:aac5ee4d79be17911c608f736f8a23c0e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#aac5ee4d79be17911c608f736f8a23c0e">Window_GetControl</a> (<a class="el" href="struct_window.html">Window</a> *the_window, uint16_t the_control_id)</td></tr>
+<tr class="memdesc:aac5ee4d79be17911c608f736f8a23c0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a pointer to the control owned by the window that matches the specified ID NOTE: <a class="el" href="struct_control.html" title="This structure describes an instantiated control on a window.">Control</a> IDs 0-3 are reserved by the system for standard controls (close, minimize, etc.).  <a href="window_8h.html#aac5ee4d79be17911c608f736f8a23c0e">More...</a><br /></td></tr>
+<tr class="separator:aac5ee4d79be17911c608f736f8a23c0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d911f939dacc0de1aa273a5099d702b"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a0d911f939dacc0de1aa273a5099d702b">Window_GetControlID</a> (<a class="el" href="struct_window.html">Window</a> *the_window, <a class="el" href="struct_control.html">Control</a> *the_control)</td></tr>
+<tr class="memdesc:a0d911f939dacc0de1aa273a5099d702b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the ID of the control passed, if the window actually owns that control NOTE: <a class="el" href="struct_control.html" title="This structure describes an instantiated control on a window.">Control</a> IDs 0-3 are reserved by the system for standard controls (close, minimize, etc.).  <a href="window_8h.html#a0d911f939dacc0de1aa273a5099d702b">More...</a><br /></td></tr>
+<tr class="separator:a0d911f939dacc0de1aa273a5099d702b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa803e44ea1836cd957f6177544f876e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#aa803e44ea1836cd957f6177544f876e0">Window_GetControlAtXY</a> (<a class="el" href="struct_window.html">Window</a> *the_window, int16_t x, int16_t y)</td></tr>
+<tr class="memdesc:aa803e44ea1836cd957f6177544f876e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find the control, if any, located at the specified local coordinates Transparency is not taken into account: if the passed coordinate intersects the control's rectangle at any point, it is considered a match.  <a href="window_8h.html#aa803e44ea1836cd957f6177544f876e0">More...</a><br /></td></tr>
 <tr class="separator:aa803e44ea1836cd957f6177544f876e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad41c4e19641204a8971dd78920707fdf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#ad41c4e19641204a8971dd78920707fdf">Window_SetTitle</a> (<a class="el" href="struct_window.html">Window</a> *the_window, char *the_title)</td></tr>
+<tr class="memdesc:ad41c4e19641204a8971dd78920707fdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace the current window title with the passed string Note: the passed string will be copied into storage by the window.  <a href="window_8h.html#ad41c4e19641204a8971dd78920707fdf">More...</a><br /></td></tr>
+<tr class="separator:ad41c4e19641204a8971dd78920707fdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c11cf55c2b4421d21b40c97c01ee8cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a5c11cf55c2b4421d21b40c97c01ee8cf">Window_SetVisible</a> (<a class="el" href="struct_window.html">Window</a> *the_window, bool is_visible)</td></tr>
-<tr class="memdesc:a5c11cf55c2b4421d21b40c97c01ee8cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the passed window's visibility flag.  <a href="window_8h.html#a5c11cf55c2b4421d21b40c97c01ee8cf">More...</a><br /></td></tr>
+<tr class="memdesc:a5c11cf55c2b4421d21b40c97c01ee8cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the window's visibility flag.  <a href="window_8h.html#a5c11cf55c2b4421d21b40c97c01ee8cf">More...</a><br /></td></tr>
 <tr class="separator:a5c11cf55c2b4421d21b40c97c01ee8cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92819b05a6056984a75b9635f851816c"><td class="memItemLeft" align="right" valign="top"><a id="a92819b05a6056984a75b9635f851816c" name="a92819b05a6056984a75b9635f851816c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_SetDisplayOrder</b> (<a class="el" href="struct_window.html">Window</a> *the_window, int8_t the_display_order)</td></tr>
-<tr class="memdesc:a92819b05a6056984a75b9635f851816c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the display order of the window Consider this a system-only function: do not use this. <br /></td></tr>
+<tr class="memitem:a92819b05a6056984a75b9635f851816c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a92819b05a6056984a75b9635f851816c">Window_SetDisplayOrder</a> (<a class="el" href="struct_window.html">Window</a> *the_window, int8_t the_display_order)</td></tr>
+<tr class="memdesc:a92819b05a6056984a75b9635f851816c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the display order of the window NOTE: This does not immediately re-render or change the display order visibly.  <a href="window_8h.html#a92819b05a6056984a75b9635f851816c">More...</a><br /></td></tr>
 <tr class="separator:a92819b05a6056984a75b9635f851816c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c867b3623de29bc967fed6be0453500"><td class="memItemLeft" align="right" valign="top"><a id="a4c867b3623de29bc967fed6be0453500" name="a4c867b3623de29bc967fed6be0453500"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_SetActive</b> (<a class="el" href="struct_window.html">Window</a> *the_window, bool is_active)</td></tr>
-<tr class="memdesc:a4c867b3623de29bc967fed6be0453500"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the passed window's active flag. <br /></td></tr>
+<tr class="memitem:a4c867b3623de29bc967fed6be0453500"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a4c867b3623de29bc967fed6be0453500">Window_SetActive</a> (<a class="el" href="struct_window.html">Window</a> *the_window, bool is_active)</td></tr>
+<tr class="memdesc:a4c867b3623de29bc967fed6be0453500"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the passed window's active flag.  <a href="window_8h.html#a4c867b3623de29bc967fed6be0453500">More...</a><br /></td></tr>
 <tr class="separator:a4c867b3623de29bc967fed6be0453500"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a908f9db4f3ba5322da3cb8f08de707bd"><td class="memItemLeft" align="right" valign="top"><a id="a908f9db4f3ba5322da3cb8f08de707bd" name="a908f9db4f3ba5322da3cb8f08de707bd"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_UpdateTheme</b> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
-<tr class="memdesc:a908f9db4f3ba5322da3cb8f08de707bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the current window controls, etc., to match the current system theme. <br /></td></tr>
+<tr class="memitem:a409bdc564f16c800f4ce1d0094d68b58"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a409bdc564f16c800f4ce1d0094d68b58">Window_SetState</a> (<a class="el" href="struct_window.html">Window</a> *the_window, window_state the_state)</td></tr>
+<tr class="memdesc:a409bdc564f16c800f4ce1d0094d68b58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the window's state (maximized, minimized, etc.) NOTE: This does not immediately cause the window to render in the passed state.  <a href="window_8h.html#a409bdc564f16c800f4ce1d0094d68b58">More...</a><br /></td></tr>
+<tr class="separator:a409bdc564f16c800f4ce1d0094d68b58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a503e83466fb162d7bf80a01bb43f8553"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a503e83466fb162d7bf80a01bb43f8553">Window_EvaluateWindowChange</a> (<a class="el" href="struct_window.html">Window</a> *the_window, int16_t *x, int16_t *y, int16_t *width, int16_t *height)</td></tr>
+<tr class="memdesc:a503e83466fb162d7bf80a01bb43f8553"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate potential change to window position or size, and correct if out of allowed limits Negative value positions will be corrected to 0.  <a href="window_8h.html#a503e83466fb162d7bf80a01bb43f8553">More...</a><br /></td></tr>
+<tr class="separator:a503e83466fb162d7bf80a01bb43f8553"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad83be21c727b12f20835d47480dae26a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#ad83be21c727b12f20835d47480dae26a">Window_ChangeWindow</a> (<a class="el" href="struct_window.html">Window</a> *the_window, int16_t x, int16_t y, int16_t width, int16_t height, bool update_norm)</td></tr>
+<tr class="memdesc:ad83be21c727b12f20835d47480dae26a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change position and/or size of window NOTE: passed x, y will be checked against the window's min/max values Will also adjust the position of the built-in maximize/minimize/normsize controls.  <a href="window_8h.html#ad83be21c727b12f20835d47480dae26a">More...</a><br /></td></tr>
+<tr class="separator:ad83be21c727b12f20835d47480dae26a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addad5d1b415319d4f59f508a0604a6c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#addad5d1b415319d4f59f508a0604a6c2">Window_Maximize</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:addad5d1b415319d4f59f508a0604a6c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the window to full-screen size (maximize mode) Sets window's x, y, width, height parameters to match those of the screen.  <a href="window_8h.html#addad5d1b415319d4f59f508a0604a6c2">More...</a><br /></td></tr>
+<tr class="separator:addad5d1b415319d4f59f508a0604a6c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6734ebb21ea802588f95b877bb158e5a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a6734ebb21ea802588f95b877bb158e5a">Window_NormSize</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:a6734ebb21ea802588f95b877bb158e5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the window to normal size (window-size mode) Sets window's x, y, width, height parameters to those stored in norm_x, etc.  <a href="window_8h.html#a6734ebb21ea802588f95b877bb158e5a">More...</a><br /></td></tr>
+<tr class="separator:a6734ebb21ea802588f95b877bb158e5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa92c11bc1e8ba08c600c5c9c3284c83b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#aa92c11bc1e8ba08c600c5c9c3284c83b">Window_Minimize</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:aa92c11bc1e8ba08c600c5c9c3284c83b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hides the window (minimize mode) Does not change the window's x, y, width, height parameters, it just makes it invisible.  <a href="window_8h.html#aa92c11bc1e8ba08c600c5c9c3284c83b">More...</a><br /></td></tr>
+<tr class="separator:aa92c11bc1e8ba08c600c5c9c3284c83b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05e369a1c4a3457250961f914e7b4564"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a05e369a1c4a3457250961f914e7b4564">Window_GetTitle</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:a05e369a1c4a3457250961f914e7b4564"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a pointer to the current window title Note: It is not guaranteed that every window will have a title.  <a href="window_8h.html#a05e369a1c4a3457250961f914e7b4564">More...</a><br /></td></tr>
+<tr class="separator:a05e369a1c4a3457250961f914e7b4564"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad663b8813835c2c5be3cebb135ef6672"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#ad663b8813835c2c5be3cebb135ef6672">Window_GetUserData</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:ad663b8813835c2c5be3cebb135ef6672"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the value stored in the user data field of the window.  <a href="window_8h.html#ad663b8813835c2c5be3cebb135ef6672">More...</a><br /></td></tr>
+<tr class="separator:ad663b8813835c2c5be3cebb135ef6672"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b2b31f9d6cdc08f7dec20f8c4a90b2b"><td class="memItemLeft" align="right" valign="top">window_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a0b2b31f9d6cdc08f7dec20f8c4a90b2b">Window_GetType</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:a0b2b31f9d6cdc08f7dec20f8c4a90b2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the window's type (normal, backdrop, dialog, etc.)  <a href="window_8h.html#a0b2b31f9d6cdc08f7dec20f8c4a90b2b">More...</a><br /></td></tr>
+<tr class="separator:a0b2b31f9d6cdc08f7dec20f8c4a90b2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0deb10f4f9de60834c83ae843b8dc89e"><td class="memItemLeft" align="right" valign="top">window_state&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a0deb10f4f9de60834c83ae843b8dc89e">Window_GetState</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:a0deb10f4f9de60834c83ae843b8dc89e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the window's state (maximized, minimized, etc.)  <a href="window_8h.html#a0deb10f4f9de60834c83ae843b8dc89e">More...</a><br /></td></tr>
+<tr class="separator:a0deb10f4f9de60834c83ae843b8dc89e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a526f1e6df0a6f11c48f721d7c4e850c9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_bitmap.html">Bitmap</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a526f1e6df0a6f11c48f721d7c4e850c9">Window_GetBitmap</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:a526f1e6df0a6f11c48f721d7c4e850c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the bitmap object used as the offscreen buffer for the window NOTE: this is not a pointer into VRAM, or directly to the screen.  <a href="window_8h.html#a526f1e6df0a6f11c48f721d7c4e850c9">More...</a><br /></td></tr>
+<tr class="separator:a526f1e6df0a6f11c48f721d7c4e850c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96ff52a29523c87c3d17cf8463920e52"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a96ff52a29523c87c3d17cf8463920e52">Window_GetX</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:a96ff52a29523c87c3d17cf8463920e52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the global horizontal coordinate of the window.  <a href="window_8h.html#a96ff52a29523c87c3d17cf8463920e52">More...</a><br /></td></tr>
+<tr class="separator:a96ff52a29523c87c3d17cf8463920e52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab41d0f16fc6251732973de9a2abd8d7b"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#ab41d0f16fc6251732973de9a2abd8d7b">Window_GetY</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:ab41d0f16fc6251732973de9a2abd8d7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the global vertical coordinate of the window.  <a href="window_8h.html#ab41d0f16fc6251732973de9a2abd8d7b">More...</a><br /></td></tr>
+<tr class="separator:ab41d0f16fc6251732973de9a2abd8d7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe736fa0770039114a79602ccc5e23d4"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#abe736fa0770039114a79602ccc5e23d4">Window_GetWidth</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:abe736fa0770039114a79602ccc5e23d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the width of the window.  <a href="window_8h.html#abe736fa0770039114a79602ccc5e23d4">More...</a><br /></td></tr>
+<tr class="separator:abe736fa0770039114a79602ccc5e23d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a18ccc5070e58bf098dd11764042032"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a8a18ccc5070e58bf098dd11764042032">Window_GetHeight</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:a8a18ccc5070e58bf098dd11764042032"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the height of the window.  <a href="window_8h.html#a8a18ccc5070e58bf098dd11764042032">More...</a><br /></td></tr>
+<tr class="separator:a8a18ccc5070e58bf098dd11764042032"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4500bd2eb027dfdc29027237dd1b67af"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a4500bd2eb027dfdc29027237dd1b67af">Window_IsBackdrop</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:a4500bd2eb027dfdc29027237dd1b67af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a window is a backdrop window or a regular window.  <a href="window_8h.html#a4500bd2eb027dfdc29027237dd1b67af">More...</a><br /></td></tr>
+<tr class="separator:a4500bd2eb027dfdc29027237dd1b67af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a4138b516a4315dcc02178b233afa81"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a4a4138b516a4315dcc02178b233afa81">Window_IsVisible</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:a4a4138b516a4315dcc02178b233afa81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a window should be visible or not NOTE: this does not necessarily mean the window isn't currently rendered to the screen.  <a href="window_8h.html#a4a4138b516a4315dcc02178b233afa81">More...</a><br /></td></tr>
+<tr class="separator:a4a4138b516a4315dcc02178b233afa81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1217a89992fbc2380cc452daa8696f23"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a1217a89992fbc2380cc452daa8696f23">Window_IsActive</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:a1217a89992fbc2380cc452daa8696f23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the active/inactive condition of the window.  <a href="window_8h.html#a1217a89992fbc2380cc452daa8696f23">More...</a><br /></td></tr>
+<tr class="separator:a1217a89992fbc2380cc452daa8696f23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8709807e37fd1fa98e2f2f0c1204f73"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#ab8709807e37fd1fa98e2f2f0c1204f73">Window_Render</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:ab8709807e37fd1fa98e2f2f0c1204f73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw/re-draw any necessary components, and blit the window (or parts of it, via cliprects) to the screen.  <a href="window_8h.html#ab8709807e37fd1fa98e2f2f0c1204f73">More...</a><br /></td></tr>
+<tr class="separator:ab8709807e37fd1fa98e2f2f0c1204f73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49313d63417dc961f23f6fe759d69553"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a49313d63417dc961f23f6fe759d69553">Window_ClearContent</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:a49313d63417dc961f23f6fe759d69553"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the content area rect by filling it with the theme's backcolor.  <a href="window_8h.html#a49313d63417dc961f23f6fe759d69553">More...</a><br /></td></tr>
+<tr class="separator:a49313d63417dc961f23f6fe759d69553"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a908f9db4f3ba5322da3cb8f08de707bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a908f9db4f3ba5322da3cb8f08de707bd">Window_UpdateTheme</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:a908f9db4f3ba5322da3cb8f08de707bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the current window controls, etc., to match the current system theme.  <a href="window_8h.html#a908f9db4f3ba5322da3cb8f08de707bd">More...</a><br /></td></tr>
 <tr class="separator:a908f9db4f3ba5322da3cb8f08de707bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae2c60be4c22336cfff4ce569ae54a5ef"><td class="memItemLeft" align="right" valign="top"><a id="ae2c60be4c22336cfff4ce569ae54a5ef" name="ae2c60be4c22336cfff4ce569ae54a5ef"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_GlobalToLocal</b> (<a class="el" href="struct_window.html">Window</a> *the_window, int16_t *x, int16_t *y)</td></tr>
-<tr class="memdesc:ae2c60be4c22336cfff4ce569ae54a5ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the passed x, y global coordinates to local (to window) coordinates. <br /></td></tr>
+<tr class="memitem:a0ae435c3af3ee34dc89c61f54b48afe7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a0ae435c3af3ee34dc89c61f54b48afe7">Window_Invalidate</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:a0ae435c3af3ee34dc89c61f54b48afe7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mark entire window as invalidated This will cause it to be redrawn and fully reblitted in the next render cycle.  <a href="window_8h.html#a0ae435c3af3ee34dc89c61f54b48afe7">More...</a><br /></td></tr>
+<tr class="separator:a0ae435c3af3ee34dc89c61f54b48afe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2c60be4c22336cfff4ce569ae54a5ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#ae2c60be4c22336cfff4ce569ae54a5ef">Window_GlobalToLocal</a> (<a class="el" href="struct_window.html">Window</a> *the_window, int16_t *x, int16_t *y)</td></tr>
+<tr class="memdesc:ae2c60be4c22336cfff4ce569ae54a5ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the passed x, y global coordinates to local (to window) coordinates.  <a href="window_8h.html#ae2c60be4c22336cfff4ce569ae54a5ef">More...</a><br /></td></tr>
 <tr class="separator:ae2c60be4c22336cfff4ce569ae54a5ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff15b5181e47d364fe9ae7193fc7ed37"><td class="memItemLeft" align="right" valign="top"><a id="aff15b5181e47d364fe9ae7193fc7ed37" name="aff15b5181e47d364fe9ae7193fc7ed37"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal</b> (<a class="el" href="struct_window.html">Window</a> *the_window, int16_t *x, int16_t *y)</td></tr>
-<tr class="memdesc:aff15b5181e47d364fe9ae7193fc7ed37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the passed x, y local coordinates to global coordinates. <br /></td></tr>
+<tr class="memitem:aff15b5181e47d364fe9ae7193fc7ed37"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#aff15b5181e47d364fe9ae7193fc7ed37">Window_LocalToGlobal</a> (<a class="el" href="struct_window.html">Window</a> *the_window, int16_t *x, int16_t *y)</td></tr>
+<tr class="memdesc:aff15b5181e47d364fe9ae7193fc7ed37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the passed x, y local coordinates to global coordinates.  <a href="window_8h.html#aff15b5181e47d364fe9ae7193fc7ed37">More...</a><br /></td></tr>
 <tr class="separator:aff15b5181e47d364fe9ae7193fc7ed37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a45da18d6ab298b8afc95fb62ad557e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#a2a45da18d6ab298b8afc95fb62ad557e">Window_SetFont</a> (<a class="el" href="struct_window.html">Window</a> *the_window, <a class="el" href="struct_font.html">Font</a> *the_font)</td></tr>
 <tr class="memdesc:a2a45da18d6ab298b8afc95fb62ad557e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the font This is the font that will be used for any subsequent font drawing in this <a class="el" href="struct_window.html">Window</a> This also sets the font of the window's bitmap This only affects programmer-controlled drawing actions; it will not change the title bar font, the icon font, etc.  <a href="window_8h.html#a2a45da18d6ab298b8afc95fb62ad557e">More...</a><br /></td></tr>
@@ -239,8 +313,86 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
 <tr class="memitem:ada90aa1ccd6638ce6653d4b7db32ff28"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#ada90aa1ccd6638ce6653d4b7db32ff28">Window_DrawStringInBox</a> (<a class="el" href="struct_window.html">Window</a> *the_window, int16_t width, int16_t height, char *the_string, int16_t num_chars, char **wrap_buffer, bool(*continue_function)(void))</td></tr>
 <tr class="memdesc:ada90aa1ccd6638ce6653d4b7db32ff28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a string in a rectangular block on the window, with wrap.  <a href="window_8h.html#ada90aa1ccd6638ce6653d4b7db32ff28">More...</a><br /></td></tr>
 <tr class="separator:ada90aa1ccd6638ce6653d4b7db32ff28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8f3e88b7fdb76d862817e557765ccbc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="window_8h.html#ae8f3e88b7fdb76d862817e557765ccbc">Window_Print</a> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="separator:ae8f3e88b7fdb76d862817e557765ccbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="aca2ab4377a7336fb06798008645c51de" name="aca2ab4377a7336fb06798008645c51de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca2ab4377a7336fb06798008645c51de">&#9670;&nbsp;</a></span>Window_AcceptDamageRect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Window_AcceptDamageRect </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_rectangle.html">Rectangle</a> *&#160;</td>
+          <td class="paramname"><em>damage_rect</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy the passed rectangle to the window's clip rect collection, translating to local coordinates as it does so NOTE: the incoming rect is assumed to be using global, not window-local coordinates. </p>
+<p >Coordinates will be translated to window-local. Note: it is safe to pass non-intersecting rects to this function: it will check for non-intersection; will trim copy of clip to just the intersection </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">damage_rect</td><td>reference to the rectangle describing the coordinates to be added to the window as a clipping rect.. Coordinates of this rect must be global! </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns true if the passed rect has any intersection with the window. Returns false if not intersection, or on any error condition. </dd></dl>
+
+</div>
+</div>
+<a id="a0c78417665114d5f2f2a5a2936bf765f" name="a0c78417665114d5f2f2a5a2936bf765f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c78417665114d5f2f2a5a2936bf765f">&#9670;&nbsp;</a></span>Window_AddClipRect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Window_AddClipRect </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_rectangle.html">Rectangle</a> *&#160;</td>
+          <td class="paramname"><em>new_rect</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy the passed rectangle to the window's clip rect collection If the window already has the maximum allowed number of clip rects, the rectangle will not be added. </p>
+<p >NOTE: the incoming rect must be using window-local coordinates, not global. No translation will be performed. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">new_rect</td><td>reference to the rectangle describing the coordinates to be added to the window as a clipping rect. Coordinates of this rect must be window-local! Coordinates in rect are copied to window storage, so it is safe to free the rect after calling this function. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns true if rect is copied successfully. Returns false on any error, or if the window already had the maximum number of allowed clip rects. </dd></dl>
+
+</div>
+</div>
 <a id="a8b0d0004b11c05b168e151175363ce95" name="a8b0d0004b11c05b168e151175363ce95"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8b0d0004b11c05b168e151175363ce95">&#9670;&nbsp;</a></span>Window_AddControl()</h2>
 
@@ -267,8 +419,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
       </table>
 </div><div class="memdoc">
 
-<p>Add the passed control to the window's list of controls. </p>
-<dl class="section return"><dt>Returns</dt><dd>Returns false in any error condition </dd></dl>
+<p>Adds the passed control to the window's list of controls. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">the_control</td><td>reference to a valid <a class="el" href="struct_control.html" title="This structure describes an instantiated control on a window.">Control</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns false in any error condition </dd></dl>
 
 </div>
 </div>
@@ -353,7 +512,23 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
 </div><div class="memdoc">
 
 <p>Instantiate a new control of the type specified, and add it to the window's list of controls. </p>
-<dl class="section return"><dt>Returns</dt><dd>Returns a pointer to the new control, or NULL in any error condition </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">the_type</td><td>the type of control to be created. See the control_type enum definition. </td></tr>
+    <tr><td class="paramname">width</td><td>width, in pixels, of the control to be created </td></tr>
+    <tr><td class="paramname">height</td><td>height, in pixels, of the control to be created </td></tr>
+    <tr><td class="paramname">x_offset</td><td>horizontal offset, in pixels, from the left or right edge of the control, to the left or right edge of the parent rect, depending on the alignment choice </td></tr>
+    <tr><td class="paramname">y_offset</td><td>vertical offset, in pixels, from the top or bottom edge of the control, to the top or bottom edge of the parent rect, depending on the alignment choice </td></tr>
+    <tr><td class="paramname">the_h_align</td><td>horizontal alignment choice; determines if the control is located relative to the right or left edge of the parent rect, or is centered </td></tr>
+    <tr><td class="paramname">the_v_align</td><td>vertical alignment choice; determines if the control is located relative to the top or bottom edge of the parent rect, or is centered </td></tr>
+    <tr><td class="paramname">the_caption</td><td>optional string to be used as the caption for the control. Not all controls support captions. The string will be copied to the control's storage, so it is safe to free the string after calling this function. </td></tr>
+    <tr><td class="paramname">the_id</td><td>the unique ID (within the specified window) to be assigned to the control. WARNING: assigning multiple controls the same ID will result in undefined behavior. </td></tr>
+    <tr><td class="paramname">group_id</td><td>1 byte group ID value to be assigned to the control. Pass CONTROL_NO_GROUP if the control is not to be part of a group. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns a pointer to the new control, or NULL in any error condition </dd></dl>
 
 </div>
 </div>
@@ -396,7 +571,16 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
 </div><div class="memdoc">
 
 <p>Instantiate a new control from the passed template, and add it to the window's list of controls. </p>
-<dl class="section return"><dt>Returns</dt><dd>Returns a pointer to the new control, or NULL in any error condition </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">the_template</td><td>reference to a valid, populated <a class="el" href="struct_control_template.html" title="A structure that can be used to instantiate a ControlTemplate object instance in a window The Control...">ControlTemplate</a> object. The created control will take most of its properties from this template. </td></tr>
+    <tr><td class="paramname">the_id</td><td>the unique ID (within the specified window) to be assigned to the control. WARNING: assigning multiple controls the same ID will result in undefined behavior. </td></tr>
+    <tr><td class="paramname">group_id</td><td>1 byte group ID value to be assigned to the control. Pass CONTROL_NO_GROUP if the control is not to be part of a group. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns a pointer to the new control, or NULL in any error condition </dd></dl>
 
 </div>
 </div>
@@ -480,19 +664,90 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
 </div><div class="memdoc">
 
 <p>Blit each clip rect to the screen, and clear all clip rects when done This is the actual mechanics of rendering the window to the screen. </p>
-<p >Blit each clip rect to the screen, and clear all clip rects when done This is the actual mechanics of rendering the window to the screen.</p>
-<p >Blit each clip rect to the screen, and clear all clip rects when done This is the actual mechanics of rendering the window to the screen </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns true if there are either no clips to blit, or if there are clips and they are blitted successfully. Returns false on any error. </dd></dl>
 
 </div>
 </div>
-<a id="aa46b88f5600872b937c26f2a8e632ef0" name="aa46b88f5600872b937c26f2a8e632ef0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa46b88f5600872b937c26f2a8e632ef0">&#9670;&nbsp;</a></span>Window_CheckForDragZone()</h2>
+<a id="ad83be21c727b12f20835d47480dae26a" name="ad83be21c727b12f20835d47480dae26a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad83be21c727b12f20835d47480dae26a">&#9670;&nbsp;</a></span>Window_ChangeWindow()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">mouse_mode Window_CheckForDragZone </td>
+          <td class="memname">void Window_ChangeWindow </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>height</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>update_norm</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Change position and/or size of window NOTE: passed x, y will be checked against the window's min/max values Will also adjust the position of the built-in maximize/minimize/normsize controls. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">x</td><td>The new global horizontal position </td></tr>
+    <tr><td class="paramname">y</td><td>The new global vertical position </td></tr>
+    <tr><td class="paramname">width</td><td>The new width </td></tr>
+    <tr><td class="paramname">height</td><td>The new height </td></tr>
+    <tr><td class="paramname">update_norm</td><td>if true, the window's normal x/y/width/height properties will be updated to match the passed values. Pass false if setting maximize size, etc. </td></tr>
+  </table>
+  </dd>
+</dl>
+<p >will contain global rect of window before resize/move</p>
+
+</div>
+</div>
+<a id="a59249072b93ed7b4823ce6433ac85b73" name="a59249072b93ed7b4823ce6433ac85b73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59249072b93ed7b4823ce6433ac85b73">&#9670;&nbsp;</a></span>Window_CheckForDragZone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">MouseMode Window_CheckForDragZone </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
           <td class="paramname"><em>the_window</em>, </td>
@@ -523,6 +778,56 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
     <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
     <tr><td class="paramname">x</td><td>window-local horizontal coordinate </td></tr>
     <tr><td class="paramname">y</td><td>window-local vertical coordinate </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a49313d63417dc961f23f6fe759d69553" name="a49313d63417dc961f23f6fe759d69553"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49313d63417dc961f23f6fe759d69553">&#9670;&nbsp;</a></span>Window_ClearContent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Window_ClearContent </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clears the content area rect by filling it with the theme's backcolor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7d058388394655102535714c45df65e1" name="a7d058388394655102535714c45df65e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d058388394655102535714c45df65e1">&#9670;&nbsp;</a></span>Window_Destroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Window_Destroy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> **&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
   </table>
   </dd>
 </dl>
@@ -584,7 +889,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>: returns false on any error/invalid input. </dd></dl>
 
 </div>
 </div>
@@ -650,7 +955,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>: returns false on any error/invalid input. </dd></dl>
 
 </div>
 </div>
@@ -695,7 +1000,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>: returns false on any error/invalid input. </dd></dl>
 
 </div>
 </div>
@@ -784,7 +1089,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>: returns false on any error/invalid input. </dd></dl>
 
 </div>
 </div>
@@ -916,7 +1221,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>: returns false on any error/invalid input. </dd></dl>
 
 </div>
 </div>
@@ -989,7 +1294,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>returns a pointer to the first character in the string after which it stopped processing (if string is too long to be displayed in its entirety). Returns the original string if the entire string was processed successfully. Returns NULL in the event of any error. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>: returns a pointer to the first character in the string after which it stopped processing (if string is too long to be displayed in its entirety). Returns the original string if the entire string was processed successfully. Returns NULL in the event of any error. </dd></dl>
 
 </div>
 </div>
@@ -1034,7 +1339,65 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>: returns false on any error/invalid input. </dd></dl>
+
+</div>
+</div>
+<a id="a503e83466fb162d7bf80a01bb43f8553" name="a503e83466fb162d7bf80a01bb43f8553"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a503e83466fb162d7bf80a01bb43f8553">&#9670;&nbsp;</a></span>Window_EvaluateWindowChange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Window_EvaluateWindowChange </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t *&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t *&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t *&#160;</td>
+          <td class="paramname"><em>height</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Evaluate potential change to window position or size, and correct if out of allowed limits Negative value positions will be corrected to 0. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">x</td><td>Pointer to the proposed new horizontal position. If less than 0, it will be set to 0. </td></tr>
+    <tr><td class="paramname">y</td><td>Pointer to the proposed new vertical position. If less than 0, it will be set to 0. </td></tr>
+    <tr><td class="paramname">width</td><td>Pointer to the proposed new width. Will be set to window's minimum or maximum if necessary. </td></tr>
+    <tr><td class="paramname">height</td><td>Pointer to the proposed new height. Will be set to window's minimum or maximum if necessary. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1086,7 +1449,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>: returns false on any error/invalid input. </dd></dl>
 
 </div>
 </div>
@@ -1131,7 +1494,246 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>: returns false on any error/invalid input. </dd></dl>
+
+</div>
+</div>
+<a id="a27c9d4c4c25556442f0ebef99313d104" name="a27c9d4c4c25556442f0ebef99313d104"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27c9d4c4c25556442f0ebef99313d104">&#9670;&nbsp;</a></span>Window_GenerateDamageRects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Window_GenerateDamageRects </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_rectangle.html">Rectangle</a> *&#160;</td>
+          <td class="paramname"><em>the_old_rect</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate damage rects, if any, caused by window moving or being resized NOTE: it is not necessarily an error condition if a given window doesn't end up with damage rects as a result of this operation: if the window rect doesn't intersect the incoming rect, no damage is relevant. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">the_old_rect</td><td>reference to the rectangle to be checked for overlap with the specified window. Coordinates of this rect must be global! </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns true if 1 or more damage rects were created. Returns false on any error condition, or if no damage rects needed to be created. </dd></dl>
+
+</div>
+</div>
+<a id="a526f1e6df0a6f11c48f721d7c4e850c9" name="a526f1e6df0a6f11c48f721d7c4e850c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a526f1e6df0a6f11c48f721d7c4e850c9">&#9670;&nbsp;</a></span>Window_GetBitmap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_bitmap.html">Bitmap</a> * Window_GetBitmap </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the bitmap object used as the offscreen buffer for the window NOTE: this is not a pointer into VRAM, or directly to the screen. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns a pointer to the bitmap used by the window. Returns NULL in any error condition. </dd></dl>
+
+</div>
+</div>
+<a id="aac5ee4d79be17911c608f736f8a23c0e" name="aac5ee4d79be17911c608f736f8a23c0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac5ee4d79be17911c608f736f8a23c0e">&#9670;&nbsp;</a></span>Window_GetControl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_control.html">Control</a> * Window_GetControl </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>the_control_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return a pointer to the control owned by the window that matches the specified ID NOTE: <a class="el" href="struct_control.html" title="This structure describes an instantiated control on a window.">Control</a> IDs 0-3 are reserved by the system for standard controls (close, minimize, etc.). </p>
+<p >Other control IDs are specified by the programmer for each window. <a class="el" href="struct_control.html" title="This structure describes an instantiated control on a window.">Control</a> IDs are not global, they are window-specific. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">the_control_id</td><td>ID of the control that you want to find </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns a pointer to the control with the ID passed, or NULL if no match found, or on any error condition </dd></dl>
+
+</div>
+</div>
+<a id="aa803e44ea1836cd957f6177544f876e0" name="aa803e44ea1836cd957f6177544f876e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa803e44ea1836cd957f6177544f876e0">&#9670;&nbsp;</a></span>Window_GetControlAtXY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_control.html">Control</a> * Window_GetControlAtXY </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Find the control, if any, located at the specified local coordinates Transparency is not taken into account: if the passed coordinate intersects the control's rectangle at any point, it is considered a match. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">x</td><td>window-local horizontal coordinate </td></tr>
+    <tr><td class="paramname">y</td><td>window-local vertical coordinate </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns a pointer to the control at the passed coordinates, or NULL if no match found, or on any error condition </dd></dl>
+
+</div>
+</div>
+<a id="a0d911f939dacc0de1aa273a5099d702b" name="a0d911f939dacc0de1aa273a5099d702b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d911f939dacc0de1aa273a5099d702b">&#9670;&nbsp;</a></span>Window_GetControlID()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t Window_GetControlID </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_control.html">Control</a> *&#160;</td>
+          <td class="paramname"><em>the_control</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the ID of the control passed, if the window actually owns that control NOTE: <a class="el" href="struct_control.html" title="This structure describes an instantiated control on a window.">Control</a> IDs 0-3 are reserved by the system for standard controls (close, minimize, etc.). </p>
+<p >Other control IDs are specified by the programmer for each window. <a class="el" href="struct_control.html" title="This structure describes an instantiated control on a window.">Control</a> IDs are not global, they are window-specific. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">the_control</td><td>Pointer to the control whose ID you want to find </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns the ID of the control, or CONTROL_ID_NOT_FOUND if no match found, or CONTROL_ID_ERROR on any error condition </dd></dl>
+
+</div>
+</div>
+<a id="a8a18ccc5070e58bf098dd11764042032" name="a8a18ccc5070e58bf098dd11764042032"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a18ccc5070e58bf098dd11764042032">&#9670;&nbsp;</a></span>Window_GetHeight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int16_t Window_GetHeight </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the height of the window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns -1 in any error condition. </dd></dl>
+
+</div>
+</div>
+<a id="a15ad33cabfaa482929e4cf8cc95eab9d" name="a15ad33cabfaa482929e4cf8cc95eab9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15ad33cabfaa482929e4cf8cc95eab9d">&#9670;&nbsp;</a></span>Window_GetLastControl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_control.html">Control</a> * Window_GetLastControl </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Find and return the last control in the window's chain of controls This corresponds to the first control with a NULL value for next_. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1151,9 +1753,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
       </table>
 </div><div class="memdoc">
 
-<p>Allocate and populate a new window template object Ensures that all fields have appropriate default values Calling method must free this after creating a window with it. </p>
-<p ><br  />
- </p>
+<p>Allocate and populate a new window template object Assigns (but does not copy) the passed title string; leaves bitmaps NULL; assigns the pre-defined default value to all other fields Calling method must free the returned <a class="el" href="struct_new_win_template.html">NewWinTemplate</a> pointer after creating a window with it. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_win_title</td><td>pointer to the string that will be assigned to the title_ property. No copy or allocation will take place. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: A <a class="el" href="struct_new_win_template.html">NewWinTemplate</a> with all values set to default, or NULL on any error condition </dd></dl>
 
 </div>
 </div>
@@ -1174,7 +1781,538 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
 </div><div class="memdoc">
 
 <p>Get the control listed as the currently selected control. </p>
-<dl class="section return"><dt>Returns</dt><dd>Returns a control pointer, or NULL on any error, or if there is no selected control currently </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns a control pointer, or NULL on any error, or if there is no selected control currently </dd></dl>
+
+</div>
+</div>
+<a id="a0deb10f4f9de60834c83ae843b8dc89e" name="a0deb10f4f9de60834c83ae843b8dc89e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0deb10f4f9de60834c83ae843b8dc89e">&#9670;&nbsp;</a></span>Window_GetState()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">window_state Window_GetState </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the window's state (maximized, minimized, etc.) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns a window_state enum. Returns WIN_UNKNOWN_STATE in any error condition. </dd></dl>
+
+</div>
+</div>
+<a id="a05e369a1c4a3457250961f914e7b4564" name="a05e369a1c4a3457250961f914e7b4564"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05e369a1c4a3457250961f914e7b4564">&#9670;&nbsp;</a></span>Window_GetTitle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * Window_GetTitle </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get a pointer to the current window title Note: It is not guaranteed that every window will have a title. </p>
+<p >Backdrop windows, for example, do not have a title. Note: the window title is maintained by the window. Do not free the string pointer returned by this function! </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns a pointer to the title string. Returns NULL in any error condition. </dd></dl>
+
+</div>
+</div>
+<a id="a0b2b31f9d6cdc08f7dec20f8c4a90b2b" name="a0b2b31f9d6cdc08f7dec20f8c4a90b2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b2b31f9d6cdc08f7dec20f8c4a90b2b">&#9670;&nbsp;</a></span>Window_GetType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">window_type Window_GetType </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the window's type (normal, backdrop, dialog, etc.) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns a window_type enum. Returns WIN_UNKNOWN_TYPE in any error condition. </dd></dl>
+
+</div>
+</div>
+<a id="ad663b8813835c2c5be3cebb135ef6672" name="ad663b8813835c2c5be3cebb135ef6672"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad663b8813835c2c5be3cebb135ef6672">&#9670;&nbsp;</a></span>Window_GetUserData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t Window_GetUserData </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the value stored in the user data field of the window. </p>
+<p >NOTE: this field is for the exclusive use of application programs. The system will not act on this data in any way: you are free to store whatever 4-byte value you want here. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns an unsigned 32 bit value. Returns 0 in any error condition. </dd></dl>
+
+</div>
+</div>
+<a id="abe736fa0770039114a79602ccc5e23d4" name="abe736fa0770039114a79602ccc5e23d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe736fa0770039114a79602ccc5e23d4">&#9670;&nbsp;</a></span>Window_GetWidth()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int16_t Window_GetWidth </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the width of the window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns -1 in any error condition. </dd></dl>
+
+</div>
+</div>
+<a id="a96ff52a29523c87c3d17cf8463920e52" name="a96ff52a29523c87c3d17cf8463920e52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96ff52a29523c87c3d17cf8463920e52">&#9670;&nbsp;</a></span>Window_GetX()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int16_t Window_GetX </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the global horizontal coordinate of the window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns the horizontal portion of the upper-left coordinate of the window. Returns -1 in any error condition. </dd></dl>
+
+</div>
+</div>
+<a id="ab41d0f16fc6251732973de9a2abd8d7b" name="ab41d0f16fc6251732973de9a2abd8d7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab41d0f16fc6251732973de9a2abd8d7b">&#9670;&nbsp;</a></span>Window_GetY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int16_t Window_GetY </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the global vertical coordinate of the window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns the vertical portion of the upper-left coordinate of the window. Returns -1 in any error condition. </dd></dl>
+
+</div>
+</div>
+<a id="ae2c60be4c22336cfff4ce569ae54a5ef" name="ae2c60be4c22336cfff4ce569ae54a5ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2c60be4c22336cfff4ce569ae54a5ef">&#9670;&nbsp;</a></span>Window_GlobalToLocal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Window_GlobalToLocal </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t *&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convert the passed x, y global coordinates to local (to window) coordinates. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">x</td><td>the global horizontal position to be converted to window-local. </td></tr>
+    <tr><td class="paramname">y</td><td>the global vertical position to be converted to window-local. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0ae435c3af3ee34dc89c61f54b48afe7" name="a0ae435c3af3ee34dc89c61f54b48afe7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ae435c3af3ee34dc89c61f54b48afe7">&#9670;&nbsp;</a></span>Window_Invalidate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Window_Invalidate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Mark entire window as invalidated This will cause it to be redrawn and fully reblitted in the next render cycle. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8f72140d3e7a5b7e632bd8abb0328e99" name="a8f72140d3e7a5b7e632bd8abb0328e99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f72140d3e7a5b7e632bd8abb0328e99">&#9670;&nbsp;</a></span>Window_InvalidateControlByID()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Window_InvalidateControlByID </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>the_control_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Invalidate the control matching the ID passed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">the_control_id</td><td>ID of the control that you want to invalidate </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab6fb4dde75e63fc4e0dfa6374af59885" name="ab6fb4dde75e63fc4e0dfa6374af59885"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6fb4dde75e63fc4e0dfa6374af59885">&#9670;&nbsp;</a></span>Window_InvalidateTitlebar()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Window_InvalidateTitlebar </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Invalidate the title bar and the controls in the title bar Call when switching from inactive to active window, and vice versa, to force controls and title bar to redraw appropriately. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1217a89992fbc2380cc452daa8696f23" name="a1217a89992fbc2380cc452daa8696f23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1217a89992fbc2380cc452daa8696f23">&#9670;&nbsp;</a></span>Window_IsActive()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Window_IsActive </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the active/inactive condition of the window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns true if window is active, false if not </dd></dl>
+
+</div>
+</div>
+<a id="a4500bd2eb027dfdc29027237dd1b67af" name="a4500bd2eb027dfdc29027237dd1b67af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4500bd2eb027dfdc29027237dd1b67af">&#9670;&nbsp;</a></span>Window_IsBackdrop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Window_IsBackdrop </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if a window is a backdrop window or a regular window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns true if backdrop, false if not </dd></dl>
+
+</div>
+</div>
+<a id="a4a4138b516a4315dcc02178b233afa81" name="a4a4138b516a4315dcc02178b233afa81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a4138b516a4315dcc02178b233afa81">&#9670;&nbsp;</a></span>Window_IsVisible()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Window_IsVisible </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if a window should be visible or not NOTE: this does not necessarily mean the window isn't currently rendered to the screen. </p>
+<p >This indicates if it will or won't be after the next render pass. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns true if window should be rendered, false if not </dd></dl>
+
+</div>
+</div>
+<a id="aff15b5181e47d364fe9ae7193fc7ed37" name="aff15b5181e47d364fe9ae7193fc7ed37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff15b5181e47d364fe9ae7193fc7ed37">&#9670;&nbsp;</a></span>Window_LocalToGlobal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Window_LocalToGlobal </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t *&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convert the passed x, y local coordinates to global coordinates. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>the window-local horizontal position to be converted to global. </td></tr>
+    <tr><td class="paramname">y</td><td>the window-local vertical position to be converted to global. </td></tr>
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="addad5d1b415319d4f59f508a0604a6c2" name="addad5d1b415319d4f59f508a0604a6c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#addad5d1b415319d4f59f508a0604a6c2">&#9670;&nbsp;</a></span>Window_Maximize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Window_Maximize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the window to full-screen size (maximize mode) Sets window's x, y, width, height parameters to match those of the screen. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3f79996e24465fa14b2b1abe5193df9e" name="a3f79996e24465fa14b2b1abe5193df9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f79996e24465fa14b2b1abe5193df9e">&#9670;&nbsp;</a></span>Window_MergeClipRects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Window_MergeClipRects </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Merge and de-duplicate clip rects Consolidating the clip rects will happen reduce unnecessary reblitting. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa92c11bc1e8ba08c600c5c9c3284c83b" name="aa92c11bc1e8ba08c600c5c9c3284c83b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa92c11bc1e8ba08c600c5c9c3284c83b">&#9670;&nbsp;</a></span>Window_Minimize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Window_Minimize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Hides the window (minimize mode) Does not change the window's x, y, width, height parameters, it just makes it invisible. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1209,6 +2347,119 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
   <table class="params">
     <tr><td class="paramname">the_win_template</td><td>a populated new window template whose data will be used to create the new window object </td></tr>
     <tr><td class="paramname">event_handler</td><td>pointer to the function that will handle all events for the window. This function will be called when the system detects an event associated with the window. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6734ebb21ea802588f95b877bb158e5a" name="a6734ebb21ea802588f95b877bb158e5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6734ebb21ea802588f95b877bb158e5a">&#9670;&nbsp;</a></span>Window_NormSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Window_NormSize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the window to normal size (window-size mode) Sets window's x, y, width, height parameters to those stored in norm_x, etc. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae8f3e88b7fdb76d862817e557765ccbc" name="ae8f3e88b7fdb76d862817e557765ccbc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8f3e88b7fdb76d862817e557765ccbc">&#9670;&nbsp;</a></span>Window_Print()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Window_Print </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab8709807e37fd1fa98e2f2f0c1204f73" name="ab8709807e37fd1fa98e2f2f0c1204f73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8709807e37fd1fa98e2f2f0c1204f73">&#9670;&nbsp;</a></span>Window_Render()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Window_Render </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Draw/re-draw any necessary components, and blit the window (or parts of it, via cliprects) to the screen. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4c867b3623de29bc967fed6be0453500" name="a4c867b3623de29bc967fed6be0453500"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c867b3623de29bc967fed6be0453500">&#9670;&nbsp;</a></span>Window_SetActive()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Window_SetActive </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>is_active</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the passed window's active flag. </p>
+<p >NOTE: This does not immediately cause the window to render as active or inactive, but it does invalidate the title bar so that it re-renders in the next render pass. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">is_active</td><td>set to true if window is now considered the active window, false if not </td></tr>
   </table>
   </dd>
 </dl>
@@ -1250,6 +2501,43 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns false on any error condition </dd></dl>
+
+</div>
+</div>
+<a id="a92819b05a6056984a75b9635f851816c" name="a92819b05a6056984a75b9635f851816c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92819b05a6056984a75b9635f851816c">&#9670;&nbsp;</a></span>Window_SetDisplayOrder()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Window_SetDisplayOrder </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int8_t&#160;</td>
+          <td class="paramname"><em>the_display_order</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the display order of the window NOTE: This does not immediately re-render or change the display order visibly. </p>
+<p >WARNING: This function is designed to be called by the system only: do not use this </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object </td></tr>
+    <tr><td class="paramname">the_display_order</td><td>the new display order value for the window </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1415,7 +2703,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>returns false on any error/invalid input. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>: returns false on any error/invalid input. </dd></dl>
 
 </div>
 </div>
@@ -1445,8 +2733,89 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
       </table>
 </div><div class="memdoc">
 
-<p>Set the passed control as the currently selected control and unselect any previously selected control. </p>
-<dl class="section return"><dt>Returns</dt><dd>Returns false on any error </dd></dl>
+<p>Sets the passed control as the currently selected control and unselects any previously selected control. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">the_control</td><td>reference to a valid <a class="el" href="struct_control.html" title="This structure describes an instantiated control on a window.">Control</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns false on any error </dd></dl>
+
+</div>
+</div>
+<a id="a409bdc564f16c800f4ce1d0094d68b58" name="a409bdc564f16c800f4ce1d0094d68b58"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a409bdc564f16c800f4ce1d0094d68b58">&#9670;&nbsp;</a></span>Window_SetState()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Window_SetState </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">window_state&#160;</td>
+          <td class="paramname"><em>the_state</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the window's state (maximized, minimized, etc.) NOTE: This does not immediately cause the window to render in the passed state. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">the_state</td><td>the new state </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad41c4e19641204a8971dd78920707fdf" name="ad41c4e19641204a8971dd78920707fdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad41c4e19641204a8971dd78920707fdf">&#9670;&nbsp;</a></span>Window_SetTitle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Window_SetTitle </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>the_title</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Replace the current window title with the passed string Note: the passed string will be copied into storage by the window. </p>
+<p >The passing function is free to dispose of the passed string after calling this function. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">the_title</td><td>string containing the new title for the window. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1476,8 +2845,40 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Window_LocalToGlobal<
       </table>
 </div><div class="memdoc">
 
-<p>Set the passed window's visibility flag. </p>
-<p >This does not immediately cause the window to render. The window will be rendered on the next system rendering pass. </p>
+<p>Set the window's visibility flag. </p>
+<p >NOTE: This does not immediately cause the window to render. The window will be rendered on the next system rendering pass. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+    <tr><td class="paramname">is_visible</td><td>set to true if window should be rendered in the next pass, false if not </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a908f9db4f3ba5322da3cb8f08de707bd" name="a908f9db4f3ba5322da3cb8f08de707bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a908f9db4f3ba5322da3cb8f08de707bd">&#9670;&nbsp;</a></span>Window_UpdateTheme()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Window_UpdateTheme </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_window.html">Window</a> *&#160;</td>
+          <td class="paramname"><em>the_window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Updates the current window controls, etc., to match the current system theme. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the_window</td><td>reference to a valid <a class="el" href="struct_window.html">Window</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

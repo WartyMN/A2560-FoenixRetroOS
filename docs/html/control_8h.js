@@ -13,6 +13,7 @@ var control_8h =
       [ "RESERVED2x", "control_8h.html#a8d0ec0ac6c53b09d8759c8c35b96434dae84025be35047daa35f8259a69917256", null ],
       [ "RESERVED3x", "control_8h.html#a8d0ec0ac6c53b09d8759c8c35b96434da3a0579588ea3a583585be078a7fa1bf2", null ]
     ] ],
+    [ "Control_AlignToParentRect", "control_8h.html#ad9f00ea73c6593af13c24acbaf5393db", null ],
     [ "Control_GetID", "control_8h.html#a46769dd3cce2ceb0afa3753e9ec931ca", null ],
     [ "Control_GetNextControl", "control_8h.html#a519db2f8ec577bc575f6fc0f19f97fa5", null ],
     [ "Control_GetPressed", "control_8h.html#a9644b583bb48e954eb0fdb86e2a1a6ba", null ],

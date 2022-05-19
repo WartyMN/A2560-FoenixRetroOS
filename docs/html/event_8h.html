@@ -99,12 +99,11 @@ $(document).ready(function(){initNavTree('event_8h.html',''); initResizable(); }
 <div class="contents">
 <div class="textblock"><code>#include &lt;stdbool.h&gt;</code><br />
 <code>#include &lt;mcp/syscalls.h&gt;</code><br />
-<code>#include &lt;mb/a2560_platform.h&gt;</code><br />
-<code>#include &lt;mb/general.h&gt;</code><br />
-<code>#include &lt;mb/text.h&gt;</code><br />
-<code>#include &lt;mb/bitmap.h&gt;</code><br />
-<code>#include &lt;mb/window.h&gt;</code><br />
-<code>#include &lt;mb/lib_sys.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="general_8h_source.html">general.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="text_8h_source.html">text.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="bitmap_8h_source.html">bitmap.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="window_8h_source.html">window.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="lib__sys_8h_source.html">lib_sys.h</a>&quot;</code><br />
 </div>
 <p><a href="event_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -125,6 +124,10 @@ Functions</h2></td></tr>
 <a class="el" href="struct_event_manager.html">EventManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>EventManager_New</b> (void)</td></tr>
 <tr class="memdesc:acf07ba63a69007bb91d0067a46d20ed2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate an <a class="el" href="struct_event_manager.html">EventManager</a> object. <br /></td></tr>
 <tr class="separator:acf07ba63a69007bb91d0067a46d20ed2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0657d799e0fb9ac636c840917874bbcd"><td class="memItemLeft" align="right" valign="top"><a id="a0657d799e0fb9ac636c840917874bbcd" name="a0657d799e0fb9ac636c840917874bbcd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>EventManager_RemoveEventsForWindow</b> (<a class="el" href="struct_window.html">Window</a> *the_window)</td></tr>
+<tr class="memdesc:a0657d799e0fb9ac636c840917874bbcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Nulls out any events associated with the window pointer passed Call this when a window has been closed, to ensure that there are not future events that will try to recall the window after it is destroyed. <br /></td></tr>
+<tr class="separator:a0657d799e0fb9ac636c840917874bbcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9701a53a907a72002b4675b702015f88"><td class="memItemLeft" align="right" valign="top"><a id="a9701a53a907a72002b4675b702015f88" name="a9701a53a907a72002b4675b702015f88"></a>
 <a class="el" href="struct_event_record.html">EventRecord</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>EventManager_NextEvent</b> (void)</td></tr>
 <tr class="memdesc:a9701a53a907a72002b4675b702015f88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks to see if there is an event in the queue returns NULL if no event (not the same as returning an event of type nullEvent) <br /></td></tr>
@@ -132,10 +135,10 @@ Functions</h2></td></tr>
 <tr class="memitem:ae5744033a61b1efd7fff24e7b151587b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="event_8h.html#ae5744033a61b1efd7fff24e7b151587b">EventManager_AddEvent</a> (event_kind the_what, uint32_t the_code, int16_t x, int16_t y, event_modifiers the_modifiers, <a class="el" href="struct_window.html">Window</a> *the_window, <a class="el" href="struct_control.html">Control</a> *the_control)</td></tr>
 <tr class="memdesc:ae5744033a61b1efd7fff24e7b151587b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new event to the event queue NOTE: this does not actually insert a new record, as the event queue is a circular buffer It overwrites whatever slot is next in line.  <a href="event_8h.html#ae5744033a61b1efd7fff24e7b151587b">More...</a><br /></td></tr>
 <tr class="separator:ae5744033a61b1efd7fff24e7b151587b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2267e55733d0ac91a751ff4984a41692"><td class="memItemLeft" align="right" valign="top"><a id="a2267e55733d0ac91a751ff4984a41692" name="a2267e55733d0ac91a751ff4984a41692"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>EventManager_WaitForEvent</b> (event_mask the_mask)</td></tr>
-<tr class="memdesc:a2267e55733d0ac91a751ff4984a41692"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait for an event to happen, do system-processing of it, then if appropriate, give the window responsible for the event a chance to do something with it. <br /></td></tr>
-<tr class="separator:a2267e55733d0ac91a751ff4984a41692"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5780fc80f9b9dfcf6ece825aaa4848fd"><td class="memItemLeft" align="right" valign="top"><a id="a5780fc80f9b9dfcf6ece825aaa4848fd" name="a5780fc80f9b9dfcf6ece825aaa4848fd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>EventManager_WaitForEvent</b> (void)</td></tr>
+<tr class="memdesc:a5780fc80f9b9dfcf6ece825aaa4848fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait for an event to happen, do system-processing of it, then if appropriate, give the window responsible for the event a chance to do something with it. <br /></td></tr>
+<tr class="separator:a5780fc80f9b9dfcf6ece825aaa4848fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ae5744033a61b1efd7fff24e7b151587b" name="ae5744033a61b1efd7fff24e7b151587b"></a>

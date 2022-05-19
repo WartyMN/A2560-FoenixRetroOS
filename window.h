@@ -111,11 +111,11 @@ typedef enum window_state
 
 typedef enum window_base_control_id
 {
-	CLOSE_WIDGET_ID		= 0,
-	MINIMIZE_WIDGET_ID 	= 1,
-	NORM_SIZE_WIDGET_ID	= 2,
-	MAXIMIZE_WIDGET_ID	= 3,
-	MAX_BUILT_IN_WIDGET	= 4,
+	CLOSE_WIDGET_ID			= 0,
+	MINIMIZE_WIDGET_ID 		= 1,
+	NORM_SIZE_WIDGET_ID		= 2,
+	MAXIMIZE_WIDGET_ID		= 3,
+	MAX_BUILT_IN_WIDGET		= 4,
 } window_base_control_id;
 
 
@@ -262,11 +262,14 @@ Window* Window_New(NewWinTemplate* the_win_template, void (* event_handler)(Even
 
 // destructor
 // frees all allocated memory associated with the passed object, and the object itself
+//! @param	the_window: reference to a valid Window object.
 bool Window_Destroy(Window** the_window);
 
 //! Allocate and populate a new window template object
-//! Ensures that all fields have appropriate default values
-//! Calling method must free this after creating a window with it. 
+//! Assigns (but does not copy) the passed title string; leaves bitmaps NULL; assigns the pre-defined default value to all other fields
+//! Calling method must free the returned NewWinTemplate pointer after creating a window with it.
+//! @param	the_win_title: pointer to the string that will be assigned to the title_ property. No copy or allocation will take place.
+//! @return:	A NewWinTemplate with all values set to default, or NULL on any error condition
 NewWinTemplate* Window_GetNewWinTemplate(char* the_win_title);
 
 
@@ -274,23 +277,36 @@ NewWinTemplate* Window_GetNewWinTemplate(char* the_win_title);
 // **** CLIP RECT MANAGEMENT functions *****
 
 //! Copy the passed rectangle to the window's clip rect collection
+//! If the window already has the maximum allowed number of clip rects, the rectangle will not be added.
+//! NOTE: the incoming rect must be using window-local coordinates, not global. No translation will be performed.
+//! @param	the_window: reference to a valid Window object.
+//! @param	new_rect: reference to the rectangle describing the coordinates to be added to the window as a clipping rect. Coordinates of this rect must be window-local! Coordinates in rect are copied to window storage, so it is safe to free the rect after calling this function.
+//! @return:	Returns true if rect is copied successfully. Returns false on any error, or if the window already had the maximum number of allowed clip rects.
 bool Window_AddClipRect(Window* the_window, Rectangle* new_rect);
 
 //! Merge and de-duplicate clip rects
 //! Consolidating the clip rects will happen reduce unnecessary reblitting
+//! @param	the_window: reference to a valid Window object.
 bool Window_MergeClipRects(Window* the_window);
 
 //! Blit each clip rect to the screen, and clear all clip rects when done
 //! This is the actual mechanics of rendering the window to the screen
+//! @param	the_window: reference to a valid Window object.
+//! @return:	Returns true if there are either no clips to blit, or if there are clips and they are blitted successfully. Returns false on any error.
 bool Window_BlitClipRects(Window* the_window);
 
 //! Calculate damage rects, if any, caused by window moving or being resized
-//! @return:	Returns true if 1 or more damage rects were created
+//! NOTE: it is not necessarily an error condition if a given window doesn't end up with damage rects as a result of this operation: if the window rect doesn't intersect the incoming rect, no damage is relevant.
+//! @param	the_window: reference to a valid Window object.
+//! @param	the_old_rect: reference to the rectangle to be checked for overlap with the specified window. Coordinates of this rect must be global!
+//! @return:	Returns true if 1 or more damage rects were created. Returns false on any error condition, or if no damage rects needed to be created.
 bool Window_GenerateDamageRects(Window* the_window, Rectangle* the_old_rect);
 
-//! Copy the passed rectangle to the window's clip rect collection
-//! Note: will check for non-intersection; will trim copy of clip to just the intersection
-//! Note: it is safe to pass non-intersecting rects to this function
+//! Copy the passed rectangle to the window's clip rect collection, translating to local coordinates as it does so
+//! NOTE: the incoming rect is assumed to be using global, not window-local coordinates. Coordinates will be translated to window-local. 
+//! Note: it is safe to pass non-intersecting rects to this function: it will check for non-intersection; will trim copy of clip to just the intersection
+//! @param	the_window: reference to a valid Window object.
+//! @param	damage_rect: reference to the rectangle describing the coordinates to be added to the window as a clipping rect.. Coordinates of this rect must be global!
 //! @return:	Returns true if the passed rect has any intersection with the window. Returns false if not intersection, or on any error condition.
 bool Window_AcceptDamageRect(Window* the_window, Rectangle* damage_rect);
 
@@ -310,74 +326,124 @@ MouseMode Window_CheckForDragZone(Window* the_window, int16_t x, int16_t y);
 
 // **** CONTROL MANAGEMENT functions *****
 
-bool Window_SetControlState(Window* the_window, uint16_t the_control_id);
-
-//! Set the passed control as the currently selected control and unselect any previously selected control
-//! @return	Returns false on any error
+//! Sets the passed control as the currently selected control and unselects any previously selected control
+//! @param	the_window: reference to a valid Window object.
+//! @param	the_control: reference to a valid Control object.
+//! @return:	Returns false on any error
 bool Window_SetSelectedControl(Window* the_window, Control* the_control);
 
-//! Add the passed control to the window's list of controls
-//! @return	Returns false in any error condition
+//! Adds the passed control to the window's list of controls
+//! @param	the_window: reference to a valid Window object.
+//! @param	the_control: reference to a valid Control object.
+//! @return:	Returns false in any error condition
 bool Window_AddControl(Window* the_window, Control* the_control);
 
 //! Instantiate a new control from the passed template, and add it to the window's list of controls
-//! @return	Returns a pointer to the new control, or NULL in any error condition
+//! @param	the_window: reference to a valid Window object.
+//! @param	the_template: reference to a valid, populated ControlTemplate object. The created control will take most of its properties from this template.
+//! @param	the_id: the unique ID (within the specified window) to be assigned to the control. WARNING: assigning multiple controls the same ID will result in undefined behavior.
+//! @param	group_id: 1 byte group ID value to be assigned to the control. Pass CONTROL_NO_GROUP if the control is not to be part of a group.
+//! @return:	Returns a pointer to the new control, or NULL in any error condition
 Control* Window_AddNewControlFromTemplate(Window* the_window, ControlTemplate* the_template, uint16_t the_id, uint16_t group_id);
 
 //! Instantiate a new control of the type specified, and add it to the window's list of controls
-//! @return	Returns a pointer to the new control, or NULL in any error condition
+//! @param	the_window: reference to a valid Window object.
+//! @param	the_type: the type of control to be created. See the control_type enum definition.
+//! @param	width: width, in pixels, of the control to be created
+//! @param	height: height, in pixels, of the control to be created
+//! @param	x_offset: horizontal offset, in pixels, from the left or right edge of the control, to the left or right edge of the parent rect, depending on the alignment choice
+//! @param	y_offset: vertical offset, in pixels, from the top or bottom edge of the control, to the top or bottom edge of the parent rect, depending on the alignment choice
+//! @param	the_h_align: horizontal alignment choice; determines if the control is located relative to the right or left edge of the parent rect, or is centered
+//! @param	the_v_align: vertical alignment choice; determines if the control is located relative to the top or bottom edge of the parent rect, or is centered
+//! @param	the_caption: optional string to be used as the caption for the control. Not all controls support captions. The string will be copied to the control's storage, so it is safe to free the string after calling this function.
+//! @param	the_id: the unique ID (within the specified window) to be assigned to the control. WARNING: assigning multiple controls the same ID will result in undefined behavior.
+//! @param	group_id: 1 byte group ID value to be assigned to the control. Pass CONTROL_NO_GROUP if the control is not to be part of a group.
+//! @return:	Returns a pointer to the new control, or NULL in any error condition
 Control* Window_AddNewControl(Window* the_window, control_type the_type, int16_t width, int16_t height, int16_t x_offset, int16_t y_offset, h_align_type the_h_align, v_align_type the_v_align, char* the_caption, uint16_t the_id, uint16_t group_id);
 
 //! Invalidate the title bar and the controls in the title bar
 //! Call when switching from inactive to active window, and vice versa, to force controls and title bar to redraw appropriately
+//! @param	the_window: reference to a valid Window object.
 void Window_InvalidateTitlebar(Window* the_window);
 
 //! Invalidate the control matching the ID passed
+//! @param	the_window: reference to a valid Window object.
+//! @param	the_control_id: ID of the control that you want to invalidate
 void Window_InvalidateControlByID(Window* the_window, uint16_t the_control_id);
 
 
 
-Control* Window_GetRootControl(Window* the_window);
-
 //! Get the control listed as the currently selected control.
-//! @return	Returns a control pointer, or NULL on any error, or if there is no selected control currently
+//! @param	the_window: reference to a valid Window object.
+//! @return:	Returns a control pointer, or NULL on any error, or if there is no selected control currently
 Control* Window_GetSelectedControl(Window* the_window);
-
 
 //! Find and return the last control in the window's chain of controls
 //! This corresponds to the first control with a NULL value for next_
+//! @param	the_window: reference to a valid Window object.
 Control* Window_GetLastControl(Window* the_window);
 
+//! Return a pointer to the control owned by the window that matches the specified ID
+//! NOTE: Control IDs 0-3 are reserved by the system for standard controls (close, minimize, etc.). Other control IDs are specified by the programmer for each window. Control IDs are not global, they are window-specific.
+//! @param	the_window: reference to a valid Window object.
+//! @param	the_control_id: ID of the control that you want to find
+//! @return:	Returns a pointer to the control with the ID passed, or NULL if no match found, or on any error condition
 Control* Window_GetControl(Window* the_window, uint16_t the_control_id);
+
+//! Return the ID of the control passed, if the window actually owns that control
+//! NOTE: Control IDs 0-3 are reserved by the system for standard controls (close, minimize, etc.). Other control IDs are specified by the programmer for each window. Control IDs are not global, they are window-specific.
+//! @param	the_window: reference to a valid Window object.
+//! @param	the_control: Pointer to the control whose ID you want to find
+//! @return:	Returns the ID of the control, or CONTROL_ID_NOT_FOUND if no match found, or CONTROL_ID_ERROR on any error condition
 uint16_t Window_GetControlID(Window* the_window, Control* the_control);
 
-//! Find the Control under the mouse
+//! Find the control, if any, located at the specified local coordinates
+//! Transparency is not taken into account: if the passed coordinate intersects the control's rectangle at any point, it is considered a match
+//! @param	the_window: reference to a valid Window object.
+//! @param	x: window-local horizontal coordinate
+//! @param	y: window-local vertical coordinate
+//! @return:	Returns a pointer to the control at the passed coordinates, or NULL if no match found, or on any error condition
 Control* Window_GetControlAtXY(Window* the_window, int16_t x, int16_t y);
+
 
 
 // **** Set functions *****
 
 
-// replace the current window title with the passed string
-// Note: the passed string will be copied into storage by the window. The passing function can dispose of the passed string when done.
+//! Replace the current window title with the passed string
+//! Note: the passed string will be copied into storage by the window. The passing function is free to dispose of the passed string after calling this function.
+//! @param	the_window: reference to a valid Window object.
+//! @param	the_title: string containing the new title for the window.
 void Window_SetTitle(Window* the_window, char* the_title);
 
-//! Set the passed window's visibility flag.
-//! This does not immediately cause the window to render. The window will be rendered on the next system rendering pass.
+//! Set the window's visibility flag.
+//! NOTE: This does not immediately cause the window to render. The window will be rendered on the next system rendering pass.
+//! @param	the_window: reference to a valid Window object.
+//! @param	is_visible: set to true if window should be rendered in the next pass, false if not
 void Window_SetVisible(Window* the_window, bool is_visible);
 
 //! Set the display order of the window
-//! Consider this a system-only function: do not use this
+//! NOTE: This does not immediately re-render or change the display order visibly.
+//! WARNING: This function is designed to be called by the system only: do not use this
+//! @param	the_window: reference to a valid Window object
+//! @param	the_display_order: the new display order value for the window
 void Window_SetDisplayOrder(Window* the_window, int8_t the_display_order);
 
 //! Set the passed window's active flag.
+//! NOTE: This does not immediately cause the window to render as active or inactive, but it does invalidate the title bar so that it re-renders in the next render pass.
+//! @param	the_window: reference to a valid Window object.
+//! @param	is_active: set to true if window is now considered the active window, false if not
 void Window_SetActive(Window* the_window, bool is_active);
 
 //! Set the window's state (maximized, minimized, etc.)
+//! NOTE: This does not immediately cause the window to render in the passed state.
+//! @param	the_window: reference to a valid Window object.
+//! @param	the_state: the new state
 void Window_SetState(Window* the_window, window_state the_state);
 
 //! Evaluate potential change to window position or size, and correct if out of allowed limits
 //! Negative value positions will be corrected to 0.
+//! @param	the_window: reference to a valid Window object.
 //! @param	x: Pointer to the proposed new horizontal position. If less than 0, it will be set to 0.
 //! @param	y: Pointer to the proposed new vertical position. If less than 0, it will be set to 0.
 //! @param	width: Pointer to the proposed new width. Will be set to window's minimum or maximum if necessary.
@@ -387,8 +453,9 @@ void Window_EvaluateWindowChange(Window* the_window, int16_t* x, int16_t* y, int
 //! Change position and/or size of window
 //! NOTE: passed x, y will be checked against the window's min/max values
 //! Will also adjust the position of the built-in maximize/minimize/normsize controls
-//! @param	x: The new horizontal position
-//! @param	y: The new vertical position
+//! @param	the_window: reference to a valid Window object.
+//! @param	x: The new global horizontal position
+//! @param	y: The new global vertical position
 //! @param	width: The new width
 //! @param	height: The new height
 //! @param	update_norm: if true, the window's normal x/y/width/height properties will be updated to match the passed values. Pass false if setting maximize size, etc.
@@ -396,58 +463,107 @@ void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width
 
 //! Set the window to full-screen size (maximize mode)
 //! Sets window's x, y, width, height parameters to match those of the screen
+//! @param	the_window: reference to a valid Window object.
 void Window_Maximize(Window* the_window);
 
 //! Set the window to normal size (window-size mode)
 //! Sets window's x, y, width, height parameters to those stored in norm_x, etc.
+//! @param	the_window: reference to a valid Window object.
 void Window_NormSize(Window* the_window);
 
 //! Hides the window (minimize mode)
 //! Does not change the window's x, y, width, height parameters, it just makes it invisible
+//! @param	the_window: reference to a valid Window object.
 void Window_Minimize(Window* the_window);
 
 
 // **** Get functions *****
 
 
-// return the current window title
-// Note: the window title is maintained by the window. Do not free the string pointer returned by this function!
+//! Get a pointer to the current window title
+//! Note: It is not guaranteed that every window will have a title. Backdrop windows, for example, do not have a title.
+//! Note: the window title is maintained by the window. Do not free the string pointer returned by this function!
+//! @param	the_window: reference to a valid Window object.
+//! @return:	Returns a pointer to the title string. Returns NULL in any error condition.
 char* Window_GetTitle(Window* the_window);
 
+//! Get the value stored in the user data field of the window.
+//! NOTE: this field is for the exclusive use of application programs. The system will not act on this data in any way: you are free to store whatever 4-byte value you want here.
+//! @param	the_window: reference to a valid Window object.
+//! @return:	Returns an unsigned 32 bit value. Returns 0 in any error condition.
 uint32_t Window_GetUserData(Window* the_window);
 
+//! Get the window's type (normal, backdrop, dialog, etc.)
+//! @param	the_window: reference to a valid Window object.
+//! @return:	Returns a window_type enum. Returns WIN_UNKNOWN_TYPE in any error condition.
 window_type Window_GetType(Window* the_window);
+
+//! Get the window's state (maximized, minimized, etc.)
+//! @param	the_window: reference to a valid Window object.
+//! @return:	Returns a window_state enum. Returns WIN_UNKNOWN_STATE in any error condition.
 window_state Window_GetState(Window* the_window);
+
+//! Get the bitmap object used as the offscreen buffer for the window
+//! NOTE: this is not a pointer into VRAM, or directly to the screen.
+//! @param	the_window: reference to a valid Window object.
+//! @return:	Returns a pointer to the bitmap used by the window. Returns NULL in any error condition.
 Bitmap* Window_GetBitmap(Window* the_window);
 
+//! Get the global horizontal coordinate of the window
+//! @param	the_window: reference to a valid Window object.
+//! @return:	Returns the horizontal portion of the upper-left coordinate of the window. Returns -1 in any error condition.
 int16_t Window_GetX(Window* the_window);
+
+//! Get the global vertical coordinate of the window
+//! @param	the_window: reference to a valid Window object.
+//! @return:	Returns the vertical portion of the upper-left coordinate of the window. Returns -1 in any error condition.
 int16_t Window_GetY(Window* the_window);
+
+//! Get the width of the window
+//! @param	the_window: reference to a valid Window object.
+//! @return:	Returns -1 in any error condition.
 int16_t Window_GetWidth(Window* the_window);
+
+//! Get the height of the window
+//! @param	the_window: reference to a valid Window object.
+//! @return:	Returns -1 in any error condition.
 int16_t Window_GetHeight(Window* the_window);
 
-// Get backdrop yes/no flag. returns true if backdrop, false if not
+//! Check if a window is a backdrop window or a regular window
+//! @param	the_window: reference to a valid Window object.
+//! @return:	Returns true if backdrop, false if not
 bool Window_IsBackdrop(Window* the_window);
 
-// Get visible yes/no flag. returns true if window should be rendered, false if not
+//! Check if a window should be visible or not
+//! NOTE: this does not necessarily mean the window isn't currently rendered to the screen. This indicates if it will or won't be after the next render pass.
+//! @param	the_window: reference to a valid Window object.
+//! @return:	Returns true if window should be rendered, false if not
 bool Window_IsVisible(Window* the_window);
 
-// Get the active/inactive condition of the window
-window_state Window_IsActive(Window* the_window);
+//! Get the active/inactive condition of the window
+//! @param	the_window: reference to a valid Window object.
+//! @return:	Returns true if window is active, false if not
+bool Window_IsActive(Window* the_window);
 
 
 
 // **** RENDER functions *****
 
+//! Draw/re-draw any necessary components, and blit the window (or parts of it, via cliprects) to the screen
+//! @param	the_window: reference to a valid Window object.
 void Window_Render(Window* the_window);
 
-// clears the content area rect, setting it to the theme's backcolor
+//! Clears the content area rect by filling it with the theme's backcolor
+//! @param	the_window: reference to a valid Window object.
 void Window_ClearContent(Window* the_window);
 
 //! Updates the current window controls, etc., to match the current system theme 
+//! @param	the_window: reference to a valid Window object.
 void Window_UpdateTheme(Window* the_window);
 
 //! Mark entire window as invalidated
 //! This will cause it to be redrawn and fully reblitted in the next render cycle
+//! @param	the_window: reference to a valid Window object.
 void Window_Invalidate(Window* the_window);
 
 
@@ -455,9 +571,15 @@ void Window_Invalidate(Window* the_window);
 // **** DRAW functions *****
 
 //! Convert the passed x, y global coordinates to local (to window) coordinates
+//! @param	the_window: reference to a valid Window object.
+//! @param	x: the global horizontal position to be converted to window-local.
+//! @param	y: the global vertical position to be converted to window-local.
 void Window_GlobalToLocal(Window* the_window, int16_t* x, int16_t* y);
 
 //! Convert the passed x, y local coordinates to global coordinates
+//! @param	x: the window-local horizontal position to be converted to global.
+//! @param	y: the window-local vertical position to be converted to global.
+//! @param	the_window: reference to a valid Window object.
 void Window_LocalToGlobal(Window* the_window, int16_t* x, int16_t* y);
 
 //! Set the font
@@ -509,20 +631,20 @@ bool Window_Blit(Window* the_window, Bitmap* src_bm, int16_t src_x, int16_t src_
 //! @param	width: width, in pixels, of the rectangle to be drawn
 //! @param	height: height, in pixels, of the rectangle to be drawn
 //! @param	the_color: a 1-byte index to the current LUT
-//! @return	returns false on any error/invalid input.
+//! @return:	returns false on any error/invalid input.
 bool Window_FillBox(Window* the_window, int16_t width, int16_t height, uint8_t the_color);
 
 //! Fill pixel values for the passed Rectangle object, using the specified LUT value
 //! @param	the_window: reference to a valid Window object.
 //! @param	the_coords: the starting and ending coordinates within the content area of the window
 //! @param	the_color: a 1-byte index to the current LUT
-//! @return	returns false on any error/invalid input.
+//! @return:	returns false on any error/invalid input.
 bool Window_FillBoxRect(Window* the_window, Rectangle* the_coords, uint8_t the_color);
 
 //! Set the color of the pixel at the current pen location
 //! @param	the_window: reference to a valid Window object.
 //! @param	the_color: a 1-byte index to the current LUT
-//! @return	returns false on any error/invalid input.
+//! @return:	returns false on any error/invalid input.
 bool Window_SetPixel(Window* the_window, uint8_t the_color);
 
 //! Draws a line between 2 passed coordinates.
@@ -540,21 +662,21 @@ bool Window_DrawLine(Window* the_window, int16_t x1, int16_t y1, int16_t x2, int
 //! @param	the_window: reference to a valid Window object.
 //! @param	the_line_len: The total length of the line, in pixels
 //! @param	the_color: a 1-byte index to the current LUT
-//! @return	returns false on any error/invalid input.
+//! @return:	returns false on any error/invalid input.
 bool Window_DrawHLine(Window* the_window, int16_t the_line_len, uint8_t the_color);
 
 //! Draws a vertical line from specified coords, for n pixels
 //! @param	the_window: reference to a valid Window object.
 //! @param	the_line_len: The total length of the line, in pixels
 //! @param	the_color: a 1-byte index to the current LUT
-//! @return	returns false on any error/invalid input.
+//! @return:	returns false on any error/invalid input.
 bool Window_DrawVLine(Window* the_window, int16_t the_line_len, uint8_t the_color);
 
 //! Draws a rectangle based on the passed Rectangle object, using the specified LUT value
 //! @param	the_window: reference to a valid Window object.
 //! @param	the_coords: the starting and ending coordinates within the content area of the window
 //! @param	the_color: a 1-byte index to the current LUT
-//! @return	returns false on any error/invalid input.
+//! @return:	returns false on any error/invalid input.
 bool Window_DrawBoxRect(Window* the_window, Rectangle* the_coords, uint8_t the_color);
 
 //! Draws a rectangle based on 2 sets of coords, using the specified LUT value
@@ -564,7 +686,7 @@ bool Window_DrawBoxRect(Window* the_window, Rectangle* the_coords, uint8_t the_c
 //! @param	x2: the ending horizontal position within the content area of the window
 //! @param	y2: the ending vertical position within the content area of the window
 //! @param	the_color: a 1-byte index to the current LUT
-//! @return	returns false on any error/invalid input.
+//! @return:	returns false on any error/invalid input.
 bool Window_DrawBoxCoords(Window* the_window, int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t the_color);
 
 //! Draws a rectangle based on start coords and width/height, and optionally fills the rectangle.
@@ -573,7 +695,7 @@ bool Window_DrawBoxCoords(Window* the_window, int16_t x1, int16_t y1, int16_t x2
 //! @param	height: height, in pixels, of the rectangle to be drawn
 //! @param	the_color: a 1-byte index to the current LUT
 //! @param	do_fill: If true, the box will be filled with the provided color. If false, the box will only draw the outline.
-//! @return	returns false on any error/invalid input.
+//! @return:	returns false on any error/invalid input.
 bool Window_DrawBox(Window* the_window, int16_t width, int16_t height, uint8_t the_color, bool do_fill);
 
 //! Draws a rounded rectangle from the current pen location, with the specified size and radius, and optionally fills the rectangle.
@@ -583,7 +705,7 @@ bool Window_DrawBox(Window* the_window, int16_t width, int16_t height, uint8_t t
 //! @param	radius: radius, in pixels, of the arc to be applied to the rectangle's corners. Minimum 3, maximum 20.
 //! @param	the_color: a 1-byte index to the current color LUT
 //! @param	do_fill: If true, the box will be filled with the provided color. If false, the box will only draw the outline.
-//! @return	returns false on any error/invalid input.
+//! @return:	returns false on any error/invalid input.
 bool Window_DrawRoundBox(Window* the_window, int16_t width, int16_t height, int16_t radius, uint8_t the_color, bool do_fill);
 
 //! Draw a circle centered on the current pen location
@@ -610,13 +732,14 @@ bool Window_DrawString(Window* the_window, char* the_string, int16_t max_chars);
 //! @param	num_chars: either the length of the passed string, or as much of the string as should be displayed.
 //! @param	wrap_buffer: pointer to a pointer to a temporary text buffer that can be used to hold the wrapped ('formatted') characters. The buffer must be large enough to hold num_chars of incoming text, plus additional line break characters where necessary. 
 //! @param	continue_function: optional hook to a function that will be called if the provided text cannot fit into the specified box. If provided, the function will be called each time text exceeds available space. If the function returns true, another chunk of text will be displayed, replacing the first. If the function returns false, processing will stop. If no function is provided, processing will stop at the point text exceeds the available space.
-//! @return	returns a pointer to the first character in the string after which it stopped processing (if string is too long to be displayed in its entirety). Returns the original string if the entire string was processed successfully. Returns NULL in the event of any error.
+//! @return:	returns a pointer to the first character in the string after which it stopped processing (if string is too long to be displayed in its entirety). Returns the original string if the entire string was processed successfully. Returns NULL in the event of any error.
 char* Window_DrawStringInBox(Window* the_window, int16_t width, int16_t height, char* the_string, int16_t num_chars, char** wrap_buffer, bool (* continue_function)(void));
 
 
 
 // **** Debug functions *****
 
+//! @param	the_window: reference to a valid Window object.
 void Window_Print(Window* the_window);
 
 // helper function called by List class's print function: prints one window entry

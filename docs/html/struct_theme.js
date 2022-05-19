@@ -14,6 +14,8 @@ var struct_theme =
     [ "iconbar_outline_", "struct_theme.html#a1a0fb4d4d5b346c3f4b1f314502145be", null ],
     [ "inactive_back_color_", "struct_theme.html#a48553d356dbe085e814fe63a44fdfbc2", null ],
     [ "inactive_fore_color_", "struct_theme.html#a74d62e458c663915ef354ff95398b116", null ],
+    [ "menu_back_color_", "struct_theme.html#a833719f81ab575a62e945dca7c73f034", null ],
+    [ "menu_fore_color_", "struct_theme.html#afdebc26952c27f1ab4576fb4c51899bf", null ],
     [ "outline_color_", "struct_theme.html#a8228b33d9ed62a4f41d6b8a0daafe86d", null ],
     [ "pattern_height_", "struct_theme.html#a6c71775727543b4b8bff95e6b1fc0248", null ],
     [ "pattern_width_", "struct_theme.html#ad20962e4d8f6fd98f5be2428c36d3e1b", null ],

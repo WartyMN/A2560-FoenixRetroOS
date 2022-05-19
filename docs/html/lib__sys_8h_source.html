@@ -110,311 +110,328 @@ $(document).ready(function(){initNavTree('lib__sys_8h_source.html',''); initResi
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment">/* about this library: System</span></div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment"> *</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment"> * This provides overall system level functionality</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment"> * </span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment"> * See also: memory_manager.h</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment"> *** things this library needs to be able to do</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment"> * Manage memory allocation for VRAM for the system and for 3rd party programs that are launched from the system. </span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment"> * Manage memory allocation for standard RAM for 3rd party programs that are launched from the system. </span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"> * Manage global system resources such as fonts, screens, mouse pointer, etc. </span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment"> * Provide event handling</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment"> * STRETCH GOALS</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment"> *** things this library needs to be able to do</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment"> * Manage global system resources such as fonts, screens, mouse pointer, etc. </span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment"> * Provide event handling</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment"> * STRETCH GOALS</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"> * </span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment"> * SUPER STRETCH GOALS</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment"> * </span></div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment"> * </span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment"> * SUPER STRETCH GOALS</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment"> * </span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment"> * </span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment">/*****************************************************************************/</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment">/*                                Includes                                   */</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment">/*****************************************************************************/</span></div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment">/*                                Includes                                   */</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="comment">// project includes</span></div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="preprocessor">#include &quot;list.h&quot;</span></div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="preprocessor">#include &quot;<a class="code" href="memory__manager_8h.html">memory_manager.h</a>&quot;</span></div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="preprocessor">#include &quot;<a class="code" href="theme_8h.html">theme.h</a>&quot;</span></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="preprocessor">#include &quot;<a class="code" href="control__template_8h.html">control_template.h</a>&quot;</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment">// project includes</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="preprocessor">#include &quot;list.h&quot;</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">#include &quot;<a class="code" href="theme_8h.html">theme.h</a>&quot;</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="preprocessor">#include &quot;<a class="code" href="control__template_8h.html">control_template.h</a>&quot;</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment">// C includes</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="preprocessor">#include &lt;stdbool.h&gt;</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment">// C includes</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="preprocessor">#include &lt;stdbool.h&gt;</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment">// A2560 includes</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="preprocessor">#include &lt;mcp/syscalls.h&gt;</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="preprocessor">#include &lt;mb/a2560_platform.h&gt;</span></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="preprocessor">#include &lt;mb/general.h&gt;</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="preprocessor">#include &lt;mb/text.h&gt;</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="preprocessor">#include &lt;mb/bitmap.h&gt;</span></div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="preprocessor">#include &lt;mb/window.h&gt;</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment">// A2560 includes</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="preprocessor">#include &lt;mcp/syscalls.h&gt;</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="preprocessor">#include &quot;a2560_platform.h&quot;</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="preprocessor">#include &quot;<a class="code" href="general_8h.html">general.h</a>&quot;</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="preprocessor">#include &quot;<a class="code" href="text_8h.html">text.h</a>&quot;</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="preprocessor">#include &quot;<a class="code" href="bitmap_8h.html">bitmap.h</a>&quot;</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="preprocessor">#include &quot;<a class="code" href="window_8h.html">window.h</a>&quot;</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment">/*****************************************************************************/</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment">/*                            Macro Definitions                              */</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment">/*****************************************************************************/</span></div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment">/*                            Macro Definitions                              */</span></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment">/*****************************************************************************/</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="preprocessor">#define SYS_MAX_WINDOWS                 32</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="preprocessor">#define SYS_WIN_Z_ORDER_BACKDROP        -127</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="preprocessor">#define SYS_WIN_Z_ORDER_NEWLY_ACTIVE    SYS_MAX_WINDOWS + 1</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="preprocessor">#define SYS_MAX_WINDOWS                 32</span></div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="preprocessor">#define SYS_WIN_Z_ORDER_BACKDROP        -127</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="preprocessor">#define SYS_WIN_Z_ORDER_NEWLY_ACTIVE    SYS_MAX_WINDOWS + 1</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="comment">/*****************************************************************************/</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment">/*                               Enumerations                                */</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="comment">/*****************************************************************************/</span></div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment">/*                               Enumerations                                */</span></div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment">/*****************************************************************************/</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment">/*                                 Structs                                   */</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment">/*****************************************************************************/</span></div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment">/*                                 Structs                                   */</span></div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno"><a class="line" href="struct_system.html">   78</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_system.html">System</a></div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>{</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <a class="code hl_struct" href="struct_event_manager.html">EventManager</a>*   event_manager_;</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    <a class="code hl_struct" href="struct_font.html">Font</a>*           system_font_;</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <a class="code hl_struct" href="struct_font.html">Font</a>*           app_font_;</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <a class="code hl_struct" href="struct_screen.html">Screen</a>*         screen_[2];</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <a class="code hl_struct" href="struct_theme.html">Theme</a>*          theme_;</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    uint8_t         num_screens_;</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    <a class="code hl_struct" href="struct_list.html">List</a>**          list_windows_;</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    <a class="code hl_struct" href="struct_window.html">Window</a>*         active_window_;</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    uint8_t         window_count_;</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    uint16_t        model_number_;</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>};</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno"><a class="line" href="struct_system.html">   73</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_system.html">System</a></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>{</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <a class="code hl_struct" href="struct_event_manager.html">EventManager</a>*   event_manager_;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <a class="code hl_struct" href="struct_font.html">Font</a>*           system_font_;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <a class="code hl_struct" href="struct_font.html">Font</a>*           app_font_;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <a class="code hl_struct" href="struct_screen.html">Screen</a>*         screen_[2];</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    <a class="code hl_struct" href="struct_theme.html">Theme</a>*          theme_;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    uint8_t         num_screens_;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    <a class="code hl_struct" href="struct_list.html">List</a>**          list_windows_;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <a class="code hl_struct" href="struct_window.html">Window</a>*         active_window_;</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    uint8_t         window_count_;</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    uint16_t        model_number_;</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <a class="code hl_struct" href="struct_menu.html">Menu</a>*           menu_manager_;</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>};</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
 <div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment">/*****************************************************************************/</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment">/*                             Global Variables                              */</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment">/*****************************************************************************/</span></div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment">/*                             Global Variables                              */</span></div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment">/*****************************************************************************/</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment">/*                       Public Function Prototypes                          */</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment">/*****************************************************************************/</span></div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment">/*                       Public Function Prototypes                          */</span></div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment">/*****************************************************************************/</span></div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment">// **** CONSTRUCTOR AND DESTRUCTOR *****</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment">// **** CONSTRUCTOR AND DESTRUCTOR *****</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="comment">// constructor</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment"></span><a class="code hl_struct" href="struct_system.html">System</a>* <a class="code hl_function" href="lib__sys_8h.html#a08443288542cd1c5c531b6ec028d2980">Sys_New</a>(<span class="keywordtype">void</span>);</div>
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="comment">// constructor</span></div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment"></span><a class="code hl_struct" href="struct_system.html">System</a>* <a class="code hl_function" href="lib__sys_8h.html#a08443288542cd1c5c531b6ec028d2980">Sys_New</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment">// destructor</span></div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment">// frees all allocated memory associated with the passed object, and the object itself</span></div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="comment"></span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#a4b554373341e17075715bafd0b522319">Sys_Destroy</a>(<a class="code hl_struct" href="struct_system.html">System</a>** the_system);</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="comment">// destructor</span></div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment">// frees all allocated memory associated with the passed object, and the object itself</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment"></span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#a4b554373341e17075715bafd0b522319">Sys_Destroy</a>(<a class="code hl_struct" href="struct_system.html">System</a>** the_system);</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span> </div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="comment">// **** System Initialization functions *****</span></div>
 <div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span> </div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment">// **** System Initialization functions *****</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#ac3d6d271b2a789e26896de04852c77c0">Sys_InitSystem</a>(<span class="keywordtype">void</span>);</div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#ac3d6d271b2a789e26896de04852c77c0">Sys_InitSystem</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span> </div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment">// **** Event-handling functions *****</span></div>
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
 <div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
 <div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="comment">// **** Event-handling functions *****</span></div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="comment">// **** Screen mode/resolution/size functions *****</span></div>
 <div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span> </div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="comment">// **** Screen mode/resolution/size functions *****</span></div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#a492835a9360cea71b17ddfb29ff7e44c">Sys_AutoDetectMachine</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span> </div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#aed61a6754ace552013413feea54fd336">Sys_AutoConfigure</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#aa5e4e18b0e2066b48f050addbbe546b3">Sys_DetectScreenSize</a>(<a class="code hl_struct" href="struct_screen.html">Screen</a>* the_screen);</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span> </div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#a3b11a4c19b359bffb12dc6c86cdac684">Sys_SetVideoMode</a>(<a class="code hl_struct" href="struct_screen.html">Screen</a>* the_screen, screen_resolution new_mode);</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#a492835a9360cea71b17ddfb29ff7e44c">Sys_AutoDetectMachine</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> </div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#aed61a6754ace552013413feea54fd336">Sys_AutoConfigure</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span> </div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#aa5e4e18b0e2066b48f050addbbe546b3">Sys_DetectScreenSize</a>(<a class="code hl_struct" href="struct_screen.html">Screen</a>* the_screen);</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#a3b11a4c19b359bffb12dc6c86cdac684">Sys_SetVideoMode</a>(<a class="code hl_struct" href="struct_screen.html">Screen</a>* the_screen, screen_resolution new_mode);</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span> </div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#a4a4b865a6eab764d18a3defa01844810">Sys_SetModeGraphics</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
 <div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span> </div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#a4a4b865a6eab764d18a3defa01844810">Sys_SetModeGraphics</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span> </div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#ab18b67b61dd745e75aa64c5ba73358d0">Sys_SetModeText</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, <span class="keywordtype">bool</span> as_overlay);</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span> </div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#a0cc43e2be125e57916a9df424f909f60">Sys_EnableTextModeCursor</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, <a class="code hl_struct" href="struct_screen.html">Screen</a>* the_screen, <span class="keywordtype">bool</span> enable_it);</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#ab18b67b61dd745e75aa64c5ba73358d0">Sys_SetModeText</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, <span class="keywordtype">bool</span> as_overlay);</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span> </div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#a0cc43e2be125e57916a9df424f909f60">Sys_EnableTextModeCursor</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, <a class="code hl_struct" href="struct_screen.html">Screen</a>* the_screen, <span class="keywordtype">bool</span> enable_it);</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span> </div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span><span class="comment">// **** Window management functions *****</span></div>
 <div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span> </div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><span class="comment">// **** Window management functions *****</span></div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span> </div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#a31b4b6b8f93b4daabde4662d62ed66d9">Sys_AddToWindowList</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, <a class="code hl_struct" href="struct_window.html">Window</a>* the_new_window);</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#a31b4b6b8f93b4daabde4662d62ed66d9">Sys_AddToWindowList</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, <a class="code hl_struct" href="struct_window.html">Window</a>* the_new_window);</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span> </div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="comment">// create the backdrop window for the system</span></div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span><span class="comment"></span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#a921ca3413bb38373e6a14bd88c1eb6da">Sys_CreateBackdropWindow</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
 <div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span> </div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span><span class="comment">// create the backdrop window for the system</span></div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span><span class="comment"></span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#a921ca3413bb38373e6a14bd88c1eb6da">Sys_CreateBackdropWindow</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span><span class="comment">// return the active window</span></div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span><span class="comment"></span><a class="code hl_struct" href="struct_window.html">Window</a>* <a class="code hl_function" href="lib__sys_8h.html#ae616a613bf0d182c82c53807f90787e3">Sys_GetActiveWindow</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
 <div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> </div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span><span class="comment">// return the active window</span></div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span><span class="comment"></span><a class="code hl_struct" href="struct_window.html">Window</a>* <a class="code hl_function" href="lib__sys_8h.html#ae616a613bf0d182c82c53807f90787e3">Sys_GetActiveWindow</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span><span class="comment">// return the backdrop window</span></div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span><span class="comment"></span><a class="code hl_struct" href="struct_window.html">Window</a>* <a class="code hl_function" href="lib__sys_8h.html#aa013ab93ca4a376667fdd9bf216c0121">Sys_GetBackdropWindow</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
 <div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span> </div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span><span class="comment">// return the backdrop window</span></div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span><span class="comment"></span><a class="code hl_struct" href="struct_window.html">Window</a>* <a class="code hl_function" href="lib__sys_8h.html#aa013ab93ca4a376667fdd9bf216c0121">Sys_GetBackdropWindow</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span><span class="comment">// return a reference to the next window in the system&#39;s list, excluding backdrop windows</span></div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span><span class="comment"></span><a class="code hl_struct" href="struct_window.html">Window</a>* <a class="code hl_function" href="lib__sys_8h.html#a6739e8ef26b70432c009d8fe80bd435a">Sys_GetNextWindow</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
 <div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span> </div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span><span class="comment">// return a reference to the next window in the system&#39;s list, excluding backdrop windows</span></div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span><span class="comment"></span><a class="code hl_struct" href="struct_window.html">Window</a>* <a class="code hl_function" href="lib__sys_8h.html#a6739e8ef26b70432c009d8fe80bd435a">Sys_GetNextWindow</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span><span class="comment">// return a reference to the previous window in the system&#39;s list, excluding backdrop windows</span></div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span><span class="comment"></span><a class="code hl_struct" href="struct_window.html">Window</a>* <a class="code hl_function" href="lib__sys_8h.html#aa7140689d5ca0964b3840c96ccde1807">Sys_GetPreviousWindow</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
 <div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span> </div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span><span class="comment">// return a reference to the previous window in the system&#39;s list, excluding backdrop windows</span></div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span><span class="comment"></span><a class="code hl_struct" href="struct_window.html">Window</a>* <a class="code hl_function" href="lib__sys_8h.html#aa7140689d5ca0964b3840c96ccde1807">Sys_GetPreviousWindow</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span> </div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span><span class="comment">// Find the Window under the mouse -- accounts for z depth (topmost window will be found)</span></div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span><span class="comment"></span><a class="code hl_struct" href="struct_window.html">Window</a>* <a class="code hl_function" href="lib__sys_8h.html#a844d7975b42b311fdfe7d6a9afede689">Sys_GetWindowAtXY</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, int16_t x, int16_t y);</div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span> </div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#aadad43b6c5eaa6981951eac2536ce10b">Sys_SetActiveWindow</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, <a class="code hl_struct" href="struct_window.html">Window</a>* the_window);</div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span> </div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span><span class="comment">// List-sort compatible function for sorting windows by their display order property</span></div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span><span class="keywordtype">bool</span> Window_CompareDisplayOrder(<span class="keywordtype">void</span>* first_payload, <span class="keywordtype">void</span>* second_payload);</div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span> </div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span> </div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span><span class="comment">// **** Other GET functions *****</span></div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span><span class="comment">// Find the Window under the mouse -- accounts for z depth (topmost window will be found)</span></div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span><span class="comment"></span><a class="code hl_struct" href="struct_window.html">Window</a>* <a class="code hl_function" href="lib__sys_8h.html#a844d7975b42b311fdfe7d6a9afede689">Sys_GetWindowAtXY</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, int16_t x, int16_t y);</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span> </div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#aadad43b6c5eaa6981951eac2536ce10b">Sys_SetActiveWindow</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, <a class="code hl_struct" href="struct_window.html">Window</a>* the_window);</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span> </div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span><span class="comment">// List-sort compatible function for sorting windows by their display order property</span></div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span><span class="keywordtype">bool</span> Window_CompareDisplayOrder(<span class="keywordtype">void</span>* first_payload, <span class="keywordtype">void</span>* second_payload);</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span> </div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span><span class="comment">// remove one window from system&#39;s list of windows, and close it</span></div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span><span class="keywordtype">void</span> Sys_CloseOneWindow(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, <a class="code hl_struct" href="struct_window.html">Window</a>* the_window);</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span> </div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span><span class="keywordtype">void</span> <a class="code hl_function" href="lib__sys_8h.html#ab623aeab6f4d9d7cb590443784f5fb21">Sys_IssueDamageRects</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
 <div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span><a class="code hl_struct" href="struct_font.html">Font</a>* <a class="code hl_function" href="lib__sys_8h.html#ad932137a967df1c9ca838bae43362045">Sys_GetSystemFont</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span> </div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span><a class="code hl_struct" href="struct_font.html">Font</a>* <a class="code hl_function" href="lib__sys_8h.html#a677c804fa2b6068e4ec0dbcd63bb9c4f">Sys_GetAppFont</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span> </div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span><a class="code hl_struct" href="struct_screen.html">Screen</a>* <a class="code hl_function" href="lib__sys_8h.html#a8f17fdc9762295321c42c166d5022c20">Sys_GetScreen</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, int16_t channel_id);</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span><span class="keywordtype">void</span> <a class="code hl_function" href="lib__sys_8h.html#a42408a44288eff4198b872aee08f34e9">Sys_IssueMenuDamageRects</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span> </div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span><span class="keywordtype">void</span> <a class="code hl_function" href="lib__sys_8h.html#a1f2272ea55be32476762fe7f63dafe1f">Sys_CollectDamageRects</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, <a class="code hl_struct" href="struct_window.html">Window</a>* the_future_active_window);</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span> </div>
 <div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span> </div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span><a class="code hl_struct" href="struct_theme.html">Theme</a>* <a class="code hl_function" href="lib__sys_8h.html#abd5862c5cf34c09cba051d4c896322e5">Sys_GetTheme</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span> </div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span><a class="code hl_struct" href="struct_bitmap.html">Bitmap</a>* <a class="code hl_function" href="lib__sys_8h.html#a63aedad641566d0d1dc865d5d0a35159">Sys_GetScreenBitmap</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, int16_t channel_id);</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span> </div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span><a class="code hl_struct" href="struct_event_manager.html">EventManager</a>* <a class="code hl_function" href="lib__sys_8h.html#a15c8506e06311bbe6c815d64eb685bda">Sys_GetEventManager</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span> </div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span> </div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span> </div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span><span class="comment">// **** Other GET functions *****</span></div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span> </div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span><a class="code hl_struct" href="struct_font.html">Font</a>* <a class="code hl_function" href="lib__sys_8h.html#ad932137a967df1c9ca838bae43362045">Sys_GetSystemFont</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span> </div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span><a class="code hl_struct" href="struct_font.html">Font</a>* <a class="code hl_function" href="lib__sys_8h.html#a677c804fa2b6068e4ec0dbcd63bb9c4f">Sys_GetAppFont</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
 <div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span> </div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span> </div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span><span class="comment">// **** Other SET functions *****</span></div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span><a class="code hl_struct" href="struct_screen.html">Screen</a>* <a class="code hl_function" href="lib__sys_8h.html#a8f17fdc9762295321c42c166d5022c20">Sys_GetScreen</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, int16_t channel_id);</div>
 <div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span> </div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span><span class="keywordtype">void</span> <a class="code hl_function" href="lib__sys_8h.html#a064e8b27c30d58b3a65a8ec7e709bfdb">Sys_SetSystemFont</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, <a class="code hl_struct" href="struct_font.html">Font</a>* the_font);</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span><a class="code hl_struct" href="struct_menu.html">Menu</a>* <a class="code hl_function" href="lib__sys_8h.html#ac17125fd80c4fc5a76b0218206047be4">Sys_GetMenu</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
 <div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span> </div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span><span class="keywordtype">void</span> <a class="code hl_function" href="lib__sys_8h.html#a424d04e97f5b784500098ea5c1ff263a">Sys_SetAppFont</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, <a class="code hl_struct" href="struct_font.html">Font</a>* the_font);</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span><a class="code hl_struct" href="struct_theme.html">Theme</a>* <a class="code hl_function" href="lib__sys_8h.html#abd5862c5cf34c09cba051d4c896322e5">Sys_GetTheme</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
 <div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span> </div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span><span class="keywordtype">void</span> <a class="code hl_function" href="lib__sys_8h.html#aa08811e1f1c5e90dacebb1c5502afc71">Sys_SetScreen</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, int16_t channel_id, <a class="code hl_struct" href="struct_screen.html">Screen</a>* the_screen);</div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span> </div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span><span class="keywordtype">void</span> <a class="code hl_function" href="lib__sys_8h.html#a6a430bc3ebc69806ead9035112ec0f24">Sys_SetScreenBitmap</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, int16_t channel_id, <a class="code hl_struct" href="struct_bitmap.html">Bitmap</a>* the_bitmap);</div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span> </div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#a39f1fbbd7a6b0a38ff0c9884e188d4d4">Sys_SetTheme</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, <a class="code hl_struct" href="struct_theme.html">Theme</a>* the_theme);</div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span> </div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span> </div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span><a class="code hl_struct" href="struct_bitmap.html">Bitmap</a>* <a class="code hl_function" href="lib__sys_8h.html#abc49eb62dfe89d2b36b696a2b452dfb3">Sys_GetScreenBitmap</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, bitmap_layer the_layer);</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span> </div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span><a class="code hl_struct" href="struct_event_manager.html">EventManager</a>* <a class="code hl_function" href="lib__sys_8h.html#a15c8506e06311bbe6c815d64eb685bda">Sys_GetEventManager</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span> </div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span> </div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span> </div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span><span class="comment">// **** Other SET functions *****</span></div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span> </div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span><span class="keywordtype">void</span> <a class="code hl_function" href="lib__sys_8h.html#a064e8b27c30d58b3a65a8ec7e709bfdb">Sys_SetSystemFont</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, <a class="code hl_struct" href="struct_font.html">Font</a>* the_font);</div>
 <div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span> </div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span><span class="comment">// **** xxx functions *****</span></div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span> </div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#a28db6577238669059b73ad77d7fa9752">Sys_SetVRAMAddr</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, uint8_t the_bitmap_layer, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* the_address);</div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span> </div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span> </div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span><span class="keywordtype">void</span> <a class="code hl_function" href="lib__sys_8h.html#a424d04e97f5b784500098ea5c1ff263a">Sys_SetAppFont</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, <a class="code hl_struct" href="struct_font.html">Font</a>* the_font);</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span> </div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span><span class="keywordtype">void</span> <a class="code hl_function" href="lib__sys_8h.html#aa08811e1f1c5e90dacebb1c5502afc71">Sys_SetScreen</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, int16_t channel_id, <a class="code hl_struct" href="struct_screen.html">Screen</a>* the_screen);</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span> </div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span><span class="keywordtype">void</span> <a class="code hl_function" href="lib__sys_8h.html#af643b8e356213197c003f5002d8930b5">Sys_SetScreenBitmap</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, <a class="code hl_struct" href="struct_bitmap.html">Bitmap</a>* the_bitmap, bitmap_layer the_layer);</div>
 <div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span> </div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span><span class="comment">// **** xxx functions *****</span></div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span> </div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span> </div>
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span> </div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span> </div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#a39f1fbbd7a6b0a38ff0c9884e188d4d4">Sys_SetTheme</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, <a class="code hl_struct" href="struct_theme.html">Theme</a>* the_theme);</div>
 <div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span> </div>
 <div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span> </div>
 <div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span> </div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span><span class="comment">//</span></div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span><span class="comment">// Discord, 3022/03/10</span></div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span><span class="comment">//</span></div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span><span class="comment">// PJW</span></div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span><span class="comment">// Generally speaking (the order does not really matter on this):</span></div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span><span class="comment">// 1. Set the mode bits in the master control register (GRAPHICS + BITMAP), as well as the resolution.</span></div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span><span class="comment">// 2. Load the color table for the bitmap into one of the graphics LUTs (start at $B4:2000 on the A2560U, $FEC8:2000 on the A2560K)</span></div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span><span class="comment">// 3. Load the bitmap pixel data into video RAM (starts at $C0:0000 on the A2560U, $0080:0000 on the A2560K)</span></div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span><span class="comment">// 4. Set the enable bit and LUT # in the bitmap control register for the layer you want</span></div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span><span class="comment">// 5. Set the address of the pixel data in video RAM in the VRAM address pointer for the layer you want. This must be set relative to the beginning of VRAM, so if you&#39;re using the A2560U and the pixel data starts at $C2:0000, you&#39;d store $02:0000 in the address register.</span></div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span><span class="comment">// Paul Scott Robson — Today at 12:45 PM</span></div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span><span class="comment">// TextInitialise:</span></div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span><span class="comment">//         clr.l     d0</span></div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span><span class="comment">//         lea     vicky3,a0                     ; start register writes</span></div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span><span class="comment">//         move.l     #$0000000C,(a0)             ; graphics mode &amp; bitmap on.</span></div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span><span class="comment">//         move.l     d0,$4(a0)                     ; zero border size/scroll/colour</span></div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span><span class="comment">//         move.l     d0,$8(a0)                     ; clear border colour</span></div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span><span class="comment">//         move.l     d0,$C(a0)</span></div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span><span class="comment">//         move.l     d0,$10(a0)                     ; cursor off</span></div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span><span class="comment">//         move.l     d0,$14(a0)                     ; no line interrupts</span></div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span><span class="comment">//         move.l     d0,$18(a0)</span></div>
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span><span class="comment">// </span></div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span><span class="comment">//         move.l     #$00000001,$100(a0)         ; LUT 0, BMP 1 on</span></div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span><span class="comment">//         move.l     d0,$104(a0)                 ; BMP 1 address</span></div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span><span class="comment">//         move.l     d0,$108(a0)                    ; BMP 2 off</span></div>
-<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span><span class="comment">// </span></div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span><span class="comment">//         move.l     #$0000FF00,$2004(a0)         ; colour 1 red</span></div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span><span class="comment">//         move.l     #$00FF00FF,$2008(a0)         ; colour 2 green</span></div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span><span class="comment">//         move.l     #$00FFFFFF,$200C(a0)         ; colour 3 yellow</span></div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span><span class="comment">//         move.l     #$FF0000FF,$2010(a0)         ; colour 4 blue</span></div>
-<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span><span class="comment">//         move.l     #$FF00FFFF,$2014(a0)         ; colour 5 magenta</span></div>
-<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span><span class="comment">//         move.l     #$FFFF00FF,$2018(a0)         ; colour 6 cyan</span></div>
-<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span><span class="comment">//         move.l     #$FFFFFFFF,$201C(a0)         ; colour 7 white</span></div>
-<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span><span class="comment">// </span></div>
-<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span><span class="comment">//         rts</span></div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span><span class="comment">// Bit Q&amp;D but I think it&#39;s right</span></div>
-<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span> </div>
-<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span> </div>
-<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span><span class="comment">// **** TEMP font loading *****</span></div>
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span> </div>
-<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span><span class="comment">// create a font object and populate with modified chicago 14 pt regular</span></div>
-<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span><span class="comment">// this is a temporary function until we get file handling and can load from disk</span></div>
-<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span><a class="code hl_struct" href="struct_font.html">Font</a>* Sys_LoadSystemFont(<span class="keywordtype">void</span>);</div>
-<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span> </div>
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span><span class="comment">// create a font object and populate with helvetica 9 pt regular</span></div>
-<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span><span class="comment">// this is a temporary function until we get file handling and can load from disk</span></div>
-<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span><a class="code hl_struct" href="struct_font.html">Font</a>* Sys_LoadAppFont(<span class="keywordtype">void</span>);</div>
-<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span> </div>
-<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span> </div>
-<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span> </div>
-<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span><span class="comment">// **** Render functions *****</span></div>
-<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span> </div>
-<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span> </div>
-<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span><span class="keywordtype">void</span> <a class="code hl_function" href="lib__sys_8h.html#a894dcd75f3b86c56cb65687773a9f42b">Sys_Render</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span><span class="comment">// **** xxx functions *****</span></div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span> </div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span><span class="keywordtype">bool</span> <a class="code hl_function" href="lib__sys_8h.html#a28db6577238669059b73ad77d7fa9752">Sys_SetVRAMAddr</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system, uint8_t the_bitmap_layer, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* the_address);</div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span> </div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span> </div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span> </div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span><span class="comment">// **** xxx functions *****</span></div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span> </div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span> </div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span> </div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span> </div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span> </div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span> </div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span> </div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span><span class="comment">//</span></div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span><span class="comment">// Discord, 3022/03/10</span></div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span><span class="comment">//</span></div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span><span class="comment">// PJW</span></div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span><span class="comment">// Generally speaking (the order does not really matter on this):</span></div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span><span class="comment">// 1. Set the mode bits in the master control register (GRAPHICS + BITMAP), as well as the resolution.</span></div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span><span class="comment">// 2. Load the color table for the bitmap into one of the graphics LUTs (start at $B4:2000 on the A2560U, $FEC8:2000 on the A2560K)</span></div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span><span class="comment">// 3. Load the bitmap pixel data into video RAM (starts at $C0:0000 on the A2560U, $0080:0000 on the A2560K)</span></div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span><span class="comment">// 4. Set the enable bit and LUT # in the bitmap control register for the layer you want</span></div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span><span class="comment">// 5. Set the address of the pixel data in video RAM in the VRAM address pointer for the layer you want. This must be set relative to the beginning of VRAM, so if you&#39;re using the A2560U and the pixel data starts at $C2:0000, you&#39;d store $02:0000 in the address register.</span></div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span><span class="comment">// Paul Scott Robson — Today at 12:45 PM</span></div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span><span class="comment">// TextInitialise:</span></div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span><span class="comment">//         clr.l     d0</span></div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span><span class="comment">//         lea     vicky3,a0                     ; start register writes</span></div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span><span class="comment">//         move.l     #$0000000C,(a0)             ; graphics mode &amp; bitmap on.</span></div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span><span class="comment">//         move.l     d0,$4(a0)                     ; zero border size/scroll/colour</span></div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span><span class="comment">//         move.l     d0,$8(a0)                     ; clear border colour</span></div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span><span class="comment">//         move.l     d0,$C(a0)</span></div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span><span class="comment">//         move.l     d0,$10(a0)                     ; cursor off</span></div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span><span class="comment">//         move.l     d0,$14(a0)                     ; no line interrupts</span></div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span><span class="comment">//         move.l     d0,$18(a0)</span></div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span><span class="comment">// </span></div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span><span class="comment">//         move.l     #$00000001,$100(a0)         ; LUT 0, BMP 1 on</span></div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span><span class="comment">//         move.l     d0,$104(a0)                 ; BMP 1 address</span></div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span><span class="comment">//         move.l     d0,$108(a0)                    ; BMP 2 off</span></div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span><span class="comment">// </span></div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span><span class="comment">//         move.l     #$0000FF00,$2004(a0)         ; colour 1 red</span></div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span><span class="comment">//         move.l     #$00FF00FF,$2008(a0)         ; colour 2 green</span></div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span><span class="comment">//         move.l     #$00FFFFFF,$200C(a0)         ; colour 3 yellow</span></div>
+<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span><span class="comment">//         move.l     #$FF0000FF,$2010(a0)         ; colour 4 blue</span></div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span><span class="comment">//         move.l     #$FF00FFFF,$2014(a0)         ; colour 5 magenta</span></div>
+<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span><span class="comment">//         move.l     #$FFFF00FF,$2018(a0)         ; colour 6 cyan</span></div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span><span class="comment">//         move.l     #$FFFFFFFF,$201C(a0)         ; colour 7 white</span></div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span><span class="comment">// </span></div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span><span class="comment">//         rts</span></div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span><span class="comment">// Bit Q&amp;D but I think it&#39;s right</span></div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span> </div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span> </div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span><span class="comment">// **** TEMP font loading *****</span></div>
 <div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span> </div>
-<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span> </div>
-<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span> </div>
-<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span> </div>
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span><span class="preprocessor">#endif </span><span class="comment">/* LIB_SYS_H_ */</span><span class="preprocessor"></span></div>
-<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span> </div>
-<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span> </div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span><span class="comment">// create a font object and populate with modified chicago 14 pt regular</span></div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span><span class="comment">// this is a temporary function until we get file handling and can load from disk</span></div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span><a class="code hl_struct" href="struct_font.html">Font</a>* Sys_LoadSystemFont(<span class="keywordtype">void</span>);</div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span> </div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span><span class="comment">// create a font object and populate with helvetica 9 pt regular</span></div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span><span class="comment">// this is a temporary function until we get file handling and can load from disk</span></div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span><a class="code hl_struct" href="struct_font.html">Font</a>* Sys_LoadAppFont(<span class="keywordtype">void</span>);</div>
+<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span> </div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span> </div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span> </div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span><span class="comment">// **** Render functions *****</span></div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span> </div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span> </div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span><span class="keywordtype">void</span> <a class="code hl_function" href="lib__sys_8h.html#a894dcd75f3b86c56cb65687773a9f42b">Sys_Render</a>(<a class="code hl_struct" href="struct_system.html">System</a>* the_system);</div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span> </div>
+<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span> </div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span> </div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span> </div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span><span class="preprocessor">#endif </span><span class="comment">/* LIB_SYS_H_ */</span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span> </div>
+<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span> </div>
+<div class="ttc" id="abitmap_8h_html"><div class="ttname"><a href="bitmap_8h.html">bitmap.h</a></div></div>
 <div class="ttc" id="acontrol__template_8h_html"><div class="ttname"><a href="control__template_8h.html">control_template.h</a></div></div>
-<div class="ttc" id="alib__sys_8h_html_a064e8b27c30d58b3a65a8ec7e709bfdb"><div class="ttname"><a href="lib__sys_8h.html#a064e8b27c30d58b3a65a8ec7e709bfdb">Sys_SetSystemFont</a></div><div class="ttdeci">void Sys_SetSystemFont(System *the_system, Font *the_font)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1493</div></div>
-<div class="ttc" id="alib__sys_8h_html_a08443288542cd1c5c531b6ec028d2980"><div class="ttname"><a href="lib__sys_8h.html#a08443288542cd1c5c531b6ec028d2980">Sys_New</a></div><div class="ttdeci">System * Sys_New(void)</div><div class="ttdoc">Allocate a System object.</div><div class="ttdef"><b>Definition:</b> lib_sys.c:202</div></div>
-<div class="ttc" id="alib__sys_8h_html_a0cc43e2be125e57916a9df424f909f60"><div class="ttname"><a href="lib__sys_8h.html#a0cc43e2be125e57916a9df424f909f60">Sys_EnableTextModeCursor</a></div><div class="ttdeci">bool Sys_EnableTextModeCursor(System *the_system, Screen *the_screen, bool enable_it)</div><div class="ttdoc">Enable or disable the hardware cursor in text mode, for the specified screen.</div><div class="ttdef"><b>Definition:</b> lib_sys.c:965</div></div>
-<div class="ttc" id="alib__sys_8h_html_a15c8506e06311bbe6c815d64eb685bda"><div class="ttname"><a href="lib__sys_8h.html#a15c8506e06311bbe6c815d64eb685bda">Sys_GetEventManager</a></div><div class="ttdeci">EventManager * Sys_GetEventManager(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1475</div></div>
-<div class="ttc" id="alib__sys_8h_html_a28db6577238669059b73ad77d7fa9752"><div class="ttname"><a href="lib__sys_8h.html#a28db6577238669059b73ad77d7fa9752">Sys_SetVRAMAddr</a></div><div class="ttdeci">bool Sys_SetVRAMAddr(System *the_system, uint8_t the_bitmap_layer, unsigned char *the_address)</div><div class="ttdoc">Tell the VICKY to use a different address for the specified bitmap layer.</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1612</div></div>
-<div class="ttc" id="alib__sys_8h_html_a31b4b6b8f93b4daabde4662d62ed66d9"><div class="ttname"><a href="lib__sys_8h.html#a31b4b6b8f93b4daabde4662d62ed66d9">Sys_AddToWindowList</a></div><div class="ttdeci">bool Sys_AddToWindowList(System *the_system, Window *the_new_window)</div><div class="ttdoc">Add this window to the list of windows and make it the currently active window.</div><div class="ttdef"><b>Definition:</b> lib_sys.c:994</div></div>
-<div class="ttc" id="alib__sys_8h_html_a39f1fbbd7a6b0a38ff0c9884e188d4d4"><div class="ttname"><a href="lib__sys_8h.html#a39f1fbbd7a6b0a38ff0c9884e188d4d4">Sys_SetTheme</a></div><div class="ttdeci">bool Sys_SetTheme(System *the_system, Theme *the_theme)</div><div class="ttdoc">Set the passed theme as the System's current theme Note: this will dispose of the current theme after...</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1568</div></div>
-<div class="ttc" id="alib__sys_8h_html_a3b11a4c19b359bffb12dc6c86cdac684"><div class="ttname"><a href="lib__sys_8h.html#a3b11a4c19b359bffb12dc6c86cdac684">Sys_SetVideoMode</a></div><div class="ttdeci">bool Sys_SetVideoMode(Screen *the_screen, screen_resolution new_mode)</div><div class="ttdoc">Change video mode to the one passed.</div><div class="ttdef"><b>Definition:</b> lib_sys.c:864</div></div>
-<div class="ttc" id="alib__sys_8h_html_a424d04e97f5b784500098ea5c1ff263a"><div class="ttname"><a href="lib__sys_8h.html#a424d04e97f5b784500098ea5c1ff263a">Sys_SetAppFont</a></div><div class="ttdeci">void Sys_SetAppFont(System *the_system, Font *the_font)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1506</div></div>
-<div class="ttc" id="alib__sys_8h_html_a492835a9360cea71b17ddfb29ff7e44c"><div class="ttname"><a href="lib__sys_8h.html#a492835a9360cea71b17ddfb29ff7e44c">Sys_AutoDetectMachine</a></div><div class="ttdeci">bool Sys_AutoDetectMachine(System *the_system)</div><div class="ttdoc">Find out what kind of machine the software is running on, and determine # of screens available.</div><div class="ttdef"><b>Definition:</b> lib_sys.c:525</div></div>
-<div class="ttc" id="alib__sys_8h_html_a4a4b865a6eab764d18a3defa01844810"><div class="ttname"><a href="lib__sys_8h.html#a4a4b865a6eab764d18a3defa01844810">Sys_SetModeGraphics</a></div><div class="ttdeci">bool Sys_SetModeGraphics(System *the_system)</div><div class="ttdoc">Switch machine into graphics mode.</div><div class="ttdef"><b>Definition:</b> lib_sys.c:648</div></div>
-<div class="ttc" id="alib__sys_8h_html_a4b554373341e17075715bafd0b522319"><div class="ttname"><a href="lib__sys_8h.html#a4b554373341e17075715bafd0b522319">Sys_Destroy</a></div><div class="ttdeci">bool Sys_Destroy(System **the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:274</div></div>
-<div class="ttc" id="alib__sys_8h_html_a63aedad641566d0d1dc865d5d0a35159"><div class="ttname"><a href="lib__sys_8h.html#a63aedad641566d0d1dc865d5d0a35159">Sys_GetScreenBitmap</a></div><div class="ttdeci">Bitmap * Sys_GetScreenBitmap(System *the_system, int16_t channel_id)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1456</div></div>
-<div class="ttc" id="alib__sys_8h_html_a6739e8ef26b70432c009d8fe80bd435a"><div class="ttname"><a href="lib__sys_8h.html#a6739e8ef26b70432c009d8fe80bd435a">Sys_GetNextWindow</a></div><div class="ttdeci">Window * Sys_GetNextWindow(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1124</div></div>
-<div class="ttc" id="alib__sys_8h_html_a677c804fa2b6068e4ec0dbcd63bb9c4f"><div class="ttname"><a href="lib__sys_8h.html#a677c804fa2b6068e4ec0dbcd63bb9c4f">Sys_GetAppFont</a></div><div class="ttdeci">Font * Sys_GetAppFont(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1424</div></div>
-<div class="ttc" id="alib__sys_8h_html_a6a430bc3ebc69806ead9035112ec0f24"><div class="ttname"><a href="lib__sys_8h.html#a6a430bc3ebc69806ead9035112ec0f24">Sys_SetScreenBitmap</a></div><div class="ttdeci">void Sys_SetScreenBitmap(System *the_system, int16_t channel_id, Bitmap *the_bitmap)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1538</div></div>
-<div class="ttc" id="alib__sys_8h_html_a844d7975b42b311fdfe7d6a9afede689"><div class="ttname"><a href="lib__sys_8h.html#a844d7975b42b311fdfe7d6a9afede689">Sys_GetWindowAtXY</a></div><div class="ttdeci">Window * Sys_GetWindowAtXY(System *the_system, int16_t x, int16_t y)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1283</div></div>
-<div class="ttc" id="alib__sys_8h_html_a894dcd75f3b86c56cb65687773a9f42b"><div class="ttname"><a href="lib__sys_8h.html#a894dcd75f3b86c56cb65687773a9f42b">Sys_Render</a></div><div class="ttdeci">void Sys_Render(System *the_system)</div><div class="ttdoc">Render all visible windows NOTE: this will move to a private Sys function later, once event handling ...</div><div class="ttdef"><b>Definition:</b> lib_sys.c:2315</div></div>
-<div class="ttc" id="alib__sys_8h_html_a8f17fdc9762295321c42c166d5022c20"><div class="ttname"><a href="lib__sys_8h.html#a8f17fdc9762295321c42c166d5022c20">Sys_GetScreen</a></div><div class="ttdeci">Screen * Sys_GetScreen(System *the_system, int16_t channel_id)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1437</div></div>
-<div class="ttc" id="alib__sys_8h_html_a921ca3413bb38373e6a14bd88c1eb6da"><div class="ttname"><a href="lib__sys_8h.html#a921ca3413bb38373e6a14bd88c1eb6da">Sys_CreateBackdropWindow</a></div><div class="ttdeci">bool Sys_CreateBackdropWindow(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1028</div></div>
-<div class="ttc" id="alib__sys_8h_html_aa013ab93ca4a376667fdd9bf216c0121"><div class="ttname"><a href="lib__sys_8h.html#aa013ab93ca4a376667fdd9bf216c0121">Sys_GetBackdropWindow</a></div><div class="ttdeci">Window * Sys_GetBackdropWindow(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1094</div></div>
-<div class="ttc" id="alib__sys_8h_html_aa08811e1f1c5e90dacebb1c5502afc71"><div class="ttname"><a href="lib__sys_8h.html#aa08811e1f1c5e90dacebb1c5502afc71">Sys_SetScreen</a></div><div class="ttdeci">void Sys_SetScreen(System *the_system, int16_t channel_id, Screen *the_screen)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1519</div></div>
-<div class="ttc" id="alib__sys_8h_html_aa5e4e18b0e2066b48f050addbbe546b3"><div class="ttname"><a href="lib__sys_8h.html#aa5e4e18b0e2066b48f050addbbe546b3">Sys_DetectScreenSize</a></div><div class="ttdeci">bool Sys_DetectScreenSize(Screen *the_screen)</div><div class="ttdoc">Detect the current screen mode/resolution, and set # of columns, rows, H pixels, V pixels,...</div><div class="ttdef"><b>Definition:</b> lib_sys.c:711</div></div>
-<div class="ttc" id="alib__sys_8h_html_aa7140689d5ca0964b3840c96ccde1807"><div class="ttname"><a href="lib__sys_8h.html#aa7140689d5ca0964b3840c96ccde1807">Sys_GetPreviousWindow</a></div><div class="ttdeci">Window * Sys_GetPreviousWindow(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1210</div></div>
-<div class="ttc" id="alib__sys_8h_html_aadad43b6c5eaa6981951eac2536ce10b"><div class="ttname"><a href="lib__sys_8h.html#aadad43b6c5eaa6981951eac2536ce10b">Sys_SetActiveWindow</a></div><div class="ttdeci">bool Sys_SetActiveWindow(System *the_system, Window *the_window)</div><div class="ttdoc">Set the passed window to the active window, and marks the previously active window as inactive NOTE: ...</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1334</div></div>
-<div class="ttc" id="alib__sys_8h_html_ab18b67b61dd745e75aa64c5ba73358d0"><div class="ttname"><a href="lib__sys_8h.html#ab18b67b61dd745e75aa64c5ba73358d0">Sys_SetModeText</a></div><div class="ttdeci">bool Sys_SetModeText(System *the_system, bool as_overlay)</div><div class="ttdoc">Switch machine into text mode.</div><div class="ttdef"><b>Definition:</b> lib_sys.c:673</div></div>
-<div class="ttc" id="alib__sys_8h_html_abd5862c5cf34c09cba051d4c896322e5"><div class="ttname"><a href="lib__sys_8h.html#abd5862c5cf34c09cba051d4c896322e5">Sys_GetTheme</a></div><div class="ttdeci">Theme * Sys_GetTheme(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1399</div></div>
-<div class="ttc" id="alib__sys_8h_html_ac3d6d271b2a789e26896de04852c77c0"><div class="ttname"><a href="lib__sys_8h.html#ac3d6d271b2a789e26896de04852c77c0">Sys_InitSystem</a></div><div class="ttdeci">bool Sys_InitSystem(void)</div><div class="ttdoc">Initialize the system (primary entry point for all system initialization activity) Starts up the memo...</div><div class="ttdef"><b>Definition:</b> lib_sys.c:369</div></div>
-<div class="ttc" id="alib__sys_8h_html_ad932137a967df1c9ca838bae43362045"><div class="ttname"><a href="lib__sys_8h.html#ad932137a967df1c9ca838bae43362045">Sys_GetSystemFont</a></div><div class="ttdeci">Font * Sys_GetSystemFont(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1411</div></div>
-<div class="ttc" id="alib__sys_8h_html_ae616a613bf0d182c82c53807f90787e3"><div class="ttname"><a href="lib__sys_8h.html#ae616a613bf0d182c82c53807f90787e3">Sys_GetActiveWindow</a></div><div class="ttdeci">Window * Sys_GetActiveWindow(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1080</div></div>
-<div class="ttc" id="alib__sys_8h_html_aed61a6754ace552013413feea54fd336"><div class="ttname"><a href="lib__sys_8h.html#aed61a6754ace552013413feea54fd336">Sys_AutoConfigure</a></div><div class="ttdeci">bool Sys_AutoConfigure(System *the_system)</div><div class="ttdoc">Find out what kind of machine the software is running on, and configure the passed screen accordingly...</div><div class="ttdef"><b>Definition:</b> lib_sys.c:566</div></div>
-<div class="ttc" id="amemory__manager_8h_html"><div class="ttname"><a href="memory__manager_8h.html">memory_manager.h</a></div></div>
-<div class="ttc" id="astruct_bitmap_html"><div class="ttname"><a href="struct_bitmap.html">Bitmap</a></div><div class="ttdef"><b>Definition:</b> bitmap.h:93</div></div>
-<div class="ttc" id="astruct_event_manager_html"><div class="ttname"><a href="struct_event_manager.html">EventManager</a></div><div class="ttdef"><b>Definition:</b> event.h:191</div></div>
-<div class="ttc" id="astruct_font_html"><div class="ttname"><a href="struct_font.html">Font</a></div><div class="ttdoc">This Font object is essentially the Mac &quot;fontRecord&quot; struct, with added pointers for the data tables.</div><div class="ttdef"><b>Definition:</b> font.h:67</div></div>
+<div class="ttc" id="ageneral_8h_html"><div class="ttname"><a href="general_8h.html">general.h</a></div></div>
+<div class="ttc" id="alib__sys_8h_html_a064e8b27c30d58b3a65a8ec7e709bfdb"><div class="ttname"><a href="lib__sys_8h.html#a064e8b27c30d58b3a65a8ec7e709bfdb">Sys_SetSystemFont</a></div><div class="ttdeci">void Sys_SetSystemFont(System *the_system, Font *the_font)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1928</div></div>
+<div class="ttc" id="alib__sys_8h_html_a08443288542cd1c5c531b6ec028d2980"><div class="ttname"><a href="lib__sys_8h.html#a08443288542cd1c5c531b6ec028d2980">Sys_New</a></div><div class="ttdeci">System * Sys_New(void)</div><div class="ttdoc">Allocate a System object.</div><div class="ttdef"><b>Definition:</b> lib_sys.c:220</div></div>
+<div class="ttc" id="alib__sys_8h_html_a0cc43e2be125e57916a9df424f909f60"><div class="ttname"><a href="lib__sys_8h.html#a0cc43e2be125e57916a9df424f909f60">Sys_EnableTextModeCursor</a></div><div class="ttdeci">bool Sys_EnableTextModeCursor(System *the_system, Screen *the_screen, bool enable_it)</div><div class="ttdoc">Enable or disable the hardware cursor in text mode, for the specified screen.</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1039</div></div>
+<div class="ttc" id="alib__sys_8h_html_a15c8506e06311bbe6c815d64eb685bda"><div class="ttname"><a href="lib__sys_8h.html#a15c8506e06311bbe6c815d64eb685bda">Sys_GetEventManager</a></div><div class="ttdeci">EventManager * Sys_GetEventManager(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1906</div></div>
+<div class="ttc" id="alib__sys_8h_html_a1f2272ea55be32476762fe7f63dafe1f"><div class="ttname"><a href="lib__sys_8h.html#a1f2272ea55be32476762fe7f63dafe1f">Sys_CollectDamageRects</a></div><div class="ttdeci">void Sys_CollectDamageRects(System *the_system, Window *the_future_active_window)</div><div class="ttdoc">Collect damage rects for a window that is about to be made the active (foremost) window,...</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1727</div></div>
+<div class="ttc" id="alib__sys_8h_html_a28db6577238669059b73ad77d7fa9752"><div class="ttname"><a href="lib__sys_8h.html#a28db6577238669059b73ad77d7fa9752">Sys_SetVRAMAddr</a></div><div class="ttdeci">bool Sys_SetVRAMAddr(System *the_system, uint8_t the_bitmap_layer, unsigned char *the_address)</div><div class="ttdoc">Tell the VICKY to use a different address for the specified bitmap layer.</div><div class="ttdef"><b>Definition:</b> lib_sys.c:2081</div></div>
+<div class="ttc" id="alib__sys_8h_html_a31b4b6b8f93b4daabde4662d62ed66d9"><div class="ttname"><a href="lib__sys_8h.html#a31b4b6b8f93b4daabde4662d62ed66d9">Sys_AddToWindowList</a></div><div class="ttdeci">bool Sys_AddToWindowList(System *the_system, Window *the_new_window)</div><div class="ttdoc">Add this window to the list of windows and make it the currently active window.</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1072</div></div>
+<div class="ttc" id="alib__sys_8h_html_a39f1fbbd7a6b0a38ff0c9884e188d4d4"><div class="ttname"><a href="lib__sys_8h.html#a39f1fbbd7a6b0a38ff0c9884e188d4d4">Sys_SetTheme</a></div><div class="ttdeci">bool Sys_SetTheme(System *the_system, Theme *the_theme)</div><div class="ttdoc">Set the passed theme as the System's current theme Note: this will dispose of the current theme after...</div><div class="ttdef"><b>Definition:</b> lib_sys.c:2030</div></div>
+<div class="ttc" id="alib__sys_8h_html_a3b11a4c19b359bffb12dc6c86cdac684"><div class="ttname"><a href="lib__sys_8h.html#a3b11a4c19b359bffb12dc6c86cdac684">Sys_SetVideoMode</a></div><div class="ttdeci">bool Sys_SetVideoMode(Screen *the_screen, screen_resolution new_mode)</div><div class="ttdoc">Change video mode to the one passed.</div><div class="ttdef"><b>Definition:</b> lib_sys.c:934</div></div>
+<div class="ttc" id="alib__sys_8h_html_a42408a44288eff4198b872aee08f34e9"><div class="ttname"><a href="lib__sys_8h.html#a42408a44288eff4198b872aee08f34e9">Sys_IssueMenuDamageRects</a></div><div class="ttdeci">void Sys_IssueMenuDamageRects(System *the_system)</div><div class="ttdoc">Issue damage rects from the menu down to every other window in the system so that they can redraw por...</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1679</div></div>
+<div class="ttc" id="alib__sys_8h_html_a424d04e97f5b784500098ea5c1ff263a"><div class="ttname"><a href="lib__sys_8h.html#a424d04e97f5b784500098ea5c1ff263a">Sys_SetAppFont</a></div><div class="ttdeci">void Sys_SetAppFont(System *the_system, Font *the_font)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1947</div></div>
+<div class="ttc" id="alib__sys_8h_html_a492835a9360cea71b17ddfb29ff7e44c"><div class="ttname"><a href="lib__sys_8h.html#a492835a9360cea71b17ddfb29ff7e44c">Sys_AutoDetectMachine</a></div><div class="ttdeci">bool Sys_AutoDetectMachine(System *the_system)</div><div class="ttdoc">Find out what kind of machine the software is running on, and determine # of screens available.</div><div class="ttdef"><b>Definition:</b> lib_sys.c:576</div></div>
+<div class="ttc" id="alib__sys_8h_html_a4a4b865a6eab764d18a3defa01844810"><div class="ttname"><a href="lib__sys_8h.html#a4a4b865a6eab764d18a3defa01844810">Sys_SetModeGraphics</a></div><div class="ttdeci">bool Sys_SetModeGraphics(System *the_system)</div><div class="ttdoc">Switch machine into graphics mode.</div><div class="ttdef"><b>Definition:</b> lib_sys.c:700</div></div>
+<div class="ttc" id="alib__sys_8h_html_a4b554373341e17075715bafd0b522319"><div class="ttname"><a href="lib__sys_8h.html#a4b554373341e17075715bafd0b522319">Sys_Destroy</a></div><div class="ttdeci">bool Sys_Destroy(System **the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:297</div></div>
+<div class="ttc" id="alib__sys_8h_html_a6739e8ef26b70432c009d8fe80bd435a"><div class="ttname"><a href="lib__sys_8h.html#a6739e8ef26b70432c009d8fe80bd435a">Sys_GetNextWindow</a></div><div class="ttdeci">Window * Sys_GetNextWindow(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1241</div></div>
+<div class="ttc" id="alib__sys_8h_html_a677c804fa2b6068e4ec0dbcd63bb9c4f"><div class="ttname"><a href="lib__sys_8h.html#a677c804fa2b6068e4ec0dbcd63bb9c4f">Sys_GetAppFont</a></div><div class="ttdeci">Font * Sys_GetAppFont(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1825</div></div>
+<div class="ttc" id="alib__sys_8h_html_a844d7975b42b311fdfe7d6a9afede689"><div class="ttname"><a href="lib__sys_8h.html#a844d7975b42b311fdfe7d6a9afede689">Sys_GetWindowAtXY</a></div><div class="ttdeci">Window * Sys_GetWindowAtXY(System *the_system, int16_t x, int16_t y)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1410</div></div>
+<div class="ttc" id="alib__sys_8h_html_a894dcd75f3b86c56cb65687773a9f42b"><div class="ttname"><a href="lib__sys_8h.html#a894dcd75f3b86c56cb65687773a9f42b">Sys_Render</a></div><div class="ttdeci">void Sys_Render(System *the_system)</div><div class="ttdoc">Render all visible windows NOTE: this will move to a private Sys function later, once event handling ...</div><div class="ttdef"><b>Definition:</b> lib_sys.c:2730</div></div>
+<div class="ttc" id="alib__sys_8h_html_a8f17fdc9762295321c42c166d5022c20"><div class="ttname"><a href="lib__sys_8h.html#a8f17fdc9762295321c42c166d5022c20">Sys_GetScreen</a></div><div class="ttdeci">Screen * Sys_GetScreen(System *the_system, int16_t channel_id)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1842</div></div>
+<div class="ttc" id="alib__sys_8h_html_a921ca3413bb38373e6a14bd88c1eb6da"><div class="ttname"><a href="lib__sys_8h.html#a921ca3413bb38373e6a14bd88c1eb6da">Sys_CreateBackdropWindow</a></div><div class="ttdeci">bool Sys_CreateBackdropWindow(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1136</div></div>
+<div class="ttc" id="alib__sys_8h_html_aa013ab93ca4a376667fdd9bf216c0121"><div class="ttname"><a href="lib__sys_8h.html#aa013ab93ca4a376667fdd9bf216c0121">Sys_GetBackdropWindow</a></div><div class="ttdeci">Window * Sys_GetBackdropWindow(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1207</div></div>
+<div class="ttc" id="alib__sys_8h_html_aa08811e1f1c5e90dacebb1c5502afc71"><div class="ttname"><a href="lib__sys_8h.html#aa08811e1f1c5e90dacebb1c5502afc71">Sys_SetScreen</a></div><div class="ttdeci">void Sys_SetScreen(System *the_system, int16_t channel_id, Screen *the_screen)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1966</div></div>
+<div class="ttc" id="alib__sys_8h_html_aa5e4e18b0e2066b48f050addbbe546b3"><div class="ttname"><a href="lib__sys_8h.html#aa5e4e18b0e2066b48f050addbbe546b3">Sys_DetectScreenSize</a></div><div class="ttdeci">bool Sys_DetectScreenSize(Screen *the_screen)</div><div class="ttdoc">Detect the current screen mode/resolution, and set # of columns, rows, H pixels, V pixels,...</div><div class="ttdef"><b>Definition:</b> lib_sys.c:777</div></div>
+<div class="ttc" id="alib__sys_8h_html_aa7140689d5ca0964b3840c96ccde1807"><div class="ttname"><a href="lib__sys_8h.html#aa7140689d5ca0964b3840c96ccde1807">Sys_GetPreviousWindow</a></div><div class="ttdeci">Window * Sys_GetPreviousWindow(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1334</div></div>
+<div class="ttc" id="alib__sys_8h_html_aadad43b6c5eaa6981951eac2536ce10b"><div class="ttname"><a href="lib__sys_8h.html#aadad43b6c5eaa6981951eac2536ce10b">Sys_SetActiveWindow</a></div><div class="ttdeci">bool Sys_SetActiveWindow(System *the_system, Window *the_window)</div><div class="ttdoc">Set the passed window to the active window, and marks the previously active window as inactive NOTE: ...</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1465</div></div>
+<div class="ttc" id="alib__sys_8h_html_ab18b67b61dd745e75aa64c5ba73358d0"><div class="ttname"><a href="lib__sys_8h.html#ab18b67b61dd745e75aa64c5ba73358d0">Sys_SetModeText</a></div><div class="ttdeci">bool Sys_SetModeText(System *the_system, bool as_overlay)</div><div class="ttdoc">Switch machine into text mode.</div><div class="ttdef"><b>Definition:</b> lib_sys.c:734</div></div>
+<div class="ttc" id="alib__sys_8h_html_ab623aeab6f4d9d7cb590443784f5fb21"><div class="ttname"><a href="lib__sys_8h.html#ab623aeab6f4d9d7cb590443784f5fb21">Sys_IssueDamageRects</a></div><div class="ttdeci">void Sys_IssueDamageRects(System *the_system)</div><div class="ttdoc">Issue damage rects from the Active Window down to each other window in the system so that they can re...</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1617</div></div>
+<div class="ttc" id="alib__sys_8h_html_abc49eb62dfe89d2b36b696a2b452dfb3"><div class="ttname"><a href="lib__sys_8h.html#abc49eb62dfe89d2b36b696a2b452dfb3">Sys_GetScreenBitmap</a></div><div class="ttdeci">Bitmap * Sys_GetScreenBitmap(System *the_system, bitmap_layer the_layer)</div><div class="ttdoc">NOTE: Foenix systems only have 1 screen with bitmap graphics, even if the system has 2 screens overal...</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1883</div></div>
+<div class="ttc" id="alib__sys_8h_html_abd5862c5cf34c09cba051d4c896322e5"><div class="ttname"><a href="lib__sys_8h.html#abd5862c5cf34c09cba051d4c896322e5">Sys_GetTheme</a></div><div class="ttdeci">Theme * Sys_GetTheme(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1792</div></div>
+<div class="ttc" id="alib__sys_8h_html_ac17125fd80c4fc5a76b0218206047be4"><div class="ttname"><a href="lib__sys_8h.html#ac17125fd80c4fc5a76b0218206047be4">Sys_GetMenu</a></div><div class="ttdeci">Menu * Sys_GetMenu(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1865</div></div>
+<div class="ttc" id="alib__sys_8h_html_ac3d6d271b2a789e26896de04852c77c0"><div class="ttname"><a href="lib__sys_8h.html#ac3d6d271b2a789e26896de04852c77c0">Sys_InitSystem</a></div><div class="ttdeci">bool Sys_InitSystem(void)</div><div class="ttdoc">Initialize the system (primary entry point for all system initialization activity) Starts up the memo...</div><div class="ttdef"><b>Definition:</b> lib_sys.c:405</div></div>
+<div class="ttc" id="alib__sys_8h_html_ad932137a967df1c9ca838bae43362045"><div class="ttname"><a href="lib__sys_8h.html#ad932137a967df1c9ca838bae43362045">Sys_GetSystemFont</a></div><div class="ttdeci">Font * Sys_GetSystemFont(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1808</div></div>
+<div class="ttc" id="alib__sys_8h_html_ae616a613bf0d182c82c53807f90787e3"><div class="ttname"><a href="lib__sys_8h.html#ae616a613bf0d182c82c53807f90787e3">Sys_GetActiveWindow</a></div><div class="ttdeci">Window * Sys_GetActiveWindow(System *the_system)</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1189</div></div>
+<div class="ttc" id="alib__sys_8h_html_aed61a6754ace552013413feea54fd336"><div class="ttname"><a href="lib__sys_8h.html#aed61a6754ace552013413feea54fd336">Sys_AutoConfigure</a></div><div class="ttdeci">bool Sys_AutoConfigure(System *the_system)</div><div class="ttdoc">Find out what kind of machine the software is running on, and configure the passed screen accordingly...</div><div class="ttdef"><b>Definition:</b> lib_sys.c:618</div></div>
+<div class="ttc" id="alib__sys_8h_html_af643b8e356213197c003f5002d8930b5"><div class="ttname"><a href="lib__sys_8h.html#af643b8e356213197c003f5002d8930b5">Sys_SetScreenBitmap</a></div><div class="ttdeci">void Sys_SetScreenBitmap(System *the_system, Bitmap *the_bitmap, bitmap_layer the_layer)</div><div class="ttdoc">NOTE: Foenix systems only have 1 screen with bitmap graphics, even if the system has 2 screens overal...</div><div class="ttdef"><b>Definition:</b> lib_sys.c:1992</div></div>
+<div class="ttc" id="astruct_bitmap_html"><div class="ttname"><a href="struct_bitmap.html">Bitmap</a></div><div class="ttdef"><b>Definition:</b> bitmap.h:97</div></div>
+<div class="ttc" id="astruct_event_manager_html"><div class="ttname"><a href="struct_event_manager.html">EventManager</a></div><div class="ttdef"><b>Definition:</b> event.h:194</div></div>
+<div class="ttc" id="astruct_font_html"><div class="ttname"><a href="struct_font.html">Font</a></div><div class="ttdoc">This Font object is essentially the Mac &quot;fontRecord&quot; struct, with added pointers for the data tables.</div><div class="ttdef"><b>Definition:</b> font.h:75</div></div>
 <div class="ttc" id="astruct_list_html"><div class="ttname"><a href="struct_list.html">List</a></div><div class="ttdef"><b>Definition:</b> list.h:67</div></div>
-<div class="ttc" id="astruct_screen_html"><div class="ttname"><a href="struct_screen.html">Screen</a></div><div class="ttdef"><b>Definition:</b> a2560_platform.h:368</div></div>
-<div class="ttc" id="astruct_system_html"><div class="ttname"><a href="struct_system.html">System</a></div><div class="ttdef"><b>Definition:</b> lib_sys.h:79</div></div>
-<div class="ttc" id="astruct_theme_html"><div class="ttname"><a href="struct_theme.html">Theme</a></div><div class="ttdef"><b>Definition:</b> theme.h:106</div></div>
-<div class="ttc" id="astruct_window_html"><div class="ttname"><a href="struct_window.html">Window</a></div><div class="ttdef"><b>Definition:</b> window.h:136</div></div>
+<div class="ttc" id="astruct_menu_html"><div class="ttname"><a href="struct_menu.html">Menu</a></div><div class="ttdef"><b>Definition:</b> menu.h:120</div></div>
+<div class="ttc" id="astruct_screen_html"><div class="ttname"><a href="struct_screen.html">Screen</a></div><div class="ttdef"><b>Definition:</b> a2560_platform.h:390</div></div>
+<div class="ttc" id="astruct_system_html"><div class="ttname"><a href="struct_system.html">System</a></div><div class="ttdef"><b>Definition:</b> lib_sys.h:74</div></div>
+<div class="ttc" id="astruct_theme_html"><div class="ttname"><a href="struct_theme.html">Theme</a></div><div class="ttdef"><b>Definition:</b> theme.h:108</div></div>
+<div class="ttc" id="astruct_window_html"><div class="ttname"><a href="struct_window.html">Window</a></div><div class="ttdef"><b>Definition:</b> window.h:138</div></div>
+<div class="ttc" id="atext_8h_html"><div class="ttname"><a href="text_8h.html">text.h</a></div></div>
 <div class="ttc" id="atheme_8h_html"><div class="ttname"><a href="theme_8h.html">theme.h</a></div></div>
+<div class="ttc" id="awindow_8h_html"><div class="ttname"><a href="window_8h.html">window.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
