@@ -82,7 +82,6 @@ void Menu_LayoutMenu(Menu* the_menu)
 	Theme*		the_theme;
 	int16_t		max_width = 0;
 	int16_t		i;
-	int16_t		total_height = 0;	
 	uint8_t		back_color;
 	uint8_t		fore_color;
 	uint8_t		outline_color;
@@ -209,9 +208,7 @@ void Menu_LayoutMenu(Menu* the_menu)
 		}
 		else if (this_menu_item->type_ == menuSubmenu)
 		{
-			// draw the ">" char at far right
-			int16_t		pixels_used;
-			
+			// draw the ">" char at far right			
 			Bitmap_SetXY(the_menu->bitmap_, MENU_MARGIN + the_menu->inner_width_ - 1 - FONT_CHAR_MENU_RIGHT_WIDTH, MENU_MARGIN + back_row_height + (row_height * i));
 			pixels_used = Font_DrawChar(the_menu->bitmap_, FONT_CHAR_MENU_RIGHT, the_font);
 			
@@ -313,9 +310,9 @@ void Menu_DrawOneMenuItem(Menu* the_menu, int16_t selection_index, bool as_selec
 	
 	the_menu_group = the_menu->menu_group_;
 
-	DEBUG_OUT(("%s %d: text='%s', selection_index=%i, as_selected=%i, count=%i", __func__, __LINE__, the_menu_item->text_, selection_index, as_selected, the_menu_group->num_menu_items_));
-
 	the_menu_item = the_menu_group->item_[selection_index];
+
+	DEBUG_OUT(("%s %d: text='%s', selection_index=%i, as_selected=%i, count=%i", __func__, __LINE__, the_menu_item->text_, selection_index, as_selected, the_menu_group->num_menu_items_));
 		
 	// Need the theme to be able to get current highlight/standard back and fore colors	
 	the_theme = Sys_GetTheme(global_system);
@@ -346,8 +343,6 @@ void Menu_DrawOneMenuItem(Menu* the_menu, int16_t selection_index, bool as_selec
 	if (the_menu_item->type_ == menuSubmenu)
 	{
 		// draw the ">" char at far right
-		int16_t		pixels_used;
-		
 		Bitmap_SetXY(the_menu->bitmap_, MENU_MARGIN + the_menu->inner_width_ - 1 - FONT_CHAR_MENU_RIGHT_WIDTH, the_menu_item->selection_rect_.MinY);
 		pixels_used = Font_DrawChar(the_menu->bitmap_, FONT_CHAR_MENU_RIGHT, the_font);
 		

@@ -771,8 +771,6 @@ error:
 //! Handle Right Mouse Down events on the system level
 void EventManager_HandleRightMouseDown(EventManager* the_event_manager, EventRecord* the_event)
 {
-	int16_t			local_x;
-	int16_t			local_y;
 	Window*			the_window;
 	MouseMode		starting_mode;
 
@@ -873,9 +871,6 @@ void EventManager_HandleMouseMoved(EventManager* the_event_manager, EventRecord*
 	// get the delta between current and last clicked position
 	x_delta = Mouse_GetXDelta(the_event_manager->mouse_tracker_);
 	y_delta = Mouse_GetYDelta(the_event_manager->mouse_tracker_);
-
-	// check if mouse is over a control
-	the_event->control_ = Window_GetControlAtXY(the_event->window_, local_x, local_y);
 
 	DEBUG_OUT(("%s %d: mouse clicked (%i, %i)", __func__, __LINE__, Mouse_GetClickedX(the_event_manager->mouse_tracker_), Mouse_GetClickedY(the_event_manager->mouse_tracker_)));
 	DEBUG_OUT(("%s %d: mouse now (%i, %i)", __func__, __LINE__, Mouse_GetX(the_event_manager->mouse_tracker_), Mouse_GetY(the_event_manager->mouse_tracker_)));
@@ -1009,9 +1004,19 @@ void EventManager_HandleMouseMoved(EventManager* the_event_manager, EventRecord*
 	{
 		// if mouse is down on a control, and is still on control, check that control is currently showing pressed down. if not set, set pressed down and re-render.
 		// if mouse is down on a control, and moves off the control, set the control to not-pressed, and re-render. do NOT change mouse mode. That only happens at mouse up. 
+
+		// get local coords so we can check for mouse movement over a control
+		local_x = the_event->x_;
+		local_y = the_event->y_;
+		Window_GlobalToLocal(the_window, &local_x, &local_y);
+
+		// check if mouse is over a control
+		the_event->control_ = Window_GetControlAtXY(the_event->window_, local_x, local_y);
+
 		Window_SetSelectedControl(the_event->window_, the_event->control_);
 		Control_SetPressed(the_event->control_, CONTROL_NOT_PRESSED);
 		Window_Render(the_event->window_);
+		
 		if (the_event->control_)
 		{
 			Control*	clicked_control;

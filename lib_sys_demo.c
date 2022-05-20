@@ -516,7 +516,6 @@ void Demo_Font_DrawString(Bitmap* the_bitmap, int16_t y)
 
 Bitmap* LoadFakeIcon(int16_t icon_num)
 {
-	uint8_t*	the_icon_data = (uint8_t*)icon_64p_write;	
 	Bitmap*		the_bitmap;
 	int16_t		width = 64;
 	int16_t		height = 64;
@@ -543,7 +542,7 @@ void ShowWhatYouWantMessage(void)
 	int16_t				col;
 	int16_t				icon_num = 0;
 	Window*				the_window;
-	Bitmap*				dst_bitmap;
+	//Bitmap*				dst_bitmap;
 	NewWinTemplate*		the_win_template;
 	int16_t				width = 500;
 	int16_t				height = 300;
@@ -569,7 +568,7 @@ void ShowWhatYouWantMessage(void)
 		return;
 	}
 	
-	dst_bitmap = the_window->bitmap_;
+	//dst_bitmap = the_window->bitmap_;
 	
 	// draw 4 fake icons
 	for (row=0; row < 2; row++)
@@ -688,7 +687,6 @@ void OpenMultipleWindows(void)
 	char				title_buff[WINDOW_MAX_WINTITLE_SIZE];
 	char*				the_win_title = title_buff;
 	int16_t				win_num;
-	int16_t				random_num;
 	
 	srand(sys_time_jiffies());
 	//srand(time(NULL));   // Initialization, should only be called once.
@@ -812,7 +810,6 @@ void Open2Windows(void)
 	char				title_buff[WINDOW_MAX_WINTITLE_SIZE];
 	char*				the_win_title = title_buff;
 	int16_t				win_num;
-	int16_t				random_num;
 	int16_t				win_orig_x = 10;
 	int16_t				win_orig_y = 10;
 	
@@ -1091,11 +1088,11 @@ void SharedEventHandler(EventRecord* the_event)
 	bool				exit_app = false;
 	
 	Window*				the_window;
-	Control*			the_control;
-	uint16_t			the_control_id;
 	static Rectangle	the_rect;
 	
 // 	DEBUG_OUT(("%s %d: reached", __func__, __LINE__));
+
+	the_window = the_event->window_;
 
 // 	DEBUG_OUT(("%s %d: window list at start of demo", __func__, __LINE__));
 // 	List_Print(global_system->list_windows_, (void*)&Window_PrintBrief);	
@@ -1111,7 +1108,6 @@ void SharedEventHandler(EventRecord* the_event)
 		
 			case mouseDown:
 				
-				the_window = the_event->window_;
 				DEBUG_OUT(("%s %d: mouse down event in window '%s'", __func__, __LINE__, the_window->title_));
 
 				if (Window_IsBackdrop(the_window) == false)
@@ -1130,7 +1126,6 @@ void SharedEventHandler(EventRecord* the_event)
 				break;
 
 			case mouseUp:
-				the_window = the_event->window_;
 				DEBUG_OUT(("%s %d: mouse up event in window '%s'", __func__, __LINE__, the_window->title_));
 				
 				if (Window_IsBackdrop(the_window) == false)
@@ -1190,10 +1185,7 @@ void SharedEventHandler(EventRecord* the_event)
 				// NOTE: you are not required to build menus contextually. You could establish all the menu groups ahead of time, and just do Menu_Open with the preconfigured menu groups
 
 				// simple demonstration: if tiny window is hidden, we'll offer Show All Windows and a divider. If tiny window not hidden, the only choices will be open mroe windows and close window
-				Window*	the_window;
 				Menu*	the_menu;
-				
-				the_window = the_event->window_;
 				
 				if (the_window->is_backdrop_)
 				{
@@ -1298,7 +1290,9 @@ void SharedEventHandler(EventRecord* the_event)
 			case controlClicked:
 				DEBUG_OUT(("%s %d: controlClicked event: %c", __func__, __LINE__, the_event->code_));
 				
-				the_window = the_event->window_;
+				Control*			the_control;
+				uint16_t			the_control_id;
+				
 				the_control = the_event->control_;
 				the_control_id = Control_GetID(the_event->control_);
 				
@@ -1343,7 +1337,6 @@ void SharedEventHandler(EventRecord* the_event)
 				break;
 				
 			case windowChanged:
-				the_window = the_event->window_;
 				DEBUG_OUT(("%s %d: windowChanged event: %x", __func__, __LINE__, the_event->code_));
 				
 				// window size and/or position has changed
@@ -1357,7 +1350,6 @@ void SharedEventHandler(EventRecord* the_event)
 					int16_t	new_y;
 					int16_t	new_width;
 					int16_t	new_height;
-					int32_t	the_code;
 					
 					new_x = the_event->x_;
 					new_y = the_event->y_;
