@@ -1757,6 +1757,15 @@ void Sys_CollectDamageRects(System* the_system, Window* the_future_active_window
 	
 	DEBUG_OUT(("%s %d: future active win '%s' has display order of %i", __func__ , __LINE__, the_future_active_window->title_, the_future_active_window->display_order_));
 
+	// LOGIC:
+	//   A backdrop window never needs to collect damage rects from a window above it on active/inactive change
+	//   That is because no matter what the order is, the backdrop window is always at the very back. 
+	//   Windows only need to collect damage rects from windows above them if they can actually get in front of those windows
+	if (the_future_active_window->is_backdrop_)
+	{
+		return;
+	}
+	
 	the_item = *(the_system->list_windows_);
 
 	while (the_item != NULL)
