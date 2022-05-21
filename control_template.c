@@ -57,9 +57,6 @@
 
 
 
-// **** Debug functions *****
-
-void ControlTemplate_Print(ControlTemplate* the_template);
 
 /*****************************************************************************/
 /*                       Private Function Definitions                        */

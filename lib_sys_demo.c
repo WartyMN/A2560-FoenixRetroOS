@@ -622,13 +622,13 @@ void AddControls(Window* the_window)
 		return;
 	}
 	
-	// create 4 buttons
+	// create a bunch of buttons. set different H align for each (first left, then center, then right; repeat)
 
 	// all buttons need to use same height, which is height-of-button-in-the-Theme
 	height = the_theme->flex_width_backdrops_[TEXT_BUTTON].height_; // make a function for getting this from theme. 
 	group_id = 0; // will not be grouping this button with any other buttons
 	
-	width = 280;
+	width = 200;
 	the_id = 1000; // arbitrary, for use of programmer. manage them though, and keep them unique within any one window
 	x_offset = 10;
 	y_offset = 15;
@@ -636,7 +636,7 @@ void AddControls(Window* the_window)
 	for (i = 0; i < BTN_COUNT; i++)
 	{
 		sprintf(caption, "Button #%i", i+1);
-		button[i] = Window_AddNewControl(the_window, TEXT_BUTTON, width, height, x_offset, y_offset, H_ALIGN_LEFT, V_ALIGN_TOP, caption, the_id++, group_id);
+		button[i] = Window_AddNewControl(the_window, TEXT_BUTTON, width, height, x_offset, y_offset, i % 3, V_ALIGN_TOP, caption, the_id++, group_id);
 		Control_SetPressed(button[i], CONTROL_NOT_PRESSED);
 		y_offset += 30;		
 	}
@@ -1415,10 +1415,10 @@ void RunDemo(void)
 
 
 	// test window click, titlebar drag, window resize, etc.
-	//TestWindowEvents();
+	TestWindowEvents();
 
 	// test menu system. Expects some kind of window to be open, but doesn't care what.	
-	TestMenus();
+	//TestMenus();
 
 // 	// delay a bit before switching
 // 	General_DelaySeconds(3);

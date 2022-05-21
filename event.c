@@ -691,6 +691,8 @@ void EventManager_HandleMouseDown(EventManager* the_event_manager, EventRecord* 
 
 	// update the mouse tracker so that if we end up dragging, we'll know where the original click was. (or if a future double click, what time the click was, etc.)
 	Mouse_AcceptUpdate(the_event_manager->mouse_tracker_, the_window, the_event->x_, the_event->y_, true);
+	
+	//DEBUG_OUT(("%s %d: Mouse DOWN; event x/y=(%i, %i)", __func__, __LINE__, the_event->x_, the_event->y_));
 
 	// get local coords so we can check for drag and lasso
 	local_x = the_event->x_;
@@ -739,6 +741,10 @@ void EventManager_HandleMouseDown(EventManager* the_event_manager, EventRecord* 
 			//(*the_window->event_handler_)(the_event);
 			
 			Mouse_SetMode(the_event_manager->mouse_tracker_, mouseDownOnControl);
+		}
+		else
+		{
+			DEBUG_OUT(("%s %d: ** mouse down, but NOT on a control. local_x/y=(%i, %i)", __func__, __LINE__, local_x, local_y));
 		}
 	}
 	

@@ -1988,7 +1988,7 @@ ControlTemplate* Theme_CreateDefaultControlTemplateMinimize(void)
 	the_template->type_ = SIZE_MINIMIZE;
 	the_template->h_align_ = H_ALIGN_RIGHT;
 	the_template->v_align_ = V_ALIGN_TOP;
-	the_template->x_offset_ = 46;
+	the_template->x_offset_ = 34;
 	the_template->y_offset_ = 4;
 	the_template->width_ = width;
 	the_template->height_ = height;
@@ -2044,7 +2044,7 @@ ControlTemplate* Theme_CreateDefaultControlTemplateNormSize(void)
 	the_template->type_ = SIZE_NORMAL;
 	the_template->h_align_ = H_ALIGN_RIGHT;
 	the_template->v_align_ = V_ALIGN_TOP;
-	the_template->x_offset_ = 31;
+	the_template->x_offset_ = 19;
 	the_template->y_offset_ = 4;
 	the_template->width_ = width;
 	the_template->height_ = height;
@@ -2099,7 +2099,7 @@ ControlTemplate* Theme_CreateDefaultControlTemplateMaximize(void)
 	the_template->type_ = SIZE_MAXIMIZE;
 	the_template->h_align_ = H_ALIGN_RIGHT;
 	the_template->v_align_ = V_ALIGN_TOP;
-	the_template->x_offset_ = 16;
+	the_template->x_offset_ = 4;
 	the_template->y_offset_ = 4;
 	the_template->width_ = width;
 	the_template->height_ = height;
@@ -2175,7 +2175,8 @@ ControlTemplate* Theme_CreateControlTemplateFlexWidth(Theme* the_theme, control_
 	the_template->max_ = 1;
 	the_template->caption_ = caption;
 	the_template->avail_text_width_ = width - the_theme->flex_width_backdrops_[the_type].left_width_ - the_theme->flex_width_backdrops_[the_type].right_width_;
-
+	
+	//ControlTemplate_Print(the_template);
 	
 	return the_template;
 }
@@ -3166,7 +3167,7 @@ ControlTemplate* Theme_CreateGreenControlTemplateMinimize(void)
 	the_template->type_ = SIZE_NORMAL;
 	the_template->h_align_ = H_ALIGN_RIGHT;
 	the_template->v_align_ = V_ALIGN_TOP;
-	the_template->x_offset_ = 16+16+16;
+	the_template->x_offset_ = 16+16+2;
 	the_template->y_offset_ = 4;
 	the_template->width_ = width;
 	the_template->height_ = height;
@@ -3221,7 +3222,7 @@ ControlTemplate* Theme_CreateGreenControlTemplateNormSize(void)
 	the_template->type_ = SIZE_NORMAL;
 	the_template->h_align_ = H_ALIGN_RIGHT;
 	the_template->v_align_ = V_ALIGN_TOP;
-	the_template->x_offset_ = 16+16;
+	the_template->x_offset_ = 16+2;
 	the_template->y_offset_ = 4;
 	the_template->width_ = width;
 	the_template->height_ = height;
@@ -3276,7 +3277,7 @@ ControlTemplate* Theme_CreateGreenControlTemplateMaximize(void)
 	the_template->type_ = SIZE_MAXIMIZE;
 	the_template->h_align_ = H_ALIGN_RIGHT;
 	the_template->v_align_ = V_ALIGN_TOP;
-	the_template->x_offset_ = 16;
+	the_template->x_offset_ = 2;
 	the_template->y_offset_ = 4;
 	the_template->width_ = width;
 	the_template->height_ = height;

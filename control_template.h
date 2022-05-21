@@ -137,6 +137,9 @@ bool ControlTemplate_Destroy(ControlTemplate** the_template);
 // **** xxx functions *****
 
 
+// **** Debug functions *****
+
+void ControlTemplate_Print(ControlTemplate* the_template);
 
 
 #endif /* CONTROL_TEMPLATE_H_ */

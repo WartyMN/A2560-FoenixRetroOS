@@ -2134,24 +2134,33 @@ void Window_ChangeWindow(Window* the_window, int16_t x, int16_t y, int16_t width
 			goto error;
 		}		
 
-		// only recalculate title space and move titlebar widgets if width changed (slow)
-		if ( the_window->is_backdrop_ == false && width_changed)
+		// when width changes, controls in titlebar, and in content area, need to get re-aligned to new width
+		if (width_changed)
 		{
-			int16_t		i;
+			Control*	the_control = NULL;
 			
-			// calculate available title width
-			Window_CalculateTitleSpace(the_window);
-			
-			// have controls in titlebar realign themselves to new width
-			for (i = 0; i < MAX_BUILT_IN_WIDGET; i++)
+			// Note: recalculating title space and moving titlebar widgets if width changed is probably slow
+			if ( the_window->is_backdrop_ == false)
 			{
-				Control*	the_control;
-
-				the_control = Window_GetControl(the_window, i);
-				Control_AlignToParentRect(the_control);
+				// calculate available title width
+				Window_CalculateTitleSpace(the_window);
 			}
+		
+			// have all controls re-align themselves
+			the_control = Window_GetRootControl(the_window);
+
+			while (the_control)
+			{
+				// skip aligning title bar controls if this window doesn't even have a titlebar
+				if (Control_GetID(the_control) >= MAX_BUILT_IN_WIDGET || the_window->is_backdrop_ == false)
+				{
+					Control_AlignToParentRect(the_control);
+				}
+				
+				the_control = the_control->next_;						
+			}		
 		}
-	}	
+	}
 	
 	return;
 	
