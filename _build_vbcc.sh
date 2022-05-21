@@ -4,7 +4,7 @@ export VBCC=/opt/vbcc
 export PATH=$VBCC/bin:$PATH
 
 export DEV=~/dev/bbedit-workspace-a2560
-export PROJECT=$DEV/frOS
+export PROJECT=$DEV/osf
 export BUILD_DIR=$PROJECT/build_vbcc
 export VBCC_DIR=$PROJECT/config_vbcc
 
@@ -28,6 +28,9 @@ cp event.h $VBCC_DIR/include/mb/
 cp mouse.h $VBCC_DIR/include/mb/
 cp menu.h $VBCC_DIR/include/mb/
 
+echo "Compiling PJW's minimal startup..."
+vasmm68k_mot -Felf -m68040 -o $VBCC_DIR/minimal_startup.o $VBCC_DIR/minimal_startup.s 
+
 echo "Building a2560_sys library..."
 
 # make SYS as static lib
@@ -43,7 +46,7 @@ mv a2560_sys.lib $VBCC_DIR/lib/
 echo "Building system demo executable..."
 
 # build demo code - SYS from library
-vc +$VBCC_DIR/a2560-s28-OSf -o $BUILD_DIR/sys_demo.s28 lib_sys_demo.c -D_A2560K_ -D_f68_ > $BUILD_DIR/sys_demo.map
+vc +$VBCC_DIR/a2560-s28-OSf-test -o $BUILD_DIR/sys_demo.s28 lib_sys_demo.c -D_A2560K_ -D_f68_ > $BUILD_DIR/sys_demo.map
 
 # make demo code - SYS but not from library
 # vc +$VBCC_DIR/a2560-s28-OSf -o $BUILD_DIR/sys_demo.s28 lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c startup.c event.c lib_sys_demo.c mouse.c menu.c -D_A2560K_
