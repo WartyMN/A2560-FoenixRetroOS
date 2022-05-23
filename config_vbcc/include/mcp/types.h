@@ -6,16 +6,37 @@
 #define __MCP_TYPES_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
-/*
- * Function types
+/**
+ * @struct s_extent
+ *
+ * An extent or size of a rectangular area
  */
+typedef struct s_extent {
+    short width;        /**< The width of the region */
+    short height;       /**< The height of the region */
+} t_extent, *p_extent;
 
-/*
- * Integer types in their standard sizes, signed and unsigned.
+/**
+ * @struct s_point
+ *
+ * A point on a plane
  */
+typedef struct s_point {
+    short x;                /**< The column of the point */
+    short y;                /**< The row of the point */
+} t_point, *p_point;
 
-//typedef unsigned char bool;
+/**
+ * @struct s_rect
+ *
+ * A rectangle on the screen
+ */
+typedef struct s_rect {
+    t_point origin;         /**< The upper-left corner of the rectangle */
+    t_extent size;          /**< The size of the rectangle */
+} t_rect, *p_rect;
 
 //
 // A color (BGR)
@@ -40,6 +61,7 @@ typedef struct s_color4 {
  * Function types
  */
 
+typedef short (*FUNC_V_2_V)();
 typedef short (*FUNC_V_2_S)();
 typedef short (*FUNC_S_2_S)(char *);
 typedef short (*FUNC_BS_2_S)(unsigned char *, short);
@@ -204,17 +226,30 @@ typedef struct s_time {
 #define MODEL_FOENIX_A2560U_PLUS    6
 #define MODEL_FOENIX_A2560X         8
 #define MODEL_FOENIX_A2560U         9
-#define MODEL_FOENIX_A2560K         13
+#define MODEL_FOENIX_A2560K         11
 
 /* IDs for the CPUs supported */
 
-#define CPU_WDC65816                0x16  /* CPU code for the Western Design Center 65816 */
-#define CPU_M68000                  0x20  /* CPU code for the Motorola 68000 */
-#define CPU_M68010                  0x21  /* CPU code for the Motorola 68010 */
-#define CPU_M68020                  0x22  /* CPU code for the Motorola 68020 */
-#define CPU_M68030                  0x23  /* CPU code for the Motorola 68030 */
-#define CPU_M68040                  0x24  /* CPU code for the Motorola 68040 */
-#define CPU_I486DX                  0x34  /* CPU code for the Intel 486DX */
+// #define CPU_WDC65816                0x16  /* CPU code for the Western Design Center 65816 */
+// #define CPU_M68000                  0x20  /* CPU code for the Motorola 68000 */
+// #define CPU_M68010                  0x21  /* CPU code for the Motorola 68010 */
+// #define CPU_M68020                  0x22  /* CPU code for the Motorola 68020 */
+// #define CPU_M68030                  0x23  /* CPU code for the Motorola 68030 */
+// #define CPU_M68040                  0x24  /* CPU code for the Motorola 68040 */
+// #define CPU_I486DX                  0x34  /* CPU code for the Intel 486DX */
+
+#define CPU_WDC65816                0xFF  /* CPU code for the Western Design Center 65816 */
+#define CPU_M68000                  0x00  /* Motorola 680X0 chips... */
+#define CPU_M68020                  0x01
+#define CPU_M68EC020                0x02
+#define CPU_M68030                  0x03
+#define CPU_M680EC30                0x04
+#define CPU_M68040                  0x05
+#define CPU_M68040V                 0x06
+#define CPU_M680EC40                0x07
+#define CPU_486DX2_50               0x08  /* Intel 486 chips... */
+#define CPU_486DX2_60               0x09
+#define CPU_486DX4                  0x0A
 
 /*
  * Structure to describe the hardware

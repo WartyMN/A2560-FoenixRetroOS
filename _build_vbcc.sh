@@ -28,13 +28,29 @@ cp event.h $VBCC_DIR/include/mb/
 cp mouse.h $VBCC_DIR/include/mb/
 cp menu.h $VBCC_DIR/include/mb/
 
+# copy latest version of headers to VBCC for other projects to get to
+cp lib_sys.h $VBCC/targets/a2560-micah/include/mb/
+cp a2560_platform.h $VBCC/targets/a2560-micah/include/mb/
+cp theme.h $VBCC/targets/a2560-micah/include/mb/
+cp control.h $VBCC/targets/a2560-micah/include/mb/
+cp control_template.h $VBCC/targets/a2560-micah/include/mb/
+cp font.h $VBCC/targets/a2560-micah/include/mb/
+cp window.h $VBCC/targets/a2560-micah/include/mb/
+cp general.h $VBCC/targets/a2560-micah/include/mb/
+cp text.h $VBCC/targets/a2560-micah/include/mb/
+cp bitmap.h $VBCC/targets/a2560-micah/include/mb/
+cp list.h $VBCC/targets/a2560-micah/include/mb/
+cp event.h $VBCC/targets/a2560-micah/include/mb/
+cp mouse.h $VBCC/targets/a2560-micah/include/mb/
+cp menu.h $VBCC/targets/a2560-micah/include/mb/
+
 echo "Compiling PJW's minimal startup..."
 vasmm68k_mot -Felf -m68040 -o $VBCC_DIR/minimal_startup.o $VBCC_DIR/minimal_startup.s 
 
 echo "Building a2560_sys library..."
 
 # make SYS as static lib
-vc +$VBCC_DIR/a2560-lib-OSf -o a2560_sys.lib lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c startup.c event.c mouse.c menu.c -D_A2560K_ -D_f68_ > $BUILD_DIR/a2560_sys.map
+vc +$VBCC_DIR/a2560-lib-OSf -o a2560_sys.lib lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c startup.c event.c mouse.c menu.c mcp_code/dev/ps2.c -D_A2560K_ -D_f68_ -DMODEL=MODEL_FOENIX_A2560K > $BUILD_DIR/a2560_sys.map
 mv a2560_sys.lib $VBCC_DIR/lib/
 
 

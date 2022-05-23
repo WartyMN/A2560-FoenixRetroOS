@@ -181,7 +181,12 @@ int16_t	Menu_AcceptClick(Menu* the_menu, int16_t x, int16_t y);
 //! @param y:	Global vertical coordinate of current mouse loc
 void Menu_AcceptMouseMove(Menu* the_menu, int16_t x, int16_t y);
 
-
+//! Set the font used for drawing menu text
+//! This also sets the font of the menu's bitmap
+//! @param	the_menu: reference to a valid Menu object.
+//! @param	the_font: reference to a complete, loaded Font object.
+//! @return Returns false on any error condition
+bool Menu_SetFont(Menu* the_menu, Font* the_font);
 
 
 #endif /* MENU_H_ */

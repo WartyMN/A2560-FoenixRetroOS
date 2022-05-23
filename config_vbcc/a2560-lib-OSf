@@ -1,4 +1,4 @@
--cc=vbccm68k -cpu=68040 -quiet %s -o= %s %s -O=%ld -Iconfig_vbcc/include
+-cc=vbccm68k -cpu=68040 -quiet %s -o= %s %s -O=%ld -Iconfig_vbcc/include -Imcp_code -Imcp_code/dev -Imcp_code/include
 -ccv=vbccm68k %s -cpu=68040 -o= %s %s -O=%ld -Iconfig_vbcc/include
 -as=vasmm68k_mot -quiet -Fvobj -nowarn=62 %s -o %s
 -asv=vasmm68k_mot -Fvobj -nowarn=62 %s -o %s

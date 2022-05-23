@@ -1149,7 +1149,7 @@ void EventManager_WaitForEvent(void)
 				break;
 				
 			case keyDown:
-				DEBUG_OUT(("%s %d: key down event: %c", __func__, __LINE__, the_event->code_));
+				DEBUG_OUT(("%s %d: key down event: '%c' (%x) mod (%x)", __func__, __LINE__, the_event->code_, the_event->code_, the_event->modifiers_));
 
 				// give active window an event
 				the_active_window = Sys_GetActiveWindow(global_system);
@@ -1159,7 +1159,7 @@ void EventManager_WaitForEvent(void)
 				break;
 			
 			case keyUp:
-				DEBUG_OUT(("%s %d: key up event: %c", __func__, __LINE__, the_event->code_));
+				DEBUG_OUT(("%s %d: key up event: '%c' (%x) mod (%x)", __func__, __LINE__, the_event->code_, the_event->code_, the_event->modifiers_));
 
 				// give active window an event
 				the_active_window = Sys_GetActiveWindow(global_system);

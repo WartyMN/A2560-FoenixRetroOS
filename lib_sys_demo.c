@@ -1408,17 +1408,17 @@ void RunDemo(void)
 
 	//OpenMultipleWindows();
 
-	//OpenTinyWindow();
+	OpenTinyWindow();
 
 	// temporary until event handler is written: tell system to render the screen and all windows
 	Sys_Render(global_system);
 
 
 	// test window click, titlebar drag, window resize, etc.
-	TestWindowEvents();
+	//TestWindowEvents();
 
 	// test menu system. Expects some kind of window to be open, but doesn't care what.	
-	//TestMenus();
+	TestMenus();
 
 // 	// delay a bit before switching
 // 	General_DelaySeconds(3);

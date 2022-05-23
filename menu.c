@@ -827,3 +827,33 @@ error:
 	Sys_Destroy(&global_system);	// crash early, crash often
 	return;
 }
+
+
+//! Set the font used for drawing menu text
+//! This also sets the font of the menu's bitmap
+//! @param	the_menu: reference to a valid Menu object.
+//! @param	the_font: reference to a complete, loaded Font object.
+//! @return Returns false on any error condition
+bool Menu_SetFont(Menu* the_menu, Font* the_font)
+{
+	if (the_menu == NULL)
+	{
+		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
+		goto error;
+	}
+	
+	if (the_font == NULL)
+	{
+		LOG_WARN(("%s %d: passed font was null", __func__ , __LINE__));
+		goto error;
+	}
+	
+	the_menu->pen_font_ = the_font;
+	the_menu->bitmap_->font_ = the_font;
+	
+	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
+}

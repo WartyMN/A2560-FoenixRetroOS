@@ -1817,6 +1817,9 @@ void Window_UpdateTheme(Window* the_window)
 		goto error;
 	}
 
+	// update the window's font -- TODO: determine if this is required/effective
+	Window_SetFont(the_window, Sys_GetAppFont(global_system));
+	
 	// adjust the rects for titlebar, content, etc., as each theme can change the position, height, etc. 
 	Window_ConfigureStructureRects(the_window);
 
