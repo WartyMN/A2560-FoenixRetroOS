@@ -3519,7 +3519,7 @@ Theme* Theme_CreateDefaultTheme(void)
 	
 	the_screen = Sys_GetScreen(global_system, ID_CHANNEL_B);
 	R32(the_screen->vicky_ + BORDER_COLOR_OFFSET_L) = 0;
-	R32(the_screen->vicky_ + BORDER_BACK_COLOR_OFFSET_L) = 0;
+	R32(the_screen->vicky_ + BACKGROUND_COLOR_OFFSET_L) = 0;
 
 	return the_theme;
 	
@@ -3979,7 +3979,7 @@ Theme* Theme_CreateGreenTheme(void)
 	
 	the_screen = Sys_GetScreen(global_system, ID_CHANNEL_B);
 	R32(the_screen->vicky_ + BORDER_COLOR_OFFSET_L) = the_theme->border_color_;
-	R32(the_screen->vicky_ + BORDER_BACK_COLOR_OFFSET_L) = the_theme->background_color_;
+	R32(the_screen->vicky_ + BACKGROUND_COLOR_OFFSET_L) = the_theme->background_color_;
 
 	return the_theme;
 	

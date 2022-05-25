@@ -120,7 +120,6 @@ bool Sys_InitSystem(void);
 
 
 
-
 // **** Event-handling functions *****
 
 
@@ -353,6 +352,13 @@ Font* Sys_LoadAppFont(void);
 //! @param	the_system: valid pointer to system object
 void Sys_Render(System* the_system);
 
+
+
+// **** Debug functions *****
+
+void Sys_Print(System* the_system);
+
+void Sys_PrintScreen(Screen* the_screen);
 
 
 

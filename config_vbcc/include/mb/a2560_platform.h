@@ -41,8 +41,12 @@
 #define EA_USER						(char*)0x020000	// start of user space. ie, put your program here.
 
 // adapted from vinz67
-#define R32(x)						*((volatile unsigned long* const)(x))	// make sure we read a 32 bit long; needed for many VICKY registers, etc.
-#define P32(x)						(volatile unsigned long* const)(x)		// make sure we read a 32 bit long; needed for many VICKY registers, etc.
+#define R32(x)						*((volatile unsigned long* const)(x))	// make sure we read a 32 bit long; for VICKY registers, etc.
+#define P32(x)						(volatile unsigned long* const)(x)		// make sure we read a 32 bit long; for VICKY registers, etc.
+#define R16(x)						*((volatile unsigned short* const)(x))	// make sure we read an 16 bit short; for VICKY registers, etc.
+#define P16(x)						(volatile unsigned short* const)(x)		// make sure we read an 16 bit short; for VICKY registers, etc.
+#define R8(x)						*((volatile uint8_t* const)(x))			// make sure we read an 8 bit byte; for VICKY registers, etc.
+#define P8(x)						(volatile uint8_t* const)(x)			// make sure we read an 8 bit byte; for VICKY registers, etc.
 
 // ** believe to be common to all A2560 platforms... 
 #define TEXTA_NUM_COLS_BORDER		4	// need to measure.... 
@@ -56,33 +60,72 @@
 #define TEXT_FONT_WIDTH_A2560	8	// for text mode, the width of the fixed-sized font chars
 #define TEXT_FONT_HEIGHT_A2560	8	// for text mode, the height of the fixed-sized font chars. I believe this is supposed to be 16, but its 8 in morfe at the moment.
 
-#define VIDEO_MODE_MASK			0xFFFF00FF	//!> for all VICKYs, the mask for the system control register that holds the video mode bits
-#define VIDEO_MODE_BYTE			0x01	//!> for all VICKYs, the byte offset from system control register that holds the video mode bits
-#define VIDEO_MODE_BIT1			0x00	//!> for all VICKYs, the bits in the 2nd byte of the system control register that define video mode (resolution)
-#define VIDEO_MODE_BIT2			0x01	//!> for all VICKYs, the bits in the 2nd byte of the system control register that define video mode (resolution)
+#define VIDEO_MODE_MASK			0xFFFF00FF	//!> the mask for the system control register that holds the video mode bits
+#define VIDEO_MODE_BYTE			0x01	//!> the byte offset from system control register that holds the video mode bits
+#define VIDEO_MODE_BIT1			0x00	//!> the bits in the 2nd byte of the system control register that define video mode (resolution)
+#define VIDEO_MODE_BIT2			0x01	//!> the bits in the 2nd byte of the system control register that define video mode (resolution)
 
-#define BORDER_X_MASK				0xFFFF00FF	//!> for all VICKYs, the mask for the Border control register (0x0004) long, for the X border
-#define BORDER_Y_MASK				0xFF00FFFF	//!> for all VICKYs, the mask for the Border control register (0x0004) long, for the Y border
-#define BORDER_CTRL_OFFSET_L		0x01		//!> for all VICKYs, the (long) offset from the VICKY control register to the border control register		
-#define BORDER_COLOR_OFFSET_L		0x02		//!> for all VICKYs, the (long) offset from the VICKY control register to the border color register		
-#define BORDER_BACK_COLOR_OFFSET_L	0x03		//!> for all VICKYs, the (long) offset from the VICKY control register to the border background color register		
-#define CURSOR_CTRL_OFFSET_L		0x04		//!> for all VICKYs, the (long) offset from the VICKY control register to the cursor control register		
-#define CURSOR_POS_OFFSET_L			0x04		//!> for all VICKYs, the (long) offset from the VICKY control register to the cursor position register		
-#define LN_INTERRUPT_01_OFFSET_L	0x05		//!> for all VICKYs, the (long) offset from the VICKY control register to the line interrupts 0 and 1 registers		
-#define BITMAP_L0_CTRL_L			0x40		//!> for all VICKYs, the (long) offset from the VICKY control register to the bitmap layer0 control register (foreground layer)		
-#define BITMAP_L0_VRAM_ADDR_L		0x41		//!> for all VICKYs, the (long) offset from the VICKY control register to the bitmap layer0 VRAM address pointer)		
-#define BITMAP_L1_CTRL_L			0x42		//!> for all VICKYs, the (long) offset from the VICKY control register to the bitmap layer1 control register (background layer)		
-#define BITMAP_L1_VRAM_ADDR_L		0x43		//!> for all VICKYs, the (long) offset from the VICKY control register to the bitmap layer1 VRAM address pointer)		
-#define CLUT0_OFFSET_L				0x800		//!> for all VICKYs, the (long) offset from the VICKY control register to the first CLUT RAM space
-#define CLUT1_OFFSET_L				0x900		//!> for all VICKYs, the (long) offset from the VICKY control register to the 2nd CLUT RAM space
-#define CLUT2_OFFSET_L				0xA00		//!> for all VICKYs, the (long) offset from the VICKY control register to the 3rd CLUT RAM space
-#define CLUT3_OFFSET_L				0xB00		//!> for all VICKYs, the (long) offset from the VICKY control register to the 4th CLUT RAM space
-#define CLUT4_OFFSET_L				0xC00		//!> for all VICKYs, the (long) offset from the VICKY control register to the 5th CLUT RAM space
-#define CLUT5_OFFSET_L				0xD00		//!> for all VICKYs, the (long) offset from the VICKY control register to the 6th CLUT RAM space
-#define CLUT6_OFFSET_L				0xE00		//!> for all VICKYs, the (long) offset from the VICKY control register to the 7th CLUT RAM space
-#define CLUT7_OFFSET_L				0xF00		//!> for all VICKYs, the (long) offset from the VICKY control register to the 8th CLUT RAM space
+#ifndef _C256_FMX_
+	#define BORDER_X_MASK				0xFFFF00FF	//!> the mask for the Border control register (0x0004) long, for the X border
+	#define BORDER_Y_MASK				0xFF00FFFF	//!> the mask for the Border control register (0x0004) long, for the Y border
+	#define BORDER_CTRL_OFFSET_L		0x01		//!> the (long) offset from the VICKY control register to the border control register		
+	#define BORDER_COLOR_OFFSET_L		0x02		//!> the (long) offset from the VICKY control register to the border color register		
+	#define BACKGROUND_COLOR_OFFSET_L	0x03		//!> the (long) offset from the VICKY control register to the background color register		
+	#define CURSOR_CTRL_OFFSET_L		0x04		//!> the (long) offset from the VICKY control register to the cursor control register		
+	#define CURSOR_POS_OFFSET_L			0x04		//!> the (long) offset from the VICKY control register to the cursor position register		
+	#define LN_INTERRUPT_01_OFFSET_L	0x05		//!> the (long) offset from the VICKY control register to the line interrupts 0 and 1 registers		
+	#define BITMAP_L0_CTRL_L			0x40		//!> the (long) offset from the VICKY control register to the bitmap layer0 control register (foreground layer)		
+	#define BITMAP_L0_VRAM_ADDR_L		0x41		//!> the (long) offset from the VICKY control register to the bitmap layer0 VRAM address pointer)		
+	#define BITMAP_L1_CTRL_L			0x42		//!> the (long) offset from the VICKY control register to the bitmap layer1 control register (background layer)		
+	#define BITMAP_L1_VRAM_ADDR_L		0x43		//!> the (long) offset from the VICKY control register to the bitmap layer1 VRAM address pointer)		
+	#define CLUT0_OFFSET_L				0x800		//!> the (long) offset from the VICKY control register to the first CLUT RAM space
+	#define CLUT1_OFFSET_L				0x900		//!> the (long) offset from the VICKY control register to the 2nd CLUT RAM space
+	#define CLUT2_OFFSET_L				0xA00		//!> the (long) offset from the VICKY control register to the 3rd CLUT RAM space
+	#define CLUT3_OFFSET_L				0xB00		//!> the (long) offset from the VICKY control register to the 4th CLUT RAM space
+	#define CLUT4_OFFSET_L				0xC00		//!> the (long) offset from the VICKY control register to the 5th CLUT RAM space
+	#define CLUT5_OFFSET_L				0xD00		//!> the (long) offset from the VICKY control register to the 6th CLUT RAM space
+	#define CLUT6_OFFSET_L				0xE00		//!> the (long) offset from the VICKY control register to the 7th CLUT RAM space
+	#define CLUT7_OFFSET_L				0xF00		//!> the (long) offset from the VICKY control register to the 8th CLUT RAM space
+#endif
 
-#define GRAPHICS_MODE_MASK		0xFFFFFF00	//!> for all VICKYs, the mask for the system control register that holds the graphics/bitmap/text/sprite mode bits
+#ifdef _C256_FMX_
+	#define BORDER_X_MASK				0xFFFF00FF	//!> the mask for the Border control register (0x0004) long, for the X border
+	#define BORDER_Y_MASK				0xFF00FFFF	//!> the mask for the Border control register (0x0004) long, for the Y border
+	#define BORDER_CTRL_OFFSET_L		0x04		//!> the (long) offset from the VICKY control register to the border control register		
+	#define BORDER_COLOR_OFFSET_L		0x05		//!> the (long) offset from the VICKY control register to the border color register	for Blue	
+	#define BORDER_COLOR_OFFSET_B_L		0x05		//!> the (long) offset from the VICKY control register to the border color register	for Blue
+	#define BORDER_COLOR_OFFSET_G_L		0x06		//!> the (long) offset from the VICKY control register to the border color register	for Green
+	#define BORDER_COLOR_OFFSET_R_L		0x07		//!> the (long) offset from the VICKY control register to the border color register	for Red
+	#define BORDER_X_SIZE_L				0x08		//!> the (long) offset from the VICKY control register to the border X-size
+	#define BORDER_Y_SIZE_L				0x09		//!> the (long) offset from the VICKY control register to the border Y-size
+	#define BACKGROUND_COLOR_OFFSET_L	0x0D		//!> the (long) offset from the VICKY control register to the background color register	for Blue		
+	#define BACKGROUND_COLOR_OFFSET_B_L	0x0D		//!> the (long) offset from the VICKY control register to the background color register	for Blue
+	#define BACKGROUND_COLOR_OFFSET_G_L	0x0E		//!> the (long) offset from the VICKY control register to the background color register	for Green
+	#define BACKGROUND_COLOR_OFFSET_R_L	0x0F		//!> the (long) offset from the VICKY control register to the background color register	for Red
+	#define CURSOR_CTRL_OFFSET_L		0x10		//!> the (long) offset from the VICKY control register to the cursor control register		
+	#define START_ADDR_OFFSET_L			0x11		//!> the (long) offset from the VICKY control register to change the starting address of the text mode buffer (in x)
+	#define CURSOR_CHAR_OFFSET_L		0x12		//!> the (long) offset from the VICKY control register to the Char used as the Cursor	
+	#define CURSOR_COLOR_OFFSET_L		0x13		//!> the (long) offset from the VICKY control register to the color used for the Cursor	
+	#define LN_INTERRUPT_01_OFFSET_L	0x05		//!> the (long) offset from the VICKY control register to the line interrupts 0 and 1 registers		
+	#define BITMAP_L0_CTRL_L			0x100		//!> the (long) offset from the VICKY control register to the bitmap layer0 control register (foreground layer)		
+	#define BITMAP_L0_VRAM_ADDR_L		0x101		//!> the (long) offset from the VICKY control register to the bitmap layer0 VRAM address pointer)		
+	#define BITMAP_L1_CTRL_L			0x108		//!> the (long) offset from the VICKY control register to the bitmap layer1 control register (foreground layer)		
+	#define BITMAP_L1_VRAM_ADDR_L		0x109		//!> the (long) offset from the VICKY control register to the bitmap layer1 VRAM address pointer)		
+	#define BITMAP_L0_VRAM_ADDR_L_L		0x101		//!> the (long) offset from the VICKY control register to the bitmap layer0 VRAM address pointer - low	
+	#define BITMAP_L0_VRAM_ADDR_M_L		0x102		//!> the (long) offset from the VICKY control register to the bitmap layer0 VRAM address pointer - med	
+	#define BITMAP_L0_VRAM_ADDR_H_L		0x103		//!> the (long) offset from the VICKY control register to the bitmap layer0 VRAM address pointer - high	
+	#define CLUT0_OFFSET_L				0x2000		//!> the (long) offset from the VICKY control register to the first CLUT RAM space
+	#define CLUT1_OFFSET_L				0x2400		//!> the (long) offset from the VICKY control register to the 2nd CLUT RAM space
+	#define CLUT2_OFFSET_L				0x2800		//!> the (long) offset from the VICKY control register to the 3rd CLUT RAM space
+	#define CLUT3_OFFSET_L				0x2C00		//!> the (long) offset from the VICKY control register to the 4th CLUT RAM space
+	#define CLUT4_OFFSET_L				0x3000		//!> the (long) offset from the VICKY control register to the 5th CLUT RAM space
+	#define CLUT5_OFFSET_L				0x3400		//!> the (long) offset from the VICKY control register to the 6th CLUT RAM space
+	#define CLUT6_OFFSET_L				0x3800		//!> the (long) offset from the VICKY control register to the 7th CLUT RAM space
+	#define CLUT7_OFFSET_L				0x3C00		//!> the (long) offset from the VICKY control register to the 8th CLUT RAM space
+	#define FONT_MEMORY_BANK0_OFFSET_L	0x8000		//!> the (long) offset from the VICKY control register to the font memory for bank0
+#endif
+
+#define GRAPHICS_MODE_MASK		0xFFFFFF00	//!> the mask for the system control register that holds the graphics/bitmap/text/sprite mode bits
 #define GRAPHICS_MODE_TEXT		0x01	// 0b00000001	Enable the Text Mode
 #define GRAPHICS_MODE_TEXT_OVER	0x02	// 0b00000010	Enable the Overlay of the text mode on top of Graphic Mode (the Background Color is ignored)
 #define GRAPHICS_MODE_GRAPHICS	0x04	// 0b00000100	Enable the Graphic Mode
@@ -166,7 +209,7 @@
 #define FONT_MEMORY_BANK_A2560U		(char*)0xb48000			// only 1 channel
 
 // ** C256 (VICKY II)
-#define VICKY_C256FMX				0xaf0000				// Vicky II offset/first register
+#define VICKY_C256FMX				0x00af0000				// Vicky II offset/first register
 #define TEXTA_RAM_C256FMX			(char*)0xafa000			// CS_TEXT_MEM_PTR	Text Memory Block
 #define TEXTA_ATTR_C256FMX			(char*)0xafc000			// CS_COLOR_MEM_PTR	Color Text Memory Block
 #define FONT_MEMORY_BANK_C256FMX	(char*)0xaf8000			// FONT_MEMORY_BANK0	FONT Character Graphic Mem

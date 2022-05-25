@@ -364,6 +364,13 @@ void General_DelaySeconds(uint16_t seconds);
 
 
 
+// **** USER INPUT UTILITIES *****
+
+// Wait for one character from the keyboard and return it
+char General_GetChar(void);
+
+
+
 
 
 // **** LOGGING AND DEBUG UTILITIES *****

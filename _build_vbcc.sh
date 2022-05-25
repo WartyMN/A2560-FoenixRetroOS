@@ -51,7 +51,8 @@ echo "Building a2560_sys library..."
 
 # make SYS as static lib
 vc +$VBCC_DIR/a2560-lib-OSf -o a2560_sys.lib lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c startup.c event.c mouse.c menu.c mcp_code/dev/ps2.c -D_A2560K_ -D_f68_ -DMODEL=MODEL_FOENIX_A2560K > $BUILD_DIR/a2560_sys.map
-mv a2560_sys.lib $VBCC_DIR/lib/
+cp a2560_sys.lib $VBCC_DIR/lib/
+mv a2560_sys.lib $VBCC/targets/a2560-micah/lib/
 
 
 # *************
