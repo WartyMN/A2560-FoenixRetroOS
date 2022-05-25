@@ -65,57 +65,59 @@
 #define SCREEN_COPY_TO_SCREEN	true	// param for functions doing block copy to/from screen / off-screen buffer
 #define SCREEN_COPY_FROM_SCREEN	false	// param for functions doing block copy to/from screen / off-screen buffer
 
-// based on observations in f68:
+// based on observations in f68 with names matched to ANSI colors
+// https://en.wikipedia.org/wiki/ANSI_escape_code#3-bit_and_4-bit
 #define COLOR_BLACK				(unsigned char)0x00
-#define COLOR_DK_RED			(unsigned char)0x01
-#define COLOR_DK_GREEN			(unsigned char)0x02
-#define COLOR_DK_YELLOW			(unsigned char)0x03
-#define COLOR_DK_BLUE			(unsigned char)0x04
-#define COLOR_ORANGE			(unsigned char)0x05
-#define COLOR_DK_CYAN			(unsigned char)0x06
-#define COLOR_LT_GRAY			(unsigned char)0x07
-#define COLOR_DK_GRAY			(unsigned char)0x08
-#define COLOR_RED				(unsigned char)0x09
-#define COLOR_GREEN				(unsigned char)0x0A
-#define COLOR_YELLOW			(unsigned char)0x0B
-#define COLOR_BLUE				(unsigned char)0x0C
-#define COLOR_VIOLET			(unsigned char)0x0D
-#define COLOR_CYAN				(unsigned char)0x0E
-#define COLOR_WHITE				(unsigned char)0x0F
+#define COLOR_RED				(unsigned char)0x01
+#define COLOR_GREEN				(unsigned char)0x02
+#define COLOR_YELLOW			(unsigned char)0x03
+#define COLOR_BLUE				(unsigned char)0x04
+#define COLOR_MAGENTA			(unsigned char)0x05
+#define COLOR_CYAN				(unsigned char)0x06
+#define COLOR_WHITE				(unsigned char)0x07
+#define COLOR_GRAY				(unsigned char)0x08
+#define COLOR_BRIGHT_RED		(unsigned char)0x09
+#define COLOR_BRIGHT_GREEN		(unsigned char)0x0A
+#define COLOR_BRIGHT_YELLOW		(unsigned char)0x0B
+#define COLOR_BRIGHT_BLUE		(unsigned char)0x0C
+#define COLOR_BRIGHT_MAGENTA	(unsigned char)0x0D
+#define COLOR_BRIGHT_CYAN		(unsigned char)0x0E
+#define COLOR_BRIGHT_WHITE		(unsigned char)0x0F
+
 // I believe foreground and background colors can be defined differently, but from testing on morfe, they seem to be the same at least by default.
 #define FG_COLOR_BLACK			(unsigned char)0x00
-#define FG_COLOR_DK_RED			(unsigned char)0x01
-#define FG_COLOR_DK_GREEN		(unsigned char)0x02
-#define FG_COLOR_DK_YELLOW		(unsigned char)0x03
-#define FG_COLOR_DK_BLUE		(unsigned char)0x04
-#define FG_COLOR_ORANGE			(unsigned char)0x05
-#define FG_COLOR_DK_CYAN		(unsigned char)0x06
-#define FG_COLOR_LT_GRAY		(unsigned char)0x07
-#define FG_COLOR_DK_GRAY		(unsigned char)0x08
-#define FG_COLOR_RED			(unsigned char)0x09
-#define FG_COLOR_GREEN			(unsigned char)0x0A
-#define FG_COLOR_YELLOW			(unsigned char)0x0B
-#define FG_COLOR_BLUE			(unsigned char)0x0C
-#define FG_COLOR_VIOLET			(unsigned char)0x0D
-#define FG_COLOR_CYAN			(unsigned char)0x0E
-#define FG_COLOR_WHITE			(unsigned char)0x0F
+#define FG_COLOR_RED			(unsigned char)0x01
+#define FG_COLOR_GREEN			(unsigned char)0x02
+#define FG_COLOR_YELLOW			(unsigned char)0x03
+#define FG_COLOR_BLUE			(unsigned char)0x04
+#define FG_COLOR_MAGENTA		(unsigned char)0x05
+#define FG_COLOR_CYAN			(unsigned char)0x06
+#define FG_COLOR_WHITE			(unsigned char)0x07
+#define FG_COLOR_GRAY			(unsigned char)0x08
+#define FG_COLOR_BRIGHT_RED		(unsigned char)0x09
+#define FG_COLOR_BRIGHT_GREEN	(unsigned char)0x0A
+#define FG_COLOR_BRIGHT_YELLOW	(unsigned char)0x0B
+#define FG_COLOR_BRIGHT_BLUE	(unsigned char)0x0C
+#define FG_COLOR_BRIGHT_MAGENTA	(unsigned char)0x0D
+#define FG_COLOR_BRIGHT_CYAN	(unsigned char)0x0E
+#define FG_COLOR_BRIGHT_WHITE	(unsigned char)0x0F
 
 #define BG_COLOR_BLACK			(unsigned char)0x00
-#define BG_COLOR_DK_RED			(unsigned char)0x01
-#define BG_COLOR_DK_GREEN		(unsigned char)0x02
-#define BG_COLOR_DK_YELLOW		(unsigned char)0x03
-#define BG_COLOR_DK_BLUE		(unsigned char)0x04
-#define BG_COLOR_ORANGE			(unsigned char)0x05
-#define BG_COLOR_DK_CYAN		(unsigned char)0x06
-#define BG_COLOR_LT_GRAY		(unsigned char)0x07
-#define BG_COLOR_DK_GRAY		(unsigned char)0x08
-#define BG_COLOR_RED			(unsigned char)0x09
-#define BG_COLOR_GREEN			(unsigned char)0x0A
-#define BG_COLOR_YELLOW			(unsigned char)0x0B
-#define BG_COLOR_BLUE			(unsigned char)0x0C
-#define BG_COLOR_VIOLET			(unsigned char)0x0D
-#define BG_COLOR_CYAN			(unsigned char)0x0E
-#define BG_COLOR_WHITE			(unsigned char)0x0F
+#define BG_COLOR_RED			(unsigned char)0x01
+#define BG_COLOR_GREEN			(unsigned char)0x02
+#define BG_COLOR_YELLOW			(unsigned char)0x03
+#define BG_COLOR_BLUE			(unsigned char)0x04
+#define BG_COLOR_MAGENTA		(unsigned char)0x05
+#define BG_COLOR_CYAN			(unsigned char)0x06
+#define BG_COLOR_WHITE			(unsigned char)0x07
+#define BG_COLOR_GRAY			(unsigned char)0x08
+#define BG_COLOR_BRIGHT_RED		(unsigned char)0x09
+#define BG_COLOR_BRIGHT_GREEN	(unsigned char)0x0A
+#define BG_COLOR_BRIGHT_YELLOW	(unsigned char)0x0B
+#define BG_COLOR_BRIGHT_BLUE	(unsigned char)0x0C
+#define BG_COLOR_BRIGHT_MAGENTA	(unsigned char)0x0D
+#define BG_COLOR_BRIGHT_CYAN	(unsigned char)0x0E
+#define BG_COLOR_BRIGHT_WHITE	(unsigned char)0x0F
 
 // update: the numbers shown in vicky2 file in morfe don't match up to what's shown on screen, at least with a2560 config. eg, 20/00/00 is not a super dark blue, it's some totally bright thing. need to spend some time mapping these out better. But since user configurable, will wait until real machine comes and I can make sure of what's in flash rom. 
 

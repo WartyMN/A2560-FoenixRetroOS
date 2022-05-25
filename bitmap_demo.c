@@ -90,7 +90,7 @@ void Demo_Bitmap_ScreenResolution2(void);
 // have user hit a key, then clear screens
 void WaitForUser(void)
 {
-	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 1, 4, (char*)"Press any key to continue", FG_COLOR_YELLOW, BG_COLOR_DK_BLUE);
+	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 1, 4, (char*)"Press any key to continue", FG_COLOR_BRIGHT_YELLOW, BG_COLOR_BLUE);
 	
 	General_GetChar();
 	
@@ -108,11 +108,11 @@ void ShowDescription(char* the_message)
 	int16_t		y2 = 5;
 
 	// draw box and fill contents in prep for next demo description
-	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, FG_COLOR_BLUE, BG_COLOR_DK_BLUE);
-	Text_FillBox(global_system->screen_[ID_CHANNEL_B], x1+1, y1+1, x2-1, y2-1, ' ', FG_COLOR_WHITE, BG_COLOR_DK_BLUE);
+	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, FG_COLOR_BRIGHT_BLUE, BG_COLOR_BLUE);
+	Text_FillBox(global_system->screen_[ID_CHANNEL_B], x1+1, y1+1, x2-1, y2-1, ' ', FG_COLOR_BRIGHT_WHITE, BG_COLOR_BLUE);
 	
 	// wrap text into the message box, leaving one row at the bottom for "press any key"
-	Text_DrawStringInBox(global_system->screen_[ID_CHANNEL_B], x1+1, y1+1, x2-1, y2-1, the_message, FG_COLOR_WHITE, BG_COLOR_DK_BLUE, NULL);
+	Text_DrawStringInBox(global_system->screen_[ID_CHANNEL_B], x1+1, y1+1, x2-1, y2-1, the_message, FG_COLOR_BRIGHT_WHITE, BG_COLOR_BLUE, NULL);
 }
 
 
@@ -206,9 +206,9 @@ void Demo_Bitmap_GetPixelAtXY(void)
 		Bitmap_FillBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, width, height, color);
 	 	detected_color = Bitmap_GetPixelAtXY(Sys_GetScreenBitmap(global_system, back_layer), x, y);
 	 	sprintf(temp_buff, "Set:%x", color);
-	 	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], (x+1)/8, text_y, (char*)temp_buff, FG_COLOR_YELLOW, BG_COLOR_BLACK);
+	 	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], (x+1)/8, text_y, (char*)temp_buff, FG_COLOR_BRIGHT_YELLOW, BG_COLOR_BLACK);
 	 	sprintf(temp_buff, "Got:%x", detected_color);
-	 	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], (x+1)/8, text_y+1, (char*)temp_buff, FG_COLOR_YELLOW, BG_COLOR_BLACK);
+	 	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], (x+1)/8, text_y+1, (char*)temp_buff, FG_COLOR_BRIGHT_YELLOW, BG_COLOR_BLACK);
 		color += 25;
 		x += width;
  	}
@@ -497,10 +497,10 @@ void Demo_Bitmap_ScreenResolution1(void)
 		global_system->screen_[ID_CHANNEL_B]->text_cols_vis_, 
 		global_system->screen_[ID_CHANNEL_B]->text_rows_vis_
 		);
-	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 0, y, the_message, FG_COLOR_BLACK, BG_COLOR_GREEN);
-	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 0, y + 1, (char*)"0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789", FG_COLOR_DK_BLUE, BG_COLOR_YELLOW);
-	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 0, y + 2, (char*)"<-START OF LINE", FG_COLOR_BLACK, BG_COLOR_GREEN);
-	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 0, 70, (char*)"ROW70", FG_COLOR_BLACK, BG_COLOR_GREEN);
+	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 0, y, the_message, FG_COLOR_BLACK, BG_COLOR_BRIGHT_GREEN);
+	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 0, y + 1, (char*)"0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789", FG_COLOR_BLUE, BG_COLOR_BRIGHT_YELLOW);
+	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 0, y + 2, (char*)"<-START OF LINE", FG_COLOR_BLACK, BG_COLOR_BRIGHT_GREEN);
+	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 0, 70, (char*)"ROW70", FG_COLOR_BLACK, BG_COLOR_BRIGHT_GREEN);
 	Text_ShowFontChars(global_system->screen_[ID_CHANNEL_B], y + 3);
 
 	WaitForUser();
@@ -524,10 +524,10 @@ void Demo_Bitmap_ScreenResolution2(void)
 		global_system->screen_[ID_CHANNEL_B]->text_cols_vis_, 
 		global_system->screen_[ID_CHANNEL_B]->text_rows_vis_
 		);
-	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 0, y, the_message, FG_COLOR_BLACK, BG_COLOR_GREEN);
-	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 0, y + 1, (char*)"01234567890123456789012345678901234567890123456789012345678901234567890123456789", FG_COLOR_DK_BLUE, BG_COLOR_YELLOW);
-	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 0, y + 2, (char*)"<-START OF LINE", FG_COLOR_BLACK, BG_COLOR_GREEN);
-	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 0, 55, (char*)"ROW55", FG_COLOR_BLACK, BG_COLOR_GREEN);
+	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 0, y, the_message, FG_COLOR_BLACK, BG_COLOR_BRIGHT_GREEN);
+	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 0, y + 1, (char*)"01234567890123456789012345678901234567890123456789012345678901234567890123456789", FG_COLOR_BLUE, BG_COLOR_BRIGHT_YELLOW);
+	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 0, y + 2, (char*)"<-START OF LINE", FG_COLOR_BLACK, BG_COLOR_BRIGHT_GREEN);
+	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 0, 55, (char*)"ROW55", FG_COLOR_BLACK, BG_COLOR_BRIGHT_GREEN);
 	Text_ShowFontChars(global_system->screen_[ID_CHANNEL_B], y + 3);
 
 	WaitForUser();

@@ -193,11 +193,11 @@ int main(int argc, char* argv[])
 // 	Sys_SetModeGraphics(global_system);
 // 	printf("now in graphics mode");
 // 	getchar();
-// 	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 1, 4, (char*)"graphics mode?", FG_COLOR_YELLOW, BG_COLOR_BLACK);
+// 	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 1, 4, (char*)"graphics mode?", FG_COLOR_BRIGHT_YELLOW, BG_COLOR_BLACK);
 // 	Sys_SetModeText(global_system, false);
 // 	printf("now in normal text mode");
 // 	getchar();
-// 	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 1, 4, (char*)"overlay mode??", FG_COLOR_YELLOW, BG_COLOR_BLACK);
+// 	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 1, 4, (char*)"overlay mode??", FG_COLOR_BRIGHT_YELLOW, BG_COLOR_BLACK);
 
 	
 

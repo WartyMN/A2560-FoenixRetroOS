@@ -395,7 +395,7 @@ void SharedEventHandler(EventRecord* the_event);
 // have user hit a key, then clear screens
 void WaitForUser(void)
 {
-	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 1, DESCRIPTION_START_Y_LINE + DESCRIPTION_NUM_LINES, (char*)"Press any key to continue", FG_COLOR_YELLOW, BG_COLOR_DK_BLUE);
+	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 1, DESCRIPTION_START_Y_LINE + DESCRIPTION_NUM_LINES, (char*)"Press any key to continue", FG_COLOR_BRIGHT_YELLOW, BG_COLOR_BLUE);
 	
 	getchar();
 	
@@ -412,11 +412,11 @@ void ShowDescription(char* the_message)
 	int16_t		y2 = y1 + DESCRIPTION_NUM_LINES + USER_PROMPT_NUM_LINES + 1;
 
 	// draw box and fill contents in prep for next demo description
-	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, FG_COLOR_BLUE, BG_COLOR_DK_BLUE);
-	Text_FillBox(global_system->screen_[ID_CHANNEL_B], x1+1, y1+1, x2-1, y2-1, ' ', FG_COLOR_WHITE, BG_COLOR_DK_BLUE);
+	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, FG_COLOR_BRIGHT_BLUE, BG_COLOR_BLUE);
+	Text_FillBox(global_system->screen_[ID_CHANNEL_B], x1+1, y1+1, x2-1, y2-1, ' ', FG_COLOR_BRIGHT_WHITE, BG_COLOR_BLUE);
 	
 	// wrap text into the message box, leaving one row at the bottom for "press any key"
-	Text_DrawStringInBox(global_system->screen_[ID_CHANNEL_B], x1+1, y1+1, x2-1, y2-1, the_message, FG_COLOR_WHITE, BG_COLOR_DK_BLUE, NULL);
+	Text_DrawStringInBox(global_system->screen_[ID_CHANNEL_B], x1+1, y1+1, x2-1, y2-1, the_message, FG_COLOR_BRIGHT_WHITE, BG_COLOR_BLUE, NULL);
 }
 
 
