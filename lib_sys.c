@@ -69,6 +69,12 @@ System*			global_system;
 /*                       Private Function Prototypes                         */
 /*****************************************************************************/
 
+
+//! Initialize the system (primary entry point for all system initialization activity) for use with C256 systems
+//! Primary difference is that no backdrop window is created (Windows with bitmaps not supported); 
+//! Starts up the memory manager, creates the global system object, runs autoconfigure to check the system hardware, loads system and application fonts, allocates a bitmap for the screen.
+bool Sys_InitSystemC256(void);
+
 // Instruct all windows to close / clean themselves up
 void Sys_DestroyAllWindows(System* the_system);
 
@@ -83,15 +89,138 @@ void Sys_RenumberWindows(System* the_system);
 void Window_BackdropWinEventHandler(EventRecord* the_event);
 
 
-// **** Debug functions *****
-
-void Sys_Print(System* the_system);
 
 
 /*****************************************************************************/
 /*                       Private Function Definitions                        */
 /*****************************************************************************/
 
+
+
+
+//! Initialize the system (primary entry point for all system initialization activity) for use with C256 systems
+//! Primary difference is that no backdrop window is created (Windows with bitmaps not supported) and no theme is created (saving memory)
+//! Starts up the memory manager, creates the global system object, runs autoconfigure to check the system hardware, loads system and application fonts, allocates a bitmap for the screen.
+bool Sys_InitSystemC256(void)
+{
+	Font*		the_system_font;
+	Font*		the_icon_font;
+	Theme*		the_theme;
+	int16_t		i;
+	
+	
+	DEBUG_OUT(("%s %d: Initializing System...", __func__, __LINE__));
+	
+	// initialize the system object
+	if ((global_system = Sys_New()) == NULL)
+	{
+		LOG_ERR(("%s %d: Couldn't instantiate system object", __func__, __LINE__));
+		goto error;
+	}
+
+	DEBUG_OUT(("%s %d: System object created ok. Initiating list of windows...", __func__, __LINE__));
+	
+// 	// set the global variable that other classes/libraries need access to.
+// 	global_system = the_system;
+
+	DEBUG_OUT(("%s %d: Running Autoconfigure...", __func__, __LINE__));
+	
+	if (Sys_AutoConfigure(global_system) == false)
+	{
+		LOG_ERR(("%s %d: Auto configure failed", __func__, __LINE__));
+		goto error;
+	}
+
+	// LOGIC:
+	//   load default theme so that fonts are available
+	//   having system fonts in lib sys so they are guaranteed is good, but once a theme is loaded it replaces theme
+	//   so default theme needs to know how to reload them in case user switches back
+	//   better to have it consistent: theme is responsible for loading and setting system fonts
+	
+// 	DEBUG_OUT(("%s %d: loading default theme...", __func__, __LINE__));
+// 	
+// 	if ( (the_theme = Theme_CreateDefaultTheme() ) == NULL)
+// 	{
+// 		LOG_ERR(("%s %d: Failed to create default system theme", __func__, __LINE__));
+// 		goto error;
+// 	}
+// 	
+// 	Theme_Activate(the_theme);
+// 	
+// 	DEBUG_OUT(("%s %d: Default theme loaded ok. Creating menu manager...", __func__ , __LINE__));
+// 	
+// 	// menu manager
+// 	if ( (global_system->menu_manager_ = Menu_New() ) == NULL)
+// 	{
+// 		LOG_ERR(("%s %d: could not allocate memory to create the menu manager", __func__ , __LINE__));
+// 		goto error;
+// 	}	
+// 
+// 	DEBUG_OUT(("%s %d: allocating screen bitmap...", __func__, __LINE__));
+	
+	// allocate the foreground and background bitmaps, then assign them fixed locations in VRAM
+	
+	// LOGIC: 
+	//   The only bitmaps we want pointing to VRAM locations are the system's layer0 and layer1 bitmaps for the screen
+	//   Only 1 screen has bitmapped graphics
+	//   We assign them fixed spaces in VRAM, 800*600 apart, so that the addresses are good even on a screen resolution change. 
+	
+	for (i = 0; i < 2; i++)
+	{
+		Bitmap*		the_bitmap;
+
+		if ( (the_bitmap = Bitmap_New(global_system->screen_[ID_CHANNEL_B]->width_, global_system->screen_[ID_CHANNEL_B]->height_, Sys_GetSystemFont(global_system), PARAM_IN_VRAM)) == NULL)
+		{
+			LOG_ERR(("%s %d: Failed to create bitmap #%i", __func__, __LINE__, i));
+			goto error;
+		}
+	
+		the_bitmap->addr_ = (unsigned char*)((unsigned long)VRAM_START + ((unsigned long)i * (unsigned long)VRAM_OFFSET_TO_NEXT_SCREEN));
+		
+		Sys_SetScreenBitmap(global_system, the_bitmap, i);
+		
+		// clear the bitmap
+		Bitmap_FillMemory(the_bitmap, 0x00);
+	}
+	
+
+// 	// load the splash screen and progress bar
+// 	if (Startup_ShowSplash() == false)
+// 	{
+// 		LOG_ERR(("%s %d: Failed to load splash screen. Oh, no!", __func__, __LINE__));
+// 		// but who cares, just continue on... 
+// 	}
+
+	// create the backdrop window and add it to the list of the windows the system tracks
+	
+	// LOGIC:
+	//   Every app will use (or at least have access to) the backdrop window
+	//   The backdrop window shares the same bitmap as the Screen
+	//   The backdrop window will catch events that drop through the windows in the foreground
+	
+// 	if ( Sys_CreateBackdropWindow(global_system) == false)
+// 	{
+// 		LOG_ERR(("%s %d: Failed to create a backdrop window. Fatal error.", __func__, __LINE__));
+// 		goto error;
+// 	}
+	
+	// Enable mouse pointer -- no idea if this works, f68 emulator doesn't support mouse yet. 
+	//R32(VICKYB_MOUSE_CTRL_A2560K) = 1;
+	
+	// set interrupt handlers
+//	ps2_init();
+//	global_old_keyboard_interrupt = sys_int_register(INT_KBD_PS2, &Sys_InterruptKeyboard);
+// 	global_old_keyboard_interrupt = sys_int_register(INT_KBD_A2560K, &Sys_InterruptKeyboard);
+// 	global_old_mouse_interrupt = sys_int_register(INT_MOUSE, &Sys_InterruptKeyboard);
+
+	DEBUG_OUT(("%s %d: System initialization complete.", __func__, __LINE__));
+
+	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
+}
 
 
 //! Instruct every window to update itself and its controls to match the system's current theme
@@ -196,22 +325,40 @@ void Window_BackdropWinEventHandler(EventRecord* the_event)
 
 void Sys_Print(System* the_system)
 {
-// 	DEBUG_OUT(("System print out:"));
-// 	DEBUG_OUT(("  fontType: %i", the_system->fontType));
-// 	DEBUG_OUT(("  firstChar: %i", the_system->firstChar));
-// 	DEBUG_OUT(("  lastChar: %i", the_system->lastChar));
-// 	DEBUG_OUT(("  widMax: %i", the_system->widMax));
-// 	DEBUG_OUT(("  kernMax: %i", the_system->kernMax));
-// 	DEBUG_OUT(("  nDescent: %i", the_system->nDescent));
-// 	DEBUG_OUT(("  fRectWidth: %i", the_system->fRectWidth));
-// 	DEBUG_OUT(("  fRectHeight: %i", the_system->fRectHeight));
-// 	DEBUG_OUT(("  owTLoc: %u", the_system->owTLoc));
-// 	DEBUG_OUT(("  ascent: %i", the_system->ascent));
-// 	DEBUG_OUT(("  descent: %i", the_system->descent));
-// 	DEBUG_OUT(("  leading: %i", the_system->leading));
-// 	DEBUG_OUT(("  rowWords: %i", the_system->rowWords));	
+	DEBUG_OUT(("System print out:"));
+	DEBUG_OUT(("  address: %p", 			the_system));
+	DEBUG_OUT(("  event_manager_: %p", 		the_system->event_manager_));
+	DEBUG_OUT(("  menu_manager_: %p", 		the_system->menu_manager_));
+	DEBUG_OUT(("  system_font_: %p", 		the_system->system_font_));
+	DEBUG_OUT(("  app_font_: %p",			the_system->app_font_));
+	DEBUG_OUT(("  theme_: %p",				the_system->theme_));
+	DEBUG_OUT(("  num_screens_: %i",		the_system->num_screens_));
+	DEBUG_OUT(("  window_count_: %i",		the_system->window_count_));
+	DEBUG_OUT(("  active_window_: %p",		the_system->active_window_));
+	DEBUG_OUT(("  model_number_: %i",		the_system->model_number_));
 }
 
+
+void Sys_PrintScreen(Screen* the_screen)
+{
+	DEBUG_OUT(("Screen print out:"));
+	DEBUG_OUT(("  address: %p", 			the_screen));
+	DEBUG_OUT(("  id_: %i", 				the_screen->id_));
+	DEBUG_OUT(("  vicky_: %p", 				the_screen->vicky_));
+	DEBUG_OUT(("  width_: %i", 				the_screen->width_));
+	DEBUG_OUT(("  height_: %i", 			the_screen->height_));
+	DEBUG_OUT(("  text_cols_vis_: %i", 		the_screen->text_cols_vis_));
+	DEBUG_OUT(("  text_rows_vis_: %i", 		the_screen->text_rows_vis_));
+	DEBUG_OUT(("  text_mem_cols_: %i", 		the_screen->text_mem_cols_));
+	DEBUG_OUT(("  text_mem_rows_: %i", 		the_screen->text_mem_rows_));
+	DEBUG_OUT(("  text_ram_: %p", 			the_screen->text_ram_));
+	DEBUG_OUT(("  text_attr_ram_: %p", 		the_screen->text_attr_ram_));
+	DEBUG_OUT(("  text_font_ram_: %p", 		the_screen->text_font_ram_));
+	DEBUG_OUT(("  bitmap_[0]: %p", 			the_screen->bitmap_[0]));
+	DEBUG_OUT(("  bitmap_[1]: %p", 			the_screen->bitmap_[1]));
+	DEBUG_OUT(("  text_font_height_: %i",	the_screen->text_font_height_));
+	DEBUG_OUT(("  text_font_width_: %i",	the_screen->text_font_width_));
+}
 
 
 
@@ -238,15 +385,15 @@ System* Sys_New(void)
 	LOG_ALLOC(("%s %d:	__ALLOC__	the_system	%p	size	%i", __func__ , __LINE__, the_system, sizeof(System)));
 	
 	DEBUG_OUT(("%s %d: System object created ok...", __func__ , __LINE__));
-
-	// event manager
-	if ( (the_system->event_manager_ = EventManager_New() ) == NULL)
-	{
-		LOG_ERR(("%s %d: could not allocate memory to create the event manager", __func__ , __LINE__));
-		goto error;
-	}
-	
-	DEBUG_OUT(("%s %d: EventManager created ok. Detecting hardware...", __func__ , __LINE__));
+// 
+// 	// event manager
+// 	if ( (the_system->event_manager_ = EventManager_New() ) == NULL)
+// 	{
+// 		LOG_ERR(("%s %d: could not allocate memory to create the event manager", __func__ , __LINE__));
+// 		goto error;
+// 	}
+// 	
+// 	DEBUG_OUT(("%s %d: EventManager created ok. Detecting hardware...", __func__ , __LINE__));
 	
 	// check what kind of hardware the system is running on
 	// LOGIC: we need to know how many screens it has before allocating screen objects
@@ -414,6 +561,10 @@ bool Sys_InitSystem(void)
 	Theme*		the_theme;
 	int16_t		i;
 	
+	// C256 needs more limited startup...
+	#ifdef _C256_FMX_
+		return Sys_InitSystemC256();
+	#endif
 	
 	DEBUG_OUT(("%s %d: Initializing System...", __func__, __LINE__));
 	
@@ -578,6 +729,7 @@ bool Sys_AutoDetectMachine(System* the_system)
 			break;
 			
 		case MACHINE_C256_FMX:
+			DEBUG_OUT(("%s %d: I think this is a C256 FMX...", __func__, __LINE__));
 			the_system->num_screens_ = 1;
 			break;
 			
@@ -615,6 +767,7 @@ bool Sys_AutoConfigure(System* the_system)
 			break;
 			
 		case MACHINE_C256_FMX:
+			DEBUG_OUT(("%s %d: Configuring screens for a C256FMX (1 screen)", __func__, __LINE__));
 			the_system->screen_[ID_CHANNEL_A]->vicky_ = P32(VICKY_C256FMX);
 			the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXTA_RAM_C256FMX;
 			the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXTA_ATTR_C256FMX;
@@ -846,7 +999,7 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 		//   if bit 8 is set, it's 800x600, if not set it's 640x400. VIDEO_MODE_BIT0/VIDEO_MODE_BIT1
 		//   if bit 9 is set, it doubles pixel size, bringing resolution down to 400x300 or 320x200. VICKY_II_PIX_DOUBLER_FLAGS
 
-		//DEBUG_OUT(("%s %d: vicky identified as VICKY_C256FMX", __func__, __LINE__));
+		DEBUG_OUT(("%s %d: vicky identified as VICKY_C256FMX", __func__, __LINE__));
 
 		if (the_video_mode_bits & VIDEO_MODE_BIT1)
 		{
@@ -857,10 +1010,53 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 			new_mode = RES_640X480;
 		}
 	}
+// 	else if (the_screen->vicky_ == (volatile unsigned long*)VICKY_C256FMX)
+// 	{
+//  		//   C256FMX has 1 channel with 2 video modes, 800x600 and 640x480
+// 		//   if bit 8 is set, it's 800x600, if not set it's 640x400. VIDEO_MODE_BIT0/VIDEO_MODE_BIT1
+// 		//   if bit 9 is set, it doubles pixel size, bringing resolution down to 400x300 or 320x200. VICKY_II_PIX_DOUBLER_FLAGS
+// 
+// 		DEBUG_OUT(("%s %d: vicky identified as VICKY_C256FMX with comp 2", __func__, __LINE__));
+// 
+// 		if (the_video_mode_bits & VIDEO_MODE_BIT1)
+// 		{
+// 			new_mode = RES_800X600;
+// 		}
+// 		else
+// 		{
+// 			new_mode = RES_640X480;
+// 		}
+// 	}
+// 	else if ((unsigned long)the_screen->vicky_ == VICKY_C256FMX)
+// 	{
+//  		//   C256FMX has 1 channel with 2 video modes, 800x600 and 640x480
+// 		//   if bit 8 is set, it's 800x600, if not set it's 640x400. VIDEO_MODE_BIT0/VIDEO_MODE_BIT1
+// 		//   if bit 9 is set, it doubles pixel size, bringing resolution down to 400x300 or 320x200. VICKY_II_PIX_DOUBLER_FLAGS
+// 
+// 		DEBUG_OUT(("%s %d: vicky identified as VICKY_C256FMX with comp 3", __func__, __LINE__));
+// 
+// 		if (the_video_mode_bits & VIDEO_MODE_BIT1)
+// 		{
+// 			new_mode = RES_800X600;
+// 		}
+// 		else
+// 		{
+// 			new_mode = RES_640X480;
+// 		}
+// 	}
 	else
 	{
-		LOG_ERR(("%s %d: The VICKY register on this machine doesn't match one I know of. I won't be able to figure out what the screen size is.", __func__, __LINE__));
-		return false;
+		LOG_ERR(("%s %d: The VICKY register on this machine (%p) doesn't match one I know of. I won't be able to figure out what the screen size is.", __func__, __LINE__, the_screen->vicky_));
+		DEBUG_OUT(("%s %d: VICKY_C256FMX should be %p but is %p p32=%p", __func__, __LINE__, P32(VICKY_C256FMX), the_screen->vicky_, P32(the_screen->vicky_)));
+		//return false;
+			if (the_video_mode_bits & VIDEO_MODE_BIT1)
+			{
+				new_mode = RES_800X600;
+			}
+			else
+			{
+				new_mode = RES_640X480;
+			}
 	}
 
 	switch (new_mode)
@@ -891,19 +1087,44 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 	}
 	
 	// detect borders, and set text cols/rows based on resolution modified by borders (if any)
- 	the_border_control_value = R32(the_screen->vicky_ + BORDER_CTRL_OFFSET_L);
-	border_x_pixels = (the_border_control_value >> 8) & 0xFF & 0x3F;
-	border_y_pixels = (the_border_control_value >> 16) & 0xFF & 0x3F;
+	#ifdef _C256_FMX_
+		border_x_pixels = R8(the_screen->vicky_ + BORDER_X_SIZE_L);
+		border_y_pixels = R8(the_screen->vicky_ + BORDER_Y_SIZE_L);
+		DEBUG_OUT(("%s %d:  (the_screen->vicky_ + BORDER_X_SIZE_L)=%p, the_screen->vicky_=%p", __func__, __LINE__, the_screen->vicky_ + BORDER_X_SIZE_L, the_screen->vicky_));
+		DEBUG_OUT(("%s %d: border x,y=%i,%i", __func__, __LINE__, R8(the_screen->vicky_ + BORDER_X_SIZE_L), R8(the_screen->vicky_ + BORDER_Y_SIZE_L)));
+		border_x_pixels = R8(0x00af0008);
+		border_y_pixels = R8(0x00af0009);
+		DEBUG_OUT(("%s %d: direct read border x,y=%i,%i", __func__, __LINE__, border_x_pixels, border_y_pixels));
+	#else
+		the_border_control_value = R32(the_screen->vicky_ + BORDER_CTRL_OFFSET_L);
+		border_x_pixels = (the_border_control_value >> 8) & 0xFF & 0x3F;
+		border_y_pixels = (the_border_control_value >> 16) & 0xFF & 0x3F;
+	#endif
+	
 	border_x_cols = border_x_pixels * 2 / the_screen->text_font_width_;
 	border_y_cols = border_y_pixels * 2 / the_screen->text_font_height_;
-// 	DEBUG_OUT(("%s %d: border xcols=%i, ycols=%i", __func__, __LINE__, border_x_cols, border_y_cols));
+	DEBUG_OUT(("%s %d: border xcols=%i, ycols=%i", __func__, __LINE__, border_x_cols, border_y_cols));
 
+	uint16_t the_viz_cols;
+	uint16_t the_viz_rows;
+	
 	the_screen->text_mem_cols_ = the_screen->width_ / the_screen->text_font_width_;
 	the_screen->text_mem_rows_ = the_screen->height_ / the_screen->text_font_height_;
+	DEBUG_OUT(("%s %d: text_mem_cols_- border_x_cols =%i", __func__, __LINE__, the_screen->text_mem_cols_ - border_x_cols));
+	the_viz_cols = the_screen->text_mem_cols_;
+	the_viz_rows = the_screen->text_mem_rows_ - border_y_cols;
+	DEBUG_OUT(("%s %d: the_viz_cols=%i", __func__, __LINE__, the_viz_cols));
+	the_viz_cols -= border_x_cols;
+	DEBUG_OUT(("%s %d: the_viz_cols=%i", __func__, __LINE__, the_viz_cols));
 	the_screen->text_cols_vis_ = the_screen->text_mem_cols_ - border_x_cols;
-	the_screen->text_rows_vis_ = the_screen->text_mem_rows_ - border_y_cols;
+	DEBUG_OUT(("%s %d: the_screen->text_cols_vis=%i", __func__, __LINE__, the_screen->text_cols_vis_));
+	the_screen->text_cols_vis_ = the_viz_cols;
+	DEBUG_OUT(("%s %d: the_screen->text_cols_vis=%i", __func__, __LINE__, the_screen->text_cols_vis_));
+	//the_screen->text_rows_vis_ = the_screen->text_mem_rows_ - border_y_cols;
+	the_screen->text_rows_vis_ = the_viz_rows;
 	the_screen->rect_.MaxX = the_screen->width_;
 	the_screen->rect_.MaxY = the_screen->height_;	
+	Sys_PrintScreen(the_screen);
 	
 	return true;
 	
