@@ -523,6 +523,29 @@ bool Text_CopyMemBox(Screen* the_screen, char* the_buffer, int16_t x1, int16_t y
 
 // **** Block fill functions ****
 
+
+
+//! Clear the text screen and reset foreground and background colors
+void Text_ClearScreen(Screen* the_screen, uint8_t fore_color, uint8_t back_color)
+{
+	uint8_t			the_attribute_value;
+
+	if (the_screen == NULL)
+	{
+		LOG_ERR(("%s %d: passed screen was NULL", __func__, __LINE__));
+		return;
+	}
+	
+	// calculate attribute value from passed fore and back colors
+	// LOGIC: text mode only supports 16 colors. lower 4 bits are back, upper 4 bits are foreground
+	the_attribute_value = ((fore_color << 4) | back_color);
+
+	Text_FillMemory(the_screen, SCREEN_FOR_TEXT_CHAR, ' ');
+	Text_FillMemory(the_screen, SCREEN_FOR_TEXT_ATTR, the_attribute_value);
+}
+ 	
+
+
 //! Fill the entire attribute memory of the passed screen with the specified fore- and back-color
 //! @param	the_screen: valid pointer to the target screen to operate on
 //! @param	fore_color: Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified.

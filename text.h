@@ -136,6 +136,10 @@
 #define CH_WALL_LL		(unsigned char)0xC0
 #define CH_WALL_LR		(unsigned char)0xD9
 #define CH_INTERSECT	(unsigned char)0xC5
+#define CH_T_DOWN		(unsigned char)0xC2 // T-shape pointing down
+#define CH_T_UP			(unsigned char)0xC1 // T-shape pointing up
+#define CH_T_LEFT		(unsigned char)0xB4 // T-shape pointing left
+#define CH_T_RIGHT		(unsigned char)0xC3 // T-shape pointing right
 #define CH_SMILEY1		(unsigned char)0x01 // 
 #define CH_SMILEY2		(unsigned char)0x02 // 
 #define CH_HEART		(unsigned char)0x03 // 
@@ -228,6 +232,9 @@ bool Text_CopyMemBox(Screen* the_screen, char* the_buffer, int16_t x1, int16_t y
 
 // **** Block fill functions ****
 
+
+//! Clear the text screen and reset foreground and background colors
+void Text_ClearScreen(Screen* the_screen, uint8_t fore_color, uint8_t back_color);
 
 //! Fill the entire attribute memory of the passed screen with the specified fore- and back-color
 //! @param	the_screen: valid pointer to the target screen to operate on
