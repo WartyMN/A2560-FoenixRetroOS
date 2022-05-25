@@ -1266,6 +1266,34 @@ void General_DelaySeconds(uint16_t seconds)
 
 
 
+
+
+// **** USER INPUT UTILITIES *****
+
+// Wait for one character from the keyboard and return it
+char General_GetChar(void)
+{
+	uint8_t		the_char;
+	
+#ifdef _C256_FMX_
+	char	(*Kernal_GetCharWithWait)(void);
+	//GETCHW	$00:104C	Get a character from the input channel. Waits until data received. A=0 and Carry=1 if no data is waiting
+	Kernal_GetCharWithWait = (void*)(0x00104c);
+	
+	the_char = Kernal_GetCharWithWait();
+#else
+	the_char = getchar();
+#endif
+
+	return the_char;
+}
+
+
+
+
+
+
+
 // **** LOGGING AND DEBUG UTILITIES *****
 
 
