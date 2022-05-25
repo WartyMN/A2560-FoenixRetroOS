@@ -106,7 +106,7 @@ bool Test_MyGetUserResponseFunc(void)
 {
 	unsigned char	c;
 	
-	c = getchar();
+	c = General_GetChar();
 	
 	if (c == 'q')
 	{
@@ -123,7 +123,7 @@ void WaitForUser(void)
 {
 	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 1, 4, (char*)"Press any key to continue", FG_COLOR_YELLOW, BG_COLOR_DK_BLUE);
 	
-	getchar();
+	General_GetChar();
 	
 	Text_FillCharMem(global_system->screen_[ID_CHANNEL_A], ' ');
 	Text_FillAttrMem(global_system->screen_[ID_CHANNEL_A], 159);
@@ -150,8 +150,8 @@ void ShowDescription(char* the_message)
 
 void Demo_Text_FillCharMem1(void)
 {
-	Text_FillCharMem(global_system->screen_[ID_CHANNEL_B], 'Z');
-	ShowDescription("Text_FillCharMem -> fill screen with the letter Z");	
+	Text_FillCharMem(global_system->screen_[ID_CHANNEL_B], 'Y');
+	ShowDescription("Text_FillCharMem -> fill screen with the letter Y");	
 	WaitForUser();
 }
 
@@ -800,7 +800,7 @@ void RunDemo(void)
 	Text_FillCharMem(global_system->screen_[ID_CHANNEL_B], ' ');
 	Text_FillAttrMem(global_system->screen_[ID_CHANNEL_B], 160);
 
-	ShowDescription("Welcome to the A2560 Text Library Demo! (No, it's not THAT kind of demo, sorry)");	
+	ShowDescription("Welcome to the Text Library Demo!");	
 	WaitForUser();
 	
 	Demo_Text_FillCharMem1();
@@ -862,9 +862,6 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 
-	// try flushing channel.. something about graphics mode makes getchar() not work any more? 
-	//sys_chan_flush(sys_chan_open(0, (unsigned char*)"", 1));
-	
 	RunDemo();
 
 	return 0;

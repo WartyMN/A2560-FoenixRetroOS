@@ -92,7 +92,7 @@ void WaitForUser(void)
 {
 	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 1, 4, (char*)"Press any key to continue", FG_COLOR_YELLOW, BG_COLOR_DK_BLUE);
 	
-	getchar();
+	General_GetChar();
 	
 	Bitmap_FillMemory(Sys_GetScreenBitmap(global_system, back_layer), 0xbb);
 	Text_FillCharMem(global_system->screen_[ID_CHANNEL_B], ' ');
@@ -541,36 +541,36 @@ void RunDemo(void)
 // 	Text_FillCharMem(global_system->screen_[ID_CHANNEL_B], ' ');
 // 	Text_FillAttrMem(global_system->screen_[ID_CHANNEL_B], 160);
 
-	ShowDescription("Welcome to the A2560 Graphics Library Demo!");	
+	ShowDescription("Welcome to the Graphics Library Demo!");	
 	WaitForUser();
 	
-// 	Demo_Bitmap_FillMemory1();
-// 	Demo_Bitmap_FillMemory2();
-// 	
+	Demo_Bitmap_FillMemory1();
+	Demo_Bitmap_FillMemory2();
+	
 	Demo_Bitmap_FillBox1();
 	Demo_Bitmap_FillBox2();
 	Demo_Bitmap_FillBox3();
-// 
-// 	Demo_Bitmap_SetPixelAtXY();
-// 
+
+	Demo_Bitmap_SetPixelAtXY();
+
  	Demo_Bitmap_GetPixelAtXY();
 
-// 	Demo_Bitmap_DrawHLine1();
-// 	
-// 	Demo_Bitmap_DrawLine();
-// 	
-// 	Demo_Bitmap_DrawBox();
-// 	Demo_Bitmap_DrawBoxCoords();
-
-// 	Demo_Bitmap_DrawRoundBox();
+	Demo_Bitmap_DrawHLine1();
 	
-// 	Demo_Bitmap_DrawCircle();
-// 	
-// 	Demo_Bitmap_Blit1();
+	Demo_Bitmap_DrawLine();
+	
+	Demo_Bitmap_DrawBox();
+	Demo_Bitmap_DrawBoxCoords();
+
+	Demo_Bitmap_DrawRoundBox();
+	
+	Demo_Bitmap_DrawCircle();
+	
+	Demo_Bitmap_Blit1();
 	Demo_Bitmap_BlitRect();
-// 	
-// 	Demo_Bitmap_ScreenResolution1();
-// 	Demo_Bitmap_ScreenResolution2();
+	
+	Demo_Bitmap_ScreenResolution1();
+	Demo_Bitmap_ScreenResolution2();
 	
 }
 
