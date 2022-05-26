@@ -1047,7 +1047,8 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 	else
 	{
 		LOG_ERR(("%s %d: The VICKY register on this machine (%p) doesn't match one I know of. I won't be able to figure out what the screen size is.", __func__, __LINE__, the_screen->vicky_));
-		DEBUG_OUT(("%s %d: VICKY_C256FMX should be %p but is %p p32=%p", __func__, __LINE__, P32(VICKY_C256FMX), the_screen->vicky_, P32(the_screen->vicky_)));
+		DEBUG_OUT(("%s %d: P32(VICKY_C256FMX) is %p (%x) and does not match the_screen->vicky_ %p (%x)", __func__, __LINE__, P32(VICKY_C256FMX), P32(VICKY_C256FMX), P32(the_screen->vicky_), P32(the_screen->vicky_)));
+		DEBUG_OUT(("%s %d: without cast, VICKY_C256FMX=%p (%x), the_screen->vicky_=%p (%x)", __func__, __LINE__, VICKY_C256FMX, VICKY_C256FMX, the_screen->vicky_, the_screen->vicky_));
 		//return false;
 			if (the_video_mode_bits & VIDEO_MODE_BIT1)
 			{
@@ -1090,7 +1091,7 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 	#ifdef _C256_FMX_
 		border_x_pixels = R8(the_screen->vicky_ + BORDER_X_SIZE_L);
 		border_y_pixels = R8(the_screen->vicky_ + BORDER_Y_SIZE_L);
-		DEBUG_OUT(("%s %d:  (the_screen->vicky_ + BORDER_X_SIZE_L)=%p, the_screen->vicky_=%p", __func__, __LINE__, the_screen->vicky_ + BORDER_X_SIZE_L, the_screen->vicky_));
+		DEBUG_OUT(("%s %d:  (the_screen->vicky_ + BORDER_X_SIZE_L)=%p (%x), the_screen->vicky_=%p", __func__, __LINE__, the_screen->vicky_ + BORDER_X_SIZE_L, the_screen->vicky_ + BORDER_X_SIZE_L, the_screen->vicky_));
 		DEBUG_OUT(("%s %d: border x,y=%i,%i", __func__, __LINE__, R8(the_screen->vicky_ + BORDER_X_SIZE_L), R8(the_screen->vicky_ + BORDER_Y_SIZE_L)));
 		border_x_pixels = R8(0x00af0008);
 		border_y_pixels = R8(0x00af0009);
@@ -1103,25 +1104,10 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 	
 	border_x_cols = border_x_pixels * 2 / the_screen->text_font_width_;
 	border_y_cols = border_y_pixels * 2 / the_screen->text_font_height_;
-	DEBUG_OUT(("%s %d: border xcols=%i, ycols=%i", __func__, __LINE__, border_x_cols, border_y_cols));
-
-	uint16_t the_viz_cols;
-	uint16_t the_viz_rows;
-	
 	the_screen->text_mem_cols_ = the_screen->width_ / the_screen->text_font_width_;
 	the_screen->text_mem_rows_ = the_screen->height_ / the_screen->text_font_height_;
-	DEBUG_OUT(("%s %d: text_mem_cols_- border_x_cols =%i", __func__, __LINE__, the_screen->text_mem_cols_ - border_x_cols));
-	the_viz_cols = the_screen->text_mem_cols_;
-	the_viz_rows = the_screen->text_mem_rows_ - border_y_cols;
-	DEBUG_OUT(("%s %d: the_viz_cols=%i", __func__, __LINE__, the_viz_cols));
-	the_viz_cols -= border_x_cols;
-	DEBUG_OUT(("%s %d: the_viz_cols=%i", __func__, __LINE__, the_viz_cols));
 	the_screen->text_cols_vis_ = the_screen->text_mem_cols_ - border_x_cols;
-	DEBUG_OUT(("%s %d: the_screen->text_cols_vis=%i", __func__, __LINE__, the_screen->text_cols_vis_));
-	the_screen->text_cols_vis_ = the_viz_cols;
-	DEBUG_OUT(("%s %d: the_screen->text_cols_vis=%i", __func__, __LINE__, the_screen->text_cols_vis_));
-	//the_screen->text_rows_vis_ = the_screen->text_mem_rows_ - border_y_cols;
-	the_screen->text_rows_vis_ = the_viz_rows;
+	the_screen->text_rows_vis_ = the_screen->text_mem_rows_ - border_y_cols;
 	the_screen->rect_.MaxX = the_screen->width_;
 	the_screen->rect_.MaxY = the_screen->height_;	
 	Sys_PrintScreen(the_screen);
