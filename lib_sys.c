@@ -1047,8 +1047,8 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 	else
 	{
 		LOG_ERR(("%s %d: The VICKY register on this machine (%p) doesn't match one I know of. I won't be able to figure out what the screen size is.", __func__, __LINE__, the_screen->vicky_));
-		DEBUG_OUT(("%s %d: P32(VICKY_C256FMX) is %p (%x) and does not match the_screen->vicky_ %p (%x)", __func__, __LINE__, P32(VICKY_C256FMX), P32(VICKY_C256FMX), P32(the_screen->vicky_), P32(the_screen->vicky_)));
-		DEBUG_OUT(("%s %d: without cast, VICKY_C256FMX=%p (%x), the_screen->vicky_=%p (%x)", __func__, __LINE__, VICKY_C256FMX, VICKY_C256FMX, the_screen->vicky_, the_screen->vicky_));
+		DEBUG_OUT(("%s %d: P32(VICKY_C256FMX) is %p (%lx) and does not match the_screen->vicky_ %p (%lx)", __func__, __LINE__, P32(VICKY_C256FMX), P32(VICKY_C256FMX), P32(the_screen->vicky_), P32(the_screen->vicky_)));
+		DEBUG_OUT(("%s %d: without cast, VICKY_C256FMX=%p (%lx), the_screen->vicky_=%p (%lx)", __func__, __LINE__, VICKY_C256FMX, VICKY_C256FMX, the_screen->vicky_, the_screen->vicky_));
 		//return false;
 			if (the_video_mode_bits & VIDEO_MODE_BIT1)
 			{
