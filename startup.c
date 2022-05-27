@@ -6975,7 +6975,11 @@ bool Startup_CopyCLUTtoVicky(Screen* the_screen)
 	char*		dest;
 	size_t		data_size = 0x400;
 	
-	dest = (char*)P32(the_screen->vicky_ + CLUT0_OFFSET_L);
+	#ifdef _C256_FMX_
+		dest = (char*)VICKY_II_CLUT0;
+	#else
+		dest = (char*)P32(the_screen->vicky_ + CLUT0_OFFSET_L);
+	#endif
 	
 	memcpy(dest, (uint8_t*)splash_clut, data_size);
 	

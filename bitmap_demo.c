@@ -398,10 +398,10 @@ void Demo_Bitmap_Blit1(void)
 	Bitmap_DrawCircle(Sys_GetScreenBitmap(global_system, back_layer), 25, 25, 20, 0xff);
 
 	// copy bits of this screen to other parts of the Screen
-	src_bm.addr_ = (unsigned char*)VRAM_BUFFER_A;
+	src_bm.addr_ = (unsigned char*)VRAM_START;
 	src_bm.width_ = global_system->screen_[ID_CHANNEL_B]->width_;
 	src_bm.height_ = global_system->screen_[ID_CHANNEL_B]->height_;
-	dst_bm.addr_ = (unsigned char*)VRAM_BUFFER_A;
+	dst_bm.addr_ = (unsigned char*)VRAM_START;
 	dst_bm.width_ = global_system->screen_[ID_CHANNEL_B]->width_;
 	dst_bm.height_ = global_system->screen_[ID_CHANNEL_B]->height_;
 

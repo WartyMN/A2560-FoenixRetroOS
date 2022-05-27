@@ -292,7 +292,7 @@ Bitmap* Bitmap_New(int16_t width, int16_t height, Font* the_font, bool in_vram)
 	the_bitmap->height_ = height;
 	the_bitmap->in_vram_ = in_vram;
 	
-	//DEBUG_OUT(("%s %d: Bitmap allocated! p=%p, addr=%p", __func__, __LINE__, the_bitmap, the_bitmap->addr_));
+	//DEBUG_OUT(("%s %d: Bitmap allocated! p=%p, addr=%p, width=%i, height=%i", __func__, __LINE__, the_bitmap, the_bitmap->addr_, the_bitmap->width_, the_bitmap->height_));
 
 	if (the_font)
 	{

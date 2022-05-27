@@ -149,14 +149,14 @@ bool Sys_InitSystemC256(void)
 // 	
 // 	DEBUG_OUT(("%s %d: Default theme loaded ok. Creating menu manager...", __func__ , __LINE__));
 // 	
-// 	// menu manager
-// 	if ( (global_system->menu_manager_ = Menu_New() ) == NULL)
-// 	{
-// 		LOG_ERR(("%s %d: could not allocate memory to create the menu manager", __func__ , __LINE__));
-// 		goto error;
-// 	}	
-// 
-// 	DEBUG_OUT(("%s %d: allocating screen bitmap...", __func__, __LINE__));
+	// menu manager
+	if ( (global_system->menu_manager_ = Menu_New() ) == NULL)
+	{
+		LOG_ERR(("%s %d: could not allocate memory to create the menu manager", __func__ , __LINE__));
+		goto error;
+	}	
+
+	DEBUG_OUT(("%s %d: allocating screen bitmap...", __func__, __LINE__));
 	
 	// allocate the foreground and background bitmaps, then assign them fixed locations in VRAM
 	
@@ -177,10 +177,12 @@ bool Sys_InitSystemC256(void)
 	
 		the_bitmap->addr_ = (unsigned char*)((unsigned long)VRAM_START + ((unsigned long)i * (unsigned long)VRAM_OFFSET_TO_NEXT_SCREEN));
 		
+		DEBUG_OUT(("%s %d: setting bitmap->addr for layer %i to %p", __func__, __LINE__, i, the_bitmap->addr_));
+		
 		Sys_SetScreenBitmap(global_system, the_bitmap, i);
 		
 		// clear the bitmap
-		Bitmap_FillMemory(the_bitmap, 0x00);
+		Bitmap_FillMemory(the_bitmap, 0x0F);
 	}
 	
 
@@ -715,17 +717,45 @@ bool Sys_AutoDetectMachine(System* the_system)
 	struct s_sys_info	sys_info;
 	struct s_sys_info*	the_sys_info = &sys_info; // doing this convoluted thing so that C256 macro can fake having sys_get_info
 
-	sys_get_info(the_sys_info);
+	#ifdef _C256_FMX_
+		uint8_t	the_machine_id;
+		
+		the_machine_id = (R8(GABE_SYS_STAT) & 0xF0) >> 4;
+		DEBUG_OUT(("%s %d: the_machine_id=%u, gabe raw value=%u", __func__, __LINE__, the_machine_id, R8(GABE_SYS_STAT)));
+		
+		the_sys_info->model = the_machine_id;
+		
+		if (the_machine_id == MACHINE_C256_FMX)
+		{
+			DEBUG_OUT(("%s %d: it's a C256 FMX!", __func__, __LINE__));
+		}
+		else if (the_machine_id == MACHINE_C256_UPLUS)
+		{
+			DEBUG_OUT(("%s %d: it's a C256U+... you must be Hakan!", __func__, __LINE__));
+		}
+		
+	#else
+		sys_get_info(the_sys_info);
+	#endif
+	
 	the_system->model_number_ = the_sys_info->model;
 	//DEBUG_OUT(("%s %d: the_system->model_number_=%u", __func__, __LINE__, the_system->model_number_));
 	
 	switch (the_system->model_number_)
 	{
 		case MACHINE_C256_U:
+			DEBUG_OUT(("%s %d: I think this is a C256U...", __func__, __LINE__));
+			the_system->num_screens_ = 1;
+			break;
+			
 		case MACHINE_C256_GENX:
+			DEBUG_OUT(("%s %d: I think this is a C256 GENX...", __func__, __LINE__));
+			the_system->num_screens_ = 1;
+			break;
+			
 		case MACHINE_C256_UPLUS:
-			DEBUG_OUT(("%s %d: this application is not compatible with the %s.", __func__, __LINE__, the_sys_info->model_name));
-			return false;
+			DEBUG_OUT(("%s %d: I think this is a C256U+...", __func__, __LINE__));
+			the_system->num_screens_ = 1;
 			break;
 			
 		case MACHINE_C256_FMX:
@@ -741,6 +771,11 @@ bool Sys_AutoDetectMachine(System* the_system)
 		case MACHINE_A2560X:
 		case MACHINE_A2560K:
 			the_system->num_screens_ = 2;		
+			break;
+			
+		default:
+			DEBUG_OUT(("%s %d: I can't recognize this machine (id=%u). Application will now quit.", __func__, __LINE__, the_system->model_number_));
+			return false;
 			break;
 	}
 	
@@ -762,17 +797,13 @@ bool Sys_AutoConfigure(System* the_system)
 		case MACHINE_C256_U:
 		case MACHINE_C256_GENX:
 		case MACHINE_C256_UPLUS:
-			DEBUG_OUT(("%s %d: this application is not compatible with Foenix hardware ID %u.", __func__, __LINE__, the_system->model_number_));
-			return false;
-			break;
-			
 		case MACHINE_C256_FMX:
-			DEBUG_OUT(("%s %d: Configuring screens for a C256FMX (1 screen)", __func__, __LINE__));
-			the_system->screen_[ID_CHANNEL_A]->vicky_ = P32(VICKY_C256FMX);
+			DEBUG_OUT(("%s %d: Configuring screens for a C256 (1 screen)", __func__, __LINE__));
+			the_system->screen_[ID_CHANNEL_A]->vicky_ = P32(VICKY_C256);
 			the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXTA_RAM_C256FMX;
 			the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXTA_ATTR_C256FMX;
 			the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANK_C256FMX;
-			the_system->screen_[ID_CHANNEL_B]->vicky_ = P32(VICKY_C256FMX);
+			the_system->screen_[ID_CHANNEL_B]->vicky_ = P32(VICKY_C256);
 			the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXTA_RAM_C256FMX;
 			the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXTA_ATTR_C256FMX;
 			the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANK_C256FMX;
@@ -784,6 +815,10 @@ bool Sys_AutoConfigure(System* the_system)
 			the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXT_RAM_A2560U;
 			the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXT_ATTR_A2560U;
 			the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANK_A2560U;
+			the_system->screen_[ID_CHANNEL_B]->vicky_ = P32(VICKY_A2560U);
+			the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXT_RAM_A2560U;
+			the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXT_ATTR_A2560U;
+			the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANK_A2560U;
 			break;
 			
 		case MACHINE_A2560X:
@@ -799,7 +834,12 @@ bool Sys_AutoConfigure(System* the_system)
 			the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANKB_A2560K;
 		
 			break;
-
+		
+		default:
+			DEBUG_OUT(("%s %d: this application is not compatible with Foenix hardware ID %u.", __func__, __LINE__, the_system->model_number_));
+			return false;
+			break;
+		
 	}
 
 	// set some things that aren't machine-dependent
@@ -848,16 +888,25 @@ bool Sys_SetModeGraphics(System* the_system)
 	//   On an A2560K or X, the only screen that has a text/graphics mode is the Channel B screen
 	
 	// switch to graphics mode by setting graphics mode bit, and setting bitmap engine enable bit
-	//*the_screen->vicky_ = (*the_screen->vicky_ & GRAPHICS_MODE_MASK | (GRAPHICS_MODE_GRAPHICS) | GRAPHICS_MODE_EN_BITMAP);
-	R32(the_system->screen_[ID_CHANNEL_B]->vicky_) = (*the_system->screen_[ID_CHANNEL_B]->vicky_ & GRAPHICS_MODE_MASK | (GRAPHICS_MODE_GRAPHICS) | GRAPHICS_MODE_EN_BITMAP);
 
 	// enable bitmap layers 0 and 1
-	R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_CTRL_L) = 0x01;
-	#ifndef _f68_	// f68 does not do compositing, so if bitmap layer1 is enabled, it blocks everything else
-	R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L1_CTRL_L) = 0x01;
+	#ifdef _C256_FMX_
+		R8(VICKY_II_MASTER_CTRL_REG_L) = *(uint8_t*)VICKY_II_MASTER_CTRL_REG_L & (GRAPHICS_MODE_GRAPHICS | GRAPHICS_MODE_EN_BITMAP);
+		//R8(the_system->screen_[ID_CHANNEL_B]->vicky_) = *(uint8_t*)the_system->screen_[ID_CHANNEL_B]->vicky_ & (GRAPHICS_MODE_MASK | GRAPHICS_MODE_GRAPHICS | GRAPHICS_MODE_EN_BITMAP);
+		R8(BITMAP_L0_CTRL) = 0x01;
+		R8(BITMAP_L1_CTRL) = 0x00; // TEMP... not sure layer 1 is getting cleared.
 	#else
-	R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L1_CTRL_L) = 0x00;
+		//*the_screen->vicky_ = (*the_screen->vicky_ & GRAPHICS_MODE_MASK | (GRAPHICS_MODE_GRAPHICS) | GRAPHICS_MODE_EN_BITMAP);
+		R32(the_system->screen_[ID_CHANNEL_B]->vicky_) = (*the_system->screen_[ID_CHANNEL_B]->vicky_ & GRAPHICS_MODE_MASK | GRAPHICS_MODE_GRAPHICS | GRAPHICS_MODE_EN_BITMAP);
+
+		R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_CTRL_L) = 0x01;
+		#ifndef _f68_	// f68 does not do compositing, so if bitmap layer1 is enabled, it blocks everything else
+		R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L1_CTRL_L) = 0x01;
+		#else
+		R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L1_CTRL_L) = 0x00;
+		#endif
 	#endif
+	
 	
 	return true;
 	
@@ -881,11 +930,18 @@ bool Sys_SetModeText(System* the_system, bool as_overlay)
 	// LOGIC:
 	//   On an A2560K or X, the only screen that has a text/graphics mode is the Channel B screen
 	
-	// switch to yrcy mode by unsetting graphics mode bit, and setting bitmap engine enable bit
-	//*the_screen->vicky_ = (*the_screen->vicky_ & GRAPHICS_MODE_MASK | (GRAPHICS_MODE_GRAPHICS) | GRAPHICS_MODE_EN_BITMAP);
 	if (as_overlay)
 	{
-		R32(the_system->screen_[ID_CHANNEL_B]->vicky_) = (*the_system->screen_[ID_CHANNEL_B]->vicky_ & GRAPHICS_MODE_MASK | GRAPHICS_MODE_TEXT | GRAPHICS_MODE_TEXT_OVER | GRAPHICS_MODE_GRAPHICS | GRAPHICS_MODE_EN_BITMAP);
+		// switch to text mode with overlay by setting graphics mode bit, setting bitmap engine enable bit, and setting graphics mode overlay		
+		#ifdef _C256_FMX_
+			R8(VICKY_II_MASTER_CTRL_REG_L) = (GRAPHICS_MODE_TEXT | GRAPHICS_MODE_TEXT_OVER | GRAPHICS_MODE_GRAPHICS | GRAPHICS_MODE_EN_BITMAP);
+			//R8(VICKY_II_MASTER_CTRL_REG_L) = *(uint8_t*)VICKY_II_MASTER_CTRL_REG_L & (GRAPHICS_MODE_TEXT | GRAPHICS_MODE_TEXT_OVER | GRAPHICS_MODE_GRAPHICS | GRAPHICS_MODE_EN_BITMAP);
+			R8(BITMAP_L0_CTRL) = 0x01;
+			R8(BITMAP_L1_CTRL) = 0x00; // TEMP... not sure layer 1 is getting cleared.
+			//R8(the_system->screen_[ID_CHANNEL_B]->vicky_) = *(uint8_t*)the_system->screen_[ID_CHANNEL_B]->vicky_ & (GRAPHICS_MODE_MASK | GRAPHICS_MODE_TEXT | GRAPHICS_MODE_TEXT_OVER | GRAPHICS_MODE_GRAPHICS | GRAPHICS_MODE_EN_BITMAP);
+		#else
+			R32(the_system->screen_[ID_CHANNEL_B]->vicky_) = (*the_system->screen_[ID_CHANNEL_B]->vicky_ & GRAPHICS_MODE_MASK | GRAPHICS_MODE_TEXT | GRAPHICS_MODE_TEXT_OVER | GRAPHICS_MODE_GRAPHICS | GRAPHICS_MODE_EN_BITMAP);
+		#endif
 		
 		// c256foenix, discord 2022/03/10
 		// Normally, for example, if you setup everything to be in bitmap mode, and you download an image in VRAM and you can see it properly... If you turn on overlay, then you will see on top of that same image, your text that you had before.
@@ -897,11 +953,19 @@ bool Sys_SetModeText(System* the_system, bool as_overlay)
 	}
 	else
 	{
-		R32(the_system->screen_[ID_CHANNEL_B]->vicky_) = (*the_system->screen_[ID_CHANNEL_B]->vicky_ & GRAPHICS_MODE_MASK | GRAPHICS_MODE_TEXT);
-		
-		// disable bitmap layers 0 and 1
-		R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_CTRL_L) = 0x00;
-		R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L1_CTRL_L) = 0x00;
+		#ifdef _C256_FMX_
+			R8(VICKY_II_MASTER_CTRL_REG_L) = (GRAPHICS_MODE_TEXT);
+			//R8(VICKY_II_MASTER_CTRL_REG_L) = *(uint8_t*)VICKY_II_MASTER_CTRL_REG_L & (GRAPHICS_MODE_TEXT);
+			//R8(the_system->screen_[ID_CHANNEL_B]->vicky_) = *(uint8_t*)the_system->screen_[ID_CHANNEL_B]->vicky_ & (GRAPHICS_MODE_MASK | GRAPHICS_MODE_TEXT);
+			// disable bitmap layers 0 and 1
+			R8(BITMAP_L0_CTRL) = 0x00;
+			R8(BITMAP_L1_CTRL) = 0x00;
+		#else
+			R32(the_system->screen_[ID_CHANNEL_B]->vicky_) = (*the_system->screen_[ID_CHANNEL_B]->vicky_ & GRAPHICS_MODE_MASK | GRAPHICS_MODE_TEXT);
+			// disable bitmap layers 0 and 1
+			R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_CTRL_L) = 0x00;
+			R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L1_CTRL_L) = 0x00;
+		#endif
 	}
 	
 	return true;
@@ -993,13 +1057,13 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 			new_mode = RES_640X480;
 		}
 	}
-	else if (the_screen->vicky_ == P32(VICKY_C256FMX))
+	else if (the_screen->vicky_ == P32(VICKY_C256))
 	{
  		//   C256FMX has 1 channel with 2 video modes, 800x600 and 640x480
 		//   if bit 8 is set, it's 800x600, if not set it's 640x400. VIDEO_MODE_BIT0/VIDEO_MODE_BIT1
 		//   if bit 9 is set, it doubles pixel size, bringing resolution down to 400x300 or 320x200. VICKY_II_PIX_DOUBLER_FLAGS
 
-		DEBUG_OUT(("%s %d: vicky identified as VICKY_C256FMX", __func__, __LINE__));
+		DEBUG_OUT(("%s %d: vicky identified as VICKY_C256", __func__, __LINE__));
 
 		if (the_video_mode_bits & VIDEO_MODE_BIT1)
 		{
@@ -1010,54 +1074,10 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 			new_mode = RES_640X480;
 		}
 	}
-// 	else if (the_screen->vicky_ == (volatile unsigned long*)VICKY_C256FMX)
-// 	{
-//  		//   C256FMX has 1 channel with 2 video modes, 800x600 and 640x480
-// 		//   if bit 8 is set, it's 800x600, if not set it's 640x400. VIDEO_MODE_BIT0/VIDEO_MODE_BIT1
-// 		//   if bit 9 is set, it doubles pixel size, bringing resolution down to 400x300 or 320x200. VICKY_II_PIX_DOUBLER_FLAGS
-// 
-// 		DEBUG_OUT(("%s %d: vicky identified as VICKY_C256FMX with comp 2", __func__, __LINE__));
-// 
-// 		if (the_video_mode_bits & VIDEO_MODE_BIT1)
-// 		{
-// 			new_mode = RES_800X600;
-// 		}
-// 		else
-// 		{
-// 			new_mode = RES_640X480;
-// 		}
-// 	}
-// 	else if ((unsigned long)the_screen->vicky_ == VICKY_C256FMX)
-// 	{
-//  		//   C256FMX has 1 channel with 2 video modes, 800x600 and 640x480
-// 		//   if bit 8 is set, it's 800x600, if not set it's 640x400. VIDEO_MODE_BIT0/VIDEO_MODE_BIT1
-// 		//   if bit 9 is set, it doubles pixel size, bringing resolution down to 400x300 or 320x200. VICKY_II_PIX_DOUBLER_FLAGS
-// 
-// 		DEBUG_OUT(("%s %d: vicky identified as VICKY_C256FMX with comp 3", __func__, __LINE__));
-// 
-// 		if (the_video_mode_bits & VIDEO_MODE_BIT1)
-// 		{
-// 			new_mode = RES_800X600;
-// 		}
-// 		else
-// 		{
-// 			new_mode = RES_640X480;
-// 		}
-// 	}
 	else
 	{
 		LOG_ERR(("%s %d: The VICKY register on this machine (%p) doesn't match one I know of. I won't be able to figure out what the screen size is.", __func__, __LINE__, the_screen->vicky_));
-		DEBUG_OUT(("%s %d: P32(VICKY_C256FMX) is %p (%lx) and does not match the_screen->vicky_ %p (%lx)", __func__, __LINE__, P32(VICKY_C256FMX), P32(VICKY_C256FMX), P32(the_screen->vicky_), P32(the_screen->vicky_)));
-		DEBUG_OUT(("%s %d: without cast, VICKY_C256FMX=%p (%lx), the_screen->vicky_=%p (%lx)", __func__, __LINE__, VICKY_C256FMX, VICKY_C256FMX, the_screen->vicky_, the_screen->vicky_));
-		//return false;
-			if (the_video_mode_bits & VIDEO_MODE_BIT1)
-			{
-				new_mode = RES_800X600;
-			}
-			else
-			{
-				new_mode = RES_640X480;
-			}
+		return false;
 	}
 
 	switch (new_mode)
@@ -1089,13 +1109,9 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 	
 	// detect borders, and set text cols/rows based on resolution modified by borders (if any)
 	#ifdef _C256_FMX_
-		border_x_pixels = R8(the_screen->vicky_ + BORDER_X_SIZE_L);
-		border_y_pixels = R8(the_screen->vicky_ + BORDER_Y_SIZE_L);
-		DEBUG_OUT(("%s %d:  (the_screen->vicky_ + BORDER_X_SIZE_L)=%p (%x), the_screen->vicky_=%p", __func__, __LINE__, the_screen->vicky_ + BORDER_X_SIZE_L, the_screen->vicky_ + BORDER_X_SIZE_L, the_screen->vicky_));
-		DEBUG_OUT(("%s %d: border x,y=%i,%i", __func__, __LINE__, R8(the_screen->vicky_ + BORDER_X_SIZE_L), R8(the_screen->vicky_ + BORDER_Y_SIZE_L)));
-		border_x_pixels = R8(0x00af0008);
-		border_y_pixels = R8(0x00af0009);
-		DEBUG_OUT(("%s %d: direct read border x,y=%i,%i", __func__, __LINE__, border_x_pixels, border_y_pixels));
+		border_x_pixels = R8(P8(the_screen->vicky_) + BORDER_X_SIZE_B);
+		border_y_pixels = R8(P8(the_screen->vicky_) + BORDER_Y_SIZE_B);
+		//DEBUG_OUT(("%s %d: calculated vicky reg=%p; border x,y=%i,%i", __func__, __LINE__, P8(the_screen->vicky_) + BORDER_X_SIZE_B, R8(P8(the_screen->vicky_) + BORDER_X_SIZE_B), R8(P8(the_screen->vicky_) + BORDER_Y_SIZE_B)));
 	#else
 		the_border_control_value = R32(the_screen->vicky_ + BORDER_CTRL_OFFSET_L);
 		border_x_pixels = (the_border_control_value >> 8) & 0xFF & 0x3F;
@@ -1183,9 +1199,9 @@ bool Sys_SetVideoMode(Screen* the_screen, screen_resolution new_mode)
 			new_mode_flag = VICKY_II_RES_800X600_FLAGS;
 		}
 	}
-	else if (the_screen->vicky_ == P32(VICKY_C256FMX))
+	else if (the_screen->vicky_ == P32(VICKY_C256))
 	{
- 		//DEBUG_OUT(("%s %d: vicky identified as VICKY_C256FMX", __func__, __LINE__));
+ 		//DEBUG_OUT(("%s %d: vicky identified as VICKY_C256", __func__, __LINE__));
 		if (new_mode == RES_640X480)
 		{
 			new_mode_flag = VICKY_II_RES_640X480_FLAGS;
@@ -2289,7 +2305,9 @@ error:
 bool Sys_SetVRAMAddr(System* the_system, uint8_t the_bitmap_layer, unsigned char* the_address)
 {
 	uint32_t			new_vicky_bitmap_vram_value;
-	
+
+return true;
+
 	if (the_system == NULL)
 	{
 		LOG_ERR(("%s %d: passed class object was null", __func__ , __LINE__));
@@ -2302,24 +2320,43 @@ bool Sys_SetVRAMAddr(System* the_system, uint8_t the_bitmap_layer, unsigned char
 		goto error;
 	}
 	
-	//DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0: want to point to bitmap at %p", __func__, __LINE__, the_address));
+	DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0: want to point to bitmap at %p", __func__, __LINE__, the_address));
 
-	//DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0 before change: 0x%x (with offset=0x%x)", __func__, __LINE__, R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L), (uint32_t)VRAM_BUFFER_A + R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L)));
+	//DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0 before change: 0x%x (with offset=0x%x)", __func__, __LINE__, R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_OFFSET_L), (uint32_t)VRAM_START + R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_OFFSET_L)));
+	DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer %i before change: %x / %x / %x", __func__, __LINE__, the_bitmap_layer, R8(BITMAP_L0_VRAM_ADDR_L), R8(BITMAP_L0_VRAM_ADDR_M), R8(BITMAP_L0_VRAM_ADDR_H)));
 	
-	new_vicky_bitmap_vram_value = (uint32_t)the_address - (uint32_t)VRAM_BUFFER_A;		
+	new_vicky_bitmap_vram_value = (uint32_t)the_address - (uint32_t)VRAM_START;		
 
-// 	DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0 about to change to: 0x%x (with offset=0x%x)", __func__, __LINE__, new_vicky_bitmap_vram_value, (uint32_t)the_address));
+	DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer %i about to change to: %p (with offset=%p)", __func__, __LINE__, the_bitmap_layer, P32(new_vicky_bitmap_vram_value), P32(the_address)));
 
 	if (the_bitmap_layer == 0)
 	{
-		R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L) = new_vicky_bitmap_vram_value;
+		#ifdef _C256_FMX_
+			R8(BITMAP_L0_VRAM_ADDR_L) = (new_vicky_bitmap_vram_value >> (8*1)) & 0xff;
+			R8(BITMAP_L0_VRAM_ADDR_M) = (new_vicky_bitmap_vram_value >> (8*2)) & 0xff;
+			R8(BITMAP_L0_VRAM_ADDR_H) = (new_vicky_bitmap_vram_value >> (8*3)) & 0xff;
+			DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer %i AFTER change: %x / %x / %x", __func__, __LINE__, the_bitmap_layer, R8(BITMAP_L0_VRAM_ADDR_L), R8(BITMAP_L0_VRAM_ADDR_M), R8(BITMAP_L0_VRAM_ADDR_H)));
+		#else
+			R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_OFFSET_L) = new_vicky_bitmap_vram_value;
+		#endif
 	}
 	else
 	{
-		R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L1_VRAM_ADDR_L) = new_vicky_bitmap_vram_value;
+		#ifdef _C256_FMX_
+			R8(BITMAP_L1_VRAM_ADDR_L) = (new_vicky_bitmap_vram_value >> (8*1)) & 0xff;
+			R8(BITMAP_L1_VRAM_ADDR_M) = (new_vicky_bitmap_vram_value >> (8*2)) & 0xff;
+			R8(BITMAP_L1_VRAM_ADDR_H) = (new_vicky_bitmap_vram_value >> (8*3)) & 0xff;
+// 			R8(P8(the_system->screen_[ID_CHANNEL_B]->vicky_) + BITMAP_L1_VRAM_ADDR_L_B) = (new_vicky_bitmap_vram_value >> (8*1)) & 0xff;
+// 			R8(P8(the_system->screen_[ID_CHANNEL_B]->vicky_) + BITMAP_L1_VRAM_ADDR_M_B) = (new_vicky_bitmap_vram_value >> (8*2)) & 0xff;
+// 			R8(P8(the_system->screen_[ID_CHANNEL_B]->vicky_) + BITMAP_L1_VRAM_ADDR_H_B) = (new_vicky_bitmap_vram_value >> (8*3)) & 0xff;
+		#else
+			R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L1_VRAM_ADDR_OFFSET_L) = new_vicky_bitmap_vram_value;
+		#endif
 	}
+
+
 	
-	//DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0 now set to 0x%x (with offset=0x%x)", __func__, __LINE__, R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L), (uint32_t)VRAM_BUFFER_A + R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_L)));
+	//DEBUG_OUT(("%s %d: VICKY VRAM for bitmap layer 0 now set to 0x%x (with offset=0x%x)", __func__, __LINE__, R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_OFFSET_L), (uint32_t)VRAM_START + R32(the_system->screen_[ID_CHANNEL_B]->vicky_ + BITMAP_L0_VRAM_ADDR_OFFSET_L)));
 	
 	return true;
 	

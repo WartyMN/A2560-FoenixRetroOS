@@ -24,7 +24,7 @@ obj/%.o: %.c
 #lib_sys.c:
 #	cc65816 -D_C256_FMX_ --core=65816 $(MODEL) --target=Foenix --debug --list-file=lib_sys.lst -o obj/lib_sys.o ../lib_sys.c
 
-all: headers lib textdemo
+all: headers lib textdemo bitmapdemo
 
 headers:
 	@echo "Copying headers to target..."
@@ -50,20 +50,20 @@ lib:	$(LIB_OBJS) $(FOENIX_LIB)
 
 textdemo: $(TEXT_DEMO_OBJS) $(FOENIX_LIB)
 	@echo "Building text demo..."
-#	echo $@
 	ln65816 -o text.pgz $(TEXT_DEMO_OBJS) $(FOENIX_LINKER_RULES) clib-$(LIB_MODEL)-foenix.a $(FOENIX)/foenix-lc-md.a --output-format=pgz --list-file=obj/textdemo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix
 
-bitmapdemo: $(TEXT_DEMO_OBJS) $(FOENIX_LIB)
+bitmapdemo: $(BITMAP_DEMO_OBJS) $(FOENIX_LIB)
 	@echo "Building bitmap demo..."
-#	ln68k -o build_calypsi/bitmap_demo.elf build_calypsi/obj/bitmap_demo.o $(A2560K_RULES) clib-68000-$(LIB_MODEL).a $(FOENIX)/foenix-lc-ld.a build_calypsi/a2560_sys.a --output-format=pgz --list-file=build_calypsi/obj/bitmap_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix_user --debug
-	ln65816 -o bitmap_demo.pgz $(BITMAP_DEMO_OBJS) $(FOENIX_LINKER_RULES) clib-$(LIB_MODEL)-foenix.a $(FOENIX)/foenix-lc-md.a $(VBCC)/targets/a2560-micah/lib/c256fmx_sys.a --output-format=pgz --list-file=obj/bitmap_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix
-
+	ln65816 -o bitmap.pgz $(BITMAP_DEMO_OBJS) $(FOENIX_LINKER_RULES) clib-$(LIB_MODEL)-foenix.a $(FOENIX)/foenix-lc-md.a $(VBCC)/targets/a2560-micah/lib/c256fmx_sys.a --output-format=pgz --list-file=obj/bitmap_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix
+	
 $(FOENIX_LIB):
 	(cd $(FOENIX) ; make all)
 
 clean:
 	-rm $(TEXT_DEMO_OBJS) obj/*.lst text.pgz
-	-rm $(BITMAP_DEMO_OBJS) obj/*.lst text.pgz
+	-rm $(BITMAP_DEMO_OBJS) obj/*.lst bitmap.pgz
 	-rm *.pgz
 	-rm *.elf
+	
+	
 	
