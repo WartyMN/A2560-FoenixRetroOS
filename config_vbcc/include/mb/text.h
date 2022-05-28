@@ -523,6 +523,17 @@ int16_t Text_MeasureStringWidth(Font* the_font, char* the_string, int16_t num_ch
 
 
 
+// **** Plotting functions ****
+
+//! Calculate the VRAM location of the specified coordinate
+//! @param	the_screen: valid pointer to the target screen to operate on
+//! @param	x: the horizontal position, between 0 and the screen's text_cols_vis_ - 1
+//! @param	y: the vertical position, between 0 and the screen's text_rows_vis_ - 1
+//! @param	for_attr: true to work with attribute data, false to work character data. Recommend using SCREEN_FOR_TEXT_ATTR/SCREEN_FOR_TEXT_CHAR.
+char* Text_GetMemLocForXY(Screen* the_screen, int16_t x, int16_t y, bool for_attr);
+
+//! Calculate the combined text attribute value for a given foreground/background combination
+uint8_t Text_CalculateAttributeValue(uint8_t fore_color, uint8_t back_color);	
 
 
 

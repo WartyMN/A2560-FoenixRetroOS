@@ -70,13 +70,6 @@ bool Text_ValidateAll(Screen* the_screen, int16_t x, int16_t y, uint8_t fore_col
 //! @param	y: the vertical position to validate. Must be between 0 and the screen's text_rows_vis_ - 1
 bool Text_ValidateXY(Screen* the_screen, int16_t x, int16_t y);
 
-//! Calculate the VRAM location of the specified coordinate
-//! @param	the_screen: valid pointer to the target screen to operate on
-//! @param	x: the horizontal position, between 0 and the screen's text_cols_vis_ - 1
-//! @param	y: the vertical position, between 0 and the screen's text_rows_vis_ - 1
-//! @param	for_attr: true to work with attribute data, false to work character data. Recommend using SCREEN_FOR_TEXT_ATTR/SCREEN_FOR_TEXT_CHAR.
-char* Text_GetMemLocForXY(Screen* the_screen, int16_t x, int16_t y, bool for_attr);
-
 // Fill attribute or text char memory. Writes to char memory if for_attr is false.
 // calling function must validate the screen ID before passing!
 //! @return	Returns false on any error/invalid input.
@@ -166,34 +159,6 @@ bool Text_ValidateXY(Screen* the_screen, int16_t x, int16_t y)
 	}
 
 	return true;
-}
-
-
-//! Calculate the VRAM location of the specified coordinate
-//! @param	the_screen: valid pointer to the target screen to operate on
-//! @param	x: the horizontal position, between 0 and the screen's text_cols_vis_ - 1
-//! @param	y: the vertical position, between 0 and the screen's text_rows_vis_ - 1
-//! @param	for_attr: true to work with attribute data, false to work character data. Recommend using SCREEN_FOR_TEXT_ATTR/SCREEN_FOR_TEXT_CHAR.
-char* Text_GetMemLocForXY(Screen* the_screen, int16_t x, int16_t y, bool for_attr)
-{
-	char*			the_write_loc;
-	
-	// LOGIC:
-	//   For plotting the VRAM, A2560 uses the full width, regardless of borders. 
-	//   So even if only 72 are showing, the screen is arranged from 0-71 for row 1, then 80-151 for row 2, etc. 
-	
-	if (for_attr)
-	{
-		the_write_loc = the_screen->text_attr_ram_ + (the_screen->text_mem_cols_ * y) + x;
-	}
-	else
-	{
-		the_write_loc = the_screen->text_ram_ + (the_screen->text_mem_cols_ * y) + x;
-	}
-	
-	//DEBUG_OUT(("%s %d: screen=%i, x=%i, y=%i, for-attr=%i, calc=%i, loc=%p", __func__, __LINE__, (int16_t)the_screen_id, x, y, for_attr, (the_screen->text_mem_cols_ * y) + x, the_write_loc));
-	
-	return the_write_loc;
 }
 
 
@@ -543,7 +508,6 @@ void Text_ClearScreen(Screen* the_screen, uint8_t fore_color, uint8_t back_color
 	Text_FillMemory(the_screen, SCREEN_FOR_TEXT_CHAR, ' ');
 	Text_FillMemory(the_screen, SCREEN_FOR_TEXT_ATTR, the_attribute_value);
 }
- 	
 
 
 //! Fill the entire attribute memory of the passed screen with the specified fore- and back-color
@@ -1829,5 +1793,44 @@ int16_t Text_MeasureStringWidth(Font* the_font, char* the_string, int16_t num_ch
 }
 
 
+
+// **** Plotting functions ****
+
+
+//! Calculate the VRAM location of the specified coordinate
+//! @param	the_screen: valid pointer to the target screen to operate on
+//! @param	x: the horizontal position, between 0 and the screen's text_cols_vis_ - 1
+//! @param	y: the vertical position, between 0 and the screen's text_rows_vis_ - 1
+//! @param	for_attr: true to work with attribute data, false to work character data. Recommend using SCREEN_FOR_TEXT_ATTR/SCREEN_FOR_TEXT_CHAR.
+char* Text_GetMemLocForXY(Screen* the_screen, int16_t x, int16_t y, bool for_attr)
+{
+	char*			the_write_loc;
+	
+	// LOGIC:
+	//   For plotting the VRAM, A2560 uses the full width, regardless of borders. 
+	//   So even if only 72 are showing, the screen is arranged from 0-71 for row 1, then 80-151 for row 2, etc. 
+	
+	if (for_attr)
+	{
+		the_write_loc = the_screen->text_attr_ram_ + (the_screen->text_mem_cols_ * y) + x;
+	}
+	else
+	{
+		the_write_loc = the_screen->text_ram_ + (the_screen->text_mem_cols_ * y) + x;
+	}
+	
+	//DEBUG_OUT(("%s %d: screen=%i, x=%i, y=%i, for-attr=%i, calc=%i, loc=%p", __func__, __LINE__, (int16_t)the_screen_id, x, y, for_attr, (the_screen->text_mem_cols_ * y) + x, the_write_loc));
+	
+	return the_write_loc;
+}
+
+
+//! Calculate the combined text attribute value for a given foreground/background combination
+uint8_t Text_CalculateAttributeValue(uint8_t fore_color, uint8_t back_color)
+{
+	// calculate attribute value from passed fore and back colors
+	// LOGIC: text mode only supports 16 colors. lower 4 bits are back, upper 4 bits are foreground
+	return((fore_color << 4) | back_color);
+}
 
 

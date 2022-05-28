@@ -149,14 +149,14 @@ bool Sys_InitSystemC256(void)
 // 	
 // 	DEBUG_OUT(("%s %d: Default theme loaded ok. Creating menu manager...", __func__ , __LINE__));
 // 	
-	// menu manager
-	if ( (global_system->menu_manager_ = Menu_New() ) == NULL)
-	{
-		LOG_ERR(("%s %d: could not allocate memory to create the menu manager", __func__ , __LINE__));
-		goto error;
-	}	
-
-	DEBUG_OUT(("%s %d: allocating screen bitmap...", __func__, __LINE__));
+// 	// menu manager
+// 	if ( (global_system->menu_manager_ = Menu_New() ) == NULL)
+// 	{
+// 		LOG_ERR(("%s %d: could not allocate memory to create the menu manager", __func__ , __LINE__));
+// 		goto error;
+// 	}	
+// 
+// 	DEBUG_OUT(("%s %d: allocating screen bitmap...", __func__, __LINE__));
 	
 	// allocate the foreground and background bitmaps, then assign them fixed locations in VRAM
 	
@@ -1109,9 +1109,9 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 	
 	// detect borders, and set text cols/rows based on resolution modified by borders (if any)
 	#ifdef _C256_FMX_
-		border_x_pixels = R8(P8(the_screen->vicky_) + BORDER_X_SIZE_B);
-		border_y_pixels = R8(P8(the_screen->vicky_) + BORDER_Y_SIZE_B);
-		//DEBUG_OUT(("%s %d: calculated vicky reg=%p; border x,y=%i,%i", __func__, __LINE__, P8(the_screen->vicky_) + BORDER_X_SIZE_B, R8(P8(the_screen->vicky_) + BORDER_X_SIZE_B), R8(P8(the_screen->vicky_) + BORDER_Y_SIZE_B)));
+		border_x_pixels = R8(VICKY_II_BORDER_X_SIZE);
+		border_y_pixels = R8(VICKY_II_BORDER_Y_SIZE);
+		//DEBUG_OUT(("%s %d: border x,y=%i,%i", __func__, __LINE__, R8(VICKY_II_BORDER_X_SIZE), R8(VICKY_II_BORDER_Y_SIZE)));
 	#else
 		the_border_control_value = R32(the_screen->vicky_ + BORDER_CTRL_OFFSET_L);
 		border_x_pixels = (the_border_control_value >> 8) & 0xFF & 0x3F;
@@ -1269,6 +1269,44 @@ error:
 	return false;
 }
 
+
+//! Set the left/right and top/bottom borders
+//! This will reset the visible text columns as a side effect
+//! Grotesquely large values will be accepted as is: use at your own risk!
+//! @param	border_width: width in pixels of the border on left and right side of the screen. Total border used with be the double of this.
+//! @param	border_height: height in pixels of the border on top and bottom of the screen. Total border used with be the double of this.
+//! @return	returns false on any error/invalid input.
+bool Sys_SetBorderSize(System* the_system, Screen* the_screen, uint8_t border_width, uint8_t border_height)
+{
+	if (the_screen == NULL)
+	{
+		LOG_ERR(("%s %d: passed screen was NULL", __func__, __LINE__));
+		goto error;
+	}
+	
+	// set borders
+	#ifdef _C256_FMX_
+		R8(VICKY_II_BORDER_X_SIZE) = border_width;
+		R8(VICKY_II_BORDER_Y_SIZE) = border_height;
+	#else
+		uint32_t the_border_control_value;
+		
+		the_border_control_value = R32(the_screen->vicky_ + BORDER_CTRL_OFFSET_L);
+		the_border_control_value = (the_border_control_value & 0xFFFF00FF) | ((uint32_t)border_width <<  8);
+		the_border_control_value = (the_border_control_value & 0xFF00FFFF) | ((uint32_t)border_height <<  16);
+		R32(the_screen->vicky_ + BORDER_CTRL_OFFSET_L) = the_border_control_value;
+	#endif
+	
+	// now we need to recalculate how many text cols/rows are visible, because it might have changed
+	the_screen->text_cols_vis_ = the_screen->text_mem_cols_ - border_width * 2 / the_screen->text_font_width_;
+	the_screen->text_rows_vis_ = the_screen->text_mem_rows_ - border_height * 2 / the_screen->text_font_height_;
+		
+	return true;
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
+}
 
 
 

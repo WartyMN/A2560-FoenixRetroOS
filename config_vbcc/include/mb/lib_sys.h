@@ -152,18 +152,28 @@ bool Sys_SetVideoMode(Screen* the_screen, screen_resolution new_mode);
 
 //! Switch machine into graphics mode
 //! @param	the_system: valid pointer to system object
+//! @return	returns false on any error/invalid input.
 bool Sys_SetModeGraphics(System* the_system);
 
 //! Switch machine into text mode
 //! @param	the_system: valid pointer to system object
 //! @param as_overlay: If true, sets text overlay mode (text over graphics). If false, sets full text mode (no graphics);
+//! @return	returns false on any error/invalid input.
 bool Sys_SetModeText(System* the_system, bool as_overlay);
 
 //! Enable or disable the hardware cursor in text mode, for the specified screen
 //! @param	the_system: valid pointer to system object
 //! @param	the_screen: valid pointer to the target screen to operate on
 //! @param enable_it: If true, turns the hardware blinking cursor on. If false, hides the hardware cursor;
+//! @return	returns false on any error/invalid input.
 bool Sys_EnableTextModeCursor(System* the_system, Screen* the_screen, bool enable_it);
+
+//! Set the left/right and top/bottom borders
+//! This will reset the visible text columns as a side effect
+//! @param	border_width: width in pixels of the border on left and right side of the screen. Total border used with be the double of this.
+//! @param	border_height: height in pixels of the border on top and bottom of the screen. Total border used with be the double of this.
+//! @return	returns false on any error/invalid input.
+bool Sys_SetBorderSize(System* the_system, Screen* the_screen, uint8_t border_width, uint8_t border_height);
 
 
 

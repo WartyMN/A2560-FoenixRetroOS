@@ -33,6 +33,12 @@
 /*                            Macro Definitions                              */
 /*****************************************************************************/
 
+// 
+// // eliminate __huge extension keyword unless we are building with Calypsi for 65816
+// #if defined(__VBCC__)
+// 	#define __huge  
+// #endif
+
 #define ID_CHANNEL_A				0	// for use in text() calls, etc. 
 #define ID_CHANNEL_B				1	// for use in text() calls, etc.
 
@@ -95,6 +101,8 @@
 	#define VICKY_II_BORDER_COLOR_B		0x00af0005		// Vicky II Border Color Blue
 	#define VICKY_II_BORDER_COLOR_G		0x00af0006		// Vicky II Border Color Green
 	#define VICKY_II_BORDER_COLOR_R		0x00af0007		// Vicky II Border Color Red
+	#define VICKY_II_BORDER_X_SIZE		0x00af0008		// Vicky II Border X size in pixels
+	#define VICKY_II_BORDER_Y_SIZE		0x00af0009		// Vicky II Border Y size in pixels
 	
 	#define VICKY_II_BACKGROUND_COLOR_B		0x00af000D		// Vicky II background color Blue
 	#define VICKY_II_BACKGROUND_COLOR_G		0x00af000E		// Vicky II background color Green
