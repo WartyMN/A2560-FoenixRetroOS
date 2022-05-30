@@ -83,7 +83,7 @@ void WaitForUser(void)
 {
 	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 1, 4, (char*)"Press any key to continue", FG_COLOR_BRIGHT_YELLOW, 0);
 	
-	getchar();
+	General_GetChar();
 	
 // 	Bitmap_FillMemory(global_system->screen_[ID_CHANNEL_B], 0xbb);
 // 	Text_FillCharMem(global_system->screen_[ID_CHANNEL_B], ' ');

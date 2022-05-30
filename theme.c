@@ -237,7 +237,7 @@ extern System*			global_system;
 		0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 
 	};
 
-	static const uint8_t* green_theme_close_btn[2][2] = { {green_theme_close_btn_inactive_up, green_theme_close_btn_inactive_dn}, {green_theme_close_btn_active_up, green_theme_close_btn_active_dn}};
+	static const uint8_t* const green_theme_close_btn[2][2] = { {green_theme_close_btn_inactive_up, green_theme_close_btn_inactive_dn}, {green_theme_close_btn_active_up, green_theme_close_btn_active_dn}};
 
 
 	const uint8_t green_theme_minimize_btn_active_up[]=
@@ -312,7 +312,7 @@ extern System*			global_system;
 		0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 
 	};
 
-	static const uint8_t* green_theme_minimize_btn[2][2] = { {green_theme_minimize_btn_inactive_up, green_theme_minimize_btn_inactive_dn}, {green_theme_minimize_btn_active_up, green_theme_minimize_btn_active_dn}};
+	static const uint8_t* const green_theme_minimize_btn[2][2] = { {green_theme_minimize_btn_inactive_up, green_theme_minimize_btn_inactive_dn}, {green_theme_minimize_btn_active_up, green_theme_minimize_btn_active_dn}};
 
 
 	const uint8_t green_theme_normsize_btn_active_up[]=
@@ -387,7 +387,7 @@ extern System*			global_system;
 		0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 
 	};
 
-	static const uint8_t* green_theme_normsize_btn[2][2] = { {green_theme_normsize_btn_inactive_up, green_theme_normsize_btn_inactive_dn}, {green_theme_normsize_btn_active_up, green_theme_normsize_btn_active_dn}};
+	static const uint8_t* const green_theme_normsize_btn[2][2] = { {green_theme_normsize_btn_inactive_up, green_theme_normsize_btn_inactive_dn}, {green_theme_normsize_btn_active_up, green_theme_normsize_btn_active_dn}};
 
 
 	const uint8_t green_theme_maximize_btn_active_up[]=
@@ -462,7 +462,7 @@ extern System*			global_system;
 		0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 
 	};
 
-	static const uint8_t* green_theme_maximize_btn[2][2] = { {green_theme_maximize_btn_inactive_up, green_theme_maximize_btn_inactive_dn}, {green_theme_maximize_btn_active_up, green_theme_maximize_btn_active_dn}};
+	static const uint8_t* const green_theme_maximize_btn[2][2] = { {green_theme_maximize_btn_inactive_up, green_theme_maximize_btn_inactive_dn}, {green_theme_maximize_btn_active_up, green_theme_maximize_btn_active_dn}};
 
 	static const uint8_t green_theme_textbutton_left_active_up[]=
 	{
@@ -720,6 +720,7 @@ extern System*			global_system;
 
 // ********* Fonts -- for any theme
 
+	static const uint16_t font_data_osf_techno_bold_12_size = 3638;
 	static const uint8_t font_data_osf_techno_bold_12[] = 
 	{ 
 		0x90,0x00,0x00,0x00,0x00,0xFF,0x00,0x11,0x00,0x00,
@@ -1087,6 +1088,7 @@ extern System*			global_system;
 		0x00,0x05,0x00,0x02,0x00,0x05,0x00,0x04,0x00,0x08,
 		0x00,0x04,0x00,0x04,0x00,0x0B,0xFF,0xFF,
 	};
+	static const uint16_t font_data_profont_regular_9_size = 2072;
 	static const uint8_t font_data_profont_regular_9[] = 
 	{ 
 		0x90,0x00,0x00,0x00,0x00,0xD9,0x00,0x06,0x00,0x00,
@@ -1298,6 +1300,7 @@ extern System*			global_system;
 		0x00,0x06,0x00,0x06,0x00,0x06,0x00,0x06,0x01,0x06,
 		0x00,0x00,
 	};			
+	static const uint16_t font_data_osf_espy_bold_10_size = 3216;
 	static const uint8_t font_data_osf_espy_bold_10[] = 
 	{ 
 		0x90,0x00,0x00,0x00,0x00,0xFF,0x00,0x11,0xFF,0xFF,
@@ -1623,6 +1626,7 @@ extern System*			global_system;
 		0x01,0x02,0x01,0x05,0x01,0x04,0x01,0x06,0x01,0x04,
 		0x01,0x04,0x01,0x05,0xFF,0xFF,
 	};
+	static const uint16_t font_data_osf_menu_reg_10_size = 2278;
 	static const uint8_t font_data_osf_menu_reg_10[] = 
 	{ 
 		0x90,0x00,0x00,0x00,0x00,0xE0,0x00,0x0B,0x00,0x00,
@@ -1854,6 +1858,7 @@ extern System*			global_system;
 		0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
 		0xFF,0xFF,0x01,0x05,0x00,0x08,0xFF,0xFF,
 	};		
+	static const uint16_t font_data_osf_ultra_regular_12_size = 1798;
 	static const uint8_t font_data_osf_ultra_regular_12[] = 
 	{
 		0x90,0x00,0x00,0x00,0x00,0x7D,0x00,0x0C,0x00,0x00,
@@ -2197,7 +2202,7 @@ extern System*			global_system;
 		0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4,
 	};
 	
-	static const uint8_t* def_theme_close_btn[2][2] = { {def_theme_close_btn_inactive_up, def_theme_close_btn_inactive_dn}, {def_theme_close_btn_active_up, def_theme_close_btn_active_dn}};
+	static const uint8_t* const def_theme_close_btn[2][2] = { {def_theme_close_btn_inactive_up, def_theme_close_btn_inactive_dn}, {def_theme_close_btn_active_up, def_theme_close_btn_active_dn}};
 
 
 	static const uint8_t def_theme_minimize_btn_active_up[] = 
@@ -2264,7 +2269,7 @@ extern System*			global_system;
 		0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 
 	};
 	
-	static const uint8_t* def_theme_minimize_btn[2][2] = { {def_theme_minimize_btn_inactive_up, def_theme_minimize_btn_inactive_dn}, {def_theme_minimize_btn_active_up, def_theme_minimize_btn_active_dn}};
+	static const uint8_t* const def_theme_minimize_btn[2][2] = { {def_theme_minimize_btn_inactive_up, def_theme_minimize_btn_inactive_dn}, {def_theme_minimize_btn_active_up, def_theme_minimize_btn_active_dn}};
 	
 
 	static const uint8_t def_theme_normsize_btn_active_up[] = 
@@ -2331,7 +2336,7 @@ extern System*			global_system;
 		0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 
 	};
 	
-	static const uint8_t* def_theme_normsize_btn[2][2] = { {def_theme_normsize_btn_inactive_up, def_theme_normsize_btn_inactive_dn}, {def_theme_normsize_btn_active_up, def_theme_normsize_btn_active_dn}};
+	static const uint8_t* const def_theme_normsize_btn[2][2] = { {def_theme_normsize_btn_inactive_up, def_theme_normsize_btn_inactive_dn}, {def_theme_normsize_btn_active_up, def_theme_normsize_btn_active_dn}};
 
 
 	static const uint8_t def_theme_maximize_btn_active_up[] = 
@@ -2398,7 +2403,7 @@ extern System*			global_system;
 		0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 
 	};
 	
-	static const uint8_t* def_theme_maximize_btn[2][2] = { {def_theme_maximize_btn_inactive_up, def_theme_maximize_btn_inactive_dn}, {def_theme_maximize_btn_active_up, def_theme_maximize_btn_active_dn}};
+	static const uint8_t* const def_theme_maximize_btn[2][2] = { {def_theme_maximize_btn_inactive_up, def_theme_maximize_btn_inactive_dn}, {def_theme_maximize_btn_active_up, def_theme_maximize_btn_active_dn}};
 
 	static const uint8_t def_theme_textfield_left_active_up[]=
 	{
@@ -2463,9 +2468,9 @@ extern System*			global_system;
 		0xFF, 0xFF, 0xFF, 0xFF, 
 	};
 	
-	static const uint8_t* def_theme_textfield_left[2][2] = { {def_theme_textfield_left_active_up, def_theme_textfield_left_active_up}, {def_theme_textfield_left_active_up, def_theme_textfield_left_active_up}};
-	static const uint8_t* def_theme_textfield_mid[2][2] = { {def_theme_textfield_mid_active_up, def_theme_textfield_mid_active_up}, {def_theme_textfield_mid_active_up, def_theme_textfield_mid_active_up}};
-	static const uint8_t* def_theme_textfield_right[2][2] = { {def_theme_textfield_right_active_up, def_theme_textfield_right_active_up}, {def_theme_textfield_right_active_up, def_theme_textfield_right_active_up}};
+	static const uint8_t* const def_theme_textfield_left[2][2] = { {def_theme_textfield_left_active_up, def_theme_textfield_left_active_up}, {def_theme_textfield_left_active_up, def_theme_textfield_left_active_up}};
+	static const uint8_t* const def_theme_textfield_mid[2][2] = { {def_theme_textfield_mid_active_up, def_theme_textfield_mid_active_up}, {def_theme_textfield_mid_active_up, def_theme_textfield_mid_active_up}};
+	static const uint8_t* const def_theme_textfield_right[2][2] = { {def_theme_textfield_right_active_up, def_theme_textfield_right_active_up}, {def_theme_textfield_right_active_up, def_theme_textfield_right_active_up}};
 
 	static const uint8_t def_theme_textbutton_left_active_up[]=
 	{
@@ -2731,18 +2736,18 @@ extern System*			global_system;
 		0xFF, 0xFF, 0xFF, 0xF4, 
 	};
 	
-	static const uint8_t* def_theme_textbutton_left[2][2] = { {def_theme_textbutton_left_inactive_up, def_theme_textbutton_left_inactive_dn}, {def_theme_textbutton_left_active_up, def_theme_textbutton_left_active_dn}};
-	static const uint8_t* def_theme_textbutton_mid[2][2] = { {def_theme_textbutton_mid_inactive_up, def_theme_textbutton_mid_inactive_dn}, {def_theme_textbutton_mid_active_up, def_theme_textbutton_mid_active_dn}};
-	static const uint8_t* def_theme_textbutton_right[2][2] = { {def_theme_textbutton_right_inactive_up, def_theme_textbutton_right_inactive_dn}, {def_theme_textbutton_right_active_up, def_theme_textbutton_right_active_dn}};
+	static const uint8_t* const def_theme_textbutton_left[2][2] = { {def_theme_textbutton_left_inactive_up, def_theme_textbutton_left_inactive_dn}, {def_theme_textbutton_left_active_up, def_theme_textbutton_left_active_dn}};
+	static const uint8_t* const def_theme_textbutton_mid[2][2] = { {def_theme_textbutton_mid_inactive_up, def_theme_textbutton_mid_inactive_dn}, {def_theme_textbutton_mid_active_up, def_theme_textbutton_mid_active_dn}};
+	static const uint8_t* const def_theme_textbutton_right[2][2] = { {def_theme_textbutton_right_inactive_up, def_theme_textbutton_right_inactive_dn}, {def_theme_textbutton_right_active_up, def_theme_textbutton_right_active_dn}};
 
 
-	static const uint8_t* green_theme_textbutton_left[2][2] = { {green_theme_textbutton_left_inactive_up, green_theme_textbutton_left_inactive_dn}, {green_theme_textbutton_left_active_up, green_theme_textbutton_left_active_dn}};
-	static const uint8_t* green_theme_textbutton_mid[2][2] = { {green_theme_textbutton_mid_inactive_up, green_theme_textbutton_mid_inactive_dn}, {green_theme_textbutton_mid_active_up, green_theme_textbutton_mid_active_dn}};
-	static const uint8_t* green_theme_textbutton_right[2][2] = { {green_theme_textbutton_right_inactive_up, green_theme_textbutton_right_inactive_dn}, {green_theme_textbutton_right_active_up, green_theme_textbutton_right_active_dn}};
+	static const uint8_t* const green_theme_textbutton_left[2][2] = { {green_theme_textbutton_left_inactive_up, green_theme_textbutton_left_inactive_dn}, {green_theme_textbutton_left_active_up, green_theme_textbutton_left_active_dn}};
+	static const uint8_t* const green_theme_textbutton_mid[2][2] = { {green_theme_textbutton_mid_inactive_up, green_theme_textbutton_mid_inactive_dn}, {green_theme_textbutton_mid_active_up, green_theme_textbutton_mid_active_dn}};
+	static const uint8_t* const green_theme_textbutton_right[2][2] = { {green_theme_textbutton_right_inactive_up, green_theme_textbutton_right_inactive_dn}, {green_theme_textbutton_right_active_up, green_theme_textbutton_right_active_dn}};
 
-	static const uint8_t* green_theme_textfield_left[2][2] = { {def_theme_textfield_left_active_up, def_theme_textfield_left_active_up}, {def_theme_textfield_left_active_up, def_theme_textfield_left_active_up}};
-	static const uint8_t* green_theme_textfield_mid[2][2] = { {def_theme_textfield_mid_active_up, def_theme_textfield_mid_active_up}, {def_theme_textfield_mid_active_up, def_theme_textfield_mid_active_up}};
-	static const uint8_t* green_theme_textfield_right[2][2] = { {def_theme_textfield_right_active_up, def_theme_textfield_right_active_up}, {def_theme_textfield_right_active_up, def_theme_textfield_right_active_up}};
+	static const uint8_t* const green_theme_textfield_left[2][2] = { {def_theme_textfield_left_active_up, def_theme_textfield_left_active_up}, {def_theme_textfield_left_active_up, def_theme_textfield_left_active_up}};
+	static const uint8_t* const green_theme_textfield_mid[2][2] = { {def_theme_textfield_mid_active_up, def_theme_textfield_mid_active_up}, {def_theme_textfield_mid_active_up, def_theme_textfield_mid_active_up}};
+	static const uint8_t* const green_theme_textfield_right[2][2] = { {def_theme_textfield_right_active_up, def_theme_textfield_right_active_up}, {def_theme_textfield_right_active_up, def_theme_textfield_right_active_up}};
 
 
 /*****************************************************************************/
@@ -2783,7 +2788,7 @@ ControlTemplate* Theme_CreateDefaultControlTemplateMaximize(void);
 ControlTemplate* Theme_CreateControlTemplateTextButton(int16_t width, int16_t height);
 
 // load the specified buffer data into a font object and return it
-Font* Theme_LoadFontFromBuffer(uint8_t* the_font_data);
+Font* Theme_LoadFontFromBuffer(uint8_t* the_font_data, uint16_t data_size);
 
 
 /*****************************************************************************/
@@ -3322,7 +3327,9 @@ bool Theme_Destroy(Theme** the_theme)
 
 //! create default Theme.
 //! used in cases where a custom theme is not specified or is not available
-Theme* Theme_CreateDefaultTheme(void)
+//! Note: set the minimal_resources flag to true when running on a C256, as this framework does not yet have full support on that platform. Themes created with the minimal resource flag will 1) not have control templates, 2) will only support one font, the system font (control_font_). 
+//! @param minimal_resources:	if true, control templates will not be created.
+Theme* Theme_CreateDefaultTheme(bool minimal_resources)
 {
 	Theme*		the_theme;
 	int16_t		is_active;
@@ -3342,15 +3349,22 @@ Theme* Theme_CreateDefaultTheme(void)
 	//   this is to create a default style involving resources guaranteed to be in "ROM" (ie, no dependency on disk)
 	//   fonts will come from the system, CLUT will be the system default, etc. 
 
-	the_theme->icon_font_ = Theme_LoadFontFromBuffer((uint8_t*)font_data_osf_menu_reg_10);
-	the_theme->control_font_ = Theme_LoadFontFromBuffer((uint8_t*)font_data_osf_espy_bold_10);
-// 	
-// 	the_theme->icon_font_ = Sys_GetAppFont(global_system);
-// 	the_theme->control_font_ = Sys_GetSystemFont(global_system);
-	
-	if (the_theme->icon_font_ == NULL || the_theme->control_font_ == NULL)
+	if (minimal_resources == false)
 	{
-		LOG_ERR(("%s %d: Could not acquire the system and/or app font", __func__ , __LINE__));
+		the_theme->icon_font_ = Theme_LoadFontFromBuffer((uint8_t*)font_data_osf_menu_reg_10, font_data_osf_menu_reg_10_size);
+	
+		if (the_theme->icon_font_ == NULL)
+		{
+			LOG_ERR(("%s %d: Could not acquire the app (icon) font", __func__ , __LINE__));
+			goto error;
+		}
+	}
+	
+	the_theme->control_font_ = Theme_LoadFontFromBuffer((uint8_t*)font_data_osf_espy_bold_10, font_data_osf_espy_bold_10_size);
+	
+	if (the_theme->control_font_ == NULL)
+	{
+		LOG_ERR(("%s %d: Could not acquire the system (control) font", __func__ , __LINE__));
 		goto error;
 	}
 	
@@ -3391,127 +3405,130 @@ Theme* Theme_CreateDefaultTheme(void)
 	the_theme->border_color_ = WIN_DEFAULT_BORDER_BGRA;
 	
 	// get control templates
-	the_theme->control_t_close_ = Theme_CreateDefaultControlTemplateClose();
-	the_theme->control_t_minimize_ = Theme_CreateDefaultControlTemplateMinimize();
-	the_theme->control_t_norm_size_ = Theme_CreateDefaultControlTemplateNormSize();
-	the_theme->control_t_maximize_ = Theme_CreateDefaultControlTemplateMaximize();
-
-	// get the backdrop bitmap snippets for the flexible-width controls (text buttons, text fields)
-
-	the_theme->flex_width_backdrops_[TEXT_BUTTON].left_width_ = 4;
-	the_theme->flex_width_backdrops_[TEXT_BUTTON].mid_width_ = 4;
-	the_theme->flex_width_backdrops_[TEXT_BUTTON].right_width_ = 4;
-	the_theme->flex_width_backdrops_[TEXT_BUTTON].height_ = 18;
-	the_theme->flex_width_backdrops_[TEXT_FIELD].left_width_ = 4;
-	the_theme->flex_width_backdrops_[TEXT_FIELD].mid_width_ = 4;
-	the_theme->flex_width_backdrops_[TEXT_FIELD].right_width_ = 4;
-	the_theme->flex_width_backdrops_[TEXT_FIELD].height_ = 17;
-
-	// LOGIC:
-	//   height will be same for all states and parts of buttons/fields
-	//   left/mid/right widths will be same, respectively, for all states and parts of buttons/fields
-	width_left = the_theme->flex_width_backdrops_[TEXT_BUTTON].left_width_;
-	width_mid = the_theme->flex_width_backdrops_[TEXT_BUTTON].mid_width_;
-	width_right = the_theme->flex_width_backdrops_[TEXT_BUTTON].right_width_;
-	height = the_theme->flex_width_backdrops_[TEXT_BUTTON].height_;
-// 	DEBUG_OUT(("%s %d: button l width=%i", __func__, __LINE__, width_left));
-// 	DEBUG_OUT(("%s %d: button m width=%i", __func__, __LINE__, width_mid));
-// 	DEBUG_OUT(("%s %d: button r width=%i", __func__, __LINE__, width_right));
-// 	DEBUG_OUT(("%s %d: button height=%i", __func__, __LINE__, height));
-// 	DEBUG_OUT(("%s %d: button height=%p, theme=%p", __func__, __LINE__, the_theme, &the_theme->flex_width_backdrops_[TEXT_BUTTON].height_));
-
-// code below works on VBCC, causes memory issue on Calypsi. unrolling to better see it in calypsi.		
-	for (is_active = 0; is_active < 2; is_active++)
+	if (minimal_resources == false)
 	{
-		for (is_pushed = 0; is_pushed < 2; is_pushed++)
+		the_theme->control_t_close_ = Theme_CreateDefaultControlTemplateClose();
+		the_theme->control_t_minimize_ = Theme_CreateDefaultControlTemplateMinimize();
+		the_theme->control_t_norm_size_ = Theme_CreateDefaultControlTemplateNormSize();
+		the_theme->control_t_maximize_ = Theme_CreateDefaultControlTemplateMaximize();
+
+		// get the backdrop bitmap snippets for the flexible-width controls (text buttons, text fields)
+
+		the_theme->flex_width_backdrops_[TEXT_BUTTON].left_width_ = 4;
+		the_theme->flex_width_backdrops_[TEXT_BUTTON].mid_width_ = 4;
+		the_theme->flex_width_backdrops_[TEXT_BUTTON].right_width_ = 4;
+		the_theme->flex_width_backdrops_[TEXT_BUTTON].height_ = 18;
+		the_theme->flex_width_backdrops_[TEXT_FIELD].left_width_ = 4;
+		the_theme->flex_width_backdrops_[TEXT_FIELD].mid_width_ = 4;
+		the_theme->flex_width_backdrops_[TEXT_FIELD].right_width_ = 4;
+		the_theme->flex_width_backdrops_[TEXT_FIELD].height_ = 17;
+
+		// LOGIC:
+		//   height will be same for all states and parts of buttons/fields
+		//   left/mid/right widths will be same, respectively, for all states and parts of buttons/fields
+		width_left = the_theme->flex_width_backdrops_[TEXT_BUTTON].left_width_;
+		width_mid = the_theme->flex_width_backdrops_[TEXT_BUTTON].mid_width_;
+		width_right = the_theme->flex_width_backdrops_[TEXT_BUTTON].right_width_;
+		height = the_theme->flex_width_backdrops_[TEXT_BUTTON].height_;
+	// 	DEBUG_OUT(("%s %d: button l width=%i", __func__, __LINE__, width_left));
+	// 	DEBUG_OUT(("%s %d: button m width=%i", __func__, __LINE__, width_mid));
+	// 	DEBUG_OUT(("%s %d: button r width=%i", __func__, __LINE__, width_right));
+	// 	DEBUG_OUT(("%s %d: button height=%i", __func__, __LINE__, height));
+	// 	DEBUG_OUT(("%s %d: button height=%p, theme=%p", __func__, __LINE__, the_theme, &the_theme->flex_width_backdrops_[TEXT_BUTTON].height_));
+
+	// code below works on VBCC, causes memory issue on Calypsi. unrolling to better see it in calypsi.		
+		for (is_active = 0; is_active < 2; is_active++)
 		{
-			Bitmap*		bitmap1;
-			Bitmap*		bitmap2;
-			Bitmap*		bitmap3;
+			for (is_pushed = 0; is_pushed < 2; is_pushed++)
+			{
+				Bitmap*		bitmap1;
+				Bitmap*		bitmap2;
+				Bitmap*		bitmap3;
 		
-			if ( (bitmap1 = Bitmap_New(width_left, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
-			{
-				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
-				return NULL;
+				if ( (bitmap1 = Bitmap_New(width_left, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+				{
+					LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+					return NULL;
+				}
+			
+				memcpy(bitmap1->addr_, def_theme_textbutton_left[is_active][is_pushed], width_left * height);
+				the_theme->flex_width_backdrops_[TEXT_BUTTON].image_left_[is_active][is_pushed] = bitmap1;
+			
+	// 			DEBUG_OUT(("%s %d: image_left_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_left_[is_active][is_pushed], bitmap1));
+
+
+				if ( (bitmap2 = Bitmap_New(width_mid, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+				{
+					LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+					return NULL;
+				}
+			
+				memcpy(bitmap2->addr_, def_theme_textbutton_mid[is_active][is_pushed], width_mid * height);
+				the_theme->flex_width_backdrops_[TEXT_BUTTON].image_mid_[is_active][is_pushed] = bitmap2;
+
+	// 			DEBUG_OUT(("%s %d: image_mid_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_mid_[is_active][is_pushed], bitmap2));
+
+				if ( (bitmap3 = Bitmap_New(width_right, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+				{
+					LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+					return NULL;
+				}
+			
+				memcpy(bitmap3->addr_, def_theme_textbutton_right[is_active][is_pushed], width_right * height);
+
+	// 	DEBUG_OUT(("%s %d: button height=%i, themeheight=%i, width_right=%i", __func__, __LINE__, height, the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, width_right));
+			
+				// this next line will cause the value of the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, to go from 18 to -20668.
+				the_theme->flex_width_backdrops_[TEXT_BUTTON].image_right_[is_active][is_pushed] = bitmap3;
+
+	// 			DEBUG_OUT(("%s %d: image_right_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_right_[is_active][is_pushed], bitmap3));
+
+	// 	DEBUG_OUT(("%s %d: button height=%i, themeheight=%i, width_right=%i", __func__, __LINE__, height, the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, width_right));
+			
 			}
-			
-			memcpy(bitmap1->addr_, def_theme_textbutton_left[is_active][is_pushed], width_left * height);
-			the_theme->flex_width_backdrops_[TEXT_BUTTON].image_left_[is_active][is_pushed] = bitmap1;
-			
-// 			DEBUG_OUT(("%s %d: image_left_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_left_[is_active][is_pushed], bitmap1));
-
-
-			if ( (bitmap2 = Bitmap_New(width_mid, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
-			{
-				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
-				return NULL;
-			}
-			
-			memcpy(bitmap2->addr_, def_theme_textbutton_mid[is_active][is_pushed], width_mid * height);
-			the_theme->flex_width_backdrops_[TEXT_BUTTON].image_mid_[is_active][is_pushed] = bitmap2;
-
-// 			DEBUG_OUT(("%s %d: image_mid_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_mid_[is_active][is_pushed], bitmap2));
-
-			if ( (bitmap3 = Bitmap_New(width_right, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
-			{
-				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
-				return NULL;
-			}
-			
-			memcpy(bitmap3->addr_, def_theme_textbutton_right[is_active][is_pushed], width_right * height);
-
-// 	DEBUG_OUT(("%s %d: button height=%i, themeheight=%i, width_right=%i", __func__, __LINE__, height, the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, width_right));
-			
-			// this next line will cause the value of the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, to go from 18 to -20668.
-			the_theme->flex_width_backdrops_[TEXT_BUTTON].image_right_[is_active][is_pushed] = bitmap3;
-
-// 			DEBUG_OUT(("%s %d: image_right_[%i][%i] = %p, bitmap1=%p", __func__, __LINE__, is_active, is_pushed, the_theme->flex_width_backdrops_[TEXT_BUTTON].image_right_[is_active][is_pushed], bitmap3));
-
-// 	DEBUG_OUT(("%s %d: button height=%i, themeheight=%i, width_right=%i", __func__, __LINE__, height, the_theme->flex_width_backdrops_[TEXT_BUTTON].height_, width_right));
-			
 		}
-	}
 
 
-	width_left = the_theme->flex_width_backdrops_[TEXT_FIELD].left_width_;
-	width_mid = the_theme->flex_width_backdrops_[TEXT_FIELD].mid_width_;
-	width_right = the_theme->flex_width_backdrops_[TEXT_FIELD].right_width_;
-	height = the_theme->flex_width_backdrops_[TEXT_FIELD].height_;
+		width_left = the_theme->flex_width_backdrops_[TEXT_FIELD].left_width_;
+		width_mid = the_theme->flex_width_backdrops_[TEXT_FIELD].mid_width_;
+		width_right = the_theme->flex_width_backdrops_[TEXT_FIELD].right_width_;
+		height = the_theme->flex_width_backdrops_[TEXT_FIELD].height_;
 		
-	for (is_active = 0; is_active < 2; is_active++)
-	{
-		for (is_pushed = 0; is_pushed < 2; is_pushed++)
+		for (is_active = 0; is_active < 2; is_active++)
 		{
-			Bitmap*		bitmap4;
-			Bitmap*		bitmap5;
-			Bitmap*		bitmap6;
-
-			if ( (bitmap4 = Bitmap_New(width_left, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+			for (is_pushed = 0; is_pushed < 2; is_pushed++)
 			{
-				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
-				return NULL;
-			}
-			
-			memcpy(bitmap4->addr_, def_theme_textbutton_left[is_active][is_pushed], width_left * height);
-			the_theme->flex_width_backdrops_[TEXT_FIELD].image_left_[is_active][is_pushed] = bitmap4;
+				Bitmap*		bitmap4;
+				Bitmap*		bitmap5;
+				Bitmap*		bitmap6;
 
-			if ( (bitmap5 = Bitmap_New(width_mid, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
-			{
-				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
-				return NULL;
-			}
+				if ( (bitmap4 = Bitmap_New(width_left, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+				{
+					LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+					return NULL;
+				}
 			
-			memcpy(bitmap5->addr_, def_theme_textbutton_mid[is_active][is_pushed], width_mid * height);
-			the_theme->flex_width_backdrops_[TEXT_FIELD].image_mid_[is_active][is_pushed] = bitmap5;
+				memcpy(bitmap4->addr_, def_theme_textbutton_left[is_active][is_pushed], width_left * height);
+				the_theme->flex_width_backdrops_[TEXT_FIELD].image_left_[is_active][is_pushed] = bitmap4;
 
-			if ( (bitmap6 = Bitmap_New(width_right, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
-			{
-				LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
-				return NULL;
-			}
+				if ( (bitmap5 = Bitmap_New(width_mid, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+				{
+					LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+					return NULL;
+				}
 			
-			memcpy(bitmap6->addr_, def_theme_textbutton_right[is_active][is_pushed], width_right * height);
-			the_theme->flex_width_backdrops_[TEXT_FIELD].image_right_[is_active][is_pushed] = bitmap6;
+				memcpy(bitmap5->addr_, def_theme_textbutton_mid[is_active][is_pushed], width_mid * height);
+				the_theme->flex_width_backdrops_[TEXT_FIELD].image_mid_[is_active][is_pushed] = bitmap5;
+
+				if ( (bitmap6 = Bitmap_New(width_right, height, NULL, PARAM_NOT_IN_VRAM) ) == NULL)
+				{
+					LOG_ERR(("%s %d: could not create new Bitmap", __func__ , __LINE__));
+					return NULL;
+				}
+			
+				memcpy(bitmap6->addr_, def_theme_textbutton_right[is_active][is_pushed], width_right * height);
+				the_theme->flex_width_backdrops_[TEXT_FIELD].image_right_[is_active][is_pushed] = bitmap6;
+			}
 		}
 	}
 	
@@ -3835,8 +3852,8 @@ Theme* Theme_CreateGreenTheme(void)
 	//   this is to create a "custom" green theme that is different than the default
 	//   this is just for test purposes, and will be replaced by a more generic theme loaded once disk access is available
 	
-	the_theme->icon_font_ = Theme_LoadFontFromBuffer((uint8_t*)font_data_osf_ultra_regular_12);
-	the_theme->control_font_ = Theme_LoadFontFromBuffer((uint8_t*)font_data_osf_techno_bold_12);
+	the_theme->icon_font_ = Theme_LoadFontFromBuffer((uint8_t*)font_data_osf_ultra_regular_12, font_data_osf_ultra_regular_12_size);
+	the_theme->control_font_ = Theme_LoadFontFromBuffer((uint8_t*)font_data_osf_techno_bold_12, font_data_osf_techno_bold_12_size);
 // 	the_theme->icon_font_ = Sys_GetAppFont(global_system);
 // 	the_theme->control_font_ = Theme_GetGreenThemeFont();
 	
@@ -4013,32 +4030,12 @@ error:
 }
 
 
-// 
-// // create a font object and populate with modified chicago 14 pt regular
-// // this is a temporary function until we get file handling and can load from disk
-// Font* Theme_GetGreenThemeFont(void)
-// {
-// 	Font*			the_font;
-// 
-// 	if ( (the_font = Font_LoadFontData((uint8_t*)font_data_osf_techno_bold_12)) == NULL)
-// 	{
-// 		LOG_ERR(("%s %d: error condition on loading font data", __func__, __LINE__));
-// 		return NULL;
-// 	}
-// 	else
-// 	{
-// 		DEBUG_OUT(("%s %d: font data loaded ok.", __func__, __LINE__));
-// 		return the_font;
-// 	}
-// }
-// 
-
 // load the specified buffer data into a font object and return it
-Font* Theme_LoadFontFromBuffer(uint8_t* the_font_data)
+Font* Theme_LoadFontFromBuffer(uint8_t* the_font_data, uint16_t data_size)
 {
 	Font*			the_font;
 
-	if ( (the_font = Font_LoadFontData(the_font_data)) == NULL)
+	if ( (the_font = Font_LoadFontData(the_font_data, data_size)) == NULL)
 	{
 		LOG_ERR(("%s %d: error condition on loading font data", __func__, __LINE__));
 		return NULL;
@@ -4070,7 +4067,7 @@ Bitmap* Theme_CreateGreenDesktopPattern(Theme* the_theme)
 
 	memcpy(the_bitmap->addr_, green_theme_pattern, the_theme->pattern_width_ * the_theme->pattern_height_);
 	
-	return the_bitmap;	
+	return the_bitmap;
 }
 
 
@@ -4108,7 +4105,28 @@ ControlTemplate* Theme_CreateGreenControlTemplateClose(void)
 				return NULL;
 			}
 			
-			memcpy(the_bitmap->addr_, green_theme_close_btn[is_active][is_pushed], width * height);
+			#if defined(__VBCC__)
+				memcpy(the_bitmap->addr_, green_theme_close_btn[is_active][is_pushed], width * height);
+			#else
+				uint32_t i;
+				uint32_t copy_size = (uint32_t)(width * height);
+				uint8_t*	the_write_loc;
+				uint8_t*	the_read_loc;
+				
+				the_write_loc = (uint8_t*)the_bitmap->addr_int_;
+				the_read_loc = (uint8_t*)green_theme_close_btn[is_active][is_pushed];
+				//DEBUG_OUT(("%s %d: addr=%p, addr_int=%lx, the_write_loc=%p, the_read_loc=%p", __func__, __LINE__, the_bitmap->addr_, the_bitmap->addr_int_, the_write_loc, the_read_loc));
+				//the_read_loc = (uint8_t*)green_theme_close_btn_active_up;
+			
+				for (i=0; i < copy_size; i++)
+				{
+					*the_write_loc = *the_read_loc;
+					the_write_loc++;
+					the_read_loc++;
+				}
+				
+			#endif
+
 			the_template->image_[is_active][is_pushed] = the_bitmap;
 		}
 	}

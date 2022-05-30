@@ -397,7 +397,7 @@ void WaitForUser(void)
 {
 	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], 1, DESCRIPTION_START_Y_LINE + DESCRIPTION_NUM_LINES, (char*)"Press any key to continue", FG_COLOR_BRIGHT_YELLOW, BG_COLOR_BLUE);
 	
-	getchar();
+	General_GetChar();
 	
 	Text_FillCharMem(global_system->screen_[ID_CHANNEL_B], ' ');
 	Text_FillAttrMem(global_system->screen_[ID_CHANNEL_B], 0);
@@ -1260,7 +1260,7 @@ void SharedEventHandler(EventRecord* the_event)
 					}
 					else
 					{
-						if ( (new_theme = Theme_CreateDefaultTheme() ) == NULL)
+						if ( (new_theme = Theme_CreateDefaultTheme(THEME_PARAM_FULL_RESOURCES) ) == NULL)
 						{
 							LOG_ERR(("%s %d: Failed to create default theme", __func__, __LINE__));
 							return;
@@ -1333,7 +1333,7 @@ void SharedEventHandler(EventRecord* the_event)
 					Window_Render(the_window);
 				}
 				
-				//getchar();
+				//General_GetChar();
 				break;
 				
 			case windowChanged:
@@ -1381,7 +1381,7 @@ void SharedEventHandler(EventRecord* the_event)
 		}
 		
 		//General_DelaySeconds(2);
-		//getchar();
+		//General_GetChar();
 	}	
 }
 

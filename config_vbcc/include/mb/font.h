@@ -114,7 +114,8 @@ struct Font {
 //! NOTE: it is not possible to create a Font object without having a valid 'FONT' data chunk already in memory.
 //! NOTE: this allocates new memory for the font, and copies the font data to it from the passed buffer. It is not dependent on the data in the buffer after returning.
 //! @param	the_data: Must contain a valid Mac 'FONT' resource data hunk. 
-Font* Font_New(unsigned char* the_data);
+//! @param	data_size: Count of all bytes in the data buffer, including the font record and following font tables.
+Font* Font_New(unsigned char* the_data, uint16_t data_size);
 
 // destructor
 // frees all allocated memory associated with the passed object, and the object itself
@@ -130,7 +131,7 @@ bool Font_Destroy(Font** the_font);
 //! Load a font into memory from disk, and create a font record from it
 //! NOTE: this allocates new memory for the font, and copies the font data to it from the passed buffer. It is not dependent on the data in the buffer after returning.
 //! This preliminary version is just a shell that does not read from disk, because no disk functionality available yet in f68/mcp as far as I know. Will switch to taking a path or something once disk is available. 
-Font* Font_LoadFontData(unsigned char* the_data);
+Font* Font_LoadFontData(unsigned char* the_data, uint16_t data_size);
 
 
 

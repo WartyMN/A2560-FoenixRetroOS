@@ -201,8 +201,8 @@ int main(int argc, char* argv[])
 
 	
 
-// 		MU_RUN_SUITE(bitmap_test_suite_units);
-	MU_RUN_SUITE(bitmap_test_suite_speed);
+	MU_RUN_SUITE(bitmap_test_suite_units);
+// 	MU_RUN_SUITE(bitmap_test_suite_speed);
 	MU_REPORT();
 
 	Sys_SetModeText(global_system, true);

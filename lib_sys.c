@@ -137,15 +137,15 @@ bool Sys_InitSystemC256(void)
 	//   so default theme needs to know how to reload them in case user switches back
 	//   better to have it consistent: theme is responsible for loading and setting system fonts
 	
-// 	DEBUG_OUT(("%s %d: loading default theme...", __func__, __LINE__));
-// 	
-// 	if ( (the_theme = Theme_CreateDefaultTheme() ) == NULL)
-// 	{
-// 		LOG_ERR(("%s %d: Failed to create default system theme", __func__, __LINE__));
-// 		goto error;
-// 	}
-// 	
-// 	Theme_Activate(the_theme);
+	DEBUG_OUT(("%s %d: loading default theme...", __func__, __LINE__));
+	
+	if ( (the_theme = Theme_CreateDefaultTheme(true) ) == NULL)
+	{
+		LOG_ERR(("%s %d: Failed to create default system theme", __func__, __LINE__));
+		goto error;
+	}
+	
+	Theme_Activate(the_theme);
 // 	
 // 	DEBUG_OUT(("%s %d: Default theme loaded ok. Creating menu manager...", __func__ , __LINE__));
 // 	
@@ -175,9 +175,10 @@ bool Sys_InitSystemC256(void)
 			goto error;
 		}
 	
-		the_bitmap->addr_ = (unsigned char*)((unsigned long)VRAM_START + ((unsigned long)i * (unsigned long)VRAM_OFFSET_TO_NEXT_SCREEN));
+		the_bitmap->addr_int_ = (uint32_t)VRAM_START + (uint32_t)i * (uint32_t)VRAM_OFFSET_TO_NEXT_SCREEN;
+		the_bitmap->addr_ = (unsigned char*)the_bitmap->addr_int_;
 		
-		DEBUG_OUT(("%s %d: setting bitmap->addr for layer %i to %p", __func__, __LINE__, i, the_bitmap->addr_));
+		//DEBUG_OUT(("%s %d: bitmap addr_int_=%lx, addr_=%p", __func__, __LINE__, the_bitmap->addr_int_, the_bitmap->addr_));
 		
 		Sys_SetScreenBitmap(global_system, the_bitmap, i);
 		
@@ -387,15 +388,17 @@ System* Sys_New(void)
 	LOG_ALLOC(("%s %d:	__ALLOC__	the_system	%p	size	%i", __func__ , __LINE__, the_system, sizeof(System)));
 	
 	DEBUG_OUT(("%s %d: System object created ok...", __func__ , __LINE__));
-// 
-// 	// event manager
-// 	if ( (the_system->event_manager_ = EventManager_New() ) == NULL)
-// 	{
-// 		LOG_ERR(("%s %d: could not allocate memory to create the event manager", __func__ , __LINE__));
-// 		goto error;
-// 	}
-// 	
-// 	DEBUG_OUT(("%s %d: EventManager created ok. Detecting hardware...", __func__ , __LINE__));
+
+	// event manager -- not currently 65816 compatible
+	#ifndef _C256_FMX_
+		if ( (the_system->event_manager_ = EventManager_New() ) == NULL)
+		{
+			LOG_ERR(("%s %d: could not allocate memory to create the event manager", __func__ , __LINE__));
+			goto error;
+		}
+	
+		DEBUG_OUT(("%s %d: EventManager created ok. Detecting hardware...", __func__ , __LINE__));
+	#endif
 	
 	// check what kind of hardware the system is running on
 	// LOGIC: we need to know how many screens it has before allocating screen objects
@@ -598,7 +601,7 @@ bool Sys_InitSystem(void)
 	
 	DEBUG_OUT(("%s %d: loading default theme...", __func__, __LINE__));
 	
-	if ( (the_theme = Theme_CreateDefaultTheme() ) == NULL)
+	if ( (the_theme = Theme_CreateDefaultTheme(THEME_PARAM_FULL_RESOURCES) ) == NULL)
 	{
 		LOG_ERR(("%s %d: Failed to create default system theme", __func__, __LINE__));
 		goto error;
@@ -633,8 +636,11 @@ bool Sys_InitSystem(void)
 			LOG_ERR(("%s %d: Failed to create bitmap #%i", __func__, __LINE__, i));
 			goto error;
 		}
-	
-		the_bitmap->addr_ = (unsigned char*)((unsigned long)VRAM_START + ((unsigned long)i * (unsigned long)VRAM_OFFSET_TO_NEXT_SCREEN));
+
+		the_bitmap->addr_int_ = (uint32_t)VRAM_START + (uint32_t)i * (uint32_t)VRAM_OFFSET_TO_NEXT_SCREEN;
+		the_bitmap->addr_ = (unsigned char*)the_bitmap->addr_int_;
+
+		//DEBUG_OUT(("%s %d: bitmap addr_int_=%lx, addr_=%p", __func__, __LINE__, the_bitmap->addr_int_, the_bitmap->addr_));
 		
 		Sys_SetScreenBitmap(global_system, the_bitmap, i);
 		
@@ -739,7 +745,7 @@ bool Sys_AutoDetectMachine(System* the_system)
 	#endif
 	
 	the_system->model_number_ = the_sys_info->model;
-	//DEBUG_OUT(("%s %d: the_system->model_number_=%u", __func__, __LINE__, the_system->model_number_));
+	DEBUG_OUT(("%s %d: the_system->model_number_=%u", __func__, __LINE__, the_system->model_number_));
 	
 	switch (the_system->model_number_)
 	{
@@ -765,11 +771,13 @@ bool Sys_AutoDetectMachine(System* the_system)
 			
 		case MACHINE_A2560U_PLUS:
 		case MACHINE_A2560U:
+			DEBUG_OUT(("%s %d: I think this is a A2560U or A2560U+...", __func__, __LINE__));
 			the_system->num_screens_ = 1;
 			break;
 			
 		case MACHINE_A2560X:
 		case MACHINE_A2560K:
+			DEBUG_OUT(("%s %d: I think this is a A2560K or A2560X...", __func__, __LINE__));
 			the_system->num_screens_ = 2;		
 			break;
 			

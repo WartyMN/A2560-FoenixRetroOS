@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+//#include <time.h>	// just for initiating rand()
 
 
 // A2560 includes
@@ -135,21 +136,22 @@ void Demo_Bitmap_FillMemory2(void)
 void Demo_Bitmap_FillBox1(void)
 {
 	int16_t x = 5;
-	int	y = 8*6;
-	int	width = global_system->screen_[ID_CHANNEL_B]->width_ - x - 30;
-	int16_t height = global_system->screen_[ID_CHANNEL_B]->height_ - y - 100;
+	int	y = 125; // 0-101 is the amount coverable with 65536 bytes, so starting past that tests 65816 version's ability to plot beyond 64k.
+	int	width = (global_system->screen_[ID_CHANNEL_B]->width_ - x) - 30;
+	//int16_t height = global_system->screen_[ID_CHANNEL_B]->height_ - y - 100;
+	int16_t height = 5;
 	
-	ShowDescription("Bitmap_FillBox -> fill a square on screen with 0xff");	
-	Bitmap_FillBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, width, height, 0xff);
+	ShowDescription("Bitmap_FillBox -> fill a square on screen with 0x20");	
+	Bitmap_FillBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, width, height, 0x20);
 	WaitForUser();
 }
 
 
 void Demo_Bitmap_FillBox2(void)
 {
-	int16_t x = 500;
+	int16_t x = 400;
 	int	y = 8*6+100;
-	int	width = global_system->screen_[ID_CHANNEL_B]->width_ - x - 30;
+	int	width = global_system->screen_[ID_CHANNEL_B]->width_ - x - 25;
 	int16_t height = global_system->screen_[ID_CHANNEL_B]->height_ - y - 100;
 	
 	ShowDescription("Bitmap_FillBox -> fill a square on screen with 0x05");	
@@ -173,14 +175,19 @@ void Demo_Bitmap_FillBox3(void)
 
 void Demo_Bitmap_SetPixelAtXY(void)
 {
-	unsigned char	i;
-	unsigned char*	junk_value = (unsigned char*)EA_USER;	// we'll just use whatever bytes we find in our code as x and y
+	int16_t		i;
+	int16_t		x;
+	int16_t		y;
+	int16_t		width = global_system->screen_[ID_CHANNEL_B]->width_ - 1;
+	int16_t		height = global_system->screen_[ID_CHANNEL_B]->height_ - 1;
 	
 	ShowDescription("Bitmap_SetPixelAtXY -> Draw pixels in various colors at various locations on screen");	
  	
  	for (i = 0; i < 254; i++)
  	{
-	 	Bitmap_SetPixelAtXY(Sys_GetScreenBitmap(global_system, back_layer), *(junk_value++) + i, *(junk_value++) + i, i);
+	 	x = rand() % width;
+	 	y = rand() % height;
+	 	Bitmap_SetPixelAtXY(Sys_GetScreenBitmap(global_system, back_layer), x, y, i);
  	}
 	WaitForUser();
 }
@@ -227,11 +234,11 @@ void Demo_Bitmap_DrawHLine1(void)
 	x = 20;
 	y = 8*(10);
 	line_len = 200;
-	Bitmap_DrawHLine(Sys_GetScreenBitmap(global_system, back_layer), x, y, line_len, 0xff);
-	Bitmap_DrawHLine(Sys_GetScreenBitmap(global_system, back_layer), x, y + 20, line_len, 0xff);
-	Bitmap_DrawHLine(Sys_GetScreenBitmap(global_system, back_layer), x, y + 40, line_len, 0xff);
-	Bitmap_DrawVLine(Sys_GetScreenBitmap(global_system, back_layer), x + 100, y - 10, line_len, 0xff);
-	Bitmap_DrawVLine(Sys_GetScreenBitmap(global_system, back_layer), x + 150, y - 10, line_len + 50, 0xff);
+	Bitmap_DrawHLine(Sys_GetScreenBitmap(global_system, back_layer), x, y, line_len, 0x40);
+	Bitmap_DrawHLine(Sys_GetScreenBitmap(global_system, back_layer), x, y + 20, line_len, 0x50);
+	Bitmap_DrawHLine(Sys_GetScreenBitmap(global_system, back_layer), x, y + 40, line_len, 0x60);
+	Bitmap_DrawVLine(Sys_GetScreenBitmap(global_system, back_layer), x + 100, y - 10, line_len, 0x20);
+	Bitmap_DrawVLine(Sys_GetScreenBitmap(global_system, back_layer), x + 150, y - 10, line_len + 50, 0x30);
 
 	WaitForUser();
 }
@@ -320,7 +327,11 @@ void Demo_Bitmap_DrawRoundBox(void)
 	for (i = 0; i <= 20; i++)
 	{
 		Bitmap_DrawRoundBox(Sys_GetScreenBitmap(global_system, back_layer), x + color, y + color, width + i*2, height + i*2, i, color, PARAM_DO_NOT_FILL);
-		Bitmap_DrawRoundBox(Sys_GetScreenBitmap(global_system, back_layer), xleft - color, y + color, width*2 + i*2, height*2 + i*2, 20 - i, color, PARAM_DO_FILL);
+		
+		#ifndef _C256_FMX_
+			Bitmap_DrawRoundBox(Sys_GetScreenBitmap(global_system, back_layer), xleft - color, y + color, width*2 + i*2, height*2 + i*2, 20 - i, color, PARAM_DO_FILL);
+		#endif
+		
 		Bitmap_DrawRoundBox(Sys_GetScreenBitmap(global_system, back_layer), xleft - color, y + color, width*2 + i*2, height*2 + i*2, 20 - i, line_color, PARAM_DO_NOT_FILL);
 		color += 7;
 	}
@@ -337,16 +348,16 @@ void Demo_Bitmap_DrawRoundBox(void)
 // 	Bitmap_Fill(Sys_GetScreenBitmap(global_system, back_layer), x + radius, y + 1, color);
 // 	Bitmap_DrawRoundBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, width, height, radius, 0x01);
 // 	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], (x)/8-2, y/8-1, (char*)"Cancel", FG_COLOR_BLACK, BG_COLOR_BLACK);
-// 	getchar();
+// 	General_GetChar();
 	
 	// faster fill by making rect fills and then just flood filling the corners
 	y = 250;
-	Bitmap_DrawRoundBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, width, height, radius, color, PARAM_DO_FILL);
+	#ifndef _C256_FMX_
+		Bitmap_DrawRoundBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, width, height, radius, color, PARAM_DO_FILL);
+	#endif
 	Bitmap_DrawRoundBox(Sys_GetScreenBitmap(global_system, back_layer), x, y, width, height, radius, 0x01, PARAM_DO_NOT_FILL);
 	Text_DrawStringAtXY(global_system->screen_[ID_CHANNEL_B], (x)/8-2, y/8-1, (char*)"Cancel", FG_COLOR_BLACK, BG_COLOR_BLACK);
 
-
-	
 	WaitForUser();
 }
 
@@ -354,7 +365,7 @@ void Demo_Bitmap_DrawRoundBox(void)
 void Demo_Bitmap_DrawCircle(void)
 {
 	int16_t			x1 = 320;
-	int16_t			y1 = 200;
+	int16_t			y1 = 240;
 	int16_t			radius = 6;
 	int16_t			i;
 
@@ -380,8 +391,8 @@ void Demo_Bitmap_Blit1(void)
 	int16_t			box_width = global_system->screen_[ID_CHANNEL_B]->width_;
 	int16_t			color = 0x20;
 	int16_t			i;
-	Bitmap			src_bm;
-	Bitmap			dst_bm;
+	Bitmap*			src_bm;
+	Bitmap*			dst_bm;
 
 	ShowDescription("Bitmap_Blit -> Copy a rectange of pixels from one bitmap to another");	
 
@@ -398,35 +409,33 @@ void Demo_Bitmap_Blit1(void)
 	Bitmap_DrawCircle(Sys_GetScreenBitmap(global_system, back_layer), 25, 25, 20, 0xff);
 
 	// copy bits of this screen to other parts of the Screen
-	src_bm.addr_ = (unsigned char*)VRAM_START;
-	src_bm.width_ = global_system->screen_[ID_CHANNEL_B]->width_;
-	src_bm.height_ = global_system->screen_[ID_CHANNEL_B]->height_;
-	dst_bm.addr_ = (unsigned char*)VRAM_START;
-	dst_bm.width_ = global_system->screen_[ID_CHANNEL_B]->width_;
-	dst_bm.height_ = global_system->screen_[ID_CHANNEL_B]->height_;
+	src_bm = Sys_GetScreenBitmap(global_system, back_layer);
+	dst_bm = src_bm;
 
-	Bitmap_Blit(&src_bm, 0, 0, &dst_bm, 100, 0, 50, 50);
-	Bitmap_Blit(&src_bm, 0, 0, &dst_bm, 100, 100, 50, 50);
-	Bitmap_Blit(&src_bm, 0, 0, &dst_bm, 100, 200, 50, 50);
-	Bitmap_Blit(&src_bm, 0, 0, &dst_bm, 100, 300, 50, 50);
-	Bitmap_Blit(&src_bm, 0, 0, &dst_bm, 200, 100, 50, 50);
-	Bitmap_Blit(&src_bm, 0, 0, &dst_bm, 200, 200, 50, 50);
-	Bitmap_Blit(&src_bm, 0, 0, &dst_bm, 200, 300, 50, 50);
-	Bitmap_Blit(&src_bm, 0, 0, &dst_bm, 300, 100, 50, 50);
-	Bitmap_Blit(&src_bm, 0, 0, &dst_bm, 300, 200, 50, 50);
-	Bitmap_Blit(&src_bm, 0, 0, &dst_bm, 300, 300, 50, 50);
-// 	Bitmap_Blit(&src_bm, x1 - 100, y1 - 100, &dst_bm, 0, 0, 100, 100);
-// 	Bitmap_Blit(&src_bm, x1 - 100, y1 - 100, &dst_bm, 400, 300, 100, 100);
+// 	DEBUG_OUT(("%s %d: blitting 100,0...", __func__, __LINE__));
+	Bitmap_Blit(src_bm, 0, 0, dst_bm, 100, 0, 50, 50);
+	Bitmap_Blit(src_bm, 0, 0, dst_bm, 100, 100, 50, 50);
+	Bitmap_Blit(src_bm, 0, 0, dst_bm, 100, 200, 50, 50);
+	Bitmap_Blit(src_bm, 0, 0, dst_bm, 100, 300, 50, 50);
+	Bitmap_Blit(src_bm, 0, 0, dst_bm, 200, 100, 50, 50);
+	Bitmap_Blit(src_bm, 0, 0, dst_bm, 200, 200, 50, 50);
+	Bitmap_Blit(src_bm, 0, 0, dst_bm, 200, 300, 50, 50);
+	Bitmap_Blit(src_bm, 0, 0, dst_bm, 300, 100, 50, 50);
+	Bitmap_Blit(src_bm, 0, 0, dst_bm, 300, 200, 50, 50);
+	Bitmap_Blit(src_bm, 0, 0, dst_bm, 300, 300, 50, 50);
+
+// 	Bitmap_Blit(src_bm, x1 - 100, y1 - 100, dst_bm, 0, 0, 100, 100);
+// 	Bitmap_Blit(src_bm, x1 - 100, y1 - 100, dst_bm, 400, 300, 100, 100);
 	
 	// do a 'dragon' effect
-	Bitmap_DrawBox(Sys_GetScreenBitmap(global_system, back_layer), 550, 350, 20, 20, 0xff, PARAM_DO_FILL);
-	Bitmap_DrawBox(Sys_GetScreenBitmap(global_system, back_layer), 550, 350, 30, 30, 0xcc, PARAM_DO_FILL);
-	Bitmap_DrawBox(Sys_GetScreenBitmap(global_system, back_layer), 550, 350, 40, 40, 0xbb, PARAM_DO_FILL);
-	Bitmap_DrawBox(Sys_GetScreenBitmap(global_system, back_layer), 550, 350, 50, 50, 0x99, PARAM_DO_FILL);
+	Bitmap_DrawBox(src_bm, 550, 350, 50, 50, 0x99, PARAM_DO_FILL);
+	Bitmap_DrawBox(src_bm, 550, 350, 40, 40, 0xbb, PARAM_DO_FILL);
+	Bitmap_DrawBox(src_bm, 550, 350, 30, 30, 0xcc, PARAM_DO_FILL);
+	Bitmap_DrawBox(src_bm, 550, 350, 20, 20, 0xff, PARAM_DO_FILL);
 	
 	for (i = 0; i < 25; i++)
 	{
-		Bitmap_Blit(&src_bm, 550, 350, &dst_bm, i*10, 350 - i*10, 50, 50);
+		Bitmap_Blit(src_bm, 550, 350, dst_bm, i*10, 350 - i*10, 50, 50);
 	}
 	
 	WaitForUser();
@@ -442,6 +451,7 @@ void Demo_Bitmap_BlitRect(void)
 	Bitmap*			src_bm;
 	Bitmap*			dst_bm;
 	Rectangle		src_rect;
+	Rectangle*		blit_rect = &src_rect;
 
 	ShowDescription("Bitmap_BlitRect -> Copy a rectange of pixels from one bitmap to another");	
 
@@ -463,13 +473,13 @@ void Demo_Bitmap_BlitRect(void)
 	
 	src_rect.MinX = 0;
 
-	for (i = 0; i < 30; i++)
+	for (i = 1; i < 30; i++)
 	{
 		src_rect.MaxX = box_width * i;
 		src_rect.MinY = box_height * i;
 		src_rect.MaxY = src_rect.MinY + box_height;
 		
-		Bitmap_BlitRect(src_bm, src_rect, dst_bm, 0, 200 + box_height * i);
+		Bitmap_BlitRect(src_bm, blit_rect, dst_bm, 0, 200 + box_height * i);
 	}
 	
 	WaitForUser();
@@ -544,8 +554,9 @@ void RunDemo(void)
 	ShowDescription("Welcome to the Graphics Library Demo!");	
 	WaitForUser();
 	
-	Demo_Bitmap_FillMemory1();
-	Demo_Bitmap_FillMemory2();
+// 	Demo_Bitmap_FillMemory1();
+// 	Demo_Bitmap_FillMemory2();
+
 	
 	Demo_Bitmap_FillBox1();
 	Demo_Bitmap_FillBox2();
@@ -553,7 +564,9 @@ void RunDemo(void)
 
 	Demo_Bitmap_SetPixelAtXY();
 
- 	Demo_Bitmap_GetPixelAtXY();
+// 
+//  	Demo_Bitmap_GetPixelAtXY();
+// 
 
 	Demo_Bitmap_DrawHLine1();
 	
@@ -562,15 +575,17 @@ void RunDemo(void)
 	Demo_Bitmap_DrawBox();
 	Demo_Bitmap_DrawBoxCoords();
 
+	Demo_Bitmap_FillMemory1();
+
 	Demo_Bitmap_DrawRoundBox();
 	
 	Demo_Bitmap_DrawCircle();
 	
 	Demo_Bitmap_Blit1();
 	Demo_Bitmap_BlitRect();
-	
-	Demo_Bitmap_ScreenResolution1();
-	Demo_Bitmap_ScreenResolution2();
+// 	
+// 	Demo_Bitmap_ScreenResolution1();
+// 	Demo_Bitmap_ScreenResolution2();
 	
 }
 
@@ -589,6 +604,9 @@ int main(int argc, char* argv[])
 		DEBUG_OUT(("%s %d: Couldn't initialize the system", __func__, __LINE__));
 		exit(0);
 	}
+
+	srand(42); // need to have some better way to initialize this on c256. look in kernel. 
+	//srand(time(NULL));   // Initialization, should only be called once.
 	
 	//Sys_SetModeGraphics(global_system);
 	Sys_SetModeText(global_system, true);

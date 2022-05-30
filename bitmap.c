@@ -67,6 +67,13 @@ bool Bitmap_ValidateXY(Bitmap* the_bitmap, int16_t x, int16_t y);
 //! @return Returns a pointer to the VRAM location that corresponds to the passed X, Y, or NULL on any error condition
 unsigned char* Bitmap_GetMemLocForXY(Bitmap* the_bitmap, int16_t x, int16_t y);
 
+//! Calculate the VRAM location of the specified coordinate within the bitmap
+//! @param	the_bitmap: reference to a valid Bitmap object.
+//! @param	x: the horizontal position, between 0 and bitmap width - 1
+//! @param	y: the vertical position, between 0 and bitmap height - 1
+//! @return Returns an unsigned long that can be converted to the VRAM location that corresponds to the passed X, Y, or NULL on any error condition
+uint32_t Bitmap_GetMemLocIntForXY(Bitmap* the_bitmap, int16_t x, int16_t y);
+
 //! Draw 1 to 4 quadrants of a circle
 //! Only the specified quadrants will be drawn. This makes it possible to use this to make round rects, by only passing 1 quadrant.
 //! Based on http://rosettacode.org/wiki/Bitmap/Midpoint_circle_algorithm#C
@@ -226,6 +233,7 @@ void Bitmap_Print(Bitmap* the_bitmap)
 	DEBUG_OUT(("  reserved_: %u",		the_bitmap->reserved_));	
 	DEBUG_OUT(("  font_: %p",			the_bitmap->font_));	
 	DEBUG_OUT(("  addr_: %p",			the_bitmap->addr_));
+	DEBUG_OUT(("  addr_int_: %lx",		the_bitmap->addr_int_));
 }
 
 //! \endcond
@@ -282,10 +290,13 @@ Bitmap* Bitmap_New(int16_t width, int16_t height, Font* the_font, bool in_vram)
 			LOG_ERR(("%s %d: Couldn't instantiate a bitmap", __func__, __LINE__));
 			goto error;
 		}
+		
+		the_bitmap->addr_int_ = (uint32_t)the_bitmap->addr_;
 	}
 	else
 	{
 		the_bitmap->addr_ = NULL;
+		the_bitmap->addr_int_ = 0;
 	}
 
 	the_bitmap->width_ = width;
@@ -388,6 +399,8 @@ bool Bitmap_Resize(Bitmap* the_bitmap, int16_t width, int16_t height)
 			LOG_ERR(("%s %d: Couldn't instantiate a bitmap", __func__, __LINE__));
 			return false;
 		}
+		
+		the_bitmap->addr_int_ = (uint32_t)the_bitmap->addr_;
 	}
 	
 	return true;
@@ -405,20 +418,21 @@ bool Bitmap_Resize(Bitmap* the_bitmap, int16_t width, int16_t height)
 //! @param dst_bm: the destination bitmap. It must have a valid address within the VRAM memory space. It can be the same bitmap as the source.
 //! @param src_rect: the rectangle from the source bitmap to be blitted to the target bitmap
 //! @param dst_x, dst_y: the location within the destination bitmap to copy pixels to. May be negative.
-bool Bitmap_BlitRect(Bitmap* src_bm, Rectangle src_rect, Bitmap* dst_bm, int16_t dst_x, int16_t dst_y)
+bool Bitmap_BlitRect(Bitmap* src_bm, Rectangle* src_rect, Bitmap* dst_bm, int16_t dst_x, int16_t dst_y)
 {
 	int16_t	width;
 	int16_t	height;
 	
 	// LOGIC: validation checks will be done by Bitmap_Blit, no need to check them here too
 	
-	width = src_rect.MaxX - src_rect.MinX + 1;
-	height = src_rect.MaxY - src_rect.MinY + 1;
+	width = src_rect->MaxX - src_rect->MinX + 1;
+	height = src_rect->MaxY - src_rect->MinY + 1;
 
-	//DEBUG_OUT(("%s %d: final parameters: src_x=%i, src_y=%i, dst_x=%i, dst_y=%i, width=%i, height=%i.", __func__, __LINE__, src_rect.MinX, src_rect.MinY, dst_x, dst_y, width, height));
+	//DEBUG_OUT(("%s %d: incoming parameters: MinX=%i, MinY=%i, MaxX=%i, MaxY=%i", __func__, __LINE__, src_rect->MinX, src_rect->MinY, src_rect->MaxX, src_rect->MaxY));
+	//DEBUG_OUT(("%s %d: final parameters: src_x=%i, src_y=%i, dst_x=%i, dst_y=%i, width=%i, height=%i.", __func__, __LINE__, src_rect->MinX, src_rect->MinY, dst_x, dst_y, width, height));
 	//DEBUG_OUT(("%s %d: src_bm=%p, dst_bm=%p", __func__, __LINE__, src_bm->addr_, dst_bm->addr_));
 	
-	return Bitmap_Blit(src_bm, src_rect.MinX, src_rect.MinY, dst_bm, dst_x, dst_y, width, height);
+	return Bitmap_Blit(src_bm, src_rect->MinX, src_rect->MinY, dst_bm, dst_x, dst_y, width, height);
 }
 
 
@@ -431,9 +445,12 @@ bool Bitmap_BlitRect(Bitmap* src_bm, Rectangle src_rect, Bitmap* dst_bm, int16_t
 //! @param width, height: the scope of the copy, in pixels.
 bool Bitmap_Blit(Bitmap* src_bm, int16_t src_x, int16_t src_y, Bitmap* dst_bm, int16_t dst_x, int16_t dst_y, int16_t width, int16_t height)
 {
-	unsigned char*		the_read_loc;
-	unsigned char*		the_write_loc;
-	int16_t				i;
+	uint32_t		the_read_loc_int;
+	uint32_t		the_write_loc_int;
+	uint8_t*		the_write_loc;
+	uint8_t*		the_read_loc;
+	uint32_t		copy_size;
+	int16_t			j;
 	
 	// TODO: move the 2 checks below to a private common function if other blit functions are added
 	
@@ -488,16 +505,37 @@ bool Bitmap_Blit(Bitmap* src_bm, int16_t src_x, int16_t src_y, Bitmap* dst_bm, i
 
 	//DEBUG_OUT(("%s %d: final parameters: src_x=%i, src_y=%i, dst_x=%i, dst_y=%i, width=%i, height=%i.", __func__, __LINE__, src_x, src_y, dst_x, dst_y, width, height));
 
-	// checks complete. ready to copy. 
-	the_read_loc = src_bm->addr_ + (src_bm->width_ * src_y) + src_x;
-	the_write_loc = dst_bm->addr_ + (dst_bm->width_ * dst_y) + dst_x;
+	// checks complete. ready to copy.
+	copy_size = (uint32_t)width;
+	the_read_loc_int = src_bm->addr_int_ + ((uint32_t)src_bm->width_ * (uint32_t)src_y) + (uint32_t)src_x;
+	the_write_loc_int = dst_bm->addr_int_ + ((uint32_t)dst_bm->width_ * (uint32_t)dst_y) + (uint32_t)dst_x;
+	//DEBUG_OUT(("%s %d: the_read_loc_int=%i, the_write_loc_int=%i, copy_size=%lu", __func__, __LINE__, the_read_loc_int, the_write_loc_int, copy_size));
 	
-	for (i = 0; i < height; i++)
+	for (j = 0; j < height; j++)
 	{
-		memcpy(the_write_loc, the_read_loc, width);
+		the_write_loc = (uint8_t*)the_write_loc_int;
+		the_read_loc = (uint8_t*)the_read_loc_int;
+		//DEBUG_OUT(("%s %d: the_read_loc=%p, the_write_loc=%p, copy_size=%lu", __func__, __LINE__, the_read_loc, the_write_loc, copy_size));
+
+		#ifdef _C256_FMX_
+			uint32_t i;
+			
+			for (i=0; i < copy_size; i++)
+			{
+				*the_write_loc = *the_read_loc;
+				the_write_loc++;
+				the_read_loc++;
+// 				the_write_loc_int++;			
+// 				the_read_loc_int++;			
+// 				the_write_loc = (uint8_t*)the_write_loc_int;
+// 				the_read_loc = (uint8_t*)the_read_loc_int;
+			}
+		#else
+			memcpy(the_write_loc, the_read_loc, copy_size);
+		#endif	
 		
-		the_write_loc += dst_bm->width_;
-		the_read_loc += src_bm->width_;
+		the_write_loc_int += (uint32_t)dst_bm->width_;
+		the_read_loc_int += (uint32_t)src_bm->width_;
 	}
 
 	return true;
@@ -893,8 +931,9 @@ bool Bitmap_TileV1(Bitmap* src_bm, int16_t src_x, int16_t src_y, Bitmap* dst_bm,
 //! @return	returns false on any error/invalid input.
 bool Bitmap_FillMemory(Bitmap* the_bitmap, uint8_t the_color)
 {
-	unsigned char*	the_write_loc;
-	unsigned long	the_write_len;
+	uint32_t	the_write_loc_int;
+	uint8_t*	the_write_loc;
+	uint32_t	the_write_len;
 	
 	if (the_bitmap == NULL)
 	{
@@ -902,11 +941,21 @@ bool Bitmap_FillMemory(Bitmap* the_bitmap, uint8_t the_color)
 		return false;
 	}
 
-	the_write_loc = Bitmap_GetMemLocForXY(the_bitmap, 0, 0);
-
-	the_write_len = the_bitmap->width_ * the_bitmap->height_;
-	
-	memset(the_write_loc, the_color, the_write_len);
+	the_write_loc_int = Bitmap_GetMemLocIntForXY(the_bitmap, 0, 0);
+	the_write_loc = (uint8_t*)the_write_loc_int;
+	the_write_len = (uint32_t)the_bitmap->width_ * (uint32_t)the_bitmap->height_;
+		
+	#ifdef _C256_FMX_
+		uint32_t i;
+		for (i=0; i < the_write_len; i++)
+		{
+			*the_write_loc = the_color;
+			the_write_loc_int++;			
+			the_write_loc = (uint8_t*)the_write_loc_int;
+		}
+	#else
+		memset(the_write_loc, the_color, the_write_len);
+	#endif
 
 	return true;
 }
@@ -929,8 +978,12 @@ bool Bitmap_FillBoxRect(Bitmap* the_bitmap, Rectangle* the_coords, uint8_t the_c
 //! @return	returns false on any error/invalid input.
 bool Bitmap_FillBox(Bitmap* the_bitmap, int16_t x, int16_t y, int16_t width, int16_t height, uint8_t the_color)
 {
-	unsigned char*	the_write_loc;
-	int16_t			max_row;
+	uint32_t	the_write_loc_int;
+	uint8_t*	the_write_loc;
+	uint32_t	fat_bmap_width;
+	size_t		write_len = (size_t)width;
+	uint16_t	short_color = (uint16_t)the_color;
+	int16_t		max_row;
 
 	if (the_bitmap == NULL)
 	{
@@ -938,19 +991,37 @@ bool Bitmap_FillBox(Bitmap* the_bitmap, int16_t x, int16_t y, int16_t width, int
 		return false;
 	}
 
-	//DEBUG_OUT(("%s %d: x=%i, y=%i, width=%i, height=%i, the_color=%i, the_bitmap=%p", __func__, __LINE__, x, y, width, height, the_color, the_bitmap));
+// 	DEBUG_OUT(("%s %d: x=%i, y=%i, width=%i, height=%i, the_color=%i, addr=%p, addr_int_=%lx", __func__, __LINE__, x, y, width, height, the_color, the_bitmap->addr_, the_bitmap->addr_int_));
 	
 	// set up initial loc
-	the_write_loc = Bitmap_GetMemLocForXY(the_bitmap, x, y);
+	the_write_loc_int = Bitmap_GetMemLocIntForXY(the_bitmap, x, y);
 	
+// 	DEBUG_OUT(("%s %d: the_write_loc_int=%lx, (char*)the_write_loc_int=%p", __func__, __LINE__, the_write_loc_int, (char*)the_write_loc_int));
+	
+	fat_bmap_width = (uint32_t)the_bitmap->width_;
+// 	DEBUG_OUT(("%s %d: fat_bmap_width=%lu, the_bitmap->width_=%i", __func__, __LINE__, fat_bmap_width, the_bitmap->width_));
+// 	DEBUG_OUT(("%s %d: width=%i, write_len=%lu (unsigned), write_len=%li", __func__, __LINE__, width, write_len, write_len));
+
 	max_row = y + height;
 	
 	for (; y <= max_row; y++)
 	{
-		memset(the_write_loc, the_color, width);
-		the_write_loc += the_bitmap->width_;
+		the_write_loc = (uint8_t*)the_write_loc_int;
+		
+		#ifdef _C256_FMX_
+			uint16_t i;
+			for (i=0; i < width; i++)
+			{
+				*(the_write_loc + i) = the_color;
+			}
+		#else
+			memset(the_write_loc, short_color, width);
+		#endif
+		
+		the_write_loc_int += fat_bmap_width;
+		//DEBUG_OUT(("%s %d: after write: the_write_loc_int=%lx, before: the_write_loc=%p, len=%lu", __func__, __LINE__, the_write_loc_int, the_write_loc, write_len));
 	}
-			
+	
 	return true;
 }
 
@@ -1126,12 +1197,47 @@ unsigned char* Bitmap_GetMemLocForXY(Bitmap* the_bitmap, int16_t x, int16_t y)
 }
 
 
+//! Calculate the VRAM location of the specified coordinate within the bitmap
+//! @param	the_bitmap: reference to a valid Bitmap object.
+//! @param	x: the horizontal position, between 0 and bitmap width - 1
+//! @param	y: the vertical position, between 0 and bitmap height - 1
+//! @return Returns an unsigned long that can be converted to the VRAM location that corresponds to the passed X, Y, or NULL on any error condition
+uint32_t Bitmap_GetMemLocIntForXY(Bitmap* the_bitmap, int16_t x, int16_t y)
+{
+	if (the_bitmap == NULL)
+	{
+		LOG_ERR(("%s %d: passed bitmap was NULL", __func__, __LINE__));
+		return 0;
+	}
+	
+	if (the_bitmap->addr_ == NULL)
+	{
+		LOG_ERR(("%s %d: passed bitmap had a NULL address", __func__, __LINE__));
+		return 0;
+	}
+	
+	// LOGIC:
+	//   check that x and y are within the bitmap's coordinate box. if not, we can't calculate a memory loc for them.
+	
+	if (0 > x >= the_bitmap->width_ || 0 > y >= the_bitmap->height_)
+	{
+		LOG_ERR(("%s %d: invalid coordinates passed (%i, %i)", __func__, __LINE__, x, y));
+		return 0;
+	}
+
+	return the_bitmap->addr_int_ + ((uint32_t)the_bitmap->width_ * (uint32_t)y) + (uint32_t)x;
+}
+
+
 //! Calculate the VRAM location of the current coordinate within the bitmap
 //! @param	the_bitmap: reference to a valid Bitmap object.
 //! @return Returns a pointer to the VRAM location that corresponds to the current "pen" X, Y, or NULL on any error condition
 unsigned char* Bitmap_GetMemLoc(Bitmap* the_bitmap)
 {
-	return Bitmap_GetMemLocForXY(the_bitmap, the_bitmap->x_, the_bitmap->y_);
+	uint32_t	as_int;
+	
+	as_int = Bitmap_GetMemLocIntForXY(the_bitmap, the_bitmap->x_, the_bitmap->y_);
+	return (unsigned char*)as_int;
 }
 
 
@@ -1147,7 +1253,8 @@ unsigned char* Bitmap_GetMemLoc(Bitmap* the_bitmap)
 //! @return	returns false on any error/invalid input.
 bool Bitmap_SetPixelAtXY(Bitmap* the_bitmap, int16_t x, int16_t y, uint8_t the_color)
 {
-	unsigned char*	the_write_loc;
+	uint32_t	the_write_loc_int;
+	char*		the_write_loc;
 	
 	if (the_bitmap == NULL)
 	{
@@ -1157,12 +1264,15 @@ bool Bitmap_SetPixelAtXY(Bitmap* the_bitmap, int16_t x, int16_t y, uint8_t the_c
 
 	if (!Bitmap_ValidateXY(the_bitmap, x, y))
 	{
-		LOG_ERR(("%s %d: illegal coordinate", __func__, __LINE__));
+		LOG_INFO(("%s %d: illegal coordinate %i, %i", __func__, __LINE__, x, y));
 		return false;
 	}
 	
-	the_write_loc = Bitmap_GetMemLocForXY(the_bitmap, x, y);	
+	the_write_loc_int = Bitmap_GetMemLocIntForXY(the_bitmap, x, y);	
+	the_write_loc = (char*)the_write_loc_int;
  	*the_write_loc = the_color;
+	
+	//DEBUG_OUT(("%s %d: x=%i, y=%i, the_write_loc=%p, the_write_loc_int=%lx", __func__, __LINE__, x, y, the_write_loc, the_write_loc_int));
 	
 	return true;
 }
@@ -1177,8 +1287,9 @@ bool Bitmap_SetPixelAtXY(Bitmap* the_bitmap, int16_t x, int16_t y, uint8_t the_c
 //! @return	returns an 8-bit CLUT index
 uint8_t Bitmap_GetPixelAtXY(Bitmap* the_bitmap, int16_t x, int16_t y)
 {
-	unsigned char*	the_read_loc;
-	unsigned char	the_color;
+	uint32_t	the_read_loc_int;
+	uint8_t*	the_read_loc;
+	uint8_t		the_color;
 	
 	if (the_bitmap == NULL)
 	{
@@ -1192,8 +1303,9 @@ uint8_t Bitmap_GetPixelAtXY(Bitmap* the_bitmap, int16_t x, int16_t y)
 		return false;
 	}
 	
-	the_read_loc = Bitmap_GetMemLocForXY(the_bitmap, x, y);	
- 	the_color = (unsigned char)*the_read_loc;
+	the_read_loc_int = Bitmap_GetMemLocIntForXY(the_bitmap, x, y);	
+	the_read_loc = (uint8_t*)the_read_loc_int;
+ 	the_color = (uint8_t)*the_read_loc;
 	
 	return the_color;
 }
@@ -1473,7 +1585,7 @@ bool Bitmap_DrawBox(Bitmap* the_bitmap, int16_t x, int16_t y, int16_t width, int
 //! Draws a rounded rectangle with the specified size and radius, and optionally fills the rectangle.
 //! @param	width: width, in pixels, of the rectangle to be drawn
 //! @param	height: height, in pixels, of the rectangle to be drawn
-//! @param	radius: radius, in pixels, of the arc to be applied to the rectangle's corners. Minimum 3, maximum 20.
+//! @param	radius: radius, in pixels, of the arc to be applied to the rectangle's corners. Enforces a minimum of 3, maximum of 20.
 //! @param	the_color: a 1-byte index to the current color LUT
 //! @param	do_fill: If true, the box will be filled with the provided color. If false, the box will only draw the outline.
 //! @return	returns false on any error/invalid input.
@@ -1500,11 +1612,9 @@ bool Bitmap_DrawRoundBox(Bitmap* the_bitmap, int16_t x, int16_t y, int16_t width
 		return false;
 	}
 
-	if (3 > radius || radius > 20)
-	{
-		LOG_ERR(("%s %d: illegal roundrect radius: %i", __func__, __LINE__, radius));
-		return false;
-	}
+	radius = (radius < 3) ? 3 : radius;
+	radius = (radius > 20) ? 20 : radius;
+	
 	
 	// adjust box x, y, width, height values to line up with the edges of the arcs
 	width -= radius * 2;

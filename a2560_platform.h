@@ -94,6 +94,10 @@
 
 
 	// ** C256 (VICKY II)
+	
+	// byte swapper: 68000 is big endian; 65816 is little endian
+	#define BSWAP(word)	( (((word) >> 8) & 0x00FF) | (((word) << 8) & 0xFF00) )
+	
 	#define VICKY_C256					0x00af0000		// Vicky II offset/first register
 	#define VICKY_II_MASTER_CTRL_REG_L	0x00af0000		// Vicky II Master Control Register - low - graphic mode/text mode/etc.
 	#define VICKY_II_MASTER_CTRL_REG_H	0x00af0001		// Vicky II Master Control Register - high - screen res, etc.

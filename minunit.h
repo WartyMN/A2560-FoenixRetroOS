@@ -129,11 +129,15 @@ static void (*minunit_teardown)(void) = NULL;
 	long minunit_end_real_timer;\
 	long minunit_end_proc_timer;\
 	printf("\n\n%d tests, %d assertions, %d failures\n", minunit_run, minunit_assert, minunit_fail);\
+	DEBUG_OUT(("\n\n%d tests, %d assertions, %d failures", minunit_run, minunit_assert, minunit_fail));\
 	minunit_end_real_timer = mu_timer_real();\
 	minunit_end_proc_timer = mu_timer_cpu();\
 	printf("\nFinished in %li ticks (real) %.8f seconds (real)\n\n",\
 		minunit_end_real_timer - minunit_real_timer,\
 		(double)(minunit_end_real_timer - minunit_real_timer)/SYS_TICKS_PER_SEC);\
+	DEBUG_OUT(("Finished in %li ticks (real) %.8f seconds (real)",\
+		minunit_end_real_timer - minunit_real_timer,\
+		(double)(minunit_end_real_timer - minunit_real_timer)/SYS_TICKS_PER_SEC));\
 )
 #define MU_EXIT_CODE minunit_fail
 

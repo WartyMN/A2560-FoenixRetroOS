@@ -856,8 +856,12 @@ void RunDemo(void)
 
 	Demo_Text_ScreenResolution1();
 	Demo_Text_ScreenResolution2();
-	Demo_Text_ScreenResolution3();
-	Demo_Text_ScreenResolution4();
+	
+	// 2 other resolutions, but only if this is a GenX or A2560 machine
+	#ifndef _C256_FMX_
+		Demo_Text_ScreenResolution3();
+		Demo_Text_ScreenResolution4();
+	#endif
 
 	Demo_Text_UpdateFontData();
 	

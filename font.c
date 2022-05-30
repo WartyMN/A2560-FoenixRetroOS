@@ -29,6 +29,7 @@
 #include "general.h"
 #include "bitmap.h"
 #include "text.h"
+#include "lib_sys.h"
 
 
 /*****************************************************************************/
@@ -47,6 +48,7 @@
 /*                             Global Variables                              */
 /*****************************************************************************/
 
+extern System*			global_system;
 
 
 /*****************************************************************************/
@@ -144,7 +146,8 @@ void Font_Print(Font* the_font)
 //! NOTE: it is not possible to create a Font object without having a valid 'FONT' data chunk already in memory.
 //! NOTE: this allocates new memory for the font, and copies the font data to it from the passed buffer. It is not dependent on the data in the buffer after returning.
 //! @param	the_data: Must contain a valid Mac 'FONT' resource data hunk. 
-Font* Font_New(unsigned char* the_data)
+//! @param	data_size: Count of all bytes in the data buffer, including the font record and following font tables.
+Font* Font_New(unsigned char* the_data, uint16_t data_size)
 {
 	Font*			the_font;
 	uint16_t		image_table_count;
@@ -152,6 +155,8 @@ Font* Font_New(unsigned char* the_data)
 	uint16_t		width_table_count;
 	uint16_t		height_table_count;
 	bool			has_height_table;
+	uint16_t		write_index = 0;
+	uint16_t		write_len;
 	
 	// LOGIC:
 	//   the font data will contain 26 bytes of font record, followed by data
@@ -162,17 +167,94 @@ Font* Font_New(unsigned char* the_data)
 	//
 	//   process is allocate space for font rec, copy over its 20 bytes
 	//   use the data now in the font rec to allocate space for the other 3 tables and copy them over. 
+	//
+	//   Table data size:
+	//     bitmap image table: char
+	//     bitmap offset table: word
+	//     width/offset table: word
+	//     height_table_: word
+	//   When reading on 65816, the word tables need to have all bytes swapped
 	
-	if ( (the_font = (Font*)calloc(1, sizeof(Font)) ) == NULL)
-	{
-		LOG_ERR(("%s %d: could not allocate memory to create new font record", __func__ , __LINE__));
-		goto error;
-	}
-	LOG_ALLOC(("%s %d:	__ALLOC__	the_font	%p	size	%i", __func__ , __LINE__, the_font, sizeof(Font)));
+	// ALLOC LOGIC:
+	//   if 68k, allocate memory for each font as it is created. plenty of memory. 
+	//   if 65816, we cannot afford to allocate on heap for fonts. system is limited to one font only, storage is pre-allocated.
+	
+	// BYTE SWAP/ENDIAN LOGIC
+	//   OS/f framework uses legacy MacOS-style fonts
+	//   The data is in big endian format (68000)
+	//   For C256s, words must be byte swapped, as 65816 is little endian
+	//   The FontRec properties, and the word-sized tables (see above) need to be byte swapped. Image data does not (char-sized)
 
+	#ifdef _C256_FMX_
+		uint16_t	i;
+		uint16_t*	the_word;
+		uint8_t		b0;
+		uint8_t		b1;
+		uint16_t	count;
+		
+// 		count = data_size / 2; // data is in bytes, we are going to read as words
+// 		the_word = (uint16_t*)the_data;
+// 		//DEBUG_OUT(("%s %d: the_data[0] before swap: %u (word=%u), count=%u", __func__, __LINE__, (uint16_t)the_data[0], *the_word, count));
+// 		
+// 		for (i = 0; i < count; i++)
+// 		{
+// 			//DEBUG_OUT(("%s %d: word[%i] before swap: %u", __func__, __LINE__, i, *the_word));
+// 			*the_word = BSWAP(*the_word);
+// 			the_word = be16toh(the_word);
+// 			//DEBUG_OUT(("%s %d: word[%i] after swap: %u", __func__, __LINE__, i, *the_word));
+// 			the_word++;
+// 			//General_GetChar();
+// 		}
+		
+		count = data_size;
+		
+		for (i = 0; i < count; i += 2)
+		{
+			b0 = the_data[i];
+			b1 = the_data[i+1];
+			the_data[i] = b1;
+			the_data[i+1] = b0;
+		}
+		//General_GetChar();
+	#endif
+	
+	#ifdef _C256_FMX_
+		the_font = (Font*)&global_system->font_data_;
+	#else
+		if ( (the_font = (Font*)calloc(1, sizeof(Font)) ) == NULL)
+		{
+			LOG_ERR(("%s %d: could not allocate memory to create new font record", __func__ , __LINE__));
+			goto error;
+		}
+		LOG_ALLOC(("%s %d:	__ALLOC__	the_font	%p	size	%i", __func__ , __LINE__, the_font, sizeof(Font)));
+	#endif
+	
+	DEBUG_OUT(("%s %d: the_font=%p", __func__, __LINE__, the_font));
+	
 	// copy in the font record
-	memcpy(the_font, the_data, FONT_RECORD_SIZE);
-	the_data += FONT_RECORD_SIZE;
+	write_len = FONT_RECORD_SIZE;
+	memcpy(the_font, the_data, write_len);
+	the_data += write_len;
+	
+	
+	
+// 	#ifdef _C256_FMX_
+// 		//Font_Print(the_font);
+// 		the_font->fontType = BSWAP(the_font->fontType);
+// 		the_font->firstChar = BSWAP(the_font->firstChar);
+// 		the_font->lastChar = BSWAP(the_font->lastChar);
+// 		the_font->widMax = BSWAP(the_font->widMax);
+// 		the_font->kernMax = BSWAP(the_font->kernMax);
+// 		the_font->nDescent = BSWAP(the_font->nDescent);
+// 		the_font->fRectWidth = BSWAP(the_font->fRectWidth);
+// 		the_font->fRectHeight = BSWAP(the_font->fRectHeight);
+// 		the_font->owTLoc = BSWAP(the_font->owTLoc);
+// 		the_font->ascent = BSWAP(the_font->ascent);
+// 		the_font->descent = BSWAP(the_font->descent);
+// 		the_font->leading = BSWAP(the_font->leading);
+// 		the_font->rowWords = BSWAP(the_font->rowWords);
+// 		Font_Print(the_font);
+// 	#endif
 	
 	// set up font data tables
 	
@@ -184,52 +266,101 @@ Font* Font_New(unsigned char* the_data)
 	//   We have no use for the higher precision character width table, but the optional height table, if present, can speed up drawing
 	//   Flags for both these are stored in bits 0 and 1 of the font type field. 
 	
-
 	// font image table -- holds the pixels for each glyph, packed into 16 bit ints
-
+	//Font_Print(the_font);
 	image_table_count = the_font->rowWords * the_font->fRectHeight;
+	//DEBUG_OUT(("%s %d: rowWords=%u, fRectHeight=%u, image_table_count=%u", __func__, __LINE__, the_font->rowWords, the_font->fRectHeight, image_table_count));
 	
-	if ( (the_font->image_table_ = (uint16_t*)calloc(image_table_count, sizeof(uint16_t)) ) == NULL)
-	{
-		LOG_ERR(("%s %d: could not allocate memory to create new font image data", __func__ , __LINE__));
-		goto error;
-	}
-	LOG_ALLOC(("%s %d:	__ALLOC__	the_font->image_table_	%p	size	%i", __func__ , __LINE__, the_font->image_table_, image_table_count * sizeof(uint16_t)));
+	#ifdef _C256_FMX_
+		write_index += write_len; // gets us past the data loaded so far
+		write_index += 4 * 4; // gets us past the 4 pointers (4 bytes each) for the_font->image_table_, etc. 
+		//DEBUG_OUT(("%s %d: write_len=%u, the_data=%p, write_index=%u", __func__, __LINE__, write_len, the_data, write_index));	
+		the_font->image_table_ = (uint16_t*)(&global_system->font_data_[write_index]);
+	#else
+		if ( (the_font->image_table_ = (uint16_t*)calloc(image_table_count, sizeof(uint16_t)) ) == NULL)
+		{
+			LOG_ERR(("%s %d: could not allocate memory to create new font image data (%lu)", __func__ , __LINE__, image_table_count * sizeof(uint16_t)));
+			goto error;
+		}
+		LOG_ALLOC(("%s %d:	__ALLOC__	the_font->image_table_	%p	size	%i", __func__ , __LINE__, the_font->image_table_, image_table_count * sizeof(uint16_t)));
+	#endif
 
-	memcpy((char*)the_font->image_table_, (char*)the_data, image_table_count * sizeof(uint16_t));
-	the_data += image_table_count * sizeof(uint16_t);
+	write_len = image_table_count * sizeof(uint16_t);
+	memcpy((char*)the_font->image_table_, (char*)the_data, write_len);
+	the_data += write_len;
 
+// 	#ifdef _C256_FMX_
+// 		uint16_t	i;
+// 		uint16_t*	the_word;
+// 		
+// 		for (i = 0; i < image_table_count; i++)
+// 		{
+// 			the_word = &the_font->image_table_[i];
+// 			//DEBUG_OUT(("%s %d: image_table_[%i] before swap: %u (word=%u)", __func__, __LINE__, i, the_font->image_table_[i], *the_word));
+// 			*the_word = BSWAP(*the_word);
+// 			//DEBUG_OUT(("%s %d: image_table_[%i] after swap: %u (word=%u)", __func__, __LINE__, i, the_font->image_table_[i], *the_word));
+// 		}
+// 		General_GetChar();
+// 	#endif
 	
 	// location table -- holds offsets to each glyph, in BITS, from the start of the image table
-
 	loc_table_count = the_font->lastChar - the_font->firstChar + 3;
 
-	if ( (the_font->loc_table_ = (uint16_t*)calloc(loc_table_count, sizeof(uint16_t)) ) == NULL)
-	{
-		LOG_ERR(("%s %d: could not allocate memory to create new font location data", __func__ , __LINE__));
-		goto error;
-	}
-	LOG_ALLOC(("%s %d:	__ALLOC__	the_font->loc_table_	%p	size	%i", __func__ , __LINE__, the_font->loc_table_, loc_table_count * sizeof(uint16_t)));
+	#ifdef _C256_FMX_
+		write_index += write_len;
+		//DEBUG_OUT(("%s %d: write_len=%u, the_data=%p, write_index=%u", __func__, __LINE__, write_len, the_data, write_index));	
+		the_font->loc_table_ = (uint16_t*)(&global_system->font_data_[write_index]);
+	#else
+		if ( (the_font->loc_table_ = (uint16_t*)calloc(loc_table_count, sizeof(uint16_t)) ) == NULL)
+		{
+			LOG_ERR(("%s %d: could not allocate memory to create new font location data", __func__ , __LINE__));
+			goto error;
+		}
+		LOG_ALLOC(("%s %d:	__ALLOC__	the_font->loc_table_	%p	size	%i", __func__ , __LINE__, the_font->loc_table_, loc_table_count * sizeof(uint16_t)));
+	#endif
 
-	memcpy((char*)the_font->loc_table_, (char*)the_data, loc_table_count * sizeof(uint16_t));
-	the_data += loc_table_count * sizeof(uint16_t);
+	write_len = loc_table_count * sizeof(uint16_t);
+	memcpy((char*)the_font->loc_table_, (char*)the_data, write_len);
+	the_data += write_len;
 
-	
-	// width/offset table -- holds the horizontal offset to first pixel and total render width
+// 	#ifdef _C256_FMX_
+// 		for (i = 0; i < loc_table_count; i++)
+// 		{
+// 			the_word = &the_font->loc_table_[i];
+// 			*the_word = BSWAP(*the_word);
+// 		}
+// 	#endif
+
+
+	// width/offset table -- holds the horizontal offset to first pixel and total render width	
 	//   the low byte will be the h offset (eg, 1, if you need to start drawing 1 pixel to the right of the pen location)
 	//   the high byte will contain the total width needed to render the character (including any whitespace to left or right of pixels)
-
 	width_table_count = the_font->lastChar - the_font->firstChar + 3;
-	
-	if ( (the_font->width_table_ = (uint16_t*)calloc(width_table_count, sizeof(uint16_t)) ) == NULL)
-	{
-		LOG_ERR(("%s %d: could not allocate memory to create new font width data", __func__ , __LINE__));
-		goto error;
-	}
-	LOG_ALLOC(("%s %d:	__ALLOC__	the_font->width_table_	%p	size	%i", __func__ , __LINE__, the_font->width_table_, width_table_count * sizeof(uint16_t)));
-	
-	memcpy((char*)the_font->width_table_, (char*)the_data, width_table_count * sizeof(uint16_t));
-	the_data += width_table_count * sizeof(uint16_t);
+
+	#ifdef _C256_FMX_
+		write_index += write_len;
+		//DEBUG_OUT(("%s %d: write_len=%u, the_data=%p, write_index=%u", __func__, __LINE__, write_len, the_data, write_index));	
+		the_font->width_table_ = (uint16_t*)(&global_system->font_data_[write_index]);
+	#else
+		if ( (the_font->width_table_ = (uint16_t*)calloc(width_table_count, sizeof(uint16_t)) ) == NULL)
+		{
+			LOG_ERR(("%s %d: could not allocate memory to create new font width data", __func__ , __LINE__));
+			goto error;
+		}
+		LOG_ALLOC(("%s %d:	__ALLOC__	the_font->width_table_	%p	size	%i", __func__ , __LINE__, the_font->width_table_, width_table_count * sizeof(uint16_t)));
+	#endif
+
+	write_len = width_table_count * sizeof(uint16_t);
+	memcpy((char*)the_font->width_table_, (char*)the_data, write_len);
+	the_data +=write_len;
+
+// 	#ifdef _C256_FMX_
+// 		for (i = 0; i < width_table_count; i++)
+// 		{
+// 			the_word = &the_font->width_table_[i];
+// 			*the_word = BSWAP(*the_word);
+// 		}
+// 	#endif
 
 
 	// get the optional height table, if any - this can be used to optimize drawing speed
@@ -244,15 +375,30 @@ Font* Font_New(unsigned char* the_data)
 		//DEBUG_OUT(("%s %d: this font has the optional height table", __func__, __LINE__));	
 		
 		height_table_count = the_font->lastChar - the_font->firstChar + 3;
-		
-		if ( (the_font->height_table_ = (uint16_t*)calloc(height_table_count, sizeof(uint16_t)) ) == NULL)
-		{
-			LOG_ERR(("%s %d: could not allocate memory to create new font height data", __func__ , __LINE__));
-			goto error;
-		}
-		LOG_ALLOC(("%s %d:	__ALLOC__	the_font->height_table_	%p	size	%i", __func__ , __LINE__, the_font->height_table_, height_table_count * sizeof(uint16_t)));
 
-		memcpy((char*)the_font->height_table_, (char*)the_data, height_table_count * sizeof(uint16_t));
+		#ifdef _C256_FMX_
+			write_index += write_len;
+			//DEBUG_OUT(("%s %d: write_len=%u, the_data=%p, write_index=%u", __func__, __LINE__, write_len, the_data, write_index));	
+			the_font->height_table_ = (uint16_t*)(&global_system->font_data_[write_index]);
+		#else
+			if ( (the_font->height_table_ = (uint16_t*)calloc(height_table_count, sizeof(uint16_t)) ) == NULL)
+			{
+				LOG_ERR(("%s %d: could not allocate memory to create new font height data", __func__ , __LINE__));
+				goto error;
+			}
+			LOG_ALLOC(("%s %d:	__ALLOC__	the_font->height_table_	%p	size	%i", __func__ , __LINE__, the_font->height_table_, height_table_count * sizeof(uint16_t)));
+		#endif	
+
+		write_len = height_table_count * sizeof(uint16_t);
+		memcpy((char*)the_font->height_table_, (char*)the_data, write_len);
+// 
+// 		#ifdef _C256_FMX_
+// 			for (i = 0; i < height_table_count; i++)
+// 			{
+// 				the_word = &the_font->height_table_[i];
+// 				*the_word = BSWAP(*the_word);
+// 			}
+// 		#endif
 	}
 	else
 	{
@@ -269,6 +415,29 @@ Font* Font_New(unsigned char* the_data)
 //	General_PrintBufferCharacters((char*)the_font->image_table_, image_table_count * sizeof(uint16_t));
 // 	General_PrintBufferCharacters((char*)the_font->loc_table_, loc_table_count * sizeof(uint16_t));
 // 	General_PrintBufferCharacters((char*)the_font->width_table_, width_table_count * sizeof(uint16_t));
+
+	#ifdef _C256_FMX_
+		uint8_t*		the_byte;
+		count = data_size + 4*4; // data is in bytes; + 4 pointers at 4 bytes each
+		
+		the_byte = (uint8_t*)the_font;
+		//DEBUG_OUT(("%s %d: the_data[0] before swap: %u (word=%u), count=%u", __func__, __LINE__, (uint16_t)the_data[0], *the_word, count));
+		
+		printf("\n");
+		for (i = 0; i < count; i++)
+		{
+			//DEBUG_OUT(("%s %d: word[%i] before swap: %u", __func__, __LINE__, i, *the_word));
+			printf("%02x ", *the_byte);
+			//DEBUG_OUT(("%s %d: word[%i] after swap: %u", __func__, __LINE__, i, *the_word));
+			the_byte++;
+			if (i % 900 == 0)
+			{
+				General_GetChar();
+			}
+		}
+		printf("\n");
+		General_GetChar();
+	#endif
 		
 	return the_font;
 	
@@ -328,11 +497,11 @@ bool Font_Destroy(Font** the_font)
 //! Load a font into memory from disk, and create a font record from it
 //! NOTE: this allocates new memory for the font, and copies the font data to it from the passed buffer. It is not dependent on the data in the buffer after returning.
 //! This preliminary version is just a shell that does not read from disk, because no disk functionality available yet in f68/mcp as far as I know. Will switch to taking a path or something once disk is available. 
-Font* Font_LoadFontData(unsigned char* the_data)
+Font* Font_LoadFontData(unsigned char* the_data, uint16_t data_size)
 {
-	Font*			the_font;
+	Font*	the_font;
 	
-	if ( (the_font = Font_New(the_data)) == NULL)
+	if ( (the_font = Font_New(the_data, data_size)) == NULL)
 	{
 		LOG_ERR(("%s %d: Could not create a Font object", __func__ , __LINE__));
 		return NULL;
@@ -341,7 +510,6 @@ Font* Font_LoadFontData(unsigned char* the_data)
 	//Font_Print(the_font);
 
 	return the_font;
-
 }
 
 
@@ -391,6 +559,7 @@ bool Font_DrawString(Bitmap* the_bitmap, char* the_string, int16_t max_chars)
 	//DEBUG_OUT(("%s %d: the_string='%s'", __func__, __LINE__, the_string));
 	
 	fit_count = Font_MeasureStringWidth(the_bitmap->font_, the_string, num_chars, available_width, 0, &pixels_used);
+	//DEBUG_OUT(("%s %d: fitcount=%i, the_string='%s'", __func__, __LINE__, fit_count, the_string));
 	
 	if (fit_count == -1)
 	{
@@ -403,7 +572,10 @@ bool Font_DrawString(Bitmap* the_bitmap, char* the_string, int16_t max_chars)
 		unsigned char	the_char;
 		
 		the_char = the_string[i];
+		
+		//DEBUG_OUT(("%s %d: the_bitmap->x_ before drawChar=%i", __func__, __LINE__, the_bitmap->x_));
 		draw_result = Font_DrawChar(the_bitmap, the_char, NULL);
+		//DEBUG_OUT(("%s %d: the_bitmap->x_ after drawChar=%i", __func__, __LINE__, the_bitmap->x_));
 	}
 
 	return true;
@@ -554,10 +726,13 @@ char* Font_DrawStringInBox(Bitmap* the_bitmap, int16_t width, int16_t height, ch
 			//DEBUG_OUT(("%s %d: the_row=%i, num_rows=%i, this_line_len=%i", __func__ , __LINE__, the_row, num_rows, this_line_len));
 		} while (the_row < num_rows && this_line_len > 0);
 	
+		//DEBUG_OUT(("%s %d: the_row=%i, num_rows=%i, needs_formatting=%p, was=%p", __func__ , __LINE__, the_row, num_rows, needs_formatting, needed_formatting_last_round));
+		
 		// any more text still to format?
 		if (needs_formatting == needed_formatting_last_round)
 		{
 			// all chars fit
+			//DEBUG_OUT(("%s %d: all chars fit, returning...", __func__ , __LINE__));
 			return the_string;
 		}
 		else
@@ -566,10 +741,13 @@ char* Font_DrawStringInBox(Bitmap* the_bitmap, int16_t width, int16_t height, ch
 			if (continue_function == NULL)
 			{
 				// no hook provided, just return
+				//DEBUG_OUT(("%s %d: no continue function providing, returning...", __func__ , __LINE__));
 				return needs_formatting;
 			}
 			else
 			{
+				//DEBUG_OUT(("%s %d: more text; formatting function=%p", __func__ , __LINE__, continue_function));
+				
 				if ((*continue_function)() == true)
 				{
 					// show next portion
@@ -662,6 +840,8 @@ int16_t Font_MeasureStringWidth(Font* the_font, char* the_string, int16_t num_ch
 //! @return:	Returns number of horizontal pixels used, including left/right offsets, or -1 on any error condition.
 int16_t Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font)
 {
+	int32_t			row;
+	int32_t			pixels_moved;
 	uint8_t			next_char;
 	int16_t			loc_offset;
 	int16_t			next_loc_offset;
@@ -669,14 +849,12 @@ int16_t Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font
 	int16_t			image_offset_index;
 	int16_t			image_offset_index_rem;
 	int16_t			offset_width_value;
+	uint16_t*		start_read_addr;
 	int8_t			h_offset_value;			//!< the horizontal offset from pen position before the first pixel should be drawn
 	int8_t			width_value;			//!< the total width of the character including any whitespace to left/right
-	uint16_t*		start_read_addr;
-	int32_t			row;
 	uint8_t			this_bit;
 	uint8_t			the_color;				// shortcut to bitmap->color_
 	unsigned char*	start_write_addr;
-	int32_t			pixels_moved;
 	uint8_t			first_row;				// if no height table available, this is 0. otherwise it's first row to start drawing.
 	uint8_t			max_row;				// if no height table available, this is height of font rec. otherwise it's 1 past the last vis row
 	
@@ -726,6 +904,33 @@ int16_t Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font
 		max_row = the_font->fRectHeight;
 	}
 	
+	#ifdef _C256_FMX_
+		Font_Print(the_font);
+		General_GetChar();
+		uint8_t*		the_byte;
+		uint16_t		i;
+		uint16_t		count;
+		count = 500;
+		
+		the_byte = (uint8_t*)the_font;
+		//DEBUG_OUT(("%s %d: the_data[0] before swap: %u (word=%u), count=%u", __func__, __LINE__, (uint16_t)the_data[0], *the_word, count));
+		
+		printf("\n");
+		for (i = 0; i < count; i++)
+		{
+			//DEBUG_OUT(("%s %d: word[%i] before swap: %u", __func__, __LINE__, i, *the_word));
+			printf("%02x ", *the_byte);
+			//DEBUG_OUT(("%s %d: word[%i] after swap: %u", __func__, __LINE__, i, *the_word));
+			the_byte++;
+			if (i % 900 == 0)
+			{
+				General_GetChar();
+			}
+		}
+		printf("\n");
+		General_GetChar();
+	#endif
+
 	//DEBUG_OUT(("%s %d: glyph char=%u, height/offset value=%i, first_row=%i, max_row=%i", __func__, __LINE__, the_char, v_offset_height, first_row, max_row));
 	
 	//   the low byte will be the v offset from top of glyph rect (eg, 3, if the first pixel is in the 4th row down)
@@ -766,8 +971,13 @@ int16_t Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font
 	next_loc_offset = the_font->loc_table_[next_char];
 	pixel_only_width = next_loc_offset - loc_offset;
 	
-	//DEBUG_OUT(("%s %d: glyph char=%u, pixelwidth=%i, Width/offset value=%i, width_value=%i, h_offset_value=%i", __func__, __LINE__, the_char, pixel_only_width, offset_width_value, width_value, h_offset_value));
-				
+	// the following debug line, if not included in Calypsi 68k builds, has the effect of having width_value=0, which causes x to not advance after drawing this glyph
+	#if !defined(__VBCC__)
+//	#if !defined(__VBCC__) && !defined(_C256_FMX_)
+		DEBUG_OUT(("%s %d: the_char=%u, next_char=%u, loc_offset=%i, next_loc_offset=%i", __func__, __LINE__, the_char, next_char, loc_offset, next_loc_offset));
+		DEBUG_OUT(("%s %d: pxwidth=%i, Wid/offset=%i, width_value=%i, h_offset_value=%i", __func__, __LINE__, pixel_only_width, offset_width_value, width_value, h_offset_value));
+	#endif
+	
 	// for A in Chicago, I get "227". this is apparently the BIT offset from the start of the image data table. 
 	// so 227/16=14.1875=image_table_[13] + 3 bits. 
 	

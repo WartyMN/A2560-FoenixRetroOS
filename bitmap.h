@@ -103,6 +103,7 @@ struct Bitmap
 	uint8_t			reserved_;	//!< future use
 	Font*			font_;		//!< the currently selected font. All text drawing activities will use this font face.
 	unsigned char*	addr_;		//!< address of the start of the bitmap, within the machine's global address space. This is not the VICKY's local address for this bitmap. This address MUST be within the VRAM, however, it cannot be in non-VRAM memory space.
+	uint32_t		addr_int_;	//!< address of the start of the bitmap, as an unsigned long int. For use with plotting locations on 65816/Calypsi, which imposed a max 64k data size (at the moment)
 	bool			in_vram_;	//!< a way to know if this bitmap is pointing to VRAM or standard RAM space.
 };
 
@@ -153,7 +154,7 @@ bool Bitmap_Resize(Bitmap* the_bitmap, int16_t width, int16_t height);
 //! @param dst_bm: the destination bitmap. It must have a valid address within the VRAM memory space. It can be the same bitmap as the source.
 //! @param src_rect: the rectangle from the source bitmap to be blitted to the target bitmap
 //! @param dst_x, dst_y: the location within the destination bitmap to copy pixels to. May be negative.
-bool Bitmap_BlitRect(Bitmap* src_bm, Rectangle src_rect, Bitmap* dst_bm, int16_t dst_x, int16_t dst_y);
+bool Bitmap_BlitRect(Bitmap* src_bm, Rectangle* src_rect, Bitmap* dst_bm, int16_t dst_x, int16_t dst_y);
 
 //! Blit from source bitmap to distination bitmap. 
 //! The source and destination bitmaps can be the same: you can use this to copy a chunk of pixels from one part of a screen to another. If the destination location cannot fit the entirety of the copied rectangle, the copy will be truncated, but will not return an error. 

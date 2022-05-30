@@ -7009,7 +7009,7 @@ Bitmap* Startup_LoadSplashBitmap(void)
 	//   perhaps even after we have file system, in case user borks their system resources
 	//   image is saved from GraphicConverter in "byte array header file" (.h) format, then adjusted to desired CLUT index manually
 
-	memcpy(the_bitmap->addr_, (uint8_t*)splash_logo, SPLASH_WIDTH * SPLASH_HEIGHT);
+	memcpy((uint8_t*)the_bitmap->addr_int_, (uint8_t*)splash_logo, SPLASH_WIDTH * SPLASH_HEIGHT);
 	
 	return the_bitmap;	
 }

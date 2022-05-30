@@ -7,6 +7,7 @@ TARGET = $(DEVA2560)/_target_foenix
 LIB_SRCS = lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c event.c mouse.c menu.c
 TEXT_DEMO_SRCS = lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c event.c mouse.c menu.c text_demo.c
 BITMAP_DEMO_SRCS = bitmap_demo.c
+FONT_DEMO_SRCS = font_demo.c
 
 MODEL = --code-model=large --data-model=medium
 LIB_MODEL = lc-md
@@ -16,15 +17,16 @@ FOENIX_LINKER_RULES = osf_Foenix-FMX.scm
 
 LIB_OBJS = $(LIB_SRCS:%.c=obj/%.o)
 BITMAP_DEMO_OBJS = $(BITMAP_DEMO_SRCS:%.c=obj/%.o)
+FONT_DEMO_OBJS = $(FONT_DEMO_SRCS:%.c=obj/%.o)
 TEXT_DEMO_OBJS = $(TEXT_DEMO_SRCS:%.c=obj/%.o)
 
 obj/%.o: %.c
-	cc65816 -D_C256_FMX_ --core=65816 $(MODEL) --target=Foenix --debug -I$(TARGET)/include/ --list-file=$(@:%.o=%.lst) -o $@ $<
+	cc65816 -D_C256_FMX_ --core=65816 $(MODEL) --target=Foenix -I$(TARGET)/include/ --list-file=$(@:%.o=%.lst) -o $@ $<
 
 #lib_sys.c:
 #	cc65816 -D_C256_FMX_ --core=65816 $(MODEL) --target=Foenix --debug --list-file=lib_sys.lst -o obj/lib_sys.o ../lib_sys.c
 
-all: headers lib textdemo bitmapdemo
+all: headers lib textdemo bitmapdemo fontdemo
 
 headers:
 	@echo "Copying headers to target..."
@@ -56,12 +58,17 @@ bitmapdemo: $(BITMAP_DEMO_OBJS) $(FOENIX_LIB)
 	@echo "Building bitmap demo..."
 	ln65816 -o bitmap.pgz $(BITMAP_DEMO_OBJS) $(FOENIX_LINKER_RULES) clib-$(LIB_MODEL)-foenix.a $(FOENIX)/foenix-lc-md.a $(VBCC)/targets/a2560-micah/lib/c256fmx_sys.a --output-format=pgz --list-file=obj/bitmap_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix
 	
+fontdemo: $(FONT_DEMO_OBJS) $(FOENIX_LIB)
+	@echo "Building font demo..."
+	ln65816 -o font.pgz $(FONT_DEMO_OBJS) $(FOENIX_LINKER_RULES) clib-$(LIB_MODEL)-foenix.a $(FOENIX)/foenix-lc-md.a $(VBCC)/targets/a2560-micah/lib/c256fmx_sys.a --output-format=pgz --list-file=obj/font_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix
+
 $(FOENIX_LIB):
 	(cd $(FOENIX) ; make all)
 
 clean:
 	-rm $(TEXT_DEMO_OBJS) obj/*.lst text.pgz
 	-rm $(BITMAP_DEMO_OBJS) obj/*.lst bitmap.pgz
+	-rm $(FONT_DEMO_OBJS) obj/*.lst font.pgz
 	-rm *.pgz
 	-rm *.elf
 	

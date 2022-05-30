@@ -373,6 +373,15 @@ char General_GetChar(void);
 
 
 
+// **** MISC UTILITIES *****
+
+//! Swap bytes big endian <> little endian, for a long
+//! NOTE: for a word, see BSWAP() macro
+uint32_t General_ByteSwapLong(uint32_t long_needing_swap);
+
+
+
+
 // **** LOGGING AND DEBUG UTILITIES *****
 
 

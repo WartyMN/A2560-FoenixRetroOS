@@ -165,15 +165,12 @@ int main(int argc, char* argv[])
 	printf("now in graphics mode");
 
 
-	#if defined(RUN_TESTS)
-// 		MU_RUN_SUITE(text_test_suite_units);
-// 		MU_RUN_SUITE(text_test_suite_speed);
-// 		MU_REPORT();
-		return MU_EXIT_CODE;
-	#endif
+	MU_RUN_SUITE(text_test_suite_units);
+// 	MU_RUN_SUITE(text_test_suite_speed);
+	MU_REPORT();
 
 	Sys_SetModeText(global_system, false);
 	printf("now in normal text mode");
 
-	return 0;
+	return MU_EXIT_CODE;
 }

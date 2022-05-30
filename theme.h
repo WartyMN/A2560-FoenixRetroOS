@@ -82,6 +82,9 @@
 #define WIN_DEFAULT_BACKGROUND_BGRA				0xCCCCCC00;
 #define WIN_DEFAULT_BORDER_BGRA					0x33333300;
 
+#define THEME_PARAM_MINIMAL_RESOURCES			true	// parameter for Theme_CreateXXXXtheme()
+#define THEME_PARAM_FULL_RESOURCES				false	// parameter for Theme_CreateXXXXtheme()
+
 /*****************************************************************************/
 /*                               Enumerations                                */
 /*****************************************************************************/
@@ -167,7 +170,9 @@ bool Theme_Destroy(Theme** the_theme);
 
 //! create default Theme.
 //! used in cases where a custom theme is not specified or is not available
-Theme* Theme_CreateDefaultTheme(void);
+//! Note: set the minimal_resources flag to true when running on a C256, as this framework does not yet have full support on that platform. Controls will not be available!
+//! @param minimal_resources:	if true, control templates will not be created.
+Theme* Theme_CreateDefaultTheme(bool minimal_resources);
 
 
 

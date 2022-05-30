@@ -1020,12 +1020,9 @@ int main(int argc, char* argv[])
 		exit(0);
 	}
 
-	#if defined(RUN_TESTS)
- 		MU_RUN_SUITE(text_test_suite_units);
-// 		MU_RUN_SUITE(text_test_suite_speed);
-// 		MU_REPORT();
-		return MU_EXIT_CODE;
-	#endif
+ 	MU_RUN_SUITE(text_test_suite_units);
+// 	MU_RUN_SUITE(text_test_suite_speed);
+ 	MU_REPORT();
 	
-	return 0;
+	return MU_EXIT_CODE;
 }
