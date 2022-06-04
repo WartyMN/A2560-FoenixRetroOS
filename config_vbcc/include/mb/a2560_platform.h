@@ -96,7 +96,6 @@
 	// ** C256 (VICKY II)
 	
 	// byte swapper: 68000 is big endian; 65816 is little endian
-	#define BSWAP2(word)	((word & 0xff) >> 8) | (word << 8)
 	#define BSWAP(word)	( (((word) >> 8) & 0x00FF) | (((word) << 8) & 0xFF00) )
 	
 	#define VICKY_C256					0x00af0000		// Vicky II offset/first register

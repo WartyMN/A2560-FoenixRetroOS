@@ -84,8 +84,8 @@ void WaitForUser(void)
 	General_GetChar();
 	
 // 	Bitmap_FillMemory(Sys_GetScreenBitmap(global_system, back_layer), 0xbb);
-// 	Text_FillCharMem(global_system->screen_[ID_CHANNEL_B], ' ');
-// 	Text_FillAttrMem(global_system->screen_[ID_CHANNEL_B], 0);
+	Text_FillCharMem(global_system->screen_[ID_CHANNEL_B], ' ');
+	Text_FillAttrMem(global_system->screen_[ID_CHANNEL_B], 0);
 }
 
 // Draw fancy box on the B screen and display demo description
@@ -435,9 +435,9 @@ Font* Demo_Font_LoadFontData(void)
 	};
 	Font*			the_font;
 
-	ShowDescription("Font_LoadFontData -> test load of font data");	
+	ShowDescription("Font_New -> test load of font data");	
 
-	if ( (the_font = Font_LoadFontData(font_data_osf_espy_bold_10, font_data_osf_espy_bold_10_size)) == NULL)
+	if ( (the_font = Font_New(font_data_osf_espy_bold_10, font_data_osf_espy_bold_10_size)) == NULL)
 	{
 		LOG_ERR(("%s %d: error condition on loading font data", __func__, __LINE__));
 		return NULL;
@@ -801,9 +801,9 @@ Font* Demo_Font_LoadProFont9FontData(void)
 		
 	Font*			the_font;
 		
-	ShowDescription("Font_LoadFontData -> test load of font data - Helvetic 9 pt");	
+	ShowDescription("Font_New -> test load of font data - ProFont Regular 9 pt");	
 
-	if ( (the_font = Font_LoadFontData(font_data_profont_regular_9, font_data_profont_regular_9_size)) == NULL)
+	if ( (the_font = Font_New(font_data_profont_regular_9, font_data_profont_regular_9_size)) == NULL)
 	{
 		LOG_ERR(("%s %d: error condition on loading font data", __func__, __LINE__));
 		return NULL;
@@ -837,9 +837,11 @@ void Demo_Font_ShowChars(Bitmap* the_bitmap, int16_t x1, int16_t y)
 	Bitmap_SetXY(the_bitmap, x1, y);
 	Bitmap_SetColor(the_bitmap, SYS_COLOR_RED2);
 	
+	//for (i=17; i < 18; i++)
 	for (; i < the_font->lastChar; i++)
 	{
 		pix_written += Font_DrawChar(the_bitmap, i, the_font);
+		General_GetChar();
 		
 		if (pix_written >= x2)
 		{
@@ -938,36 +940,36 @@ void RunDemo(void)
 	Font*	the_other_font;
 	Bitmap*	the_bitmap = Sys_GetScreenBitmap(global_system, back_layer);
 
-// 	ShowDescription("Welcome to the A2560 Font Library Demo!");	
-// 	WaitForUser();
+	ShowDescription("Welcome to the A2560 Font Library Demo!");	
+	WaitForUser();
 	
-	the_font = Demo_Font_LoadFontData();
+	//the_font = Demo_Font_LoadFontData();
 	
-	if (the_font != NULL)
+	//if (the_font != NULL)
 	{
 		int16_t		x1;
 		int16_t		y;
 		
-		Bitmap_SetFont(the_bitmap, the_font);
+		//Bitmap_SetFont(the_bitmap, the_font);
 		
 		x1 = 25;
-		y = 10;
+		y = 150;
 		Demo_Font_ShowChars(the_bitmap, x1, y);
-		Demo_Font_DrawString(the_bitmap, y);
+// 		Demo_Font_DrawString(the_bitmap, y);
 		//Font_Destroy(&the_font);
 
 		// test out a second font
-		the_other_font = Demo_Font_LoadProFont9FontData();
+		//the_other_font = Demo_Font_LoadProFont9FontData();
 	
-		if (the_other_font != NULL)
+		//if (the_other_font != NULL)
 		{
-			Bitmap_SetFont(the_bitmap, the_other_font);
+			//Bitmap_SetFont(the_bitmap, the_other_font);
 
 			x1 = 100;
 			y = 200;
-			Demo_Font_ShowChars(the_bitmap, x1, y);
-			Demo_Font_DrawString(the_bitmap, y + 50);
-			Demo_Font_DrawStringInBox1(the_bitmap);
+// 			Demo_Font_ShowChars(the_bitmap, x1, y);
+// 			Demo_Font_DrawString(the_bitmap, y + 50);
+// 			Demo_Font_DrawStringInBox1(the_bitmap);
 			//Font_Destroy(&the_other_font);
 		}
 	}

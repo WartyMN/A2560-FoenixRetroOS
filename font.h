@@ -128,10 +128,6 @@ bool Font_Destroy(Font** the_font);
 
 // **** xxx functions *****
 
-//! Load a font into memory from disk, and create a font record from it
-//! NOTE: this allocates new memory for the font, and copies the font data to it from the passed buffer. It is not dependent on the data in the buffer after returning.
-//! This preliminary version is just a shell that does not read from disk, because no disk functionality available yet in f68/mcp as far as I know. Will switch to taking a path or something once disk is available. 
-Font* Font_LoadFontData(unsigned char* the_data, uint16_t data_size);
 
 
 
@@ -192,6 +188,12 @@ int16_t Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font
 
 // **** xxx functions *****
 
+
+
+
+// **** Debug functions *****
+
+void Font_Print(Font* the_font);
 
 
 

@@ -36,6 +36,7 @@
 #include "list.h"
 #include "theme.h"
 #include "control_template.h"
+#include "font.h"
 
 
 // C includes
@@ -84,6 +85,7 @@ struct System
 	uint16_t		model_number_;
 	Menu*			menu_manager_;
 	#ifdef _C256_FMX_
+		Font		rom_font_;			// for C256 systems, pre-allocate a Font object
 		uint8_t		font_data_[10240];	// for C256 systems, pre-allocate 10K for permanent use for one font.
 	#endif
 };

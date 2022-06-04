@@ -351,10 +351,18 @@ bool Text_SetCharAtXY(Screen* the_screen, int16_t x, int16_t y, unsigned char th
 //! @param	the_screen: valid pointer to the target screen to operate on
 //! @param	x: the horizontal position, between 0 and the screen's text_cols_vis_ - 1
 //! @param	y: the vertical position, between 0 and the screen's text_rows_vis_ - 1
+//! @param	the_attribute_value: a 1-byte attribute code (foreground in high nibble, background in low nibble)
+//! @return	Returns false on any error/invalid input.
+bool Text_SetAttrAtXY(Screen* the_screen, int16_t x, int16_t y, uint8_t the_attribute_value);
+
+//! Set the attribute value at a specified x, y coord based on the foreground and background colors passed
+//! @param	the_screen: valid pointer to the target screen to operate on
+//! @param	x: the horizontal position, between 0 and the screen's text_cols_vis_ - 1
+//! @param	y: the vertical position, between 0 and the screen's text_rows_vis_ - 1
 //! @param	fore_color: Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified.
 //! @param	back_color: Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified.
 //! @return	Returns false on any error/invalid input.
-bool Text_SetAttrAtXY(Screen* the_screen, int16_t x, int16_t y, uint8_t fore_color, uint8_t back_color);
+bool Text_SetColorAtXY(Screen* the_screen, int16_t x, int16_t y, uint8_t fore_color, uint8_t back_color);
 
 //! Draw a char at a specified x, y coord, also setting the color attributes
 //! @param	the_screen: valid pointer to the target screen to operate on

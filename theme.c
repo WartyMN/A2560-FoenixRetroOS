@@ -4035,7 +4035,7 @@ Font* Theme_LoadFontFromBuffer(uint8_t* the_font_data, uint16_t data_size)
 {
 	Font*			the_font;
 
-	if ( (the_font = Font_LoadFontData(the_font_data, data_size)) == NULL)
+	if ( (the_font = Font_New(the_font_data, data_size)) == NULL)
 	{
 		LOG_ERR(("%s %d: error condition on loading font data", __func__, __LINE__));
 		return NULL;

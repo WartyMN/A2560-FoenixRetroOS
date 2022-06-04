@@ -510,9 +510,9 @@ MU_TEST(text_test_char_and_attr_reading)
 	the_attribute_value = ((FG_COLOR_MAGENTA << 4) | BG_COLOR_BRIGHT_WHITE);
 
 	// set known chars and colors to test again
-	Text_SetAttrAtXY(global_system->screen_[ID_CHANNEL_A], x, y, FG_COLOR_BRIGHT_WHITE, BG_COLOR_BLACK);
-	Text_SetAttrAtXY(global_system->screen_[ID_CHANNEL_A], x+1, y, FG_COLOR_BRIGHT_MAGENTA, BG_COLOR_GRAY);
-	Text_SetAttrAtXY(global_system->screen_[ID_CHANNEL_A], x+2, y, FG_COLOR_MAGENTA, BG_COLOR_BRIGHT_WHITE);
+	Text_SetColorAtXY(global_system->screen_[ID_CHANNEL_A], x, y, FG_COLOR_BRIGHT_WHITE, BG_COLOR_BLACK);
+	Text_SetColorAtXY(global_system->screen_[ID_CHANNEL_A], x+1, y, FG_COLOR_BRIGHT_MAGENTA, BG_COLOR_GRAY);
+	Text_SetColorAtXY(global_system->screen_[ID_CHANNEL_A], x+2, y, FG_COLOR_MAGENTA, BG_COLOR_BRIGHT_WHITE);
 	Text_SetCharAtXY(global_system->screen_[ID_CHANNEL_A], x, y, CH_DIAMOND);
 	Text_SetCharAtXY(global_system->screen_[ID_CHANNEL_A], x+1, y, CH_CLUB);
 	Text_SetCharAtXY(global_system->screen_[ID_CHANNEL_A], x+2, y, CH_SPADE);

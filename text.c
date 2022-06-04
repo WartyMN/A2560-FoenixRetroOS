@@ -928,23 +928,46 @@ bool Text_SetCharAtXY(Screen* the_screen, int16_t x, int16_t y, unsigned char th
 //! @param	the_screen: valid pointer to the target screen to operate on
 //! @param	x: the horizontal position, between 0 and the screen's text_cols_vis_ - 1
 //! @param	y: the vertical position, between 0 and the screen's text_rows_vis_ - 1
-//! @param	fore_color: Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified.
-//! @param	back_color: Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified.
+//! @param	the_attribute_value: a 1-byte attribute code (foreground in high nibble, background in low nibble)
 //! @return	Returns false on any error/invalid input.
-bool Text_SetAttrAtXY(Screen* the_screen, int16_t x, int16_t y, uint8_t fore_color, uint8_t back_color)
+bool Text_SetAttrAtXY(Screen* the_screen, int16_t x, int16_t y, uint8_t the_attribute_value)
 {
 	char*			the_write_loc;
-	uint8_t			the_attribute_value;
 	
 	if (the_screen == NULL)
 	{
 		LOG_ERR(("%s %d: passed screen was NULL", __func__, __LINE__));
 		return false;
 	}
+	
+	if (!Text_ValidateXY(the_screen, x, y))
+	{
+		LOG_ERR(("%s %d: illegal coordinate", __func__, __LINE__));
+		return false;
+	}
 
+	the_write_loc = Text_GetMemLocForXY(the_screen, x, y, SCREEN_FOR_TEXT_ATTR);	
+ 	*the_write_loc = the_attribute_value;
+	
+	return true;
+}
+
+
+//! Set the attribute value at a specified x, y coord based on the foreground and background colors passed
+//! @param	the_screen: valid pointer to the target screen to operate on
+//! @param	x: the horizontal position, between 0 and the screen's text_cols_vis_ - 1
+//! @param	y: the vertical position, between 0 and the screen's text_rows_vis_ - 1
+//! @param	fore_color: Index to the desired foreground color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified.
+//! @param	back_color: Index to the desired background color (0-15). The predefined macro constants may be used (COLOR_DK_RED, etc.), but be aware that the colors are not fixed, and may not correspond to the names if the LUT in RAM has been modified.
+//! @return	Returns false on any error/invalid input.
+bool Text_SetColorAtXY(Screen* the_screen, int16_t x, int16_t y, uint8_t fore_color, uint8_t back_color)
+{
+	char*			the_write_loc;
+	uint8_t			the_attribute_value;
+	
 	if (!Text_ValidateAll(the_screen, x, y, fore_color, back_color))
 	{
-		LOG_ERR(("%s %d: illegal screen id, coordinate, or color", __func__, __LINE__));
+		LOG_ERR(("%s %d: illegal coordinate or color", __func__, __LINE__));
 		return false;
 	}
 
@@ -952,10 +975,7 @@ bool Text_SetAttrAtXY(Screen* the_screen, int16_t x, int16_t y, uint8_t fore_col
 	// LOGIC: text mode only supports 16 colors. lower 4 bits are back, upper 4 bits are foreground
 	the_attribute_value = ((fore_color << 4) | back_color);
 	
-	the_write_loc = Text_GetMemLocForXY(the_screen, x, y, SCREEN_FOR_TEXT_ATTR);	
- 	*the_write_loc = the_attribute_value;
-	
-	return true;
+	return Text_SetAttrAtXY(the_screen, x, y, the_attribute_value);
 }
 
 
@@ -1222,7 +1242,7 @@ bool Text_DrawHLineSlow(Screen* the_screen, int16_t x, int16_t y, int16_t the_li
 		case ATTR_ONLY:
 			for (dx = 0; dx < the_line_len; dx++)
 			{
-				Text_SetAttrAtXY(the_screen, x + dx, y, fore_color, back_color);
+				Text_SetColorAtXY(the_screen, x + dx, y, fore_color, back_color);
 			}
 			break;
 			
@@ -1277,7 +1297,7 @@ bool Text_DrawVLine(Screen* the_screen, int16_t x, int16_t y, int16_t the_line_l
 		case ATTR_ONLY:
 			for (dy = 0; dy < the_line_len; dy++)
 			{
-				Text_SetAttrAtXY(the_screen, x, y + dy, fore_color, back_color);
+				Text_SetColorAtXY(the_screen, x, y + dy, fore_color, back_color);
 			}
 			break;
 			

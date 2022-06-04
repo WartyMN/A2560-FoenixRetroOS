@@ -259,6 +259,11 @@ int16_t Bitmap_GetY(Bitmap* the_bitmap);
 //! @return Returns a pointer to the VRAM location that corresponds to the current "pen" X, Y, or NULL on any error condition
 unsigned char* Bitmap_GetMemLoc(Bitmap* the_bitmap);
 
+//! Calculate the VRAM location of the current coordinate within the bitmap
+//! @param	the_bitmap: reference to a valid Bitmap object.
+//! @return Returns an unsigned long that can be converted to the VRAM location that corresponds to the current "pen" X, Y, or NULL on any error condition
+uint32_t Bitmap_GetMemLocInt(Bitmap* the_bitmap);
+
 //! Get the current font of the pen
 //! @param	the_bitmap: reference to a valid Bitmap object.
 //! @return Returns NULL on any error
