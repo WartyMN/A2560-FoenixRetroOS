@@ -93,7 +93,8 @@ void Demo_Text_ScreenResolution2(void);
 void Demo_Text_ScreenResolution3(void);
 void Demo_Text_ScreenResolution4(void);
 void Demo_Text_UpdateFontData(void);
-
+void Demo_Text_CopyMemBox1(void);
+void Demo_Text_CopyMemBox2(void);
 
 /*****************************************************************************/
 /*                       Private Function Definitions                        */
@@ -145,6 +146,94 @@ void ShowDescription(char* the_message)
 	
 	// wrap text into the message box, leaving one row at the bottom for "press any key"
 	Text_DrawStringInBox(global_system->screen_[ID_CHANNEL_B], x1+1, y1+1, x2-1, y2-1, the_message, FG_COLOR_BRIGHT_WHITE, BG_COLOR_BLUE, NULL);
+}
+
+
+void Demo_Text_CopyMemBox1(void)
+{
+	int16_t			x;
+	int16_t			y;
+	int16_t			h_line_len;
+	int16_t			v_line_len;
+	char			b1[80*60];
+	char			b2[80*60];
+	char*			buffer1 = b1;
+	char*			buffer2 = b2;
+	char*			the_message;
+	
+	x = 0;
+	y = 6;
+	h_line_len = 20;
+	v_line_len = 4;
+
+	ShowDescription("Text_CopyMemBox -> copy a rectangular chunk of text to the screen from a buffer. The screen and off-screen buffer must have the same dimensions. You can copy from one part of the screen to another by specifying src and dst buffers that match.");	
+	
+	// draw some text - 80x4
+	the_message = (char*)"12345678901234567890                                                            *This is some text *                                                            *from the offscreen*                                                            *buffer.           *                                                            ";
+	memset(buffer1, '.', 80*60); // fill with a dot first
+	memcpy(buffer1 + 6*80, the_message, 80*4+1);
+	
+	// copy text to channel B, from off-screen buffer 1	
+	Text_CopyMemBox(global_system->screen_[ID_CHANNEL_B], buffer1, x + 0, y, x+h_line_len, y+v_line_len, SCREEN_COPY_TO_SCREEN, SCREEN_FOR_TEXT_CHAR);
+	
+	WaitForUser();
+}
+
+
+void Demo_Text_CopyMemBox2(void)
+{
+	int16_t			x;
+	int16_t			y;
+	int16_t			h_line_len;
+	int16_t			v_line_len;
+	char			b1[80*60];
+	char*			buffer1 = b1;
+	char			b2[80*60];
+	char*			buffer2 = b2;
+	
+	h_line_len = 20;
+	v_line_len = 4;
+
+	int16_t			line_len;
+	unsigned char	the_char;
+	int16_t			i;
+	int16_t			num_colors = 16;
+
+
+	// draw some rows of color across the screen
+	x = 1;
+	y = 10;
+	line_len = 60;
+	the_char = CH_DIAMOND;	
+
+	// fill background with a char so we can see what's copied and not
+	Text_FillCharMem(global_system->screen_[ID_CHANNEL_B], 'X');
+
+	ShowDescription("Text_CopyMemBox -> copy a rectangular chunk of color (attributes) to the screen from a buffer and vice versa.");	
+
+	for (i = 0; i < num_colors; i++)
+	{
+		Text_DrawHLine(global_system->screen_[ID_CHANNEL_B], x, y + i, line_len, the_char, i, BG_COLOR_BRIGHT_BLUE, CHAR_AND_ATTR);
+	}
+	
+	// fill buffer 1 and 2 with a different colors
+	memset(buffer1, 176, 80*60); // 176=bright yellow on black
+	memset(buffer2, 160, 80*60); // 160=bright green on black
+
+	// copy colors on channel B, to off-screen buffer 1	
+	Text_CopyMemBox(global_system->screen_[ID_CHANNEL_B], buffer1, x, y, x+line_len/2, y+v_line_len, SCREEN_COPY_FROM_SCREEN, SCREEN_FOR_TEXT_ATTR);
+	
+	General_GetChar();
+	
+	// copy colors in buffer 2 to screen (replacing what was there)
+	Text_CopyMemBox(global_system->screen_[ID_CHANNEL_B], buffer2, x, y, x+line_len/2, y+v_line_len, SCREEN_COPY_TO_SCREEN, SCREEN_FOR_TEXT_ATTR);
+	
+	General_GetChar();
+	
+	// copy colors in buffer 1 to screen (restoring what had been there)
+	Text_CopyMemBox(global_system->screen_[ID_CHANNEL_B], buffer1, x, y, x+line_len/2, y+v_line_len, SCREEN_COPY_TO_SCREEN, SCREEN_FOR_TEXT_ATTR);
+	
+	WaitForUser();
 }
 
 
@@ -820,6 +909,9 @@ void RunDemo(void)
 
 	ShowDescription("Welcome to the Text Library Demo!");	
 	WaitForUser();
+	
+	Demo_Text_CopyMemBox1();
+	Demo_Text_CopyMemBox2();
 	
 	Demo_Text_FillCharMem1();
 	Demo_Text_FillCharMem2();

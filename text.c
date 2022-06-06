@@ -425,13 +425,13 @@ bool Text_CopyMemBox(Screen* the_screen, char* the_buffer, int16_t x1, int16_t y
 	
 	if (!Text_ValidateAll(the_screen, x1, y1, 0, 0))
 	{
-		LOG_ERR(("%s %d: illegal screen id, coordinate, or color", __func__, __LINE__));
+		LOG_ERR(("%s %d: illegal coordinate (%i, %i) or color", __func__, __LINE__, x1, y1));
 		return false;
 	}
 	
 	if (!Text_ValidateXY(the_screen, x2, y2))
 	{
-		LOG_ERR(("%s %d: illegal coordinate", __func__, __LINE__));
+		LOG_ERR(("%s %d: illegal coordinate (%i, %i)", __func__, __LINE__, x2, y2));
 		return false;
 	}
 
@@ -450,10 +450,12 @@ bool Text_CopyMemBox(Screen* the_screen, char* the_buffer, int16_t x1, int16_t y
 	// get initial read/write locs
 	initial_offset = (the_screen->text_mem_cols_ * y1) + x1;
 	the_buffer_loc = the_buffer + initial_offset;
+	the_write_len = x2 - x1 + 1;
 
 	if (for_attr)
 	{
 		the_vram_loc = the_screen->text_attr_ram_ + initial_offset;
+		//DEBUG_OUT(("%s %d: vramloc=%p, buffer=%p, bufferloc=%p, to_screen=%i, the_write_len=%i, for_attr=%u", the_vram_loc, the_buffer, the_buffer_loc, to_screen, the_write_len, for_attr));
 	}
 	else
 	{
@@ -462,9 +464,8 @@ bool Text_CopyMemBox(Screen* the_screen, char* the_buffer, int16_t x1, int16_t y
 	
 	// do copy one line at a time
 	
-	the_write_len = x2 - x1 + 1;
 
-//	DEBUG_OUT(("%s %d: vramloc=%p, buffer=%p, bufferloc=%p, to_screen=%i, the_write_len=%i", the_vram_loc, the_buffer, the_buffer_loc, to_screen, the_write_len));
+//DEBUG_OUT(("%s %d: vramloc=%p, buffer=%p, bufferloc=%p, to_screen=%i, the_write_len=%i", the_vram_loc, the_buffer, the_buffer_loc, to_screen, the_write_len));
 
 	for (; y1 <= y2; y1++)
 	{
