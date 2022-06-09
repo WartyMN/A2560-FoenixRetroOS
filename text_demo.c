@@ -289,8 +289,40 @@ void Demo_Text_FillBoxSlow2(void)
 
 void Demo_Text_FillBox1(void)
 {
+	int16_t		x1;
+	int16_t		y1;
+	int16_t		x2;
+	int16_t		y2;
+	
 	ShowDescription("Text_FillBox -> fill a square on screen with a checkered pattern, black on white (fast routine)");	
-	Text_FillBox(global_system->screen_[ID_CHANNEL_B], 4, 11, global_system->screen_[ID_CHANNEL_B]->text_cols_vis_ - 1, 32, CH_CHECKERED1, COLOR_BLACK, BG_COLOR_BRIGHT_WHITE);
+
+	x1 = 0;
+	y1 = 8;
+	x2 = 0;
+	y2 = 8;
+
+	Text_FillBox(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, CH_CHECKERED3, COLOR_BLACK, BG_COLOR_BRIGHT_WHITE);
+
+	y1 += 2;
+	x2++;
+	y2 += 3;
+	Text_FillBox(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, CH_CHECKERED3, COLOR_BLACK, BG_COLOR_BRIGHT_WHITE);
+
+	y1 += 3;
+	x2++;
+	y2 += 4;
+	Text_FillBox(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, CH_CHECKERED3, COLOR_BLACK, BG_COLOR_BRIGHT_WHITE);
+
+	y1 += 4;
+	x2++;
+	y2 += 5;
+	Text_FillBox(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, CH_CHECKERED3, COLOR_BLACK, BG_COLOR_BRIGHT_WHITE);
+
+	y1 += 5;
+	x2++;
+	y2 += 6;
+	Text_FillBox(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, CH_CHECKERED3, COLOR_BLACK, BG_COLOR_BRIGHT_WHITE);
+
 	WaitForUser();
 }
 
@@ -515,13 +547,34 @@ void Demo_Text_DrawBox(void)
 
 	ShowDescription("Text_DrawBox -> Draw a basic box using start coordinates + width and height. All cells of the box will use the same character.");	
 
-	x = 60;
+	x = 0;
 	y = 8;
-	h_line_len = 6;
-	v_line_len = 6;
+	h_line_len = 1;
+	v_line_len = 1;
 	the_char = CH_CHECKERED3;
 
 	Text_DrawBox(global_system->screen_[ID_CHANNEL_B], x, y, h_line_len, v_line_len, the_char, FG_COLOR_BRIGHT_CYAN, BG_COLOR_CYAN, CHAR_AND_ATTR);
+
+	y += 2;
+	h_line_len++;
+	v_line_len++;
+	Text_DrawBox(global_system->screen_[ID_CHANNEL_B], x, y, h_line_len, v_line_len, the_char, FG_COLOR_BRIGHT_CYAN, BG_COLOR_CYAN, CHAR_AND_ATTR);
+
+	y += 3;
+	h_line_len++;
+	v_line_len++;
+	Text_DrawBox(global_system->screen_[ID_CHANNEL_B], x, y, h_line_len, v_line_len, the_char, FG_COLOR_BRIGHT_CYAN, BG_COLOR_CYAN, CHAR_AND_ATTR);
+
+	y += 4;
+	h_line_len++;
+	v_line_len++;
+	Text_DrawBox(global_system->screen_[ID_CHANNEL_B], x, y, h_line_len, v_line_len, the_char, FG_COLOR_BRIGHT_CYAN, BG_COLOR_CYAN, CHAR_AND_ATTR);
+
+	y += 5;
+	h_line_len++;
+	v_line_len++;
+	Text_DrawBox(global_system->screen_[ID_CHANNEL_B], x, y, h_line_len, v_line_len, the_char, FG_COLOR_BRIGHT_CYAN, BG_COLOR_CYAN, CHAR_AND_ATTR);
+
 	WaitForUser();
 }
 
@@ -536,13 +589,34 @@ void Demo_Text_DrawBoxCoords(void)
 
 	ShowDescription("Text_DrawBoxCoords -> Draw a basic box using 4 coordinates. All cells of the box will use the same character.");	
 
-	x1 = 45;
-	y1 = 10;
-	x2 = 65;
-	y2 = 35;
+	x1 = 0;
+	y1 = 8;
+	x2 = 0;
+	y2 = 8;
 	the_char = CH_CHECKERED1;
 
-	Text_DrawBoxCoords(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, the_char, FG_COLOR_WHITE, BG_COLOR_GRAY, CHAR_AND_ATTR);
+	Text_DrawBoxCoords(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, the_char, FG_COLOR_WHITE, BG_COLOR_CYAN, CHAR_AND_ATTR);
+
+	y1 += 2;
+	x2++;
+	y2 += 3;
+	Text_DrawBoxCoords(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, the_char, FG_COLOR_WHITE, BG_COLOR_CYAN, CHAR_AND_ATTR);
+
+	y1 += 3;
+	x2++;
+	y2 += 4;
+	Text_DrawBoxCoords(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, the_char, FG_COLOR_WHITE, BG_COLOR_CYAN, CHAR_AND_ATTR);
+
+	y1 += 4;
+	x2++;
+	y2 += 5;
+	Text_DrawBoxCoords(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, the_char, FG_COLOR_WHITE, BG_COLOR_CYAN, CHAR_AND_ATTR);
+
+	y1 += 5;
+	x2++;
+	y2 += 6;
+	Text_DrawBoxCoords(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, the_char, FG_COLOR_WHITE, BG_COLOR_CYAN, CHAR_AND_ATTR);
+
 	WaitForUser();
 }
 
@@ -556,13 +630,38 @@ void Demo_Text_DrawBoxCoordsFancy(void)
 
 	ShowDescription("Text_DrawBoxCoordsFancy -> Draw a box using 4 coordinates. The pre-defined 'wall' characters are used to build the box's outline. Text_FillBox() is used to add a fill.");	
 
-	x1 = 12;
-	y1 = 8;
-	x2 = 68;
-	y2 = 51;
+	x1 = 1;
+	y1 = 9;
+	x2 = 1;
+	y2 = 9;
 
-	Text_FillBox(global_system->screen_[ID_CHANNEL_B], x1+1, y1+1, x2-1, y2-1, CH_CHECKERED3, FG_COLOR_WHITE, BG_COLOR_BRIGHT_WHITE);
-	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, FG_COLOR_WHITE, BG_COLOR_GRAY);
+	Text_FillBox(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, CH_CHECKERED3, COLOR_BLACK, BG_COLOR_BRIGHT_WHITE);
+	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1-1, y1-1, x2+1, y2+1, FG_COLOR_WHITE, BG_COLOR_GRAY);
+
+	y1 += 3;
+	x2++;
+	y2 += 4;
+	Text_FillBox(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, CH_CHECKERED3, COLOR_BLACK, BG_COLOR_BRIGHT_WHITE);
+	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1-1, y1-1, x2+1, y2+1, FG_COLOR_WHITE, BG_COLOR_GRAY);
+
+	y1 += 4;
+	x2++;
+	y2 += 5;
+	Text_FillBox(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, CH_CHECKERED3, COLOR_BLACK, BG_COLOR_BRIGHT_WHITE);
+	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1-1, y1-1, x2+1, y2+1, FG_COLOR_WHITE, BG_COLOR_GRAY);
+
+	y1 += 6;
+	x2++;
+	y2 += 7;
+	Text_FillBox(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, CH_CHECKERED3, COLOR_BLACK, BG_COLOR_BRIGHT_WHITE);
+	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1-1, y1-1, x2+1, y2+1, FG_COLOR_WHITE, BG_COLOR_GRAY);
+
+	y1 += 8;
+	x2++;
+	y2 += 9;
+	Text_FillBox(global_system->screen_[ID_CHANNEL_B], x1, y1, x2, y2, CH_CHECKERED3, COLOR_BLACK, BG_COLOR_BRIGHT_WHITE);
+	Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_B], x1-1, y1-1, x2+1, y2+1, FG_COLOR_WHITE, BG_COLOR_GRAY);
+
 	WaitForUser();
 }
 

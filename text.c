@@ -640,13 +640,13 @@ bool Text_FillBox(Screen* the_screen, int16_t x1, int16_t y1, int16_t x2, int16_
 
 	if (!Text_ValidateAll(the_screen, x1, y1, fore_color, back_color))
 	{
-		LOG_ERR(("%s %d: illegal screen id, coordinate, or color", __func__, __LINE__));
+		LOG_ERR(("%s %d: illegal coordinate (%i, %i) or color", __func__, __LINE__, x1, y1));
 		return false;
 	}
 	
 	if (!Text_ValidateXY(the_screen, x2, y2))
 	{
-		LOG_ERR(("%s %d: illegal coordinate", __func__, __LINE__));
+		LOG_ERR(("%s %d: illegal coordinate (%i, %i)", __func__, __LINE__, x2, y2));
 		return false;
 	}
 
@@ -656,7 +656,8 @@ bool Text_FillBox(Screen* the_screen, int16_t x1, int16_t y1, int16_t x2, int16_
 		return false;
 	}
 
-	// add 1 to line len, because desired behavior is a box that connects fully to the passed coords
+ 	// add 1 to H line len, because dx becomes width, and if width = 0, then memset gets 0, and nothing happens.
+	// dy can be 0 and you still get at least one row done.
 	dx = x2 - x1 + 1;
 	dy = y2 - y1 + 0;
 
@@ -689,13 +690,13 @@ bool Text_FillBoxCharOnly(Screen* the_screen, int16_t x1, int16_t y1, int16_t x2
 
 	if (!Text_ValidateAll(the_screen, x1, y1, 0, 0))
 	{
-		LOG_ERR(("%s %d: illegal screen id, coordinate, or color", __func__, __LINE__));
+		LOG_ERR(("%s %d: illegal coordinate (%i, %i) or color", __func__, __LINE__, x1, y1));
 		return false;
 	}
 	
 	if (!Text_ValidateXY(the_screen, x2, y2))
 	{
-		LOG_ERR(("%s %d: illegal coordinate", __func__, __LINE__));
+		LOG_ERR(("%s %d: illegal coordinate (%i, %i)", __func__, __LINE__, x2, y2));
 		return false;
 	}
 
@@ -705,9 +706,10 @@ bool Text_FillBoxCharOnly(Screen* the_screen, int16_t x1, int16_t y1, int16_t x2
 		return false;
 	}
 
-	// add 1 to line len, because desired behavior is a box that connects fully to the passed coords
+ 	// add 1 to H line len, because dx becomes width, and if width = 0, then memset gets 0, and nothing happens.
+	// dy can be 0 and you still get at least one row done.
 	dx = x2 - x1 + 1;
-	dy = y2 - y1 + 1;
+	dy = y2 - y1 + 0;
 
 	return Text_FillMemoryBox(the_screen, x1, y1, dx, dy, SCREEN_FOR_TEXT_CHAR, the_char);
 }
@@ -736,13 +738,13 @@ bool Text_FillBoxAttrOnly(Screen* the_screen, int16_t x1, int16_t y1, int16_t x2
 
 	if (!Text_ValidateAll(the_screen, x1, y1, 0, 0))
 	{
-		LOG_ERR(("%s %d: illegal screen id, coordinate, or color", __func__, __LINE__));
+		LOG_ERR(("%s %d: illegal coordinate (%i, %i) or color", __func__, __LINE__, x1, y1));
 		return false;
 	}
 	
 	if (!Text_ValidateXY(the_screen, x2, y2))
 	{
-		LOG_ERR(("%s %d: illegal coordinate", __func__, __LINE__));
+		LOG_ERR(("%s %d: illegal coordinate (%i, %i)", __func__, __LINE__, x2, y2));
 		return false;
 	}
 
@@ -752,9 +754,10 @@ bool Text_FillBoxAttrOnly(Screen* the_screen, int16_t x1, int16_t y1, int16_t x2
 		return false;
 	}
 
-	// add 1 to line len, because desired behavior is a box that connects fully to the passed coords
+ 	// add 1 to H line len, because dx becomes width, and if width = 0, then memset gets 0, and nothing happens.
+	// dy can be 0 and you still get at least one row done.
 	dx = x2 - x1 + 1;
-	dy = y2 - y1 + 1;
+	dy = y2 - y1 + 0;
 
 	// calculate attribute value from passed fore and back colors
 	// LOGIC: text mode only supports 16 colors. lower 4 bits are back, upper 4 bits are foreground
@@ -1337,15 +1340,15 @@ bool Text_DrawBoxCoords(Screen* the_screen, int16_t x1, int16_t y1, int16_t x2, 
 		return false;
 	}
 
-	if (!Text_ValidateAll(the_screen, x1, y1,fore_color, back_color))
+	if (!Text_ValidateAll(the_screen, x1, y1, fore_color, back_color))
 	{
-		LOG_ERR(("%s %d: illegal screen id, coordinate, or color", __func__, __LINE__));
+		LOG_ERR(("%s %d: illegal coordinate (%i, %i) or color", __func__, __LINE__, x1, y1));
 		return false;
 	}
 	
 	if (!Text_ValidateXY(the_screen, x2, y2))
 	{
-		LOG_ERR(("%s %d: illegal coordinate", __func__, __LINE__));
+		LOG_ERR(("%s %d: illegal coordinate (%i, %i)", __func__, __LINE__, x2, y2));
 		return false;
 	}
 
@@ -1355,9 +1358,11 @@ bool Text_DrawBoxCoords(Screen* the_screen, int16_t x1, int16_t y1, int16_t x2, 
 		return false;
 	}
 
-	// add 1 to line len, because desired behavior is a box that connects fully to the passed coords
+// 	// add 1 to H line len, because dx becomes width, and if width = 0, then memset gets 0, and nothing happens.
+	// dy can be 0 and you still get at least one row done.
+	// don't add 1 to line len, because if you do, you can never draw a box that is only 1 char wide or 1 char tall
 	dx = x2 - x1 + 1;
-	dy = y2 - y1 + 1;
+	dy = y2 - y1 + 0;
 	
 	if (!Text_DrawHLine(the_screen, x1, y1, dx, the_char, fore_color, back_color, the_draw_choice))
 	{
@@ -1425,9 +1430,11 @@ bool Text_DrawBoxCoordsFancy(Screen* the_screen, int16_t x1, int16_t y1, int16_t
 		return false;
 	}
 
-	// add 1 to line len, because desired behavior is a box that connects fully to the passed coords
-	dx = x2 - x1;
-	dy = y2 - y1;
+// 	// add 1 to H line len, because dx becomes width, and if width = 0, then memset gets 0, and nothing happens.
+	// dy can be 0 and you still get at least one row done.
+	// but, for this, because of how we draw H line, do NOT add 1 to x1. see "x1+1" below... 
+	dx = x2 - x1 + 0;
+	dy = y2 - y1 + 0;
 	
 	// draw all lines one char shorter on each end so that we don't overdraw when we do corners
 	
@@ -1484,9 +1491,9 @@ bool Text_DrawBox(Screen* the_screen, int16_t x, int16_t y, int16_t width, int16
 		return false;
 	}
 
-	if (!Text_ValidateAll(the_screen, x, y,fore_color, back_color))
+	if (!Text_ValidateAll(the_screen, x, y, fore_color, back_color))
 	{
-		LOG_ERR(("%s %d: illegal screen id, coordinate, or color", __func__, __LINE__));
+		LOG_ERR(("%s %d: illegal coordinate (%i, %i) or color", __func__, __LINE__, x, y));
 		return false;
 	}
 	
