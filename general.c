@@ -1343,6 +1343,7 @@ void General_LogError(const char* format, ...)
 #else
 	//fprintf(global_log_file, "%s %s\n", kDebugFlag[LogError], debug_buffer);
 	printf("%s %s\r", kDebugFlag[LogError], debug_buffer);
+	General_DelaySeconds(5);
 #endif
 }
 
@@ -1360,6 +1361,7 @@ void General_LogWarning(const char* format, ...)
 #else
 	//fprintf(global_log_file, "%s %s\n", kDebugFlag[LogWarning], debug_buffer);
 	printf("%s %s\r", kDebugFlag[LogWarning], debug_buffer);
+	General_DelaySeconds(1);
 #endif
 }
 
@@ -1394,6 +1396,7 @@ void General_DebugOut(const char* format, ...)
 #else
 	//fprintf(global_log_file, "%s %s\n", kDebugFlag[LogDebug], debug_buffer);
 	printf("%s %s\r", kDebugFlag[LogDebug], debug_buffer);
+	General_DelaySeconds(1);
 #endif
 }
 

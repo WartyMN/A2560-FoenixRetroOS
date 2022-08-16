@@ -1068,6 +1068,8 @@ void RunDemo(void)
 
 int main(int argc, char* argv[])
 {
+	DEBUG_OUT(("%s %d: starting text demo...", __func__, __LINE__));
+	
 	if (Sys_InitSystem() == false)
 	{
 		DEBUG_OUT(("%s %d: Couldn't initialize the system", __func__, __LINE__));
