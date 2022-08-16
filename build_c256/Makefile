@@ -1,8 +1,8 @@
 VPATH = ../
 
 FOENIX = ../module/Calypsi-65816-Foenix
-#FOENIX = /Users/micahbly/dev/bbedit-workspace-a2560/frOS/module/Calypsi-65816-Foenix
-TARGET = $(DEVA2560)/_target_foenix
+#TARGET = $(DEVA2560)/_target_foenix
+TARGET = ../config_c256
 
 LIB_SRCS = lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c event.c mouse.c menu.c
 TEXT_DEMO_SRCS = lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c event.c mouse.c menu.c text_demo.c
@@ -13,7 +13,7 @@ MODEL = --code-model=large --data-model=medium
 LIB_MODEL = lc-md
 
 FOENIX_LIB = $(FOENIX)/foenix-$(LIB_MODEL).a
-FOENIX_LINKER_RULES = osf_Foenix-FMX.scm
+FOENIX_LINKER_RULES = $(TARGET)/c256_osf.scm
 
 LIB_OBJS = $(LIB_SRCS:%.c=obj/%.o)
 BITMAP_DEMO_OBJS = $(BITMAP_DEMO_SRCS:%.c=obj/%.o)
@@ -48,7 +48,7 @@ headers:
 lib:	$(LIB_OBJS) $(FOENIX_LIB)
 	@echo "Building library..."
 	nlib c256fmx_sys.a $(LIB_OBJS)
-	cp c256fmx_sys.a $(VBCC)/targets/a2560-micah/lib/
+	cp c256fmx_sys.a $(TARGET)/lib/
 
 textdemo: $(TEXT_DEMO_OBJS) $(FOENIX_LIB)
 	@echo "Building text demo..."
@@ -56,11 +56,11 @@ textdemo: $(TEXT_DEMO_OBJS) $(FOENIX_LIB)
 
 bitmapdemo: $(BITMAP_DEMO_OBJS) $(FOENIX_LIB)
 	@echo "Building bitmap demo..."
-	ln65816 -o bitmap.pgz $(BITMAP_DEMO_OBJS) $(FOENIX_LINKER_RULES) clib-$(LIB_MODEL)-foenix.a $(FOENIX)/foenix-lc-md.a $(VBCC)/targets/a2560-micah/lib/c256fmx_sys.a --output-format=pgz --list-file=obj/bitmap_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix
+	ln65816 -o bitmap.pgz $(BITMAP_DEMO_OBJS) $(FOENIX_LINKER_RULES) clib-$(LIB_MODEL)-foenix.a $(FOENIX)/foenix-lc-md.a $(TARGET)/lib/c256fmx_sys.a --output-format=pgz --list-file=obj/bitmap_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix
 	
 fontdemo: $(FONT_DEMO_OBJS) $(FOENIX_LIB)
 	@echo "Building font demo..."
-	ln65816 -o font.pgz $(FONT_DEMO_OBJS) $(FOENIX_LINKER_RULES) clib-$(LIB_MODEL)-foenix.a $(FOENIX)/foenix-lc-md.a $(VBCC)/targets/a2560-micah/lib/c256fmx_sys.a --output-format=pgz --list-file=obj/font_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix
+	ln65816 -o font.pgz $(FONT_DEMO_OBJS) $(FOENIX_LINKER_RULES) clib-$(LIB_MODEL)-foenix.a $(FOENIX)/foenix-lc-md.a $(TARGET)/lib/c256fmx_sys.a --output-format=pgz --list-file=obj/font_demo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix
 
 $(FOENIX_LIB):
 	(cd $(FOENIX) ; make all)
