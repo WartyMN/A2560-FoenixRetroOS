@@ -52,7 +52,7 @@ lib:	$(LIB_OBJS) $(FOENIX_LIB)
 
 textdemo: $(TEXT_DEMO_OBJS) $(FOENIX_LIB)
 	@echo "Building text demo..."
-	ln65816 -o text.elf $(TEXT_DEMO_OBJS) $(FOENIX_LINKER_RULES) clib-$(LIB_MODEL)-foenix.a $(FOENIX)/foenix-lc-md.a --list-file=obj/textdemo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix
+	ln65816 -o text.hex $(TEXT_DEMO_OBJS) $(FOENIX_LINKER_RULES) clib-$(LIB_MODEL)-foenix.a $(FOENIX)/foenix-lc-md.a --list-file=obj/textdemo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix
 
 bitmapdemo: $(BITMAP_DEMO_OBJS) $(FOENIX_LIB)
 	@echo "Building bitmap demo..."
