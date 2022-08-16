@@ -63,3 +63,5 @@ dkms.conf
 # directories
 module/
 *.s28
+module/Calypsi-m68k-Foenix
+module/Calypsi-65816-Foenix
