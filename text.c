@@ -1414,13 +1414,13 @@ bool Text_DrawBoxCoordsFancy(Screen* the_screen, int16_t x1, int16_t y1, int16_t
 
 	if (!Text_ValidateAll(the_screen, x1, y1, fore_color, back_color))
 	{
-		LOG_ERR(("%s %d: illegal screen id, coordinate, or color", __func__, __LINE__));
+		LOG_ERR(("%s %d: illegal coordinate (%i, %i) or color (%u, %u)", __func__, __LINE__, x1, y1, fore_color, back_color));
 		return false;
 	}
 	
 	if (!Text_ValidateXY(the_screen, x2, y2))
 	{
-		LOG_ERR(("%s %d: illegal coordinate", __func__, __LINE__));
+		LOG_ERR(("%s %d: illegal coordinate (%i, %i)", __func__, __LINE__, x2, y2));
 		return false;
 	}
 
@@ -1493,7 +1493,7 @@ bool Text_DrawBox(Screen* the_screen, int16_t x, int16_t y, int16_t width, int16
 
 	if (!Text_ValidateAll(the_screen, x, y, fore_color, back_color))
 	{
-		LOG_ERR(("%s %d: illegal coordinate (%i, %i) or color", __func__, __LINE__, x, y));
+		LOG_ERR(("%s %d: illegal coordinate (%i, %i) or color (%u, %u)", __func__, __LINE__, x, y, fore_color, back_color));
 		return false;
 	}
 	
@@ -1562,7 +1562,7 @@ bool Text_DrawStringAtXY(Screen* the_screen, int16_t x, int16_t y, char* the_str
 
 	if (!Text_ValidateAll(the_screen, x, y, fore_color, back_color))
 	{
-		LOG_ERR(("%s %d: illegal screen id, coordinate, or color", __func__, __LINE__));
+		LOG_ERR(("%s %d: illegal coordinate (%i, %i) or color (%u, %u)", __func__, __LINE__, x, y, fore_color, back_color));
 		return false;
 	}
 	
