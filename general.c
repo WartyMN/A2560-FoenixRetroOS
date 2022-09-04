@@ -19,6 +19,7 @@
 #include "general.h"
 
 // C includes
+#include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -1341,9 +1342,10 @@ void General_LogError(const char* format, ...)
 #ifdef _f68_
 	*((long *)-4) = (long)&debug_buffer;
 #else
-	//fprintf(global_log_file, "%s %s\n", kDebugFlag[LogError], debug_buffer);
+	#ifndef _C256_FMX_
+		fprintf(global_log_file, "%s %s\n", kDebugFlag[LogError], debug_buffer);
+	#endif
 	printf("%s %s\r", kDebugFlag[LogError], debug_buffer);
-	General_DelaySeconds(5);
 #endif
 }
 
@@ -1359,9 +1361,10 @@ void General_LogWarning(const char* format, ...)
 #ifdef _f68_
 	*((long *)-4) = (long)&debug_buffer;
 #else
-	//fprintf(global_log_file, "%s %s\n", kDebugFlag[LogWarning], debug_buffer);
+	#ifndef _C256_FMX_
+		fprintf(global_log_file, "%s %s\n", kDebugFlag[LogWarning], debug_buffer);
+	#endif
 	printf("%s %s\r", kDebugFlag[LogWarning], debug_buffer);
-	General_DelaySeconds(1);
 #endif
 }
 
@@ -1377,7 +1380,9 @@ void General_LogInfo(const char* format, ...)
 #ifdef _f68_
 	*((long *)-4) = (long)&debug_buffer;
 #else
-	//fprintf(global_log_file, "%s %s\n", kDebugFlag[LogInfo], debug_buffer);
+	#ifndef _C256_FMX_
+		fprintf(global_log_file, "%s %s\n", kDebugFlag[LogInfo], debug_buffer);
+	#endif
 	printf("%s %s\r", kDebugFlag[LogInfo], debug_buffer);
 #endif
 }
@@ -1394,9 +1399,10 @@ void General_DebugOut(const char* format, ...)
 #ifdef _f68_
 	*((long *)-4) = (long)&debug_buffer;
 #else
-	//fprintf(global_log_file, "%s %s\n", kDebugFlag[LogDebug], debug_buffer);
+	#ifndef _C256_FMX_
+		fprintf(global_log_file, "%s %s\n", kDebugFlag[LogDebug], debug_buffer);
+	#endif
 	printf("%s %s\r", kDebugFlag[LogDebug], debug_buffer);
-	General_DelaySeconds(1);
 #endif
 }
 
@@ -1412,7 +1418,9 @@ void General_LogAlloc(const char* format, ...)
 #ifdef _f68_
 	*((long *)-4) = (long)&debug_buffer;
 #else
-	//fprintf(global_log_file, "%s %s\n", kDebugFlag[LogAlloc], debug_buffer);
+	#ifndef _C256_FMX_
+		fprintf(global_log_file, "%s %s\n", kDebugFlag[LogAlloc], debug_buffer);
+	#endif
 	printf("%s %s\r", kDebugFlag[LogAlloc], debug_buffer);
 #endif
 }
@@ -1421,7 +1429,8 @@ void General_LogAlloc(const char* format, ...)
 // globals for the log file
 bool General_LogInitialize(void)
 {
-	const char*		the_file_path = "wb2k_log.txt";
+#ifndef _C256_FMX_
+	const char*		the_file_path = "lk_log.txt";
 
 	global_log_file = fopen( the_file_path, "w");
 	
@@ -1430,17 +1439,19 @@ bool General_LogInitialize(void)
 		printf("General_LogInitialize: log file could not be opened! \n");
 		return false;
 	}
-	
+#endif	
 	return true;
 }
 
 // close the log file
 void General_LogCleanUp(void)
 {
+#ifndef _C256_FMX_
 	if (global_log_file != NULL)
 	{
 		fclose(global_log_file);
 	}
+#endif
 }
 
 

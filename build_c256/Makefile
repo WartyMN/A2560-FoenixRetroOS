@@ -2,6 +2,8 @@ VPATH = ../
 
 FOENIX = ../module/Calypsi-65816-Foenix
 TARGET = ../config_c256
+DEBUG_DEFS = -DLOG_LEVEL_1 -DLOG_LEVEL_2 -DLOG_LEVEL_3 -DLOG_LEVEL_4 -DLOG_LEVEL_5
+#DEBUG_DEFS = 
 
 # Common source files
 LIB_SRCS = lib_sys.c theme.c control_template.c font.c window.c control.c general.c bitmap.c text.c list.c event.c mouse.c menu.c
@@ -21,7 +23,7 @@ FONT_DEMO_OBJS = $(FONT_DEMO_SRCS:%.c=obj/%.o)
 TEXT_DEMO_OBJS = $(TEXT_DEMO_SRCS:%.c=obj/%.o)
 
 obj/%.o: %.c
-	cc65816 -D_C256_FMX_ --core=65816 $(MODEL) --target=Foenix -I$(TARGET)/include/ --list-file=$(@:%.o=%.lst) -o $@ $<
+	cc65816 -D_C256_FMX_ $(DEBUG_DEFS) --debug --core=65816 $(MODEL) --target=Foenix -I$(TARGET)/include/ --list-file=$(@:%.o=%.lst) -o $@ $<
 
 #lib_sys.c:
 #	cc65816 -D_C256_FMX_ --core=65816 $(MODEL) --target=Foenix --debug --list-file=lib_sys.lst -o obj/lib_sys.o ../lib_sys.c
@@ -53,7 +55,7 @@ lib:	$(LIB_OBJS) $(FOENIX_LIB)
 textdemo: $(TEXT_DEMO_OBJS) $(FOENIX_LIB)
 	@echo "Building text demo..."
 	ln65816 -o text.pgz $(TEXT_DEMO_OBJS) $(FOENIX_LINKER_RULES) clib-$(LIB_MODEL)-foenix.a $(FOENIX)/foenix-lc-md.a --output-format=pgz --list-file=obj/textdemo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix
-	ln65816 -o text.elf $(TEXT_DEMO_OBJS) $(FOENIX_LINKER_RULES) clib-$(LIB_MODEL)-foenix.a $(FOENIX)/foenix-lc-md.a --list-file=obj/textdemo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix
+	ln65816 -o text.elf $(TEXT_DEMO_OBJS) $(FOENIX_LINKER_RULES) clib-$(LIB_MODEL)-foenix.a $(FOENIX)/foenix-lc-md.a --list-file=obj/textdemo.lst --cross-reference --rtattr printf=float --rtattr cstartup=Foenix --debug --semi-hosted
 
 bitmapdemo: $(BITMAP_DEMO_OBJS) $(FOENIX_LIB)
 	@echo "Building bitmap demo..."

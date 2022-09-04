@@ -170,7 +170,8 @@ void Demo_Text_CopyMemBox1(void)
 	
 	// draw some text - 80x4
 	the_message = (char*)"12345678901234567890                                                            *This is some text *                                                            *from the offscreen*                                                            *buffer.           *                                                            ";
-	memset(buffer1, '.', 80*60); // fill with a dot first
+	//2022-09-03: memset freezes machine and debugger. TEMP comment out until Calypsi fix, etc.
+	//memset(buffer1, '.', 80*60); // fill with a dot first
 	memcpy(buffer1 + 6*80, the_message, 80*4+1);
 	
 	// copy text to channel B, from off-screen buffer 1	
@@ -217,8 +218,9 @@ void Demo_Text_CopyMemBox2(void)
 	}
 	
 	// fill buffer 1 and 2 with a different colors
-	memset(buffer1, 176, 80*60); // 176=bright yellow on black
-	memset(buffer2, 160, 80*60); // 160=bright green on black
+	//2022-09-03: memset freezes machine and debugger. TEMP comment out until Calypsi fix, etc.
+// 	memset(buffer1, 176, 80*60); // 176=bright yellow on black
+// 	memset(buffer2, 160, 80*60); // 160=bright green on black
 
 	// copy colors on channel B, to off-screen buffer 1	
 	Text_CopyMemBox(global_system->screen_[ID_CHANNEL_B], buffer1, x, y, x+line_len/2, y+v_line_len, SCREEN_COPY_FROM_SCREEN, SCREEN_FOR_TEXT_ATTR);
@@ -385,7 +387,7 @@ void Demo_Text_SetCharAndColorAtXY(void)
  	Text_SetCharAndColorAtXY(global_system->screen_[ID_CHANNEL_B], 1, 15, 34, FG_COLOR_BRIGHT_WHITE, BG_COLOR_RED);
  	Text_SetCharAndColorAtXY(global_system->screen_[ID_CHANNEL_B], 2, 15, 35, FG_COLOR_BRIGHT_WHITE, BG_COLOR_BRIGHT_GREEN);
  	Text_SetCharAndColorAtXY(global_system->screen_[ID_CHANNEL_B], 3, 15, 36, FG_COLOR_BRIGHT_WHITE, BG_COLOR_BRIGHT_BLUE);
- 	Text_SetCharAndColorAtXY(global_system->screen_[ID_CHANNEL_B], 4, 14, 37, FG_COLOR_BRIGHT_WHITE, COLOR_RED);
+ 	Text_SetCharAndColorAtXY(global_system->screen_[ID_CHANNEL_B], 4, 15, 37, FG_COLOR_BRIGHT_WHITE, COLOR_RED);
  	Text_SetCharAndColorAtXY(global_system->screen_[ID_CHANNEL_B], 5, 15, 38, FG_COLOR_BRIGHT_WHITE, COLOR_RED);
  	Text_SetCharAndColorAtXY(global_system->screen_[ID_CHANNEL_B], 6, 15, 39, FG_COLOR_BRIGHT_WHITE, COLOR_RED);
  	Text_SetCharAndColorAtXY(global_system->screen_[ID_CHANNEL_B], 7, 15, 40, FG_COLOR_BRIGHT_WHITE, BG_COLOR_GRAY);

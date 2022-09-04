@@ -747,45 +747,57 @@ bool Sys_AutoDetectMachine(System* the_system)
 	the_system->model_number_ = the_sys_info->model;
 	DEBUG_OUT(("%s %d: the_system->model_number_=%u", __func__, __LINE__, the_system->model_number_));
 	
-	switch (the_system->model_number_)
+	// temp until Calypsi fix for switch on 65816
+	if (the_system->model_number_ == MACHINE_C256_FMX)
 	{
-		case MACHINE_C256_U:
-			DEBUG_OUT(("%s %d: I think this is a C256U...", __func__, __LINE__));
-			the_system->num_screens_ = 1;
-			break;
-			
-		case MACHINE_C256_GENX:
-			DEBUG_OUT(("%s %d: I think this is a C256 GENX...", __func__, __LINE__));
-			the_system->num_screens_ = 1;
-			break;
-			
-		case MACHINE_C256_UPLUS:
-			DEBUG_OUT(("%s %d: I think this is a C256U+...", __func__, __LINE__));
-			the_system->num_screens_ = 1;
-			break;
-			
-		case MACHINE_C256_FMX:
 			DEBUG_OUT(("%s %d: I think this is a C256 FMX...", __func__, __LINE__));
 			the_system->num_screens_ = 1;
-			break;
-			
-		case MACHINE_A2560U_PLUS:
-		case MACHINE_A2560U:
-			DEBUG_OUT(("%s %d: I think this is a A2560U or A2560U+...", __func__, __LINE__));
-			the_system->num_screens_ = 1;
-			break;
-			
-		case MACHINE_A2560X:
-		case MACHINE_A2560K:
-			DEBUG_OUT(("%s %d: I think this is a A2560K or A2560X...", __func__, __LINE__));
-			the_system->num_screens_ = 2;		
-			break;
-			
-		default:
+	}
+	else
+	{
 			DEBUG_OUT(("%s %d: I can't recognize this machine (id=%u). Application will now quit.", __func__, __LINE__, the_system->model_number_));
 			return false;
-			break;
 	}
+	
+// 	switch (the_system->model_number_)
+// 	{
+// 		case MACHINE_C256_U:
+// 			DEBUG_OUT(("%s %d: I think this is a C256U...", __func__, __LINE__));
+// 			the_system->num_screens_ = 1;
+// 			break;
+// 			
+// 		case MACHINE_C256_GENX:
+// 			DEBUG_OUT(("%s %d: I think this is a C256 GENX...", __func__, __LINE__));
+// 			the_system->num_screens_ = 1;
+// 			break;
+// 			
+// 		case MACHINE_C256_UPLUS:
+// 			DEBUG_OUT(("%s %d: I think this is a C256U+...", __func__, __LINE__));
+// 			the_system->num_screens_ = 1;
+// 			break;
+// 			
+// 		case MACHINE_C256_FMX:
+// 			DEBUG_OUT(("%s %d: I think this is a C256 FMX...", __func__, __LINE__));
+// 			the_system->num_screens_ = 1;
+// 			break;
+// 			
+// 		case MACHINE_A2560U_PLUS:
+// 		case MACHINE_A2560U:
+// 			DEBUG_OUT(("%s %d: I think this is a A2560U or A2560U+...", __func__, __LINE__));
+// 			the_system->num_screens_ = 1;
+// 			break;
+// 			
+// 		case MACHINE_A2560X:
+// 		case MACHINE_A2560K:
+// 			DEBUG_OUT(("%s %d: I think this is a A2560K or A2560X...", __func__, __LINE__));
+// 			the_system->num_screens_ = 2;		
+// 			break;
+// 			
+// 		default:
+// 			DEBUG_OUT(("%s %d: I can't recognize this machine (id=%u). Application will now quit.", __func__, __LINE__, the_system->model_number_));
+// 			return false;
+// 			break;
+// 	}
 	
 	return true;
 }
@@ -799,13 +811,10 @@ bool Sys_AutoDetectMachine(System* the_system)
 bool Sys_AutoConfigure(System* the_system)
 {
 	int16_t				i;
-	
-	switch (the_system->model_number_)
+
+	// TEMP until bug fix for calypsi on switch below
+	if (the_system->model_number_ == MACHINE_C256_FMX)
 	{
-		case MACHINE_C256_U:
-		case MACHINE_C256_GENX:
-		case MACHINE_C256_UPLUS:
-		case MACHINE_C256_FMX:
 			DEBUG_OUT(("%s %d: Configuring screens for a C256 (1 screen)", __func__, __LINE__));
 			the_system->screen_[ID_CHANNEL_A]->vicky_ = P32(VICKY_C256);
 			the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXTA_RAM_C256FMX;
@@ -815,40 +824,61 @@ bool Sys_AutoConfigure(System* the_system)
 			the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXTA_RAM_C256FMX;
 			the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXTA_ATTR_C256FMX;
 			the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANK_C256FMX;
-			break;
-			
-		case MACHINE_A2560U_PLUS:
-		case MACHINE_A2560U:
-			the_system->screen_[ID_CHANNEL_A]->vicky_ = P32(VICKY_A2560U);
-			the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXT_RAM_A2560U;
-			the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXT_ATTR_A2560U;
-			the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANK_A2560U;
-			the_system->screen_[ID_CHANNEL_B]->vicky_ = P32(VICKY_A2560U);
-			the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXT_RAM_A2560U;
-			the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXT_ATTR_A2560U;
-			the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANK_A2560U;
-			break;
-			
-		case MACHINE_A2560X:
-		case MACHINE_A2560K:			
-			the_system->screen_[ID_CHANNEL_A]->vicky_ = P32(VICKY_A2560K_A);
-			the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXTA_RAM_A2560K;
-			the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXTA_ATTR_A2560K;
-			the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANKA_A2560K;
-
-			the_system->screen_[ID_CHANNEL_B]->vicky_ = P32(VICKY_A2560K_B);
-			the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXTB_RAM_A2560K;
-			the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXTB_ATTR_A2560K;
-			the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANKB_A2560K;
-		
-			break;
-		
-		default:
-			DEBUG_OUT(("%s %d: this application is not compatible with Foenix hardware ID %u.", __func__, __LINE__, the_system->model_number_));
-			return false;
-			break;
-		
 	}
+	else
+	{
+		DEBUG_OUT(("%s %d: this system %i not supported!", __func__, __LINE__, the_system->model_number_));
+	}
+	
+// 	switch (the_system->model_number_)
+// 	{
+// 		case MACHINE_C256_U:
+// 		case MACHINE_C256_GENX:
+// 		case MACHINE_C256_UPLUS:
+// 		case MACHINE_C256_FMX:
+// 			DEBUG_OUT(("%s %d: Configuring screens for a C256 (1 screen)", __func__, __LINE__));
+// 			the_system->screen_[ID_CHANNEL_A]->vicky_ = P32(VICKY_C256);
+// 			the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXTA_RAM_C256FMX;
+// 			the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXTA_ATTR_C256FMX;
+// 			the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANK_C256FMX;
+// 			the_system->screen_[ID_CHANNEL_B]->vicky_ = P32(VICKY_C256);
+// 			the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXTA_RAM_C256FMX;
+// 			the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXTA_ATTR_C256FMX;
+// 			the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANK_C256FMX;
+// 			break;
+// 			
+// 		case MACHINE_A2560U_PLUS:
+// 		case MACHINE_A2560U:
+// 			the_system->screen_[ID_CHANNEL_A]->vicky_ = P32(VICKY_A2560U);
+// 			the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXT_RAM_A2560U;
+// 			the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXT_ATTR_A2560U;
+// 			the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANK_A2560U;
+// 			the_system->screen_[ID_CHANNEL_B]->vicky_ = P32(VICKY_A2560U);
+// 			the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXT_RAM_A2560U;
+// 			the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXT_ATTR_A2560U;
+// 			the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANK_A2560U;
+// 			break;
+// 			
+// 		case MACHINE_A2560X:
+// 		case MACHINE_A2560K:			
+// 			the_system->screen_[ID_CHANNEL_A]->vicky_ = P32(VICKY_A2560K_A);
+// 			the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXTA_RAM_A2560K;
+// 			the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXTA_ATTR_A2560K;
+// 			the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANKA_A2560K;
+// 
+// 			the_system->screen_[ID_CHANNEL_B]->vicky_ = P32(VICKY_A2560K_B);
+// 			the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXTB_RAM_A2560K;
+// 			the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXTB_ATTR_A2560K;
+// 			the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANKB_A2560K;
+// 		
+// 			break;
+// 		
+// 		default:
+// 			DEBUG_OUT(("%s %d: this application is not compatible with Foenix hardware ID %u.", __func__, __LINE__, the_system->model_number_));
+// 			return false;
+// 			break;
+// 		
+// 	}
 
 	// set some things that aren't machine-dependent
 	for (i = 0; i < the_system->num_screens_; i++)

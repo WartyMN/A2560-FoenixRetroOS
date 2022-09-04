@@ -293,16 +293,16 @@ Font* Font_NewC256(unsigned char* the_data, uint16_t data_size)
 		
 		for (i = 0; i < count; i++)
 		{
-			printf("%02x ", *the_byte);
+			//printf("%02x ", *the_byte);
 			the_byte++;
 			
 			if (i % 900 == 1)
 			{
-				General_GetChar();
+				//General_GetChar();
 			}
 		}
-		printf("\n");
-		General_GetChar();
+		//printf("\n");
+		//General_GetChar();
 		
 		return the_font;
 
