@@ -84,6 +84,8 @@ void Sys_UpdateWindowTheme(System* the_system);
 
 void Sys_RenumberWindows(System* the_system);
 
+// enable or disable the gamma correction 
+bool Sys_SetGammaMode(System* the_system, Screen* the_screen, bool enable_it);
 
 //! Event handler for the backdrop window
 void Window_BackdropWinEventHandler(EventRecord* the_event);
@@ -956,6 +958,9 @@ bool Sys_AutoConfigure(System* the_system)
 			));
 	}
 	
+	// always enable gamma correction
+	Sys_SetGammaMode(the_system, the_system->screen_[0], true);
+	
 	return true;
 }
 
@@ -1067,7 +1072,7 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 {
 	screen_resolution	new_mode;
 	uint32_t			the_vicky_value;
-	unsigned char		the_video_mode_bits;
+	uint8_t				the_video_mode_bits;
 	uint32_t			the_border_control_value;
 	int16_t				border_x_cols;
 	int16_t				border_y_cols;
@@ -1082,10 +1087,17 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 
 	// detect the video mode and set resolution based on it
 	
-	//v = (unsigned char*)the_screen->vicky_;	
-	the_vicky_value = *the_screen->vicky_;
-	the_video_mode_bits = (*the_screen->vicky_ >> 8) & 0xff;
-	//DEBUG_OUT(("%s %d: vicky value=%x, video mode bits=%x", __func__, __LINE__, the_vicky_value, the_video_mode_bits));
+	//v = (unsigned char*)the_screen->vicky_;
+	#ifndef _C256_FMX_
+		the_vicky_value = *the_screen->vicky_;
+		the_video_mode_bits = (the_vicky_value >> 8) & 0xff;
+		//DEBUG_OUT(("%s %d: 32bit vicky value=%x, video mode bits=%x", __func__, __LINE__, the_vicky_value, the_video_mode_bits));
+	#else
+		uint8_t*	vicky_8bit_ptr = (uint8_t*)the_screen->vicky_;
+		vicky_8bit_ptr++;
+		the_video_mode_bits = *vicky_8bit_ptr;
+		//DEBUG_OUT(("%s %d: 8bit vicky ptr 2nd byte=%p, video mode bits=%x", __func__, __LINE__, vicky_8bit_ptr, the_video_mode_bits));
+	#endif
 	
 	if (the_screen->vicky_ == P32(VICKY_A2560K_A))
 	{
@@ -1146,7 +1158,7 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 	else if (the_screen->vicky_ == P32(VICKY_C256))
 	{
  		//   C256FMX has 1 channel with 2 video modes, 800x600 and 640x480
-		//   if bit 8 is set, it's 800x600, if not set it's 640x400. VIDEO_MODE_BIT0/VIDEO_MODE_BIT1
+		//   if bit 8 is set, it's 800x600, if not set it's 640x480. VIDEO_MODE_BIT0/VIDEO_MODE_BIT1
 		//   if bit 9 is set, it doubles pixel size, bringing resolution down to 400x300 or 320x200. VICKY_II_PIX_DOUBLER_FLAGS
 
 		DEBUG_OUT(("%s %d: vicky identified as VICKY_C256", __func__, __LINE__));
@@ -1325,6 +1337,82 @@ error:
 	Sys_Destroy(&global_system);	// crash early, crash often
 	return false;
 }
+
+
+// enable or disable the gamma correction 
+bool Sys_SetGammaMode(System* the_system, Screen* the_screen, bool enable_it)
+{
+	unsigned char	new_mode_flag;
+
+	// LOGIC:
+	//   both C256s and A2560s have a gamma correction mode
+	//   It needs to be hardware enabled by turning DIP switch 7 on the motherboard to ON (I believe)
+	//     bit 5 (0x20) of the video mode byte in vicky master control reflects the DIP switch setting, but doesn't change anything if you write to it 
+	//   byte 3 of the vicky master control appears to be dedicated to Gamma correction, but not all bits are documented. Stay away from all but the first 2!
+	//     gamma correction can be activated by setting the first and 2nd bits of byte 3
+	
+	if (the_screen == NULL)
+	{
+		LOG_ERR(("%s %d: passed screen was NULL", __func__, __LINE__));
+		goto error;
+	}
+
+	if (enable_it)
+	{
+		new_mode_flag = 0xFF;
+	}
+	else
+	{
+		new_mode_flag = 0x00;
+	}
+
+// 	#ifdef _C256_FMX_
+// 		uint8_t		vicky_byte_2 = R8(VICKY_II_MASTER_CTRL_REG_H);
+// 		
+//  		DEBUG_OUT(("%s %d: vicky byte 2 before gamma change = %x", __func__, __LINE__, vicky_byte_2));
+// 		vicky_byte_2 |= (GAMMA_MODE_BIT & new_mode_flag);
+// 		R8(VICKY_II_MASTER_CTRL_REG_H) = vicky_byte_2;
+//  		DEBUG_OUT(("%s %d: vicky byte 2 after gamma change = %x, %x", __func__, __LINE__, vicky_byte_2, R8(VICKY_II_MASTER_CTRL_REG_H)));
+//  		DEBUG_OUT(("%s %d: wrote to %x to register at %p", __func__, __LINE__, vicky_byte_2, P8(VICKY_II_MASTER_CTRL_REG_H)));
+// 	#else
+// 		uint32_t	the_vicky_value = R32(the_screen->vicky_);
+// 		uint8_t		the_gamma_mode_bits;
+// 
+// 		the_gamma_mode_bits = (the_vicky_value >> 16) & 0xff;
+// 		DEBUG_OUT(("%s %d: before: 32bit vicky value=%x, gamma mode bits=%x", __func__, __LINE__, the_vicky_value, the_gamma_mode_bits));
+// 		the_gamma_mode_bits &= (GAMMA_MODE_BIT & new_mode_flag);
+// 		the_vicky_value &= (GAMMA_MODE_MASK | the_gamma_mode_bits << 16);
+//  		DEBUG_OUT(("%s %d: after: 32bit vicky value=%x, gamma mode bits=%x", __func__, __LINE__, the_vicky_value, the_gamma_mode_bits));
+// 		R32(the_screen->vicky_) = the_vicky_value;
+// 	#endif
+
+	#ifdef _C256_FMX_
+		uint8_t		the_gamma_mode_bits = R8(VICKY_II_GAMMA_CTRL_REG);
+		
+ 		//DEBUG_OUT(("%s %d: vicky byte 3 before gamma change = %x", __func__, __LINE__, the_gamma_mode_bits));
+		the_gamma_mode_bits |= (GAMMA_MODE_ONOFF_BITS & new_mode_flag);
+		R8(VICKY_II_GAMMA_CTRL_REG) = the_gamma_mode_bits;
+ 		//DEBUG_OUT(("%s %d: vicky byte 3 after gamma change = %x, %x", __func__, __LINE__, the_gamma_mode_bits, R8(VICKY_II_GAMMA_CTRL_REG)));
+ 		//DEBUG_OUT(("%s %d: wrote to %x to register at %p", __func__, __LINE__, the_gamma_mode_bits, P8(VICKY_II_GAMMA_CTRL_REG)));
+	#else
+		uint32_t	the_vicky_value = R32(the_screen->vicky_);
+		uint8_t		the_gamma_mode_bits;
+
+		the_gamma_mode_bits = (the_vicky_value >> 24) & 0xff;
+		//DEBUG_OUT(("%s %d: before: 32bit vicky value=%x, gamma mode bits=%x", __func__, __LINE__, the_vicky_value, the_gamma_mode_bits));
+		the_gamma_mode_bits &= (GAMMA_MODE_ONOFF_BITS & new_mode_flag);
+		the_vicky_value &= (GAMMA_MODE_MASK | the_gamma_mode_bits << 24);
+ 		//DEBUG_OUT(("%s %d: after: 32bit vicky value=%x, gamma mode bits=%x", __func__, __LINE__, the_vicky_value, the_gamma_mode_bits));
+		R32(the_screen->vicky_) = the_vicky_value;
+	#endif
+	
+	return true; 
+	
+error:
+	Sys_Destroy(&global_system);	// crash early, crash often
+	return false;
+}
+
 
 
 //! Enable or disable the hardware cursor in text mode, for the specified screen

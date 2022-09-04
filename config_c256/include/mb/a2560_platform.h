@@ -66,10 +66,17 @@
 #define TEXT_FONT_WIDTH_A2560	8	// for text mode, the width of the fixed-sized font chars
 #define TEXT_FONT_HEIGHT_A2560	8	// for text mode, the height of the fixed-sized font chars. I believe this is supposed to be 16, but its 8 in morfe at the moment.
 
-#define VIDEO_MODE_MASK			0xFFFF00FF	//!> the mask for the system control register that holds the video mode bits
-#define VIDEO_MODE_BYTE			0x01	//!> the byte offset from system control register that holds the video mode bits
-#define VIDEO_MODE_BIT1			0x00	//!> the bits in the 2nd byte of the system control register that define video mode (resolution)
-#define VIDEO_MODE_BIT2			0x01	//!> the bits in the 2nd byte of the system control register that define video mode (resolution)
+#define VIDEO_MODE_MASK				0xFFFF00FF	//!> the mask for the system control register that holds the video mode bits
+#define VIDEO_MODE_BYTE				0x01	//!> the byte offset from system control register that holds the video mode bits
+#define VIDEO_MODE_BIT1				0x01	//!> the bits in the 2nd byte of the system control register that define video mode (resolution). if this bit is set, resolution is 800x600 (bit 2 not set) or 640x400 (bit 2 set) or 1024x768 (if bit 11 is set)
+// from Stefany on 2022/03/06 discord:
+// Channel B bit 8 and 9 are the bit that select the video mode. 640x480, 800x600 and 640x400. No 1024x768 
+// Channel A bit 8 and 9 are ignored
+// It is bit 11 that gives you the choice between 800x600 or 1024x768.
+#define VIDEO_MODE_BIT2				0x02	//!> the bits in the 2nd byte of the system control register that define video mode (resolution). if set on Chan B, you get 640x400. (also requires bit1 to be set?)
+#define GAMMA_MODE_DIPSWITCH_BIT	0x20	//!>the bits in the 2nd byte of the system control register reflect dip switch setting for control gamma correction on/off
+#define GAMMA_MODE_MASK				0xFF00FFFF	//!> the mask for the system control register that controls gamma (in some way not clear to me)
+#define GAMMA_MODE_ONOFF_BITS		0x03	//!>the bits in the 3rd byte of the system control register control gamma correction on/off
 
 	#define BORDER_X_MASK				0xFFFF00FF	//!> the mask for the Border control register (0x0004) long, for the X border
 	#define BORDER_Y_MASK				0xFF00FFFF	//!> the mask for the Border control register (0x0004) long, for the Y border
@@ -101,6 +108,7 @@
 	#define VICKY_C256					0x00af0000		// Vicky II offset/first register
 	#define VICKY_II_MASTER_CTRL_REG_L	0x00af0000		// Vicky II Master Control Register - low - graphic mode/text mode/etc.
 	#define VICKY_II_MASTER_CTRL_REG_H	0x00af0001		// Vicky II Master Control Register - high - screen res, etc.
+	#define VICKY_II_GAMMA_CTRL_REG		0x00af0002		// Vicky II Gamma Control Register
 	#define VICKY_II_BORDER_CTRL_REG	0x00af0004		// Vicky II Border Control Register
 	#define VICKY_II_BORDER_COLOR_B		0x00af0005		// Vicky II Border Color Blue
 	#define VICKY_II_BORDER_COLOR_G		0x00af0006		// Vicky II Border Color Green
@@ -136,6 +144,10 @@
 
 	#define GABE_SYS_STAT				0x00AFE887	//!> The gabe register holding the machine ID. Machine ID is stored in 4 least significant bits
 	
+	#define VIDEO_MODE_REG_OFFSET_B		0x01		//!> the (byte) offset from the VICKY control register to the Video mode reg (MASTER_CTRL_REG_H)
+	#define GAMMA_CTRL_REG_OFFSET_B		0x02		//!> the (byte) offset from the VICKY control register to the Gamma control register
+	#define VICKY_RESERVED_OFFSET_B		0x03		//!> the (byte) offset from the VICKY control register to the VKY_RESERVED_O1 byte
+	#define BORDER_CTRL_OFFSET_B		0x04		//!> the (byte) offset from the VICKY control register to the border control register
 	#define BORDER_COLOR_OFFSET_B_B		0x05		//!> the (byte) offset from the VICKY control register to the border color register	for Blue
 	#define BORDER_COLOR_OFFSET_G_B		0x06		//!> the (byte) offset from the VICKY control register to the border color register	for Green
 	#define BORDER_COLOR_OFFSET_R_B		0x07		//!> the (byte) offset from the VICKY control register to the border color register	for Red

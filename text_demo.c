@@ -171,7 +171,7 @@ void Demo_Text_CopyMemBox1(void)
 	// draw some text - 80x4
 	the_message = (char*)"12345678901234567890                                                            *This is some text *                                                            *from the offscreen*                                                            *buffer.           *                                                            ";
 	//2022-09-03: memset freezes machine and debugger. TEMP comment out until Calypsi fix, etc.
-	memset(buffer1, '.', 80*60); // fill with a dot first
+	//memset(buffer1, '.', 80*60); // fill with a dot first
 	memcpy(buffer1 + 6*80, the_message, 80*4+1);
 	
 	// copy text to channel B, from off-screen buffer 1	
