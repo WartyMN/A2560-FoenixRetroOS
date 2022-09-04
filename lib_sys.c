@@ -1123,25 +1123,25 @@ bool Sys_DetectScreenSize(Screen* the_screen)
 		case RES_640X400:
 			the_screen->width_ = 640;	
 			the_screen->height_ = 400;
-			//DEBUG_OUT(("%s %d: set to RES_640X400", __func__, __LINE__));
+			DEBUG_OUT(("%s %d: set to RES_640X400", __func__, __LINE__));
 			break;
 			
 		case RES_640X480:
 			the_screen->width_ = 640;	
 			the_screen->height_ = 480;
-			//DEBUG_OUT(("%s %d: set to RES_640X480", __func__, __LINE__));
+			DEBUG_OUT(("%s %d: set to RES_640X480", __func__, __LINE__));
 			break;
 			
 		case RES_800X600:
 			the_screen->width_ = 800;	
 			the_screen->height_ = 600;
-			//DEBUG_OUT(("%s %d: set to RES_800X600", __func__, __LINE__));
+			DEBUG_OUT(("%s %d: set to RES_800X600", __func__, __LINE__));
 			break;
 			
 		case RES_1024X768:
 			the_screen->width_ = 1024;	
 			the_screen->height_ = 768;
-			//DEBUG_OUT(("%s %d: set to 1024x768", __func__, __LINE__));
+			DEBUG_OUT(("%s %d: set to 1024x768", __func__, __LINE__));
 			break;		
 	}
 	
