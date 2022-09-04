@@ -748,10 +748,35 @@ bool Sys_AutoDetectMachine(System* the_system)
 	DEBUG_OUT(("%s %d: the_system->model_number_=%u", __func__, __LINE__, the_system->model_number_));
 	
 	// temp until Calypsi fix for switch on 65816
-	if (the_system->model_number_ == MACHINE_C256_FMX)
+	if (the_system->model_number_ == MACHINE_C256_U)
+	{
+			DEBUG_OUT(("%s %d: I think this is a C256U...", __func__, __LINE__));
+			the_system->num_screens_ = 1;
+	}
+	else if (the_system->model_number_ == MACHINE_C256_GENX)
+	{
+			DEBUG_OUT(("%s %d: I think this is a C256 GENX...", __func__, __LINE__));
+			the_system->num_screens_ = 1;
+	}
+	else if (the_system->model_number_ == MACHINE_C256_UPLUS)
+	{
+			DEBUG_OUT(("%s %d: I think this is a C256U+...", __func__, __LINE__));
+			the_system->num_screens_ = 1;
+	}
+	else if (the_system->model_number_ == MACHINE_C256_FMX)
 	{
 			DEBUG_OUT(("%s %d: I think this is a C256 FMX...", __func__, __LINE__));
 			the_system->num_screens_ = 1;
+	}
+	else if (the_system->model_number_ == MACHINE_A2560U || the_system->model_number_ == MACHINE_A2560U_PLUS)
+	{
+			DEBUG_OUT(("%s %d: I think this is a A2560U or A2560U+...", __func__, __LINE__));
+			the_system->num_screens_ = 1;
+	}
+	else if (the_system->model_number_ == MACHINE_A2560X || the_system->model_number_ == MACHINE_A2560K)
+	{
+			DEBUG_OUT(("%s %d: I think this is a A2560K or A2560X...", __func__, __LINE__));
+			the_system->num_screens_ = 2;
 	}
 	else
 	{
@@ -813,17 +838,40 @@ bool Sys_AutoConfigure(System* the_system)
 	int16_t				i;
 
 	// TEMP until bug fix for calypsi on switch below
-	if (the_system->model_number_ == MACHINE_C256_FMX)
+	if (the_system->model_number_ == MACHINE_C256_U || the_system->model_number_ == MACHINE_C256_GENX || the_system->model_number_ == MACHINE_C256_UPLUS || the_system->model_number_ == MACHINE_C256_FMX)
 	{
-			DEBUG_OUT(("%s %d: Configuring screens for a C256 (1 screen)", __func__, __LINE__));
-			the_system->screen_[ID_CHANNEL_A]->vicky_ = P32(VICKY_C256);
-			the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXTA_RAM_C256FMX;
-			the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXTA_ATTR_C256FMX;
-			the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANK_C256FMX;
-			the_system->screen_[ID_CHANNEL_B]->vicky_ = P32(VICKY_C256);
-			the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXTA_RAM_C256FMX;
-			the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXTA_ATTR_C256FMX;
-			the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANK_C256FMX;
+		DEBUG_OUT(("%s %d: Configuring screens for a C256 (1 screen)", __func__, __LINE__));
+		the_system->screen_[ID_CHANNEL_A]->vicky_ = P32(VICKY_C256);
+		the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXTA_RAM_C256FMX;
+		the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXTA_ATTR_C256FMX;
+		the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANK_C256FMX;
+		the_system->screen_[ID_CHANNEL_B]->vicky_ = P32(VICKY_C256);
+		the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXTA_RAM_C256FMX;
+		the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXTA_ATTR_C256FMX;
+		the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANK_C256FMX;
+	}
+	else if (the_system->model_number_ == MACHINE_A2560U_PLUS || the_system->model_number_ == MACHINE_A2560U)
+	{
+		the_system->screen_[ID_CHANNEL_A]->vicky_ = P32(VICKY_A2560U);
+		the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXT_RAM_A2560U;
+		the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXT_ATTR_A2560U;
+		the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANK_A2560U;
+		the_system->screen_[ID_CHANNEL_B]->vicky_ = P32(VICKY_A2560U);
+		the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXT_RAM_A2560U;
+		the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXT_ATTR_A2560U;
+		the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANK_A2560U;
+	}
+	else if (the_system->model_number_ == MACHINE_A2560X || the_system->model_number_ == MACHINE_A2560K)
+	{
+		the_system->screen_[ID_CHANNEL_A]->vicky_ = P32(VICKY_A2560K_A);
+		the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXTA_RAM_A2560K;
+		the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXTA_ATTR_A2560K;
+		the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANKA_A2560K;
+
+		the_system->screen_[ID_CHANNEL_B]->vicky_ = P32(VICKY_A2560K_B);
+		the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXTB_RAM_A2560K;
+		the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXTB_ATTR_A2560K;
+		the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANKB_A2560K;
 	}
 	else
 	{
