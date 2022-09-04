@@ -66,10 +66,17 @@
 #define TEXT_FONT_WIDTH_A2560	8	// for text mode, the width of the fixed-sized font chars
 #define TEXT_FONT_HEIGHT_A2560	8	// for text mode, the height of the fixed-sized font chars. I believe this is supposed to be 16, but its 8 in morfe at the moment.
 
-#define VIDEO_MODE_MASK			0xFFFF00FF	//!> the mask for the system control register that holds the video mode bits
-#define VIDEO_MODE_BYTE			0x01	//!> the byte offset from system control register that holds the video mode bits
-#define VIDEO_MODE_BIT1			0x00	//!> the bits in the 2nd byte of the system control register that define video mode (resolution)
-#define VIDEO_MODE_BIT2			0x01	//!> the bits in the 2nd byte of the system control register that define video mode (resolution)
+#define VIDEO_MODE_MASK				0xFFFF00FF	//!> the mask for the system control register that holds the video mode bits
+#define VIDEO_MODE_BYTE				0x01	//!> the byte offset from system control register that holds the video mode bits
+#define VIDEO_MODE_BIT1				0x01	//!> the bits in the 2nd byte of the system control register that define video mode (resolution). if this bit is set, resolution is 800x600 (bit 2 not set) or 640x400 (bit 2 set) or 1024x768 (if bit 11 is set)
+// from Stefany on 2022/03/06 discord:
+// Channel B bit 8 and 9 are the bit that select the video mode. 640x480, 800x600 and 640x400. No 1024x768 
+// Channel A bit 8 and 9 are ignored
+// It is bit 11 that gives you the choice between 800x600 or 1024x768.
+#define VIDEO_MODE_BIT2				0x02	//!> the bits in the 2nd byte of the system control register that define video mode (resolution). if set on Chan B, you get 640x400. (also requires bit1 to be set?)
+#define GAMMA_MODE_DIPSWITCH_BIT	0x20	//!>the bits in the 2nd byte of the system control register reflect dip switch setting for control gamma correction on/off
+#define GAMMA_MODE_MASK				0xFF00FFFF	//!> the mask for the system control register that controls gamma (in some way not clear to me)
+#define GAMMA_MODE_ONOFF_BITS		0x03	//!>the bits in the 3rd byte of the system control register control gamma correction on/off
 
 	#define BORDER_X_MASK				0xFFFF00FF	//!> the mask for the Border control register (0x0004) long, for the X border
 	#define BORDER_Y_MASK				0xFF00FFFF	//!> the mask for the Border control register (0x0004) long, for the Y border
@@ -101,6 +108,7 @@
 	#define VICKY_C256					0x00af0000		// Vicky II offset/first register
 	#define VICKY_II_MASTER_CTRL_REG_L	0x00af0000		// Vicky II Master Control Register - low - graphic mode/text mode/etc.
 	#define VICKY_II_MASTER_CTRL_REG_H	0x00af0001		// Vicky II Master Control Register - high - screen res, etc.
+	#define VICKY_II_GAMMA_CTRL_REG		0x00af0002		// Vicky II Gamma Control Register
 	#define VICKY_II_BORDER_CTRL_REG	0x00af0004		// Vicky II Border Control Register
 	#define VICKY_II_BORDER_COLOR_B		0x00af0005		// Vicky II Border Color Blue
 	#define VICKY_II_BORDER_COLOR_G		0x00af0006		// Vicky II Border Color Green
@@ -121,9 +129,11 @@
 	#define BITMAP_L1_VRAM_ADDR_M		0x00af010A		//!> bitmap layer1 VRAM address pointer)		
 	#define BITMAP_L1_VRAM_ADDR_H		0x00af010B		//!> bitmap layer1 VRAM address pointer)		
 
-	#define TEXTA_RAM_C256FMX			(char*)0xafa000			// CS_TEXT_MEM_PTR	Text Memory Block
-	#define TEXTA_ATTR_C256FMX			(char*)0xafc000			// CS_COLOR_MEM_PTR	Color Text Memory Block
-	#define FONT_MEMORY_BANK_C256FMX	(char*)0xaf8000			// FONT_MEMORY_BANK0	FONT Character Graphic Mem
+	#define TEXT_RAM_C256			(char*)0xafa000			// CS_TEXT_MEM_PTR	Text Memory Block
+	#define TEXT_ATTR_C256			(char*)0xafc000			// CS_COLOR_MEM_PTR	Color Text Memory Block
+	#define TEXT_FORE_LUT_C256		(char*)0xaf1f40			// FG_CHAR_LUT_PTR	Text Foreground Look-Up Table
+	#define TEXT_BACK_LUT_C256		(char*)0xaf1f80			// BG_CHAR_LUT_PTR	Text Background Look-Up Table
+	#define FONT_MEMORY_BANK_C256	(char*)0xaf8000			// FONT_MEMORY_BANK0	FONT Character Graphic Mem
 	#define VICKY_II_CLUT0				0xaf2000				// each addition LUT is 400 offset from here
 	#define VICKY_II_CLUT1				VICKY_II_CLUT0 + 0x400	// each addition LUT is 400 offset from here
 	#define VICKY_II_CLUT2				VICKY_II_CLUT1 + 0x400	// each addition LUT is 400 offset from here
@@ -136,6 +146,10 @@
 
 	#define GABE_SYS_STAT				0x00AFE887	//!> The gabe register holding the machine ID. Machine ID is stored in 4 least significant bits
 	
+	#define VIDEO_MODE_REG_OFFSET_B		0x01		//!> the (byte) offset from the VICKY control register to the Video mode reg (MASTER_CTRL_REG_H)
+	#define GAMMA_CTRL_REG_OFFSET_B		0x02		//!> the (byte) offset from the VICKY control register to the Gamma control register
+	#define VICKY_RESERVED_OFFSET_B		0x03		//!> the (byte) offset from the VICKY control register to the VKY_RESERVED_O1 byte
+	#define BORDER_CTRL_OFFSET_B		0x04		//!> the (byte) offset from the VICKY control register to the border control register
 	#define BORDER_COLOR_OFFSET_B_B		0x05		//!> the (byte) offset from the VICKY control register to the border color register	for Blue
 	#define BORDER_COLOR_OFFSET_G_B		0x06		//!> the (byte) offset from the VICKY control register to the border color register	for Green
 	#define BORDER_COLOR_OFFSET_R_B		0x07		//!> the (byte) offset from the VICKY control register to the border color register	for Red
@@ -220,8 +234,12 @@
 #define VICKYB_MOUSE_PTR_POS_A2560K	0xfec80c04				// vicky III channel B mouse pointer position (Y pos in upper 16 bits, x in lower)
 #define TEXTA_RAM_A2560K			(char*)0xfec60000		// channel A text
 #define TEXTA_ATTR_A2560K			(char*)0xfec68000		// channel A attr
+#define TEXTA_FORE_LUT_A2560K		(char*)0xfec6c400		// FG_CHAR_LUT_PTR	Text Foreground Look-Up Table
+#define TEXTA_BACK_LUT_A2560K		(char*)0xfec6c440		// BG_CHAR_LUT_PTR	Text Background Look-Up Table
 #define TEXTB_RAM_A2560K			(char*)0xfeca0000		// channel B text
 #define TEXTB_ATTR_A2560K			(char*)0xfeca8000		// channel B attr
+#define TEXTB_FORE_LUT_A2560K		(char*)0xfecac400		// FG_CHAR_LUT_PTR	Text Foreground Look-Up Table
+#define TEXTB_BACK_LUT_A2560K		(char*)0xfecac440		// BG_CHAR_LUT_PTR	Text Background Look-Up Table
 #define FONT_MEMORY_BANKA_A2560K	(char*)0xfec48000		// chan A
 #define FONT_MEMORY_BANKB_A2560K	(char*)0xfec88000		// chan B
 #define VICKY_IIIB_CLUT0			0xfec82000				// each addition LUT is 400 offset from here
@@ -246,6 +264,8 @@
 #define VICKY_CURSOR_POS_A2560U		VICKY_A2560U + 0x14		// vicky II channel A cursor position register (x pos is lower word, y pos is upper word)
 #define TEXT_RAM_A2560U				(char*)0xb60000			// text (A2560U only has one video channel)
 #define TEXT_ATTR_A2560U			(char*)0xb68000			// attr (A2560U only has one video channel)
+#define TEXT_FORE_LUT_A2560U		(char*)0xb6c400			// FG_CHAR_LUT_PTR	Text Foreground Look-Up Table
+#define TEXT_BACK_LUT_A2560U		(char*)0xb6c440			// BG_CHAR_LUT_PTR	Text Background Look-Up Table
 #define FONT_MEMORY_BANK_A2560U		(char*)0xb48000			// only 1 channel
 
 
@@ -470,6 +490,8 @@ typedef struct Screen
 	char*			text_ram_;
 	char*			text_attr_ram_;
 	char*			text_font_ram_;		// 2K of memory holding font definitions.
+	char*			text_color_fore_ram_;	// 64b of memory holding foreground color LUTs for text mode, in BGRA order
+	char*			text_color_back_ram_;	// 64b of memory holding background color LUTs for text mode, in BGRA order
 	int16_t			text_font_height_;	// in text mode, the height in pixels for the fixed width font. Should be either 8 or 16, depending on which Foenix. used for calculating text fit.
 	int16_t			text_font_width_;	// in text mode, the width in pixels for the fixed width font. Unlikely to be other than '8' with Foenix machines. used for calculating text fit.
 	char			text_temp_buffer_1_[TEXT_COL_COUNT_FOR_PLOTTING_A2560K * TEXT_ROW_COUNT_FOR_PLOTTING_A2560K + 1];	// todo: replace with pointer, and allocate space on resolution switch. general use temp buffer - do NOT use for real storage - any utility function clobber it

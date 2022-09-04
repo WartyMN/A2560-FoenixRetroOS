@@ -366,17 +366,17 @@ MU_TEST(text_test_fill_attr)
 MU_TEST(text_test_fill_box)
 {
 	// good values
-	mu_assert( Text_FillBoxSlow(global_system->screen_[ID_CHANNEL_A], 0, 6, 15, 8, CH_CHECKERED1, COLOR_BLACK, BG_COLOR_BRIGHT_WHITE, CHAR_AND_ATTR) == true, "Text_FillBoxSlow failed" );
-	mu_assert( Text_FillBoxSlow(global_system->screen_[ID_CHANNEL_A], 21, 5, 39, 7, CH_CHECKERED2, COLOR_RED, COLOR_BRIGHT_RED, CHAR_AND_ATTR) == true, "Text_FillBoxSlow failed" );
-	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_A], 3, 6, 67, 50, CH_CHECKERED3, COLOR_BRIGHT_GREEN, COLOR_GREEN) == true, "Text_FillBox failed" );
-	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_B], 21, 21, 40, 40, CH_CHECKERED3, COLOR_BRIGHT_YELLOW, COLOR_YELLOW) == true, "Text_FillBox failed" );
+	mu_assert( Text_FillBoxSlow(global_system->screen_[ID_CHANNEL_A], 0, 6, 15, 8, CH_PATTERN_B0, COLOR_BLACK, BG_COLOR_BRIGHT_WHITE, CHAR_AND_ATTR) == true, "Text_FillBoxSlow failed" );
+	mu_assert( Text_FillBoxSlow(global_system->screen_[ID_CHANNEL_A], 21, 5, 39, 7, CH_CHECKERED, COLOR_RED, COLOR_BRIGHT_RED, CHAR_AND_ATTR) == true, "Text_FillBoxSlow failed" );
+	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_A], 3, 6, 67, 50, CH_PATTERN_B2, COLOR_BRIGHT_GREEN, COLOR_GREEN) == true, "Text_FillBox failed" );
+	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_B], 21, 21, 40, 40, CH_PATTERN_B2, COLOR_BRIGHT_YELLOW, COLOR_YELLOW) == true, "Text_FillBox failed" );
 
 	// bad values
-	mu_assert( Text_FillBoxSlow(NULL, 0, 6, 15, 8, CH_CHECKERED1, COLOR_BRIGHT_MAGENTA, COLOR_CYAN, CHAR_AND_ATTR) == false, "Text_FillBoxSlow accepted an illegal screen ID" );
-	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_B], -67, 6, 72, 30, CH_CHECKERED3, COLOR_BRIGHT_BLUE, COLOR_BLUE) == false, "Text_FillBoxSlow accepted an illegal x coord" );
-	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_B], 32767, 6, 72, 30, CH_CHECKERED3, COLOR_BRIGHT_BLUE, COLOR_BLUE) == false, "Text_FillBoxSlow accepted an illegal x coord" );
-	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_B], 5, -6, 72, 30, CH_CHECKERED3, COLOR_BRIGHT_BLUE, COLOR_BLUE) == false, "Text_FillBoxSlow accepted an illegal y coord" );
-	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_B], 5, 6000, 72, 30, CH_CHECKERED3, COLOR_BRIGHT_BLUE, COLOR_BLUE) == false, "Text_FillBoxSlow accepted an illegal y coord" );
+	mu_assert( Text_FillBoxSlow(NULL, 0, 6, 15, 8, CH_PATTERN_B0, COLOR_BRIGHT_MAGENTA, COLOR_CYAN, CHAR_AND_ATTR) == false, "Text_FillBoxSlow accepted an illegal screen ID" );
+	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_B], -67, 6, 72, 30, CH_PATTERN_B2, COLOR_BRIGHT_BLUE, COLOR_BLUE) == false, "Text_FillBoxSlow accepted an illegal x coord" );
+	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_B], 32767, 6, 72, 30, CH_PATTERN_B2, COLOR_BRIGHT_BLUE, COLOR_BLUE) == false, "Text_FillBoxSlow accepted an illegal x coord" );
+	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_B], 5, -6, 72, 30, CH_PATTERN_B2, COLOR_BRIGHT_BLUE, COLOR_BLUE) == false, "Text_FillBoxSlow accepted an illegal y coord" );
+	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_B], 5, 6000, 72, 30, CH_PATTERN_B2, COLOR_BRIGHT_BLUE, COLOR_BLUE) == false, "Text_FillBoxSlow accepted an illegal y coord" );
 }
 
 
@@ -582,7 +582,7 @@ MU_TEST(text_test_basic_box_coords)
 	y = 4;
 	h_line_len = 6;
 	v_line_len = 6;
-	the_char = CH_CHECKERED1;
+	the_char = CH_PATTERN_B0;
 
 	// good values	
  	mu_assert( Text_DrawBoxCoords(global_system->screen_[ID_CHANNEL_A], x, y, x + h_line_len, y + v_line_len, the_char, FG_COLOR_WHITE, BG_COLOR_GRAY, CHAR_AND_ATTR) == true, "Text_DrawBoxCoords failed" );
@@ -605,7 +605,7 @@ MU_TEST(text_test_basic_box_hw)
 	y = 6;
 	h_line_len = 6;
 	v_line_len = 6;
-	the_char = CH_CHECKERED3;
+	the_char = CH_PATTERN_B2;
 
 	// good values	
  	mu_assert(Text_DrawBox(global_system->screen_[ID_CHANNEL_A], x, y, h_line_len, v_line_len, the_char, FG_COLOR_BRIGHT_CYAN, BG_COLOR_CYAN, CHAR_AND_ATTR) == true, "Text_DrawBox failed" );
@@ -644,7 +644,7 @@ MU_TEST(text_test_fancy_box)
 	y1 = 2;
 	x2 = 98;
 	y2 = 73;
-	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_A], x1+1, y1+1, x2-1, y2-1, CH_CHECKERED1, BG_COLOR_BRIGHT_CYAN, BG_COLOR_BLUE) == true, "Text_FillBox failed" );
+	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_A], x1+1, y1+1, x2-1, y2-1, CH_PATTERN_B0, BG_COLOR_BRIGHT_CYAN, BG_COLOR_BLUE) == true, "Text_FillBox failed" );
  	mu_assert(Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_A], x1, y1, x2, y2, FG_COLOR_WHITE, BG_COLOR_BLACK) == true, "Text_DrawBoxCoordsFancy failed" );
 
 	x1 = 3;
@@ -660,7 +660,7 @@ MU_TEST(text_test_fancy_box)
 	x2 = 68;
 	y2 = 51;
 
-	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_A], x1+1, y1+1, x2-1, y2-1, CH_CHECKERED3, FG_COLOR_WHITE, BG_COLOR_BRIGHT_WHITE) == true, "Text_FillBox failed" );
+	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_A], x1+1, y1+1, x2-1, y2-1, CH_PATTERN_B2, FG_COLOR_WHITE, BG_COLOR_BRIGHT_WHITE) == true, "Text_FillBox failed" );
  	mu_assert(Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_A], x1, y1, x2, y2, FG_COLOR_WHITE, BG_COLOR_GRAY) == true, "Text_DrawBoxCoordsFancy failed" );
 
 	x1 = 13;
@@ -676,7 +676,7 @@ MU_TEST(text_test_fancy_box)
 	x2 = 71;
 	y2 = 41;
 
-	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_A], x1+1, y1+1, x2-1, y2-1, CH_CHECKERED1, BG_COLOR_BRIGHT_CYAN, BG_COLOR_BLUE) == true, "Text_FillBox failed" );
+	mu_assert( Text_FillBox(global_system->screen_[ID_CHANNEL_A], x1+1, y1+1, x2-1, y2-1, CH_PATTERN_B0, BG_COLOR_BRIGHT_CYAN, BG_COLOR_BLUE) == true, "Text_FillBox failed" );
  	mu_assert(Text_DrawBoxCoordsFancy(global_system->screen_[ID_CHANNEL_A], x1, y1, x2, y2, FG_COLOR_WHITE, BG_COLOR_BLACK) == true, "Text_DrawBoxCoordsFancy failed" );
 	
 	x1 = 40;

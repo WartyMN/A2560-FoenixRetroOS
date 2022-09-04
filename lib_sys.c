@@ -64,6 +64,50 @@ System*			global_system;
 // p_int_handler	global_old_mouse_interrupt;
 // p_int_handler is defined in mcp/interrupt.h as typedef void (*p_int_handler)();
 
+// VGA colors, used for both fore- and background colors in Text mode
+// in C256, these are 8 bit values; in A2560s, they are 32 bit values, and endianness matters
+#ifdef _C256_FMX_
+	static uint8_t standard_text_color_lut[64] = 
+	{
+		0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0xAA, 0x00,
+		0x00, 0xAA, 0x00, 0x00,
+		0x00, 0x55, 0xAA, 0x00,
+		0xAA, 0x00, 0x00, 0x00,
+		0xAA, 0x00, 0xAA, 0x00,
+		0xAA, 0xAA, 0x00, 0x00,
+		0xAA, 0xAA, 0xAA, 0x00,
+		0x55, 0x55, 0x55, 0x00,
+		0x55, 0x55, 0xFF, 0x00,
+		0x55, 0xFF, 0x55, 0x00,
+		0x55, 0xFF, 0xFF, 0x00,
+		0xFF, 0x55, 0x55, 0x00,
+		0xFF, 0x55, 0xFF, 0x00,
+		0xFF, 0xFF, 0x55, 0x00,
+		0xFF, 0xFF, 0xFF, 0x00,			
+	};
+#else
+	static uint8_t standard_text_color_lut[64] = 
+	{
+		0x00, 0x00, 0x00, 0x00,
+		0x00, 0xAA, 0x00, 0x00,
+		0x00, 0x00, 0xAA, 0x00,
+		0x00, 0xAA, 0x55, 0x00,
+		0x00, 0x00, 0x00, 0xAA,
+		0x00, 0xAA, 0x00, 0xAA,
+		0x00, 0x00, 0xAA, 0xAA,
+		0x00, 0xAA, 0xAA, 0xAA,
+		0x00, 0x55, 0x55, 0x55,
+		0x00, 0xFF, 0x55, 0x55,
+		0x00, 0x55, 0xFF, 0x55,
+		0x00, 0xFF, 0xFF, 0x55,
+		0x00, 0x55, 0x55, 0xFF,
+		0x00, 0xFF, 0x55, 0xFF,
+		0x00, 0x55, 0xFF, 0xFF,
+		0x00, 0xFF, 0xFF, 0xFF,			
+	};
+#endif
+
 
 /*****************************************************************************/
 /*                       Private Function Prototypes                         */
@@ -844,13 +888,18 @@ bool Sys_AutoConfigure(System* the_system)
 	{
 		DEBUG_OUT(("%s %d: Configuring screens for a C256 (1 screen)", __func__, __LINE__));
 		the_system->screen_[ID_CHANNEL_A]->vicky_ = P32(VICKY_C256);
-		the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXTA_RAM_C256FMX;
-		the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXTA_ATTR_C256FMX;
-		the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANK_C256FMX;
+		the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXT_RAM_C256;
+		the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXT_ATTR_C256;
+		the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANK_C256;
+		the_system->screen_[ID_CHANNEL_A]->text_color_fore_ram_ = (char*)TEXT_FORE_LUT_C256;
+		the_system->screen_[ID_CHANNEL_A]->text_color_back_ram_ = (char*)TEXT_BACK_LUT_C256;
+
 		the_system->screen_[ID_CHANNEL_B]->vicky_ = P32(VICKY_C256);
-		the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXTA_RAM_C256FMX;
-		the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXTA_ATTR_C256FMX;
-		the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANK_C256FMX;
+		the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXT_RAM_C256;
+		the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXT_ATTR_C256;
+		the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANK_C256;
+		the_system->screen_[ID_CHANNEL_B]->text_color_fore_ram_ = (char*)TEXT_FORE_LUT_C256;
+		the_system->screen_[ID_CHANNEL_B]->text_color_back_ram_ = (char*)TEXT_BACK_LUT_C256;
 	}
 	else if (the_system->model_number_ == MACHINE_A2560U_PLUS || the_system->model_number_ == MACHINE_A2560U)
 	{
@@ -858,10 +907,15 @@ bool Sys_AutoConfigure(System* the_system)
 		the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXT_RAM_A2560U;
 		the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXT_ATTR_A2560U;
 		the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANK_A2560U;
+		the_system->screen_[ID_CHANNEL_A]->text_color_fore_ram_ = (char*)TEXT_FORE_LUT_A2560U;
+		the_system->screen_[ID_CHANNEL_A]->text_color_back_ram_ = (char*)TEXT_BACK_LUT_A2560U;
+
 		the_system->screen_[ID_CHANNEL_B]->vicky_ = P32(VICKY_A2560U);
 		the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXT_RAM_A2560U;
 		the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXT_ATTR_A2560U;
 		the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANK_A2560U;
+		the_system->screen_[ID_CHANNEL_B]->text_color_fore_ram_ = (char*)TEXT_FORE_LUT_A2560U;
+		the_system->screen_[ID_CHANNEL_B]->text_color_back_ram_ = (char*)TEXT_BACK_LUT_A2560U;
 	}
 	else if (the_system->model_number_ == MACHINE_A2560X || the_system->model_number_ == MACHINE_A2560K)
 	{
@@ -869,11 +923,15 @@ bool Sys_AutoConfigure(System* the_system)
 		the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXTA_RAM_A2560K;
 		the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXTA_ATTR_A2560K;
 		the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANKA_A2560K;
+		the_system->screen_[ID_CHANNEL_A]->text_color_fore_ram_ = (char*)TEXTA_FORE_LUT_A2560K;
+		the_system->screen_[ID_CHANNEL_A]->text_color_back_ram_ = (char*)TEXTA_BACK_LUT_A2560K;
 
 		the_system->screen_[ID_CHANNEL_B]->vicky_ = P32(VICKY_A2560K_B);
 		the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXTB_RAM_A2560K;
 		the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXTB_ATTR_A2560K;
 		the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANKB_A2560K;
+		the_system->screen_[ID_CHANNEL_B]->text_color_fore_ram_ = (char*)TEXTB_FORE_LUT_A2560K;
+		the_system->screen_[ID_CHANNEL_B]->text_color_back_ram_ = (char*)TEXTB_BACK_LUT_A2560K;
 	}
 	else
 	{
@@ -888,13 +946,13 @@ bool Sys_AutoConfigure(System* the_system)
 // 		case MACHINE_C256_FMX:
 // 			DEBUG_OUT(("%s %d: Configuring screens for a C256 (1 screen)", __func__, __LINE__));
 // 			the_system->screen_[ID_CHANNEL_A]->vicky_ = P32(VICKY_C256);
-// 			the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXTA_RAM_C256FMX;
-// 			the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXTA_ATTR_C256FMX;
-// 			the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANK_C256FMX;
+// 			the_system->screen_[ID_CHANNEL_A]->text_ram_ = TEXT_RAM_C256;
+// 			the_system->screen_[ID_CHANNEL_A]->text_attr_ram_ = TEXT_ATTR_C256;
+// 			the_system->screen_[ID_CHANNEL_A]->text_font_ram_ = FONT_MEMORY_BANK_C256;
 // 			the_system->screen_[ID_CHANNEL_B]->vicky_ = P32(VICKY_C256);
-// 			the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXTA_RAM_C256FMX;
-// 			the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXTA_ATTR_C256FMX;
-// 			the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANK_C256FMX;
+// 			the_system->screen_[ID_CHANNEL_B]->text_ram_ = TEXT_RAM_C256;
+// 			the_system->screen_[ID_CHANNEL_B]->text_attr_ram_ = TEXT_ATTR_C256;
+// 			the_system->screen_[ID_CHANNEL_B]->text_font_ram_ = FONT_MEMORY_BANK_C256;
 // 			break;
 // 			
 // 		case MACHINE_A2560U_PLUS:
@@ -946,6 +1004,10 @@ bool Sys_AutoConfigure(System* the_system)
 			LOG_ERR(("%s %d: Unable to auto-configure screen resolution", __func__, __LINE__));
 			return false;
 		}
+
+		// set standard color LUTs for text mode
+		memcpy(the_system->screen_[i]->text_color_fore_ram_, &standard_text_color_lut, 64);
+		memcpy(the_system->screen_[i]->text_color_back_ram_, &standard_text_color_lut, 64);
 	
 		DEBUG_OUT(("%s %d: This screen (id=%i: %i x %i, with %i x %i text (%i x %i visible)", __func__, __LINE__, 
 			the_system->screen_[i]->id_,
@@ -1365,26 +1427,6 @@ bool Sys_SetGammaMode(System* the_system, Screen* the_screen, bool enable_it)
 	{
 		new_mode_flag = 0x00;
 	}
-
-// 	#ifdef _C256_FMX_
-// 		uint8_t		vicky_byte_2 = R8(VICKY_II_MASTER_CTRL_REG_H);
-// 		
-//  		DEBUG_OUT(("%s %d: vicky byte 2 before gamma change = %x", __func__, __LINE__, vicky_byte_2));
-// 		vicky_byte_2 |= (GAMMA_MODE_BIT & new_mode_flag);
-// 		R8(VICKY_II_MASTER_CTRL_REG_H) = vicky_byte_2;
-//  		DEBUG_OUT(("%s %d: vicky byte 2 after gamma change = %x, %x", __func__, __LINE__, vicky_byte_2, R8(VICKY_II_MASTER_CTRL_REG_H)));
-//  		DEBUG_OUT(("%s %d: wrote to %x to register at %p", __func__, __LINE__, vicky_byte_2, P8(VICKY_II_MASTER_CTRL_REG_H)));
-// 	#else
-// 		uint32_t	the_vicky_value = R32(the_screen->vicky_);
-// 		uint8_t		the_gamma_mode_bits;
-// 
-// 		the_gamma_mode_bits = (the_vicky_value >> 16) & 0xff;
-// 		DEBUG_OUT(("%s %d: before: 32bit vicky value=%x, gamma mode bits=%x", __func__, __LINE__, the_vicky_value, the_gamma_mode_bits));
-// 		the_gamma_mode_bits &= (GAMMA_MODE_BIT & new_mode_flag);
-// 		the_vicky_value &= (GAMMA_MODE_MASK | the_gamma_mode_bits << 16);
-//  		DEBUG_OUT(("%s %d: after: 32bit vicky value=%x, gamma mode bits=%x", __func__, __LINE__, the_vicky_value, the_gamma_mode_bits));
-// 		R32(the_screen->vicky_) = the_vicky_value;
-// 	#endif
 
 	#ifdef _C256_FMX_
 		uint8_t		the_gamma_mode_bits = R8(VICKY_II_GAMMA_CTRL_REG);

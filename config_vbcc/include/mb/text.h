@@ -126,9 +126,9 @@
 /*****************************************************************************/
 // https://en.wikipedia.org/wiki/Code_page_437
 
-#define CH_CHECKERED1	(unsigned char)0xB0
-#define CH_CHECKERED2	(unsigned char)0xB1
-#define CH_CHECKERED3	(unsigned char)0xB2
+#define CH_PATTERN_B0	(unsigned char)0xB0	// on C256, this is vertical lines; on A2560, it is lighter pattern of dots
+#define CH_CHECKERED	(unsigned char)0xB1	// every-other-dot checkered pattern
+#define CH_PATTERN_B2	(unsigned char)0xB2 // on C256, this is 2-on, 2-ff vertical pattern of white space and checkered; on A2560, it is darker pattern of dots
 #define CH_SPACE		(unsigned char)0x20	// regular space
 #define CH_SOLID		(unsigned char)0xDB	// inverse space
 #define CH_WALL_H		(unsigned char)0xC4
