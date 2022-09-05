@@ -841,7 +841,7 @@ void Demo_Font_ShowChars(Bitmap* the_bitmap, int16_t x1, int16_t y)
 	for (; i < the_font->lastChar; i++)
 	{
 		pix_written += Font_DrawChar(the_bitmap, i, the_font);
-		General_GetChar();
+		//General_GetChar();
 		
 		if (pix_written >= x2)
 		{

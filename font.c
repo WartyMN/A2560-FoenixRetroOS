@@ -885,13 +885,13 @@ int16_t Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font
 	//     Characters that are not in the font (missing/-1 glyphs) will have 0 for height/offset. 
 	//   If no height table present, we read/write through every row in the Font
 	
-	DEBUG_OUT(("%s %d: the_font->fontType=%u, (the_font->fontType >> 0) & 0x01)=%u", __func__, __LINE__, the_font->fontType, (the_font->fontType >> 0) & 0x01));
+	//DEBUG_OUT(("%s %d: the_font->fontType=%u, (the_font->fontType >> 0) & 0x01)=%u", __func__, __LINE__, the_font->fontType, (the_font->fontType >> 0) & 0x01));
 	
 	if ( ((the_font->fontType >> 0) & 0x01) )
 	{		
 		v_offset_height = the_font->height_table_[the_char];
 		
-		DEBUG_OUT(("%s %d: v_offset_height=%u", __func__, __LINE__, v_offset_height));
+		//DEBUG_OUT(("%s %d: v_offset_height=%u", __func__, __LINE__, v_offset_height));
 
 		if (v_offset_height == 0)
 		{
@@ -908,7 +908,7 @@ int16_t Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font
 		max_row = the_font->fRectHeight;
 	}
 	
-	DEBUG_OUT(("%s %d: glyph char=%u, height/offset value=%i, first_row=%i, max_row=%i", __func__, __LINE__, the_char, v_offset_height, first_row, max_row));
+	//DEBUG_OUT(("%s %d: glyph char=%u, height/offset value=%i, first_row=%i, max_row=%i", __func__, __LINE__, the_char, v_offset_height, first_row, max_row));
 	
 	//   the low byte will be the v offset from top of glyph rect (eg, 3, if the first pixel is in the 4th row down)
 	//   the high byte will contain the total rows of visible pixels (eg, 3 for say a comma, but 9 for a capital letter)
@@ -929,6 +929,7 @@ int16_t Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font
 	
 	if (offset_width_value == -1)
 	{
+		// Comment out the line below causes the font data to be read in somewhat wrong. it's not clear to me why having the debug line should do anything. 
 		DEBUG_OUT(("%s %d: offset/width table says this char (%u) does not exist in the font", __func__, __LINE__, the_char));
 		
 		// switch to the "missing glyph" character, which is the last one in the font.
@@ -938,7 +939,7 @@ int16_t Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font
 	}
 	else
 	{
-		DEBUG_OUT(("%s %d: this char (%u) has a glyph in the font. Width/offset value=%x", __func__, __LINE__, the_char, offset_width_value));		
+		//DEBUG_OUT(("%s %d: this char (%u) has a glyph in the font. Width/offset value=%x", __func__, __LINE__, the_char, offset_width_value));		
 	}
 
 	h_offset_value = offset_width_value >> 8;
@@ -947,8 +948,8 @@ int16_t Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font
 	loc_offset = the_font->loc_table_[the_char];
 	next_loc_offset = the_font->loc_table_[next_char];
 	pixel_only_width = next_loc_offset - loc_offset;
-	DEBUG_OUT(("%s %d: loc_offset=%i, next_loc_offset=%i, pxwidth=%i", __func__, __LINE__, loc_offset, next_loc_offset, pixel_only_width));
-	DEBUG_OUT(("%s %d: Wid/offset=%x, width_value=%x, h_offset_value=%x", __func__, __LINE__, offset_width_value, width_value, h_offset_value));
+	//DEBUG_OUT(("%s %d: loc_offset=%i, next_loc_offset=%i, pxwidth=%i", __func__, __LINE__, loc_offset, next_loc_offset, pixel_only_width));
+	//DEBUG_OUT(("%s %d: Wid/offset=%x, width_value=%x, h_offset_value=%x", __func__, __LINE__, offset_width_value, width_value, h_offset_value));
 	
 	// the following debug line, if not included in Calypsi 68k builds, has the effect of having width_value=0, which causes x to not advance after drawing this glyph
 
@@ -962,14 +963,14 @@ int16_t Font_DrawChar(Bitmap* the_bitmap, unsigned char the_char, Font* the_font
 	
 	image_offset_index = loc_offset / 16;
 	image_offset_index_rem = loc_offset % 16;
-	DEBUG_OUT(("%s %d: loc_offset=%i, image_offset_index=%i, image_offset_index_rem=%i", __func__, __LINE__, loc_offset, image_offset_index, image_offset_index_rem));
+	//DEBUG_OUT(("%s %d: loc_offset=%i, image_offset_index=%i, image_offset_index_rem=%i", __func__, __LINE__, loc_offset, image_offset_index, image_offset_index_rem));
 
 	the_color = Bitmap_GetColor(the_bitmap);
 	
 	start_read_addr = the_font->image_table_ + image_offset_index;
 	
 	start_write_addr_int = Bitmap_GetMemLocInt(the_bitmap);
-	DEBUG_OUT(("%s %d: start_write_addr_int=%p, start_read=%p", __func__, __LINE__, start_write_addr_int, start_read_addr));
+	//DEBUG_OUT(("%s %d: start_write_addr_int=%p, start_read=%p", __func__, __LINE__, start_write_addr_int, start_read_addr));
 
 	for (row = 0; row < the_font->fRectHeight; row++)
 	{
